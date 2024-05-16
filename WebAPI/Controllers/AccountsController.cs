@@ -1,15 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTO;
-using Repositories.Interfaces;
-using Domain;
-using Domain.Enums;
 using Services.Interface;
 using Services.ViewModels.EmailModels;
-using System.Security.Policy;
-using Microsoft.AspNetCore.Authorization;
-using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WebAPI.Controllers
 {
@@ -17,7 +10,7 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly    IAccountService _accountService;
+        private readonly IAccountService _accountService;
         private readonly IEmailService _emailService;
 
         public AccountsController(IAccountService accountService, IEmailService emailService)
@@ -56,7 +49,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _accountService.LoginAsync(account);
-                if (result.Status)
+                if (result != null)
                 {
                     return Ok(result);
                 }
@@ -81,7 +74,7 @@ namespace WebAPI.Controllers
             {
                 "manhdung5289@gmail.com"
             },
-             "Test", 
+             "Test",
              "<h1> Wassup bro ! </h1>"
             );
 
@@ -97,7 +90,7 @@ namespace WebAPI.Controllers
             var result = await _accountService.ConfirmEmail(email, token);
             if (result)
             {
-                return Ok(new { status = true, message ="oh yeah lmao u did it"});
+                return Ok(new { status = true, message = "oh yeah lmao u did it" });
             }
             return BadRequest(new { status = false, message = "bruh we ded 💀" });
         }
@@ -108,7 +101,7 @@ namespace WebAPI.Controllers
             var result = await _accountService.ForgotPassword(email);
             if (result.Status)
             {
-                var confirmationLink = "Code:\n\"" + result.Data+"\"";
+                var confirmationLink = "Code:\n\"" + result.Data + "\"";
                 var message = new Message(new string[] { email }, "Reset password token", confirmationLink!);
                 await _emailService.SendEmail(message);
                 return Ok(result);
@@ -117,9 +110,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("password-reset")]
-        public async Task<IActionResult> ResetPassword(string token , string email, string newPassword) 
+        public async Task<IActionResult> ResetPassword(string token, string email, string newPassword)
         {
-            return Ok(await _accountService.AccountChangePasswordAsync(email,token,newPassword));
+            return Ok(await _accountService.AccountChangePasswordAsync(email, token, newPassword));
         }
 
 

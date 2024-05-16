@@ -10,7 +10,6 @@ using Repositories.Repositories;
 using Services.Interface;
 using Services.Services;
 using Services.ViewModels.EmailModels;
-using System;
 using System.Text;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
@@ -64,10 +63,41 @@ builder.Services.AddInfrastructuresService();
 //SETUP SERVICE
 builder.Services.AddIdentity<Account, IdentityRole>()
     .AddEntityFrameworkStores<TemplateDbContext>().AddDefaultTokenProviders();
+/*
 builder.Services.AddDbContext<TemplateDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB"));
 });
+*/
+//connect db with fly.io
+string connString;
+if (builder.Environment.IsDevelopment())
+    connString = builder.Configuration.GetConnectionString("LocalDB");
+else
+{
+    // Use connection string provided at runtime by FlyIO.
+    var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+    // Parse connection URL to connection string for SQL Server
+    connUrl = connUrl.Replace("sqlserver://", string.Empty);
+    var userPass = connUrl.Split("@")[0];
+    var hostPortDb = connUrl.Split("@")[1];
+    var hostPort = hostPortDb.Split("/")[0];
+    var db = hostPortDb.Split("/")[1];
+    var user = userPass.Split(":")[0];
+    var pass = userPass.Split(":")[1];
+    var host = hostPort.Split(":")[0];
+    var port = hostPort.Split(":")[1];
+
+    //Server=host.docker.internal;Database=SWD-Student-Event-Forum;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True
+    connString = $"Server={host},{port};Database={db};User Id={user};Password={pass};TrustServerCertificate=True";
+}
+
+builder.Services.AddDbContext<TemplateDbContext>(opt =>
+{
+    opt.UseSqlServer(connString);
+});
+
 
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
@@ -112,13 +142,13 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(
-        c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CAPYBARA API v.01")
-        );
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI(
+    c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CAPYBARA API v.01")
+    );
+//}
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<PerformanceTimeMiddleware>();
