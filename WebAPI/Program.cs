@@ -90,7 +90,7 @@ else
     var port = hostPort.Split(":")[1];
 
     //Server=host.docker.internal;Database=SWD-Student-Event-Forum;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True
-    connString = $"Server=host.docker.internal;Database={db};User Id={user};Password={pass};TrustServerCertificate=True";
+    connString = $"Server=host.docker.internal;Database=SWD-Student-Event-Forum;User Id=sa;Password=yourStrong(!)Password;TrustServerCertificate=True";
 }
 
 builder.Services.AddDbContext<TemplateDbContext>(opt =>
