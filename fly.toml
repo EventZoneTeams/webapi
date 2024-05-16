@@ -3,6 +3,9 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
+app = "student-event-forum-webapi"
+primary_region = "sin"
+
 [env]
  ASPNETCORE_URLS="http://+:8080"
  DATABASE_URL="sqlserver://sa:yourStrong(!)Password@host.docker.internal:1433/SWD-Student-Event-Forum"
