@@ -5,6 +5,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Entities;
+using Services.Interface;
+using Services.Services;
 using Services.ViewModels.EmailModels;
 using System.Text;
 using WebAPI.Injection;
@@ -90,10 +92,14 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddAuthorization();
 
+//==========================
+//Loi cc j zay, xiu check lai
 // ADD REPOSITORY
 //builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 // Add services to the container.
 //builder.Services.AddWebAPIServices();
+//==========================
+
 
 //CORS - Set Policy
 builder.Services.AddCors(opt =>
@@ -112,7 +118,7 @@ builder.Services.AddCors(opt =>
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
                    .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
-//builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
