@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Repositories.Entities;
 using Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Repositories
 {
@@ -15,7 +10,7 @@ namespace Repositories.Repositories
         private readonly ICurrentTime _timeService;
         private readonly IClaimsService _claimsService;
 
-        public GenericRepository(TemplateDbContext context, ICurrentTime timeService, IClaimsService claimsService)
+        public GenericRepository(StudentEventForumDbContext context, ICurrentTime timeService, IClaimsService claimsService)
         {
             _dbSet = context.Set<T>(); // set entity vào Dbset dựa trên generic
             _timeService = timeService;
@@ -23,8 +18,8 @@ namespace Repositories.Repositories
         }
         public async Task AddAsync(T entity)
         {
-            entity.CreatedDate  = _timeService.GetCurrentTime();
-            entity.CreatedBy = _claimsService.GetCurrentUserId;
+            entity.CreatedAt = _timeService.GetCurrentTime();
+            //entity.CreatedBy = _claimsService.GetCurrentUserId;
             await _dbSet.AddAsync(entity);
         }
 
@@ -53,26 +48,26 @@ namespace Repositories.Repositories
         public void SoftRemove(T entity)
         {
             entity.IsDeleted = true;
-            entity.DeleteBy = _claimsService.GetCurrentUserId;
-            entity.DeletionDate = _timeService.GetCurrentTime();
+            //entity.DeletedBy = _claimsService.GetCurrentUserId;
+            entity.DeletedAt = _timeService.GetCurrentTime();
             _dbSet.Update(entity);
         }
 
         public void SoftRemoveRange(List<T> entities)
         {
-           foreach (var entity in entities)
+            foreach (var entity in entities)
             {
                 entity.IsDeleted = true;
-                entity.DeleteBy = _claimsService.GetCurrentUserId;
-                entity.DeletionDate = _timeService.GetCurrentTime();
+                //entity.DeletedBy = _claimsService.GetCurrentUserId;
+                entity.DeletedAt = _timeService.GetCurrentTime();
             }
-           _dbSet.UpdateRange(entities);
+            _dbSet.UpdateRange(entities);
         }
 
         public void Update(T entity)
         {
-            entity.ModifiedDate = _timeService.GetCurrentTime();
-            entity.ModifiedBy = _claimsService.GetCurrentUserId;
+            entity.ModifiedAt = _timeService.GetCurrentTime();
+            //entity.ModifiedBy = _claimsService.GetCurrentUserId;
             _dbSet.Update(entity);
         }
 
@@ -80,8 +75,8 @@ namespace Repositories.Repositories
         {
             foreach (var entity in entities)
             {
-                entity.CreatedDate = _timeService.GetCurrentTime();
-                entity.CreatedBy = _claimsService.GetCurrentUserId;
+                entity.CreatedAt = _timeService.GetCurrentTime();
+                //entity.CreatedBy = _claimsService.GetCurrentUserId;
             }
             _dbSet.UpdateRange(entities);
         }

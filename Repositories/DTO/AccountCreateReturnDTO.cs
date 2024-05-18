@@ -9,7 +9,7 @@ namespace Repositories.DTO
 {
     public class AccountCreateReturnDTO
     {
-        public Account Account { get; set; }
+        public User Account { get; set; }
         public string token { get; set; } = null!;
     }
 }

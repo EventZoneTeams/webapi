@@ -9,10 +9,10 @@ namespace Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly TemplateDbContext _templateDbContext;
+        private readonly StudentEventForumDbContext _templateDbContext;
         private readonly IAccountRepository _accountRepository;
 
-        public UnitOfWork(TemplateDbContext templateDbContext, IAccountRepository accountRepository)
+        public UnitOfWork(StudentEventForumDbContext templateDbContext, IAccountRepository accountRepository)
         {
             _templateDbContext = templateDbContext;
             _accountRepository = accountRepository;

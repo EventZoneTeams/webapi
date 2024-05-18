@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Repositories.Entities
+﻿namespace Repositories.Entities
 {
     public class BaseEntity
     {
         public int Id { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedAt { get; set; }
 
-        public Guid? CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
 
-        public DateTime? ModifiedDate { get; set; }
+        public DateTime? ModifiedAt { get; set; }
 
-        public Guid? ModifiedBy { get; set; }
+        public int? ModifiedBy { get; set; }
 
-        public DateTime? DeletionDate { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
-        public Guid? DeleteBy { get; set; }
+        public int? DeletedBy { get; set; }
 
         public bool? IsDeleted { get; set; } = false;
     }

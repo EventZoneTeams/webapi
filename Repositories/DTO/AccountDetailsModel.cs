@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Repositories.DTO
+﻿namespace Repositories.DTO
 {
     public class AccountDetailsModel
     {
-        public required string Id { get; set; }  // Sử dụng kiểu string cho Id
+        public required int Id { get; set; }  // Sử dụng kiểu string cho Id
         public string Email { get; set; } = null!;
 
 

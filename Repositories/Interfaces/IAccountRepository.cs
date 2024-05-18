@@ -10,15 +10,15 @@ namespace Repositories.Interfaces
 {
     public interface IAccountRepository
     {
-        Task<Account> AddAccount(AccountSignupModel account, String role);
-        Task<Account> ChangeAccountPasswordAsync(string id, string currentPassword, string newPassword);
+        Task<User> AddAccount(AccountSignupModel account, String role);
+        Task<User> ChangeAccountPasswordAsync(string id, string currentPassword, string newPassword);
         Task<bool> ConfirmEmail(string email, string token);
-        Task<string> GenerateEmailConfirmationToken(Account user);
-        Task<string> GenerateTokenForResetPassword(Account user);
-        Task<Account> GetAccountByEmailAsync(string email);
-        Task<List<Account>> GetAllAccountsAsync();
+        Task<string> GenerateEmailConfirmationToken(User user);
+        Task<string> GenerateTokenForResetPassword(User user);
+        Task<User> GetAccountByEmailAsync(string email);
+        Task<List<User>> GetAllAccountsAsync();
         Task<List<AccountDetailsModel>> GetAllAccountsWithRoleAsync();
-        Task<List<string>> GetRoleName(Account account);
+        Task<List<string>> GetRoleName(User account);
         Task<ResponseLoginModel> LoginByEmailAndPassword(AccountLoginModel account);
     }
 }
