@@ -132,6 +132,52 @@ namespace Repositories
 
                 await context.SaveChangesAsync();
             }
+
+
+            if (!context.Events.Any())
+            {
+                var events = new List<Event>
+                {
+                    new Event
+                    {
+                        Name = "Event 1",
+                        Description = "Description 1",
+                        EventStartDate = new DateTime(2022, 1, 1),
+                        EventEndDate = new DateTime(2022, 1, 2),
+                        Location = "Location 1",
+                        UserId = 1,
+                        Status = "0",
+                        DonationStatus = "0"
+                    }
+                };
+
+                foreach (var eventItem in events)
+                {
+                    await context.Events.AddAsync(eventItem);
+                }
+                await context.SaveChangesAsync();
+            }
+
+            if (!context.EventProducts.Any())
+            {
+                var eventProducts = new List<EventProduct>
+                {
+                    new EventProduct
+                    {
+                        Name = "Product 1",
+                        Description = "Description 1",
+                        Price = 1000,
+                        EventId = 8
+                    }
+                };
+
+                foreach (var eventProduct in eventProducts)
+                {
+                    await context.EventProducts.AddAsync(eventProduct);
+                }
+
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

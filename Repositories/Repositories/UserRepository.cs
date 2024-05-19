@@ -20,10 +20,10 @@ namespace Repositories.Repositories
         private readonly IConfiguration _configuration;
         // identity collection
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
 
-        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService, IClaimsService claimsService, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService, IClaimsService claimsService, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
             _templateDbContext = templateDbContext;
             _timeService = timeService;
@@ -73,7 +73,7 @@ namespace Repositories.Repositories
                     Console.WriteLine($"New user ID: {user.Id}");
                     if (!await _roleManager.RoleExistsAsync(role.ToString()))
                     {
-                        await _roleManager.CreateAsync(new IdentityRole(role.ToString()));
+                        //await _roleManager.CreateAsync(new Role(role.ToString()));
                     }
 
                     if (await _roleManager.RoleExistsAsync(role.ToString()))
@@ -82,12 +82,12 @@ namespace Repositories.Repositories
                     }
 
                     if (!await _roleManager.RoleExistsAsync(role.ToString()))
-                        await _roleManager.CreateAsync(new IdentityRole(role));
+                        //await _roleManager.CreateAsync(new IdentityRole(role));
 
-                    if (await _roleManager.RoleExistsAsync(role.ToString()))
-                    {
-                        await _userManager.AddToRoleAsync(user, role.ToString());
-                    }
+                        if (await _roleManager.RoleExistsAsync(role.ToString()))
+                        {
+                            await _userManager.AddToRoleAsync(user, role.ToString());
+                        }
                     return user;
                 }
                 else

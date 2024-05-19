@@ -53,14 +53,8 @@ builder.Services.AddSwaggerGen(config =>
 });
 });
 
-// CONNECT TO DATABASE
-builder.Services.AddDbContext<StudentEventForumDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("LocalDB"));
-});
-
 //SETUP INJECTION SERVICE
-builder.Services.AddInfrastructuresService();
+builder.Services.AddInfrastructuresService(builder.Configuration);
 builder.Services.AddScoped<GenericRepository<Event, int>>();
 
 //SETUP SERVICE IDENTITY: Allow non alphanumeric
@@ -93,12 +87,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 builder.Services.AddAuthorization();
-
-//==========================
-//loi cc j deo hieu
-//builder.Services.AddWebAPIServices();
-//==========================
-
 
 //CORS - Set Policy
 builder.Services.AddCors(opt =>
