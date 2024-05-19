@@ -1,28 +1,25 @@
 ﻿using Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly StudentEventForumDbContext _templateDbContext;
-        private readonly IAccountRepository _accountRepository;
+        private readonly StudentEventForumDbContext _studentEventForumDbContext;
+        private readonly IUserRepository _userRepository;
 
-        public UnitOfWork(StudentEventForumDbContext templateDbContext, IAccountRepository accountRepository)
+        public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
+            , IUserRepository userRepository
+            )
         {
-            _templateDbContext = templateDbContext;
-            _accountRepository = accountRepository;
+            _studentEventForumDbContext = studentEventForumDbContext;
+            _userRepository = userRepository;
         }
 
-        public IAccountRepository AccountRepository { get { return _accountRepository; } }
+        public IUserRepository UserRepository => _userRepository;
 
         public Task<int> SaveChangeAsync()
         {
-            return _templateDbContext.SaveChangesAsync();
+            return _studentEventForumDbContext.SaveChangesAsync();
         }
     }
 }

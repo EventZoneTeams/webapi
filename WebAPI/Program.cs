@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Entities;
+using Repositories.Repositories;
 using Services.Interface;
 using Services.Services;
 using Services.ViewModels.EmailModels;
@@ -60,6 +61,7 @@ builder.Services.AddDbContext<StudentEventForumDbContext>(options =>
 
 //SETUP INJECTION SERVICE
 builder.Services.AddInfrastructuresService();
+builder.Services.AddScoped<GenericRepository<Event, int>>();
 
 //SETUP SERVICE IDENTITY: Allow non alphanumeric
 builder.Services.AddIdentityCore<User>(opt =>
@@ -93,10 +95,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 //==========================
-//Loi cc j zay, xiu check lai
-// ADD REPOSITORY
-//builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-// Add services to the container.
+//loi cc j deo hieu
 //builder.Services.AddWebAPIServices();
 //==========================
 
@@ -157,7 +156,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // USE MIDDLEWARE
-app.UseMiddleware<AccountStatusMiddleware>();
+app.UseMiddleware<UserStatusMiddleware>();
 
 app.MapControllers();
 

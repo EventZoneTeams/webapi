@@ -6,28 +6,28 @@ using Services.ViewModels.EmailModels;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/v1/accounts")]
+    [Route("api/v1/users")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class UserController : ControllerBase
     {
-        private readonly IAccountService _accountService;
+        private readonly IUserService _userService;
         private readonly IEmailService _emailService;
 
-        public AccountsController(IAccountService accountService, IEmailService emailService)
+        public UserController(IUserService userService, IEmailService emailService)
         {
-            _accountService = accountService;
+            _userService = userService;
             _emailService = emailService;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(AccountSignupModel accountLogin, [FromQuery] RoleEnums role)
+        public async Task<IActionResult> RegisterAsync(UserSignupModel userLogin, [FromQuery] RoleEnums role)
         {
             try
             {
-                var data = await _accountService.ResigerAsync(accountLogin, role.ToString());
+                var data = await _userService.ResigerAsync(userLogin, role.ToString());
                 if (data.Status)
                 {
-                    var confirmationLink = Url.Action(nameof(ConfirmEmail), "Accounts", new { email = accountLogin.Email, token = data.Message }, Request.Scheme);
+                    var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);
                     var message = new Message(new string[] { data.Data.Email }, "Confirmation email link", confirmationLink!);
                     await _emailService.SendEmail(message);
                     data.Message = "Added sucessfully, please check your email <3";
@@ -44,11 +44,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync(AccountLoginModel account)
+        public async Task<IActionResult> LoginAsync(UserLoginModel user)
         {
             try
             {
-                var result = await _accountService.LoginAsync(account);
+                var result = await _userService.LoginAsync(user);
                 if (result != null)
                 {
                     return Ok(result);
@@ -62,9 +62,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAccountsAsync()
+        public async Task<IActionResult> GetAllusersAsync()
         {
-            return Ok(await _accountService.GetAllAccounts());
+            return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet("test-email")]
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> ConfirmEmail(string email, string token)
         {
-            var result = await _accountService.ConfirmEmail(email, token);
+            var result = await _userService.ConfirmEmail(email, token);
             if (result)
             {
                 return Ok(new { status = true, message = "oh yeah lmao u did it" });
@@ -98,7 +98,7 @@ namespace WebAPI.Controllers
         [HttpGet("forget-passwrord")]
         public async Task<IActionResult> ConfirmEmail(string email)
         {
-            var result = await _accountService.ForgotPassword(email);
+            var result = await _userService.ForgotPassword(email);
             if (result.Status)
             {
                 var confirmationLink = "Code:\n\"" + result.Data + "\"";
@@ -112,7 +112,7 @@ namespace WebAPI.Controllers
         [HttpPut("password-reset")]
         public async Task<IActionResult> ResetPassword(string token, string email, string newPassword)
         {
-            return Ok(await _accountService.AccountChangePasswordAsync(email, token, newPassword));
+            return Ok(await _userService.UserChangePasswordAsync(email, token, newPassword));
         }
 
 

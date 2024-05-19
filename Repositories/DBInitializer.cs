@@ -119,7 +119,7 @@ namespace Repositories
                 {
                     UserName = "tienhmse172436",
                     Email = "tienhmse172436@fpt.edu.vn",
-                    FullName = "Hoàng Minh Tiến",
+                    FullName = "Hoàng Minh Tiến Lmao",
                     University = "FPTU HCM",
                     PointBalance = 1000,
                     Dob = new DateTime(2003, 4, 5), // Replace with the actual date of birth

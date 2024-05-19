@@ -1,18 +1,17 @@
 ﻿namespace WebAPI.MiddleWares
 {
-    public class AccountStatusMiddleware : IMiddleware
+    public class UserStatusMiddleware : IMiddleware
     {
-        private readonly ILogger<AccountStatusMiddleware> logger;
+        private readonly ILogger<UserStatusMiddleware> logger;
         private readonly IConfiguration configuration;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AccountStatusMiddleware(ILogger<AccountStatusMiddleware> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public UserStatusMiddleware(ILogger<UserStatusMiddleware> logger, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             this.logger = logger;
             this.configuration = configuration;
             this.httpContextAccessor = httpContextAccessor;
         }
-
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {

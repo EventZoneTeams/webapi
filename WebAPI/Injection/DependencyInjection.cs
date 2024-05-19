@@ -16,7 +16,7 @@ namespace WebAPI.Injection
             //sign up for middleware
             services.AddSingleton<GlobalExceptionMiddleware>();
             services.AddTransient<PerformanceTimeMiddleware>();
-            //services.AddScoped<AccountStatusMiddleware>(); // sử dụng ClaimsIdentity nên dùng Addscoped theo request
+            //services.AddScoped<UserStatusMiddleware>(); // sử dụng ClaimsIdentity nên dùng Addscoped theo request
             //others
             services.AddSingleton<Stopwatch>();
             services.AddHttpContextAccessor();
@@ -30,8 +30,7 @@ namespace WebAPI.Injection
         public static IServiceCollection AddWebAPIServices(this IServiceCollection services)
         {
             services.AddScoped<IClaimsService, ClaimsService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddHttpContextAccessor();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

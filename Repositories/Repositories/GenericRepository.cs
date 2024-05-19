@@ -1,84 +1,82 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Repositories.Entities;
 using Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace Repositories.Repositories
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<TEntity, TKey> : IGenericRepository<TEntity, TKey>
+where TEntity : class
     {
-        protected DbSet<T> _dbSet;
-        private readonly ICurrentTime _timeService;
-        private readonly IClaimsService _claimsService;
+        private readonly StudentEventForumDbContext _dbContext;
+        private readonly DbSet<TEntity> _dbSet;
 
-        public GenericRepository(StudentEventForumDbContext context, ICurrentTime timeService, IClaimsService claimsService)
+        public GenericRepository(StudentEventForumDbContext dbContext)
         {
-            _dbSet = context.Set<T>(); // set entity vào Dbset dựa trên generic
-            _timeService = timeService;
-            _claimsService = claimsService;
-        }
-        public async Task AddAsync(T entity)
-        {
-            entity.CreatedAt = _timeService.GetCurrentTime();
-            //entity.CreatedBy = _claimsService.GetCurrentUserId;
-            await _dbSet.AddAsync(entity);
+            _dbContext = dbContext;
+            _dbSet = dbContext.Set<TEntity>();
         }
 
-        public Task AddRangeAsync(List<T> entities)
+        public IQueryable<TEntity> GetAll()
+            => _dbSet;
+
+        public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> predicate)
+            => _dbSet.Where(predicate);
+
+        public TEntity? FirstOrDefault(Expression<Func<TEntity, bool>> predicate) => _dbSet.FirstOrDefault(predicate);
+
+        public async Task<TEntity?> GetByIdAsync(TKey id)
+            => await _dbSet.FindAsync(id);
+        public async Task<TEntity?> GetByIdCompositeKeyAsync(TKey id1, TKey id2)
+            => await _dbSet.FindAsync(id1, id2);
+        public async Task<TEntity> AddAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            var entityEntry = await _dbContext.Set<TEntity>().AddAsync(entity);
+            return entityEntry.Entity;
         }
 
-        public Task<List<T>> GetAllAsync()
+        public TEntity Update(TEntity entity)
         {
-            return _dbSet.ToListAsync();
+            var entityEntry = _dbContext.Set<TEntity>().Update(entity);
+            return entityEntry.Entity;
         }
 
-        public async Task<T?> GetByIdAsync(int id)
+        public TEntity Remove(TKey id)
         {
-            var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
-            // todo should throw exception when not found
-            // todo should throw exception when not found
-            if (result == null)
-            {
-                throw new Exception("Not found");
-            }
-            return result;
+            var entity = GetByIdAsync(id).Result;
+            var entityEntry = _dbContext.Set<TEntity>().Remove(entity!);
+            return entityEntry.Entity;
+        }
+        public TEntity RemoveCompositeKey(TKey id1, TKey id2)
+        {
+            var entity = GetByIdCompositeKeyAsync(id1, id2).Result;
+            var entityEntry = _dbContext.Set<TEntity>().Remove(entity!);
+            return entityEntry.Entity;
         }
 
-        public void SoftRemove(T entity)
+        public Task<int> Commit() => _dbContext.SaveChangesAsync();
+
+        public async Task<int> CountAsync()
         {
-            entity.IsDeleted = true;
-            //entity.DeletedBy = _claimsService.GetCurrentUserId;
-            entity.DeletedAt = _timeService.GetCurrentTime();
-            _dbSet.Update(entity);
+            var count = await _dbSet.CountAsync();
+            return count;
         }
 
-        public void SoftRemoveRange(List<T> entities)
+        public async Task<int> CountAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            foreach (var entity in entities)
-            {
-                entity.IsDeleted = true;
-                //entity.DeletedBy = _claimsService.GetCurrentUserId;
-                entity.DeletedAt = _timeService.GetCurrentTime();
-            }
-            _dbSet.UpdateRange(entities);
+            var count = await _dbSet.CountAsync(predicate);
+            return count;
         }
 
-        public void Update(T entity)
+        public async Task<IEnumerable<TEntity>> GetTopNItems<TKeyProperty>(Expression<Func<TEntity, TKeyProperty>> keySelector, int n)
         {
-            entity.ModifiedAt = _timeService.GetCurrentTime();
-            //entity.ModifiedBy = _claimsService.GetCurrentUserId;
-            _dbSet.Update(entity);
+            var items = await _dbSet.OrderBy(keySelector).Take(n).ToListAsync();
+            return items;
         }
 
-        public void UpdateRange(List<T> entities)
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
         {
-            foreach (var entity in entities)
-            {
-                entity.CreatedAt = _timeService.GetCurrentTime();
-                //entity.CreatedBy = _claimsService.GetCurrentUserId;
-            }
-            _dbSet.UpdateRange(entities);
+            await _dbContext.Set<TEntity>().AddRangeAsync(entities);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Repositories.DTO;
+using Repositories.Entities;
 
 namespace Services.Mapper
 {
@@ -6,13 +8,11 @@ namespace Services.Mapper
     {
         public MapperConfigProfile()
         {
-            /*
-            CreateMap<AccountDetailsModel, User>()
+            CreateMap<UserDetailsModel, User>()
            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToLower() == "male"))
            // Chuyển đổi Guid sang string
            .ReverseMap();
-            */
         }
     }
 }

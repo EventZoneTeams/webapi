@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Repositories.Interfaces
+﻿namespace Repositories.Interfaces
 {
     public interface IClaimsService
     {
-        public Guid GetCurrentUserId { get; }
+        public int GetCurrentUserId { get; }
 
     }
 }

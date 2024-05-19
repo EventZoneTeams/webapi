@@ -1,6 +1,6 @@
 ﻿namespace Repositories.DTO
 {
-    public class AccountDetailsModel
+    public class UserDetailsModel
     {
         public required int Id { get; set; }  // Sử dụng kiểu string cho Id
         public string Email { get; set; } = null!;
