@@ -2,7 +2,7 @@
 {
     public enum OriganizationStatusEnums
     {
-        PREPARiNG,
+        PREPARING,
         ACCOMPLISHED,
         DELAYED,
         CANCELED

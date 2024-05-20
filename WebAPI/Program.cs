@@ -12,6 +12,7 @@ using Services.Services;
 using Services.ViewModels.EmailModels;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
 
@@ -22,6 +23,7 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
