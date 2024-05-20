@@ -33,7 +33,7 @@ namespace WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetEventsAsync([FromQuery] EventParams? eventParams,
+        public async Task<IActionResult> GetEventsAsync([FromQuery] EventParams eventParams,
                OriganizationStatusEnums? origanizationStatusEnums,
                EventStatusEnums? eventStatusEnums
             )
