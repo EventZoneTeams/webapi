@@ -59,12 +59,17 @@ namespace WebAPI.Controllers
         ///
         /// </remarks> 
         /// <response code="200">Returns a event</response>
+        /// <response code="404">Event Not Found</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEventByIdAsync(int id)
         {
             try
             {
                 var data = await _eventService.GetEventByIdAsync(id);
+                if (data == null)
+                {
+                    return NotFound();
+                }
                 return Ok(data);
             }
             catch (Exception ex)

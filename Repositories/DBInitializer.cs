@@ -167,7 +167,7 @@ namespace Repositories
                         Name = "Product 1",
                         Description = "Description 1",
                         Price = 1000,
-                        EventId = 8
+                        EventId = 1
                     }
                 };
 
