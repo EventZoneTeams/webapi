@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -33,7 +34,7 @@ builder.Services.AddSwaggerGen(config =>
         BearerFormat = "JWT",
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.Http,//Cũ là apikey
         Scheme = JwtBearerDefaults.AuthenticationScheme,
         Description = "Put Bearer + your token in the box below",
         Reference = new OpenApiReference
@@ -75,22 +76,21 @@ builder.Services.AddSwaggerGen(config =>
 });
 
 //SETUP INJECTION SERVICE
-builder.Services.AddInfrastructuresService(builder.Configuration);
+builder.Services.ServicesInjection(builder.Configuration);
 builder.Services.AddScoped<GenericRepository<Event, int>>();
 
 //SETUP SERVICE IDENTITY: Allow non alphanumeric
 builder.Services.AddIdentityCore<User>(opt =>
-{
+{   
     opt.Password.RequireNonAlphanumeric = false;
-    opt.User.RequireUniqueEmail = true;
+    opt.User.RequireUniqueEmail = false;
     opt.Password.RequireUppercase = false;
     opt.Password.RequireLowercase = false;
 })
     .AddRoles<Role>()
     .AddEntityFrameworkStores<StudentEventForumDbContext>();
 //ADD AUTHENTICATION - CONFIG FOR JWT
-builder.Services.AddAuthentication(options =>
-{
+builder.Services.AddAuthentication(options =>  {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -107,6 +107,9 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
     };
 });
+
+
+
 builder.Services.AddAuthorization();
 
 //CORS - Set Policy
@@ -161,8 +164,10 @@ app.UseMiddleware<PerformanceTimeMiddleware>();
 app.UseHttpsRedirection();
 
 // USE AUTHENTICATION, AUTHORIZATION
-app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseAuthentication();
+
 
 // USE MIDDLEWARE
 app.UseMiddleware<UserStatusMiddleware>();

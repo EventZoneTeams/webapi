@@ -16,7 +16,7 @@ namespace WebAPI.Injection
 {
     public static class DependencyInjection // Chỉ cần một class tồn tại trong project unchanged
     {
-        public static IServiceCollection AddInfrastructuresService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ServicesInjection(this IServiceCollection services, IConfiguration configuration)
         {
             // CONNECT TO DATABASE
             services.AddDbContext<StudentEventForumDbContext>(options =>

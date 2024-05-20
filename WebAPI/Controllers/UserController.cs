@@ -27,10 +27,10 @@ namespace WebAPI.Controllers
                 var data = await _userService.ResigerAsync(userLogin, role.ToString());
                 if (data.Status)
                 {
-                    var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);
-                    var message = new Message(new string[] { data.Data.Email }, "Confirmation email link", confirmationLink!);
-                    await _emailService.SendEmail(message);
-                    data.Message = "Added sucessfully, please check your email <3";
+                   // var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);
+                    //var message = new Message(new string[] { data.Data.Email }, "Confirmation email link", confirmationLink!);
+                   // await _emailService.SendEmail(message);
+                    data.Message = "Added sucessfully <3";
                     return Ok(data);
                 }
 
