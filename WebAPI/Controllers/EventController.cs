@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Enums;
+using Microsoft.AspNetCore.Mvc;
+using Repositories.Commons;
+using Repositories.Commons.Payload.Requests;
+using Repositories.DTO;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -29,16 +33,23 @@ namespace WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetEventsAsync()
+        public async Task<IActionResult> GetEventsAsync([FromQuery] EventParams? eventParams,
+               OriganizationStatusEnums? origanizationStatusEnums,
+               EventStatusEnums? eventStatusEnums
+            )
         {
             try
             {
                 var data = await _eventService.GetEventsAsync();
-                return Ok(data);
+                if (data == null)
+                {
+                    return BadRequest("Get List Failed!");
+                }
+                return Ok(ApiResult<List<EventModel>>.Succeed(data, "Get Event Successfully!"));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -68,9 +79,10 @@ namespace WebAPI.Controllers
                 var data = await _eventService.GetEventByIdAsync(id);
                 if (data == null)
                 {
-                    return NotFound();
+                    return NotFound(ApiResult<EventModel>.Error(null, "Event Not Found!"));
                 }
-                return Ok(data);
+                return Ok(ApiResult<EventModel>.Succeed(data,
+                    "Get Event Details Successfully!"));
             }
             catch (Exception ex)
             {
