@@ -51,13 +51,13 @@ namespace Services.Services
                 };
             }
 
-            var token = await _unitOfWork.UserRepository.GenerateEmailConfirmationToken(result);
+          //  var token = await _unitOfWork.UserRepository.GenerateEmailConfirmationToken(result);
 
             return new ResponseGenericModel<UserDetailsModel>
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
                 Status = true,
-                Message = token
+                Message = ""
             };
         }
 

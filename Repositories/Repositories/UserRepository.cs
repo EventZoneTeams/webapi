@@ -6,6 +6,7 @@ using Repositories.DTO;
 using Repositories.Entities;
 using Repositories.Interfaces;
 using Repositories.Utils;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -73,7 +74,9 @@ namespace Repositories.Repositories
                     Console.WriteLine($"New user ID: {user.Id}");
                     if (!await _roleManager.RoleExistsAsync(role.ToString()))
                     {
-                        //await _roleManager.CreateAsync(new Role(role.ToString()));
+                        var newRole = new Role();
+                        newRole.Name = role.ToString();
+                        await _roleManager.CreateAsync(newRole);
                     }
 
                     if (await _roleManager.RoleExistsAsync(role.ToString()))
@@ -126,7 +129,7 @@ namespace Repositories.Repositories
                 return null;
             }
 
-            var result = await _signInManager.PasswordSignInAsync(User.Email, User.Password, false, false);
+            var result = await _signInManager.CheckPasswordSignInAsync(UserExist, User.Password, false);
 
             if (result.Succeeded)
             {
@@ -134,8 +137,9 @@ namespace Repositories.Repositories
 
                 var authClaims = new List<Claim> // add User vào claim
                 {
-                    //new Claim("UserId", 1),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                    new Claim(ClaimTypes.Name, UserExist.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+
                 };
 
                 foreach (var role in roles)
