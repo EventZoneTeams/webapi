@@ -9,6 +9,7 @@ using Repositories.Repositories;
 using Services.Interface;
 using Services.Services;
 using Services.ViewModels.EmailModels;
+using System.Reflection;
 using System.Text;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
@@ -27,7 +28,6 @@ builder.Services.AddEndpointsApiExplorer();
 //CONFIG FOR JWT AUTHENTICATION ON SWAGGER
 builder.Services.AddSwaggerGen(config =>
 {
-    config.SwaggerDoc("v1", new OpenApiInfo { Title = "Student Event Forum", Version = "v.1.0" });
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         BearerFormat = "JWT",
@@ -43,6 +43,24 @@ builder.Services.AddSwaggerGen(config =>
         }
     };
 
+    config.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Student Event Forum",
+        Description = "Student Event Forum API",
+        Contact = new OpenApiContact
+        {
+            Name = "Fanpage",
+            Url = new Uri("https://example.com/contact")
+        },
+        License = new OpenApiLicense
+        {
+            Name = "Front-end URL",
+            Url = new Uri("https://example.com/license")
+        }
+
+    });
+
     config.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
 
     config.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -51,6 +69,9 @@ builder.Services.AddSwaggerGen(config =>
             jwtSecurityScheme, Array.Empty<string>()
         }
 });
+    // using System.Reflection;
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 //SETUP INJECTION SERVICE

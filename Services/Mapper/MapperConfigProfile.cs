@@ -13,6 +13,9 @@ namespace Services.Mapper
            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToLower() == "male"))
            // Chuyển đổi Guid sang string
            .ReverseMap();
+
+            CreateMap<EventModel, Event>()
+                .ReverseMap();
         }
     }
 }

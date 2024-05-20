@@ -36,6 +36,7 @@ namespace WebAPI.Injection
             // add repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ProductRepository>();
+            services.AddScoped<IEventRepository, EventRepository>();
 
             // add signInManager
             services.AddScoped<SignInManager<User>>();
@@ -46,6 +47,7 @@ namespace WebAPI.Injection
 
             // add services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEventService, EventService>();
 
             return services;
         }
