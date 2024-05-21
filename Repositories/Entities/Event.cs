@@ -11,8 +11,8 @@
         public string? Location { get; set; }
         public int UserId { get; set; }
         public string? University { get; set; }
-        public int Status { get; set; }
-        public int? OriganizationStatus { get; set; }
+        public string? Status { get; set; }
+        public string? OriganizationStatus { get; set; }
         public bool IsDonation { get; set; }
         public decimal TotalCost { get; set; }
 
