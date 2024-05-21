@@ -146,8 +146,8 @@ namespace Repositories
                         EventEndDate = new DateTime(2022, 1, 2),
                         Location = "Location 1",
                         UserId = 1,
-                        Status = 0,
-                        OriganizationStatus = 0
+                        Status = "PENDING",
+                        OriganizationStatus = "PREPARING"
                     }
                 };
 
