@@ -139,7 +139,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-
+                var data = await _eventService.CreateEventAsync(createEventModel);
                 return Ok();
             }
             catch (Exception ex)

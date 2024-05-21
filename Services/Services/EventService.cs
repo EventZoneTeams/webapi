@@ -2,6 +2,7 @@
 using Repositories.DTO;
 using Repositories.Interfaces;
 using Services.Interface;
+using Services.ViewModels.EventModels;
 
 namespace Services.Services
 {
@@ -15,6 +16,12 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+        public async Task<EventModel> CreateEventAsync(CreateEventModel eventModel)
+        {
+            return null;
+        }
+
         public async Task<EventModel> GetEventByIdAsync(int id)
         {
             var Event = await _unitOfWork.EventRepository.GetEventByIdAsync(id);
