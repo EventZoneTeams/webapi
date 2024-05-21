@@ -6,8 +6,7 @@ namespace Repositories.Interfaces
     {
         public Task<List<Event>> GetEventsAsync();
         public Task<Event> GetEventByIdAsync(int id);
-        //public Task<Event> AddEventAsync(Event eventModel);
-        //public Task<Event> UpdateEventAsync(int id, Event eventModel);
-        //public Task<bool> DeleteEventAsync(int id);
+        public Task<Event> CreateEventAsync(Event eventModel);
+        public Task<Event> DeleteEventAsync(int id);
     }
 }
