@@ -31,7 +31,7 @@ namespace Services.Services
 
         public async Task<List<EventModel>> GetEventsAsync()
         {
-            var Events = await _unitOfWork.EventRepository.GetEventsAsync();
+            var Events = await _unitOfWork.EventRepository.GetAllAsync();
             var result = new List<EventModel>();
             foreach (var Event in Events)
             {

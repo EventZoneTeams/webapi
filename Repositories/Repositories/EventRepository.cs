@@ -4,13 +4,19 @@ using Repositories.Interfaces;
 
 namespace Repositories.Repositories
 {
-    public class EventRepository : GenericRepository<Event, int>, IEventRepository
+    public class EventRepository : GenericRepository<Event>, IEventRepository
     {
-        private readonly StudentEventForumDbContext _studentEventForumDbContext;
 
-        public EventRepository(StudentEventForumDbContext studentEventForumDbContext) : base(studentEventForumDbContext)
+        private readonly StudentEventForumDbContext _studentEventForumDbContext;
+        private readonly ICurrentTime _timeService;
+        private readonly IClaimsService _claimsService;
+
+        public EventRepository(StudentEventForumDbContext studentEventForumDbContext, ICurrentTime timeService, IClaimsService claims) : base(studentEventForumDbContext, timeService, claims)
+
         {
             _studentEventForumDbContext = studentEventForumDbContext;
+            _timeService = timeService;
+            _claimsService = claims;
         }
 
         public async Task<List<Event>> GetEventsAsync()
@@ -32,9 +38,11 @@ namespace Repositories.Repositories
 
         public async Task<Event> DeleteEventAsync(int id)
         {
-            var Event = await _studentEventForumDbContext.Events.FirstOrDefault(e => e.Id == id);
+            //var Event = await _studentEventForumDbContext.Events.FirstOrDefault(e => e.Id == id);
 
-            if (Even)
+            //if (Even)
+
+            return null;
 
         }
     }

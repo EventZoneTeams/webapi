@@ -95,7 +95,7 @@ namespace WebAPI.Controllers
             return BadRequest(new { status = false, message = "bruh we ded 💀" });
         }
 
-        [HttpGet("forget-passwrord")]
+        [HttpPost("forgot-password")]
         public async Task<IActionResult> ConfirmEmail(string email)
         {
             var result = await _userService.ForgotPassword(email);
@@ -109,7 +109,7 @@ namespace WebAPI.Controllers
             return NotFound(result);
         }
 
-        [HttpPut("password-reset")]
+        [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword(string token, string email, string newPassword)
         {
             return Ok(await _userService.UserChangePasswordAsync(email, token, newPassword));

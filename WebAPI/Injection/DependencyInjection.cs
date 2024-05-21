@@ -37,6 +37,7 @@ namespace WebAPI.Injection
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ProductRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>();
 
             // add signInManager
             services.AddScoped<SignInManager<User>>();

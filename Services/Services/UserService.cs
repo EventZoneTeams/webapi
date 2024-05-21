@@ -18,17 +18,17 @@ namespace Services.Services
         }
         public async Task<List<UserDetailsModel>> GetAllUsers()
         {
-            var Users = await _unitOfWork.UserRepository.GetAllUsersAsync();
-            var result = new List<UserDetailsModel>();
-            foreach (var User in Users)
-            {
-                var roleName = await _unitOfWork.UserRepository.GetRoleName(User);
-                var lmao = _mapper.Map<UserDetailsModel>(User);
-                //lmao.RoleName = roleName;
-                result.Add(lmao);
-            }
+            //var Users = await _unitOfWork.UserRepository.GetAllUsersAsync();
+            //var result = new List<UserDetailsModel>();
+            //foreach (var User in Users)
+            //{
+            //    var roleName = await _unitOfWork.UserRepository.GetRoleName(User);
+            //    var lmao = _mapper.Map<UserDetailsModel>(User);
+            //    lmao.RoleName = roleName;
+            //    result.Add(lmao); 
+            //}
 
-            //var result = await _unitOfWork.UserRepository.GetAllUsersWithRoleAsync();
+            var result = await _unitOfWork.UserRepository.GetAllUsersWithRoleAsync();
 
             return result;
         }

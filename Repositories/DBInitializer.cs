@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Repositories.Entities;
+using Repositories.Utils;
 
 namespace Repositories
 {
@@ -59,7 +60,8 @@ namespace Repositories
                 {
                     UserName = "uydev",
                     Email = "lequocuy@gmail.com",
-                    FullName = "Le Quoc Uy",
+                    FullName = "Lê Quốc Uy",
+                    UnsignFullName = "Le Quoc Uy",
                     University = "FPTU HCM",
                     PointBalance = 1000,
                     Dob = new DateTime(2003, 7, 11),
@@ -75,6 +77,7 @@ namespace Repositories
                     UserName = "namthhse172294",
                     Email = "namthhse172294@fpt.edu.vn",
                     FullName = "Trương Hà Hào Nam",
+                    UnsignFullName = StringTools.ConvertToUnSign("Trương Hà Hào Nam"),
                     University = "FPTU HCM",
                     PointBalance = 1000,
                     Dob = new DateTime(2003, 1, 1), // Replace with the actual date of birth
@@ -105,6 +108,7 @@ namespace Repositories
                     UserName = "huanngse171018",
                     Email = "huanngse171018@fpt.edu.vn",
                     FullName = "Ngô Gia Huấn",
+                    UnsignFullName = StringTools.ConvertToUnSign("Ngô Gia Huấn"),
                     University = "FPTU HCM",
                     PointBalance = 1000,
                     Dob = new DateTime(2003, 3, 20), // Replace with the actual date of birth
@@ -120,6 +124,7 @@ namespace Repositories
                     UserName = "tienhmse172436",
                     Email = "tienhmse172436@fpt.edu.vn",
                     FullName = "Hoàng Minh Tiến Lmao",
+                    UnsignFullName = StringTools.ConvertToUnSign("Hoàng Minh Tiến"),
                     University = "FPTU HCM",
                     PointBalance = 1000,
                     Dob = new DateTime(2003, 4, 5), // Replace with the actual date of birth
