@@ -4,11 +4,11 @@ using Repositories.Interfaces;
 
 namespace Repositories.Repositories
 {
-    public class EventRepository : IEventRepository
+    public class EventRepository : GenericRepository<Event, int>, IEventRepository
     {
         private readonly StudentEventForumDbContext _studentEventForumDbContext;
 
-        public EventRepository(StudentEventForumDbContext studentEventForumDbContext)
+        public EventRepository(StudentEventForumDbContext studentEventForumDbContext) : base(studentEventForumDbContext)
         {
             _studentEventForumDbContext = studentEventForumDbContext;
         }
@@ -23,6 +23,19 @@ namespace Repositories.Repositories
         {
             var eventEntity = await _studentEventForumDbContext.Events.FirstOrDefaultAsync(x => x.Id == id);
             return eventEntity;
+        }
+        public async Task<Event> CreateEventAsync(Event eventEntity)
+        {
+            var entry = await _studentEventForumDbContext.Events.AddAsync(eventEntity);
+            return entry.Entity; // test
+        }
+
+        public async Task<Event> DeleteEventAsync(int id)
+        {
+            var Event = await _studentEventForumDbContext.Events.FirstOrDefault(e => e.Id == id);
+
+            if (Even)
+
         }
     }
 }
