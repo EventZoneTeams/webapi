@@ -9,7 +9,7 @@ namespace Domain.Enums
     public enum RoleEnums
     {
         ADMIN,
-        USER,
+        MANAGER,
         STUDENT
     }
 }

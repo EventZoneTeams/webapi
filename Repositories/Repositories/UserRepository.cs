@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Google.Apis.Auth;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repositories.Commons;
@@ -24,7 +25,8 @@ namespace Repositories.Repositories
         private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
 
-        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService, IClaimsService claimsService, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService, 
+            IClaimsService claimsService, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
             _templateDbContext = templateDbContext;
             _timeService = timeService;
@@ -112,6 +114,8 @@ namespace Repositories.Repositories
             return null;
         }
 
+
+
         public async Task<string> GenerateEmailConfirmationToken(User user)
         {
             return await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -121,6 +125,105 @@ namespace Repositories.Repositories
         {
             return await _userManager.GeneratePasswordResetTokenAsync(user);
         }
+
+
+        public async Task<ResponseLoginModel> LoginGoogleAsync(string credential)
+        {
+            string clientID = _configuration["GoogleCredential:ClientId"];
+            string clientID1 = _configuration["GoogleCredential2:ClientId"];
+
+            if (string.IsNullOrEmpty(clientID) && string.IsNullOrEmpty(clientID1))
+            {
+                throw new Exception("CliendId Is null!");
+
+            }
+
+            var settings = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = new List<string>()
+                {
+                    clientID,clientID1
+                }
+            };
+
+            var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
+            if(payload == null)
+            {
+                throw new Exception("Credential incorrect!");
+            }
+
+            var accountExist = await _userManager.FindByEmailAsync(payload.Email);
+
+            if(accountExist != null)
+            {
+                if (accountExist.IsDeleted == true)
+                {
+                    return new ResponseLoginModel
+                    {
+                        Status=false,
+                        Message="Account has been banned"
+                    };
+                }
+
+                if (payload.Picture != null)
+                {
+                    if (accountExist.Image == null)
+                    {
+                        accountExist.Image = payload.Picture;
+                        await _userManager.UpdateAsync(accountExist);
+                    }
+                    else
+                    {
+                        if (payload.Picture != accountExist.Image)
+                        {
+                            accountExist.Image = payload.Picture;
+                            await _userManager.UpdateAsync(accountExist);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+            var roles = await _userManager.GetRolesAsync(accountExist);
+
+            var authClaims = new List<Claim>
+            { 
+                new Claim(ClaimTypes.Name, accountExist.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+
+            };
+
+            foreach(var role in roles)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var refreshToken = TokenTools.GenerateRefreshToken();
+
+            _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+
+            accountExist.RefreshToken = refreshToken;
+            accountExist.RefreshTokenExpiryTime = _timeService.GetCurrentTime().AddDays(refreshTokenValidityInDays);
+
+            await _userManager.UpdateAsync(accountExist);
+
+            var token = GenerateJWTToken.CreateToken(authClaims, _configuration, DateTime.UtcNow);
+
+            return new ResponseLoginModel
+            {
+                Status = true,
+                Message = "Login Successfully",
+                JWT = new JwtSecurityTokenHandler().WriteToken(token),
+                Expired = token.ValidTo.ToLocalTime(),
+                JWTRefreshToken = refreshToken
+            };
+
+        }
+
+
         public async Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel User)
         {
             var UserExist = await _userManager.FindByEmailAsync(User.Email);
