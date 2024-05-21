@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Entities;
+using Repositories.Interfaces;
 using Repositories.Repositories;
 using Services.Interface;
 using Services.Services;
@@ -79,7 +80,6 @@ builder.Services.AddSwaggerGen(config =>
 
 //SETUP INJECTION SERVICE
 builder.Services.ServicesInjection(builder.Configuration);
-builder.Services.AddScoped<GenericRepository<Event, int>>();
 
 //SETUP SERVICE IDENTITY: Allow non alphanumeric
 builder.Services.AddIdentityCore<User>(opt =>

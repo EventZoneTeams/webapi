@@ -2,7 +2,7 @@
 
 namespace Repositories.Interfaces
 {
-    public interface IEventRepository
+    public interface IEventRepository : IGenericRepository<Event>
     {
         public Task<List<Event>> GetEventsAsync();
         public Task<Event> GetEventByIdAsync(int id);
