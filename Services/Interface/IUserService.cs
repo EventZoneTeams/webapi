@@ -12,5 +12,6 @@ namespace Services.Interface
         Task<ResponseGenericModel<UserDetailsModel>> UserChangePasswordAsync(string email, string currentPassword, string newPassword);
         Task<bool> ConfirmEmail(string email, string token);
         Task<ResponseGenericModel<string>> ForgotPassword(string email);
+        Task<ResponseGenericModel<UserDetailsModel>> GetCurrentUserAsync();
     }
 }
