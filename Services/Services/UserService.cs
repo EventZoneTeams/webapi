@@ -47,7 +47,7 @@ namespace Services.Services
                 {
                     Data = null,
                     Status = false,
-                    Message = "Add User has been failed"
+                    Message = "User have been existed"
                 };
             }
 
@@ -61,8 +61,31 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseGenericModel<UserDetailsModel>> GetCurrentUserAsync()
+        {
+            var result = await _unitOfWork.UserRepository.GetCurrentUserAsync();
+            if (result != null)
+            {
+                return new ResponseGenericModel<UserDetailsModel>
+                {
+                    Data = _mapper.Map<UserDetailsModel>(result),
+                    Status = true,
+                    Message = "This is current user"
+                };
+             
+            }
+            return new ResponseGenericModel<UserDetailsModel>
+            {
+                Data = null,
+                Status = false,
+                Message = "Not found"
+            };
+
+
+        }
         public async Task<ResponseLoginModel> LoginAsync(UserLoginModel User)
         {
+
             return await _unitOfWork.UserRepository.LoginByEmailAndPassword(User);
         }
 

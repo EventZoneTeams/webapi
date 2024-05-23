@@ -5,7 +5,6 @@
         public required int Id { get; set; }  // Sử dụng kiểu string cho Id
         public string Email { get; set; } = null!;
 
-
         public string? UnsignFullName { get; set; } = "";
 
         public string? FullName { get; set; }

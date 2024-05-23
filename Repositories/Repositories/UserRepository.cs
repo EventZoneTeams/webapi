@@ -126,6 +126,18 @@ namespace Repositories.Repositories
             return await _userManager.GeneratePasswordResetTokenAsync(user);
         }
 
+        public async Task<User> GetCurrentUserAsync()
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == _claimsService.GetCurrentUserId);
+            if( user != null)
+            {
+                return user;
+            }
+
+            return null;
+
+        }
+
 
         public async Task<ResponseLoginModel> LoginGoogleAsync(string credential)
         {
@@ -229,7 +241,11 @@ namespace Repositories.Repositories
             var UserExist = await _userManager.FindByEmailAsync(User.Email);
             if (UserExist == null)
             {
-                return null;
+                return new ResponseLoginModel
+                {
+                    Status = false,
+                    Message = "This email does not exist, please go to sign up your account",
+                };
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(UserExist, User.Password, false);
@@ -268,14 +284,14 @@ namespace Repositories.Repositories
             }
             else
             {
-                if (!UserExist.EmailConfirmed)
-                {
-                    return new ResponseLoginModel
-                    {
-                        Status = false,
-                        Message = "Your email haven't verified yet, please check",
-                    };
-                }
+                //if (!UserExist.EmailConfirmed)
+                //{
+                //    return new ResponseLoginModel
+                //    {
+                //        Status = false,
+                //        Message = "Your email haven't verified yet, please check",
+                //    };
+                //}
 
                 return new ResponseLoginModel
                 {
@@ -325,6 +341,7 @@ namespace Repositories.Repositories
                                                Id = userRolesGroup.Key,
                                                UnsignFullName = userRolesGroup.First().user.UnsignFullName,
                                                FullName = userRolesGroup.First().user.FullName,
+                                               Email = userRolesGroup.First().user.Email,
                                                Dob = userRolesGroup.First().user.Dob,
                                                Gender = (bool)userRolesGroup.First().user.Gender ? "male" : "female",
                                                Image = userRolesGroup.First().user.Image,

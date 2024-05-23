@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _userService.LoginAsync(user);
-                if (result != null)
+                if (result.Status)
                 {
                     return Ok(result);
                 }
@@ -64,6 +64,19 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllusersAsync()
         {
+            return Ok(await _userService.GetAllUsers());
+        }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetCurrentUserAsync()
+        {   
+            var result = await _userService.GetCurrentUserAsync();   
+            if (result.Status)
+            {
+                return Ok(result);
+            }
+            return NotFound(result);
+
             return Ok(await _userService.GetAllUsers());
         }
 
