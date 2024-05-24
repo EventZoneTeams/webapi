@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Repositories.DTO;
 using Repositories.Interfaces;
+using Services.BusinessModels.ResponseModels;
 using Services.Interface;
-using Services.ViewModels.ResponseModels;
 
 namespace Services.Services
 {
@@ -51,7 +51,7 @@ namespace Services.Services
                 };
             }
 
-          //  var token = await _unitOfWork.UserRepository.GenerateEmailConfirmationToken(result);
+            //  var token = await _unitOfWork.UserRepository.GenerateEmailConfirmationToken(result);
 
             return new ResponseGenericModel<UserDetailsModel>
             {

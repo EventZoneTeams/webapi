@@ -12,8 +12,8 @@ using Repositories;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(StudentEventForumDbContext))]
-    [Migration("20240518071857_initial")]
-    partial class initial
+    [Migration("20240524063717_INITIAL DB")]
+    partial class INITIALDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,8 +157,8 @@ namespace Repositories.Migrations
                     b.Property<DateTime?>("DonationStartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DonationStatus")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EventCategoryId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("EventEndDate")
                         .HasColumnType("datetime2");
@@ -185,8 +185,10 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OriganizationStatus")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalCost")
@@ -200,9 +202,52 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EventCategoryId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Repositories.Entities.EventCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventCategories");
                 });
 
             modelBuilder.Entity("Repositories.Entities.EventComment", b =>
@@ -819,6 +864,21 @@ namespace Repositories.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeleteBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("Dob")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -826,11 +886,29 @@ namespace Repositories.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("Gender")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -849,11 +927,23 @@ namespace Repositories.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<string>("University")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnsignFullName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -870,6 +960,25 @@ namespace Repositories.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Repositories.Entities.Wallet", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("OrganizationalWallet")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PersonalWallet")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PointBalance")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Wallets");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -925,11 +1034,19 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Repositories.Entities.Event", b =>
                 {
+                    b.HasOne("Repositories.Entities.EventCategory", "EventCategory")
+                        .WithMany("Events")
+                        .HasForeignKey("EventCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Repositories.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("EventCategory");
 
                     b.Navigation("User");
                 });
@@ -1114,6 +1231,17 @@ namespace Repositories.Migrations
                     b.Navigation("EventProduct");
                 });
 
+            modelBuilder.Entity("Repositories.Entities.Wallet", b =>
+                {
+                    b.HasOne("Repositories.Entities.User", "User")
+                        .WithOne("Wallet")
+                        .HasForeignKey("Repositories.Entities.Wallet", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Repositories.Entities.Event", b =>
                 {
                     b.Navigation("EventComments");
@@ -1129,6 +1257,11 @@ namespace Repositories.Migrations
                     b.Navigation("EventProducts");
 
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("Repositories.Entities.EventCategory", b =>
+                {
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("Repositories.Entities.EventOrder", b =>
@@ -1157,6 +1290,12 @@ namespace Repositories.Migrations
                     b.Navigation("EventImages");
 
                     b.Navigation("PostComments");
+                });
+
+            modelBuilder.Entity("Repositories.Entities.User", b =>
+                {
+                    b.Navigation("Wallet")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

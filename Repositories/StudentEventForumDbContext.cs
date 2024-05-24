@@ -8,7 +8,9 @@ namespace Repositories
     {
         public StudentEventForumDbContext(DbContextOptions options) : base(options) { }
 
+        public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<EventCategory> EventCategories { get; set; }
         public DbSet<EventComment> EventComments { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostComment> PostComments { get; set; }
@@ -30,6 +32,12 @@ namespace Repositories
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
+
+            modelBuilder.Entity<User>()
+               .HasOne(U => U.Wallet)
+               .WithOne(e => e.User)
+               .HasForeignKey<Wallet>(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
+
 
 
             // Configure entity relationships

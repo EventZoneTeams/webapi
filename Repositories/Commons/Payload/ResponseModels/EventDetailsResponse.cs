@@ -1,4 +1,4 @@
-﻿namespace Repositories.Commons.Payload.Responses
+﻿namespace Repositories.Commons.Payload.ResponseModels
 {
     public class EventDetailsResponse
     {

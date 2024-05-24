@@ -1,5 +1,5 @@
 ﻿using Repositories.DTO;
-using Services.ViewModels.ResponseModels;
+using Services.BusinessModels.ResponseModels;
 
 namespace Services.Interface
 {

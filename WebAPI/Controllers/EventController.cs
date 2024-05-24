@@ -1,10 +1,10 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
-using Repositories.Commons.Payload.Requests;
+using Repositories.Commons.Payload.RequestModels;
 using Repositories.DTO;
+using Services.BusinessModels.EventModels;
 using Services.Interface;
-using Services.ViewModels.EventModels;
 
 namespace WebAPI.Controllers
 {

@@ -20,10 +20,8 @@ namespace Repositories.Entities
         public int? DeleteBy { get; set; }
         public bool? IsDeleted { get; set; } = false;
 
-
         public string? University { get; set; }
-        public int? PointBalance { get; set; }
 
-
+        public virtual Wallet Wallet { get; set; }
     }
 }

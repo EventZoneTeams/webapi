@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Repositories.DTO;
 using Repositories.Interfaces;
+using Services.BusinessModels.EventModels;
 using Services.Interface;
-using Services.ViewModels.EventModels;
 
 namespace Services.Services
 {
