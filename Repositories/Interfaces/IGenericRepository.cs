@@ -8,6 +8,12 @@ namespace Repositories.Interfaces
         Task<List<TEntity>> GetAllAsync();
         Task<TEntity?> GetByIdAsync(int id);
         Task<TEntity> AddAsync(TEntity entity);
+        Task<bool> UpdateRange(List<TEntity> entities);
+        Task<bool> Update(TEntity entity);
+        Task<bool> SoftRemoveRangeById(List<int> entitiesId);
+        Task<bool> SoftRemoveRange(List<TEntity> entities);
+        Task<bool> SoftRemove(TEntity entity);
+        Task AddRangeAsync(List<TEntity> entities);
 
         //IQueryable<TEntity> GetAll();
         //IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> predicate);

@@ -62,6 +62,57 @@ namespace Repositories.Repositories
             return true;
         }
 
+        public async Task<bool> SoftRemoveRange(List<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                entity.IsDeleted = true;
+                entity.DeletedAt = _timeService.GetCurrentTime();
+                entity.DeletedBy = _claimsService.GetCurrentUserId;
+            }
+            _dbSet.UpdateRange(entities);
+            //  await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> SoftRemoveRangeById(List<int> entitiesId) // update hàng loạt cùng 1 trường thì làm y chang
+        {
+            var entities = await _dbSet.Where(e => entitiesId.Contains(e.Id)).ToListAsync();
+
+            foreach (var entity in entities)
+            {
+                entity.IsDeleted = true;
+                entity.DeletedAt = _timeService.GetCurrentTime();
+                entity.DeletedBy = _claimsService.GetCurrentUserId;
+            }
+
+            _dbContext.UpdateRange(entities);
+            return true;
+        }
+
+        public async Task<bool> Update(TEntity entity)
+        {
+            entity.ModifiedAt = _timeService.GetCurrentTime();
+            entity.ModifiedBy = _claimsService.GetCurrentUserId;
+            _dbSet.Update(entity);
+            //   await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateRange(List<TEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                entity.ModifiedAt = _timeService.GetCurrentTime();
+                entity.ModifiedBy = _claimsService.GetCurrentUserId;
+            }
+            _dbSet.UpdateRange(entities);
+            //  await _dbContext.SaveChangesAsync();
+            return true;
+        }
+
+
+
 
 
         //private readonly StudentEventForumDbContext _dbContext;

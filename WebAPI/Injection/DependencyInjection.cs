@@ -37,15 +37,17 @@ namespace WebAPI.Injection
             // add repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();// ****
+            // add generic repositories
             services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>();
-            services.AddScoped<IGenericRepository<EventCategory>, GenericRepository<EventCategory>>();
+            services.AddScoped<IGenericRepository<EventCategory>, GenericRepository<EventCategory>>();// ****
 
             // add signInManager
             services.AddScoped<SignInManager<User>>();
             // add services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
-            services.AddScoped<IEventCategoryService, EventCategoryService>();
+            services.AddScoped<IEventCategoryService, EventCategoryService>(); // ****
 
             // add unitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();
