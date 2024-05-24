@@ -1,4 +1,4 @@
-﻿namespace Services.ViewModels.UserModels
+﻿namespace Services.BusinessModels.UserModels
 {
     public class UserResponseModel
     {

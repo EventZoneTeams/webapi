@@ -1,5 +1,5 @@
 ﻿using Repositories.DTO;
-using Services.ViewModels.EventModels;
+using Services.BusinessModels.EventModels;
 
 namespace Services.Interface
 {

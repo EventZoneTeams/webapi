@@ -1,20 +1,15 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using Services.BusinessModels.EmailModels;
 using Services.Interface;
-using Services.ViewModels.EmailModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
     public class EmailService : IEmailService
     {
         private readonly EmailConfiguration _emailConfig;
-        public EmailService (EmailConfiguration emailConfig)
+        public EmailService(EmailConfiguration emailConfig)
         {
             _emailConfig = emailConfig;
         }
@@ -26,7 +21,7 @@ namespace Services.Services
             await Send(emailMessage);
         }
 
-        private  MimeMessage CreateEmailMessage(Message message)
+        private MimeMessage CreateEmailMessage(Message message)
         {
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress("email", _emailConfig.From));
