@@ -24,9 +24,11 @@ namespace Services.Services
 
         public async Task<EventModel> GetEventByIdAsync(int id)
         {
-            var Event = await _unitOfWork.EventRepository.GetEventByIdAsync(id);
-            var eventFormat = _mapper.Map<EventModel>(Event);
-            return eventFormat;
+            //var Event = await _unitOfWork.EventRepository.GetEventByIdAsync(id);
+            //var eventFormat = _mapper.Map<EventModel>(Event);
+            //return eventFormat;
+
+            return null;
         }
 
         public async Task<List<EventModel>> GetEventsAsync()
