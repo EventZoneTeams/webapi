@@ -1,5 +1,4 @@
 ﻿using Repositories.Entities;
-using System.Linq.Expressions;
 
 namespace Repositories.Interfaces
 {
@@ -14,8 +13,8 @@ namespace Repositories.Interfaces
         Task<bool> SoftRemoveRange(List<TEntity> entities);
         Task<bool> SoftRemove(TEntity entity);
         Task AddRangeAsync(List<TEntity> entities);
+        IQueryable<TEntity> GetQueryable();
 
-        //IQueryable<TEntity> GetAll();
         //IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> predicate);
         //TEntity? FirstOrDefault(Expression<Func<TEntity, bool>> predicate);
         //Task<TEntity?> GetByIdAsync(TKey id);

@@ -2,9 +2,9 @@
 
 namespace Services.BusinessModels.EventCategoryModels
 {
-    public class CreateEventCategoryModel
+    public class UpdateEventCategoryModel
     {
         public string Title { get; set; }
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }
