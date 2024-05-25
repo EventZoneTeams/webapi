@@ -280,6 +280,7 @@ namespace Repositories.Repositories
                     JWT = new JwtSecurityTokenHandler().WriteToken(token),
                     Expired = token.ValidTo,
                     JWTRefreshToken = refreshToken,
+                    Role = roles.First()
                 };
             }
             else

@@ -11,5 +11,7 @@
         public DateTime? Expired { get; set; }
 
         public string? JWTRefreshToken { get; set; } = "";
+
+        public string Role {  get; set; } = string.Empty;
     }
 }
