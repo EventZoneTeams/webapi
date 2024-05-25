@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Repositories.DTO;
 using Repositories.Interfaces;
+using Services.BusinessModels.EventModels;
 using Services.Interface;
-using Services.ViewModels.EventModels;
 
 namespace Services.Services
 {
@@ -24,9 +24,11 @@ namespace Services.Services
 
         public async Task<EventModel> GetEventByIdAsync(int id)
         {
-            var Event = await _unitOfWork.EventRepository.GetEventByIdAsync(id);
-            var eventFormat = _mapper.Map<EventModel>(Event);
-            return eventFormat;
+            //var Event = await _unitOfWork.EventRepository.GetEventByIdAsync(id);
+            //var eventFormat = _mapper.Map<EventModel>(Event);
+            //return eventFormat;
+
+            return null;
         }
 
         public async Task<List<EventModel>> GetEventsAsync()

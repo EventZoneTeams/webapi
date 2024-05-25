@@ -1,4 +1,4 @@
-﻿namespace Repositories.Commons.Payload.Requests
+﻿namespace Repositories.Commons.Payload.RequestModels
 {
     public class EventParams : PaginationParameter
     {

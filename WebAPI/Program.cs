@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Repositories.Entities;
-using Repositories.Interfaces;
-using Repositories.Repositories;
+using Services.BusinessModels.EmailModels;
 using Services.Interface;
 using Services.Services;
-using Services.ViewModels.EmailModels;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -83,7 +80,7 @@ builder.Services.ServicesInjection(builder.Configuration);
 
 //SETUP SERVICE IDENTITY: Allow non alphanumeric
 builder.Services.AddIdentityCore<User>(opt =>
-{   
+{
     opt.Password.RequireNonAlphanumeric = false;
     opt.User.RequireUniqueEmail = false;
     opt.Password.RequireUppercase = false;
@@ -92,7 +89,8 @@ builder.Services.AddIdentityCore<User>(opt =>
     .AddRoles<Role>()
     .AddEntityFrameworkStores<StudentEventForumDbContext>();
 //ADD AUTHENTICATION - CONFIG FOR JWT
-builder.Services.AddAuthentication(options =>  {
+builder.Services.AddAuthentication(options =>
+{
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;

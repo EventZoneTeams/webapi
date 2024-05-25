@@ -63,7 +63,6 @@ namespace Repositories
                     FullName = "Lê Quốc Uy",
                     UnsignFullName = "Le Quoc Uy",
                     University = "FPTU HCM",
-                    PointBalance = 1000,
                     Dob = new DateTime(2003, 7, 11),
                     Gender = true,
                     Image = "https://scontent.fsgn15-1.fna.fbcdn.net/v/t39.30808-1/430878538_2206677789683723_4464660377243750146_n.jpg?stp=dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE_Vr1x6BHZ_S__ovdDg7zS5W9udhABzaHlb252EAHNoS38q_urtNeTErRYpa0zqYNo-vOAf49-zjjLBslYOw-p&_nc_ohc=8En2AdNVtaUQ7kNvgEn1g25&_nc_ht=scontent.fsgn15-1.fna&oh=00_AYA_Dyr3Kzs4J5lFKCiaYlu6-KlRK4icdur4m-IrU68PPA&oe=664E1D9B"
@@ -79,7 +78,6 @@ namespace Repositories
                     FullName = "Trương Hà Hào Nam",
                     UnsignFullName = StringTools.ConvertToUnSign("Trương Hà Hào Nam"),
                     University = "FPTU HCM",
-                    PointBalance = 1000,
                     Dob = new DateTime(2003, 1, 1), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
                     Image = "https://avatar.iran.liara.run/public/boy?username=namthhse172294" // Replace with the actual image URL
@@ -94,7 +92,6 @@ namespace Repositories
                     Email = "vunse172437@fpt.edu.vn",
                     FullName = "Nguyễn Vũ",
                     University = "FPTU HCM",
-                    PointBalance = 1000,
                     Dob = new DateTime(2003, 2, 15), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
                     Image = "https://avatar.iran.liara.run/public/boy?username=vunse172437" // Replace with the actual image URL
@@ -110,7 +107,6 @@ namespace Repositories
                     FullName = "Ngô Gia Huấn",
                     UnsignFullName = StringTools.ConvertToUnSign("Ngô Gia Huấn"),
                     University = "FPTU HCM",
-                    PointBalance = 1000,
                     Dob = new DateTime(2003, 3, 20), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
                     Image = "https://avatar.iran.liara.run/public/boy?username=huanngse171018" // Replace with the actual image URL
@@ -126,7 +122,6 @@ namespace Repositories
                     FullName = "Hoàng Minh Tiến Lmao",
                     UnsignFullName = StringTools.ConvertToUnSign("Hoàng Minh Tiến"),
                     University = "FPTU HCM",
-                    PointBalance = 1000,
                     Dob = new DateTime(2003, 4, 5), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
                     Image = "https://avatar.iran.liara.run/public/boy?username=tienhmse172436" // Replace with the actual image URL
@@ -138,21 +133,25 @@ namespace Repositories
                 await context.SaveChangesAsync();
             }
 
-
             if (!context.Events.Any())
             {
                 var events = new List<Event>
                 {
                     new Event
                     {
-                        Name = "Event 1",
-                        Description = "Description 1",
-                        EventStartDate = new DateTime(2022, 1, 1),
-                        EventEndDate = new DateTime(2022, 1, 2),
-                        Location = "Location 1",
-                        UserId = 1,
-                        Status = "PENDING",
-                        OriganizationStatus = "PREPARING"
+                        Name= "Charity Fundraiser for Children's Education",
+                        Description= "A charity event to raise funds for underprivileged children's education and school supplies.",
+                        DonationStartDate= DateTime.Parse("2024-05-15T09:00:00.000Z"),
+                        DonationEndDate= DateTime.Parse("2024-05-30T18:00:00.000Z"),
+                        EventStartDate= DateTime.Parse("2024-05-25T10:00:00.000Z"),
+                        EventEndDate= DateTime.Parse("2024-05-25T18:00:00.000Z"),
+                        Location= "Central Park, New York City",
+                        UserId= 1,
+                        University= "New York University",
+                        Status= "Upcoming",
+                        OriganizationStatus= "Approved",
+                        IsDonation= true,
+                        TotalCost= 25000
                     }
                 };
 

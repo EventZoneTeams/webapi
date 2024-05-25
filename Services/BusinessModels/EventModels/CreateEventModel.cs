@@ -1,4 +1,4 @@
-﻿namespace Services.ViewModels.EventModels
+﻿namespace Services.BusinessModels.EventModels
 {
     public class CreateEventModel
     {

@@ -10,6 +10,7 @@
         public DateTime? EventEndDate { get; set; }
         public string? Location { get; set; }
         public int UserId { get; set; }
+        public int EventCategoryId { get; set; }
         public string? University { get; set; }
         public string? Status { get; set; }
         public string? OriganizationStatus { get; set; }
@@ -17,6 +18,7 @@
         public decimal TotalCost { get; set; }
 
         public virtual User User { get; set; }
+        public virtual EventCategory EventCategory { get; set; }
         public virtual ICollection<EventImage> EventImages { get; set; }
         public virtual ICollection<EventComment> EventComments { get; set; }
         public virtual ICollection<Post> Posts { get; set; }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Repositories.DTO;
 using Repositories.Entities;
+using Services.BusinessModels.EventCategoryModels;
 
 namespace Services.Mapper
 {
@@ -15,6 +16,9 @@ namespace Services.Mapper
            .ReverseMap();
 
             CreateMap<EventModel, Event>()
+                .ReverseMap();
+
+            CreateMap<EventCategoryModel, EventCategory>()
                 .ReverseMap();
         }
     }
