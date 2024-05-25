@@ -14,7 +14,7 @@ namespace Services.Services
 
         public ImageService(IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("AzureBlobStorage");
+            string connectionString = configuration.GetConnectionString("BlobStorage");
             _blobServiceClient = new BlobServiceClient(connectionString);
             _containerName = configuration.GetValue<string>("BlobContainerName");
         }
