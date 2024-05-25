@@ -45,6 +45,7 @@ namespace WebAPI.Injection
             // add signInManager
             services.AddScoped<SignInManager<User>>();
             // add services
+            services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventCategoryService, EventCategoryService>(); // ****

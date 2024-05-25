@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Repositories.Entities;
 using Repositories.Interfaces;
-using System.Linq.Expressions;
 
 namespace Repositories.Repositories
 {
@@ -12,7 +11,7 @@ namespace Repositories.Repositories
         private readonly ICurrentTime _timeService;
         private readonly IClaimsService _claimsService;
 
-        public GenericRepository(StudentEventForumDbContext context, ICurrentTime timeService, IClaimsService claimsService) 
+        public GenericRepository(StudentEventForumDbContext context, ICurrentTime timeService, IClaimsService claimsService)
         {
             _dbSet = context.Set<TEntity>();
             _dbContext = context;
@@ -51,6 +50,8 @@ namespace Repositories.Repositories
             var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
             return result;
         }
+
+
 
         public async Task<bool> SoftRemove(TEntity entity)
         {
@@ -111,9 +112,10 @@ namespace Repositories.Repositories
             return true;
         }
 
-
-
-
+        public IQueryable<TEntity> GetQueryable()
+        {
+            return _dbSet;
+        }
 
         //private readonly StudentEventForumDbContext _dbContext;
         //private readonly DbSet<TEntity> _dbSet;
