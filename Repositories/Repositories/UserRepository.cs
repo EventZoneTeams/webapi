@@ -236,6 +236,8 @@ namespace Repositories.Repositories
         }
 
 
+
+
         public async Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel User)
         {
             var UserExist = await _userManager.FindByEmailAsync(User.Email);
