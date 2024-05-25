@@ -236,6 +236,8 @@ namespace Repositories.Repositories
         }
 
 
+
+
         public async Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel User)
         {
             var UserExist = await _userManager.FindByEmailAsync(User.Email);
@@ -280,7 +282,6 @@ namespace Repositories.Repositories
                     JWT = new JwtSecurityTokenHandler().WriteToken(token),
                     Expired = token.ValidTo,
                     JWTRefreshToken = refreshToken,
-                    Role = roles.First()
                 };
             }
             else

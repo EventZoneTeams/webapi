@@ -66,9 +66,13 @@ namespace Services.Services
             var result = await _unitOfWork.UserRepository.GetCurrentUserAsync();
             if (result != null)
             {
+                var role = await _unitOfWork.UserRepository.GetRoleName(result);
+                var data = _mapper.Map<UserDetailsModel>(result);
+                data.RoleName = role.First();
+
                 return new ResponseGenericModel<UserDetailsModel>
                 {
-                    Data = _mapper.Map<UserDetailsModel>(result),
+                    Data = data,
                     Status = true,
                     Message = "This is current user"
                 };
