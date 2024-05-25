@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Repositories.Entities;
 using Repositories.Interfaces;
 using Services.BusinessModels.EventCategoryModels;
 using Services.Interface;
@@ -16,10 +17,33 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<EventCategoryModel> CreateEventCategory(CreateEventCategoryModel eventCategoryModel)
+        public async Task<EventCategoryModel> CreateEventCategory(EventCategoryModel eventCategoryModel)
         {
-            return null;
+            // check if event category already exists
+            var existingCategory = await _unitOfWork.EventCategoryRepository
+                .GetAllAsync();
 
+
+            var isExist = existingCategory.FirstOrDefault(x => x.Title.ToLower() == eventCategoryModel.Title.ToLower());
+
+            if (isExist != null)
+            {
+                throw new Exception("Event category already exists");
+            }
+
+
+            // create new event category
+            var eventCategory = new EventCategory
+            {
+                Title = eventCategoryModel.Title,
+                ImageUrl = eventCategoryModel.ImageUrl
+            };
+            var newCategory = await _unitOfWork.EventCategoryRepository.AddAsync(eventCategory);
+
+            // mapper
+            var result = _mapper.Map<EventCategoryModel>(newCategory);
+            await _unitOfWork.SaveChangeAsync();
+            return result;
         }
 
         public async Task<EventCategoryModel> DeleteEventCategory(int id)
@@ -27,7 +51,7 @@ namespace Services.Services
             return null;
         }
 
-        public async Task<List<EventCategoryModel>> GetEventCategories()
+        public async Task<List<EventCategoryModel>> GetEventCategories(CategoryParam? categoryParam)
         {
             var eventCategories = await _unitOfWork.EventCategoryRepository.GetAllAsync();
             var result = new List<EventCategoryModel>();

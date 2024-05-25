@@ -18,8 +18,9 @@ namespace Services.Mapper
             CreateMap<EventModel, Event>()
                 .ReverseMap();
 
-            CreateMap<EventCategoryModel, EventCategory>()
-                .ReverseMap();
+            CreateMap<EventCategory, EventCategoryModel>()
+                .ReverseMap()
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? (string)null));
         }
     }
 }
