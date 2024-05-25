@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
+using Repositories.Extensions;
 using Services.BusinessModels.EventCategoryModels;
 using Services.Interface;
 
@@ -19,31 +19,31 @@ namespace WebAPI.Controllers
             _imageService = imageService;
         }
 
+
+
         /// <summary>
         /// Get all event categories
         /// </summary>
-        /// <param name="SearchTerm">Optional search term to filter categories</param>
-        /// <param name="orderByEnum">The order in which categories should be sorted</param>
         /// <returns>A list of event categories</returns>
         /// <remarks>
         /// Sample request:
         ///
-        ///     GET /event-categories?SearchTerm=Music&orderByEnum=Title
+        ///     GET /event-categories
         ///
         /// </remarks>
         /// <response code="200">Returns list of event categories</response>
         /// <response code="400">If the item is null</response>
-        [HttpGet]
+        [HttpGet("")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCategoriesOfEventAsync([FromQuery] string? SearchTerm, [FromQuery] OrderByEnum orderByEnum)
+        public async Task<IActionResult> GetCategoriesOfEventAsync([FromQuery] string? SearchTerm, [FromQuery] EventCategoryOrderBy eventCategoryOrderBy)
         {
             try
             {
                 var data = await _eventCategoryService.GetEventCategories(new CategoryParam
                 {
                     SearchTerm = SearchTerm,
-                    OrderBy = orderByEnum.ToString(),
+                    OrderBy = eventCategoryOrderBy,
                 });
 
                 if (data == null)
@@ -139,6 +139,98 @@ namespace WebAPI.Controllers
 
                 return Ok(ApiResult<EventCategoryModel>.Succeed(result,
                         "Create Event Category Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
+        /// Update an existing event category
+        /// </summary>
+        /// <param name="id">The id of the event category to update</param>
+        /// <param name="data">The updated data for the event category, including title and image</param>
+        /// <returns>The updated event category</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     PUT /event-categories/1
+        ///     {
+        ///         "title": "Updated Âm Nhạc",
+        ///         "image": [binary image data]
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="200">Returns the updated event category</response>
+        /// <response code="404">If the event category is not found</response>
+        /// <response code="400">If the model state is invalid or an error occurs during update</response>
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEventCategory(int id, [FromForm] UpdateEventCategoryModel data)
+        {
+            try
+            {
+                string imageUrl = null;
+                if (data.Image != null)
+                {
+                    imageUrl = await _imageService.UploadImageAsync(data.Image, "event-category");
+                }
+
+                var eventCategory = new EventCategoryModel
+                {
+                    Id = id,
+                    Title = data.Title,
+                    ImageUrl = imageUrl
+                };
+
+                var result = await _eventCategoryService.UpdateEventCategory(id, eventCategory);
+
+                if (result == null)
+                {
+                    return NotFound(ApiResult<EventCategoryModel>.Error(null, "Event Category Not Found!"));
+                }
+
+                return Ok(ApiResult<EventCategoryModel>.Succeed(result, "Update Event Category Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
+        /// Delete an event category
+        /// </summary>
+        /// <param name="id">The id of the event category to delete</param>
+        /// <returns>No content</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE /event-categories/1
+        ///
+        /// </remarks>
+        /// <response code="204">If the event category was successfully deleted</response>
+        /// <response code="404">If the event category is not found</response>
+        /// <response code="400">If an error occurs during deletion</response>
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteEventCategory(int id)
+        {
+            try
+            {
+                var result = await _eventCategoryService.DeleteEventCategory(id);
+
+                if (result == null)
+                {
+                    return NotFound(ApiResult<object>.Error(null, "Event Category Not Found!"));
+                }
+
+                return Ok(ApiResult<EventCategoryModel>.Succeed(result, "Delete Event Category Successfully!"));
             }
             catch (Exception ex)
             {

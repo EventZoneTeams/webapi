@@ -13,6 +13,7 @@ namespace Repositories.Interfaces
         Task<bool> SoftRemoveRange(List<TEntity> entities);
         Task<bool> SoftRemove(TEntity entity);
         Task AddRangeAsync(List<TEntity> entities);
+        IQueryable<TEntity> GetQueryable();
 
         //IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> predicate);
         //TEntity? FirstOrDefault(Expression<Func<TEntity, bool>> predicate);

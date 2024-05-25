@@ -1,9 +1,10 @@
-﻿namespace Services.BusinessModels.EventCategoryModels
+﻿using Repositories.Extensions;
+
+namespace Services.BusinessModels.EventCategoryModels
 {
     public class CategoryParam
     {
         public string SearchTerm { get; set; }
-
-        public string OrderBy { get; set; }
+        public EventCategoryOrderBy OrderBy { get; set; }
     }
 }

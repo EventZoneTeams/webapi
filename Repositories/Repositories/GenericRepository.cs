@@ -112,6 +112,11 @@ namespace Repositories.Repositories
             return true;
         }
 
+        public IQueryable<TEntity> GetQueryable()
+        {
+            return _dbSet;
+        }
+
         //private readonly StudentEventForumDbContext _dbContext;
         //private readonly DbSet<TEntity> _dbSet;
 
