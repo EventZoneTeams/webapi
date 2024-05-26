@@ -2,7 +2,7 @@
 {
     public class UserDetailsModel
     {
-        public required int Id { get; set; }  // Sử dụng kiểu string cho Id
+        public required int Id { get; set; } 
         public string Email { get; set; } = null!;
 
         public string? UnsignFullName { get; set; } = "";

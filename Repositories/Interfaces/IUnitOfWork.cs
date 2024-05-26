@@ -5,6 +5,8 @@
         IUserRepository UserRepository { get; }
         IEventRepository EventRepository { get; }
         IEventCategoryRepository EventCategoryRepository { get; }
+        IEventProductRepository EventProductRepository { get; }
+
         Task<int> SaveChangeAsync();
     }
 }

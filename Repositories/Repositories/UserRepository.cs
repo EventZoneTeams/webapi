@@ -345,7 +345,7 @@ namespace Repositories.Repositories
                                                FullName = userRolesGroup.First().user.FullName,
                                                Email = userRolesGroup.First().user.Email,
                                                Dob = userRolesGroup.First().user.Dob,
-                                               Gender = (bool)userRolesGroup.First().user.Gender ? "male" : "female",
+                                               Gender = (bool)userRolesGroup.First().user.Gender ? "Male" : "Female",
                                                Image = userRolesGroup.First().user.Image,
                                                IsDeleted = userRolesGroup.First().user.IsDeleted,
                                                Role = userRolesGroup.Select(urg => new RoleInfoModel
