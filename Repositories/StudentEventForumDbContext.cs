@@ -44,6 +44,18 @@ namespace Repositories
             modelBuilder.Entity<ProductInPackage>()
                 .HasKey(pp => new { pp.ProductId, pp.PackageId });
 
+            modelBuilder.Entity<ProductInPackage>()
+    .HasOne(pp => pp.EventProduct)
+    .WithMany(p => p.ProductsInPackage)
+    .HasForeignKey(pp => pp.ProductId)
+    .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProductInPackage>()
+                .HasOne(pp => pp.EventPackage)
+                .WithMany(p => p.ProductsInPackage)
+                .HasForeignKey(pp => pp.PackageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
             modelBuilder.Entity<EventComment>()
                 .HasKey(ec => ec.Id);

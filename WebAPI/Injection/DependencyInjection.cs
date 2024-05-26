@@ -35,16 +35,22 @@ namespace WebAPI.Injection
             services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
             services.AddScoped<IClaimsService, ClaimsService>();
             // add repositories
+            services.AddScoped<IEventPackageRepository, EventPackageRepository>();
+            services.AddScoped<IEventProductRepository, EventProductRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();// ****
             // add generic repositories
+            services.AddScoped<IGenericRepository<EventPackage>, GenericRepository<EventPackage>>();
+            services.AddScoped<IGenericRepository<EventProduct>, GenericRepository<EventProduct>>();
             services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>();
             services.AddScoped<IGenericRepository<EventCategory>, GenericRepository<EventCategory>>();// ****
 
             // add signInManager
             services.AddScoped<SignInManager<User>>();
             // add services
+            services.AddScoped<IEventPackageService, EventPackageService>();
+            services.AddScoped<IEventProductService, EventProductService>();
             services.AddScoped<IImageService, ImageService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEventService, EventService>();
@@ -52,9 +58,6 @@ namespace WebAPI.Injection
 
             // add unitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-
-
             return services;
         }
     }
