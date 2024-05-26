@@ -3,6 +3,7 @@ using Repositories.DTO;
 using Repositories.Entities;
 using Services.BusinessModels.EventCategoryModels;
 using Services.BusinessModels.EventProductsModel;
+using Services.BusinessModels.EventModels;
 
 namespace Services.Mapper
 {

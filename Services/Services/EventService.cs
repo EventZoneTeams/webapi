@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using Repositories.DTO;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Entities;
 using Repositories.Interfaces;
 using Services.BusinessModels.EventModels;
 using Services.Interface;
@@ -17,31 +18,120 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<EventModel> CreateEventAsync(CreateEventModel eventModel)
+        public async Task<List<EventModel>> GetEvent()
         {
-            return null;
-        }
+            var events = await _unitOfWork.EventRepository
+                .GetQueryable()
+                .ToListAsync<Event>();
 
-        public async Task<EventModel> GetEventByIdAsync(int id)
-        {
-            //var Event = await _unitOfWork.EventRepository.GetEventByIdAsync(id);
-            //var eventFormat = _mapper.Map<EventModel>(Event);
-            //return eventFormat;
-
-            return null;
-        }
-
-        public async Task<List<EventModel>> GetEventsAsync()
-        {
-            var Events = await _unitOfWork.EventRepository.GetAllAsync();
             var result = new List<EventModel>();
-            foreach (var Event in Events)
+            foreach (var ev in events)
             {
-                var eventFormat = _mapper.Map<EventModel>(Event);
-                result.Add(eventFormat);
+                var eventModel = _mapper.Map<EventModel>(ev);
+                result.Add(eventModel);
+            }
+            return result;
+        }
+
+        public async Task<EventModel> GetEventById(int id)
+        {
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
+
+            if (existingEvent == null)
+            {
+                throw new Exception("Event not found");
             }
 
+            var result = _mapper.Map<EventModel>(existingEvent);
             return result;
+        }
+        public async Task<EventModel> CreateEvent(EventModel eventModel)
+        {
+            var eventEntity = _mapper.Map<Event>(eventModel);
+            //check user
+            var user = await _unitOfWork.UserRepository.GetAllUsersAsync();
+            var isExist = user.FirstOrDefault(x => x.Id == eventModel.UserId);
+            if (isExist == null)
+            {
+                throw new Exception("User not null when create event");
+            }
+
+            //check eventCategory
+            var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(eventModel.EventCategoryId);
+            if (eventCategory == null)
+            {
+                throw new Exception("Event category not null when create event");
+            }
+            eventEntity.EventCategory = eventCategory;
+
+            var newEvent = await _unitOfWork.EventRepository.AddAsync(eventEntity);
+
+            var result = _mapper.Map<EventModel>(newEvent);
+            await _unitOfWork.SaveChangeAsync();
+            return result;
+        }
+
+        public async Task<EventModel> UpdateEvent(int id, EventModel eventModel)
+        {
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
+
+            if (existingEvent == null)
+            {
+                throw new Exception("Event not found");
+            }
+
+            existingEvent.Name = eventModel.Name ?? existingEvent.Name;
+            existingEvent.Description = eventModel.Description ?? existingEvent.Description;
+            existingEvent.DonationStartDate = eventModel.DonationStartDate ?? existingEvent.DonationStartDate;
+            existingEvent.DonationEndDate = eventModel.DonationEndDate ?? existingEvent.DonationEndDate;
+            existingEvent.EventStartDate = eventModel.EventStartDate ?? existingEvent.EventStartDate;
+            existingEvent.EventEndDate = eventModel.EventEndDate ?? existingEvent.EventEndDate;
+            existingEvent.Location = eventModel.Location ?? existingEvent.Location;
+            if (eventModel.UserId != 0)
+            {
+                existingEvent.UserId = eventModel.UserId;
+            }
+            if (eventModel.EventCategoryId != 0)
+            {
+                existingEvent.EventCategoryId = eventModel.EventCategoryId;
+            }
+            existingEvent.University = eventModel.University ?? existingEvent.University;
+            existingEvent.Status = eventModel.Status.ToString() ?? existingEvent.Status;
+            existingEvent.OriganizationStatus = eventModel.OriganizationStatus.ToString() ?? existingEvent.OriganizationStatus;
+            existingEvent.IsDonation = eventModel.IsDonation ?? existingEvent.IsDonation;
+            existingEvent.TotalCost = eventModel.TotalCost ?? existingEvent.TotalCost;
+
+            var isUpdated = await _unitOfWork.EventRepository.Update(existingEvent);
+
+            if (isUpdated == false)
+            {
+                throw new Exception("Failed to update event");
+            }
+
+            var result = _mapper.Map<EventModel>(existingEvent);
+            await _unitOfWork.SaveChangeAsync();
+            return result;
+        }
+        public async Task<EventModel> DeleteEvent(int id)
+        {
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
+
+            if (existingEvent == null)
+            {
+                throw new Exception("Event not found");
+            }
+
+            var isDeleted = await _unitOfWork.EventRepository.SoftRemove(existingEvent);
+            if (isDeleted)
+            {
+                var result = _mapper.Map<EventModel>(existingEvent);
+                await _unitOfWork.SaveChangeAsync();
+                return result;
+            }
+            else
+            {
+                throw new Exception("Failed to delete event");
+            }
         }
     }
 }
