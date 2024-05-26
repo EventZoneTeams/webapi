@@ -22,6 +22,11 @@ namespace Services.Mapper
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? (string)null));
 
             CreateMap<EventProduct, EventProductDetailModel>() .ReverseMap();
+            CreateMap<EventProduct, EventProductUpdateModel>().ReverseMap();
+            CreateMap<EventProduct, EventProductDetailDTO>().ReverseMap();
+
+            CreateMap<ProductInPackage, ProductInPackageDTO>().ReverseMap();
+            CreateMap<EventPackage, EventPackageDetailDTO>().ReverseMap();
         }
     }
 }

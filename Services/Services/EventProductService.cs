@@ -69,7 +69,7 @@ namespace Services.Services
 
             if(existingIds.Count > 0)
             {
-                var result = await _unitOfWork.EventRepository.SoftRemoveRangeById(existingIds);
+                var result = await _unitOfWork.EventProductRepository.SoftRemoveRangeById(existingIds);
                 if(result)
                 {
                     return new ResponseGenericModel<List<EventProductDetailModel>>()
@@ -84,10 +84,12 @@ namespace Services.Services
             {
                 if (nonExistingIds.Count > 0)
                 {
+                    string nonExistingIdsString = string.Join(", ", nonExistingIds);
+
                     return new ResponseGenericModel<List<EventProductDetailModel>>()
                     {
                         Status = false,
-                        Message = "There are few ids that are no existed" + nonExistingIds,
+                        Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
                         Data = _mapper.Map<List<EventProductDetailModel>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
@@ -109,7 +111,7 @@ namespace Services.Services
             return _mapper.Map<List<EventProductDetailModel>>(result);
         }
 
-        public async Task<ResponseGenericModel<EventProductDetailModel>> UpdateEventProductAsync(int productId, EventProductDetailModel updateModel)
+        public async Task<ResponseGenericModel<EventProductDetailModel>> UpdateEventProductAsync(int productId, EventProductUpdateModel updateModel)
         {
             var existingProduct = await _unitOfWork.EventProductRepository.GetByIdAsync(productId);
             if(existingProduct != null)
@@ -135,7 +137,7 @@ namespace Services.Services
                         Data = null
                     };
                 }
-               
+             
             }
             return new ResponseGenericModel<EventProductDetailModel>()
             {
@@ -143,8 +145,6 @@ namespace Services.Services
                 Message = "This account is not existed",
                 Data = null
             };
-
-
         }
     }
 }

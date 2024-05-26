@@ -44,12 +44,12 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("{productId}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute]int productId, [FromBody] EventProductDetailModel model)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute]int id, [FromBody] EventProductUpdateModel model)
         {
             try
             {
-                var result = await _eventProductService.UpdateEventProductAsync( productId,model);
+                var result = await _eventProductService.UpdateEventProductAsync(id, model);
                 if (result.Status)
                 {
                     return Ok(result);
