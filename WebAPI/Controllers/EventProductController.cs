@@ -5,7 +5,7 @@ using Services.Interface;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/v1/eventproducts")]
+    [Route("api/v1/event-products")]
     [ApiController]
     public class EventProductController : Controller
     {
@@ -31,12 +31,26 @@ namespace WebAPI.Controllers
             }
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> CreateAsync([FromBody] EventProductCreateModel model)
+        //{
+        //    try
+        //    {
+        //        var result = await _eventProductService.CreateEventProductAsync(model);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] EventProductCreateModel model)
+        public async Task<IActionResult> CreateAsync([FromBody] List<EventProductCreateModel> models)
         {
             try
             {
-                var result = await _eventProductService.CreateEventProductAsync(model);
+                var result = await _eventProductService.CreateEventProductAsync(models);
                 return Ok(result);
             }
             catch (Exception ex)

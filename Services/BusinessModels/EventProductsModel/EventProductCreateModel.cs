@@ -22,5 +22,7 @@ namespace Services.BusinessModels.EventProductsModel
       //  [Required(ErrorMessage = "QuantityInStock is required!")]
         public int QuantityInStock { get; set; }
 
+        public string? imageUrl { get; set; }
+
     }
 }

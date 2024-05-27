@@ -9,13 +9,16 @@ namespace Repositories
         private readonly IEventRepository _eventRepository;
         private readonly IEventCategoryRepository _eventCategoryRepository;
         private readonly IEventProductRepository _eventProductRepository;
+        private readonly IEventPackageRepository _eventPackageRepository;
+
 
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
             , IUserRepository userRepository,
             IEventRepository eventRepository,
             IEventCategoryRepository eventCategoryRepository,
-            IEventProductRepository eventProductRepository
+            IEventProductRepository eventProductRepository,
+            IEventPackageRepository eventPackageRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -23,6 +26,7 @@ namespace Repositories
             _eventRepository = eventRepository;
             _eventCategoryRepository = eventCategoryRepository;
             _eventProductRepository = eventProductRepository;
+            _eventPackageRepository = eventPackageRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -30,6 +34,8 @@ namespace Repositories
         public IEventCategoryRepository EventCategoryRepository => _eventCategoryRepository;
 
         public IEventProductRepository EventProductRepository => _eventProductRepository;
+        public IEventPackageRepository EventPackageRepository => _eventPackageRepository;
+
 
 
 

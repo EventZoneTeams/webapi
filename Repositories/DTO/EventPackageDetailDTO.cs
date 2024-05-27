@@ -12,6 +12,8 @@ namespace Repositories.DTO
         public int EventId { get; set; }
         public int TotalPrice { get; set; }
         public string Description { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public bool? IsDeleted { get; set; } = false;
 
         public List<EventProductDetailDTO>? Products { get; set; }
 

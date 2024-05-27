@@ -10,8 +10,10 @@ namespace Services.Interface
 {
     public interface IEventPackageService
     {
-        Task<ResponseGenericModel<List<ProductInPackageDTO>>> CreatePackageWithProducts(int eventId, List<int> productIds);
-        Task<List<EventPackageDetailDTO>> GetAll();
+        Task<ResponseGenericModel<List<ProductInPackageDTO>>> CreatePackageWithProducts(int eventId, string description, List<ProductQuantityDTO> products);
+        Task<List<EventPackageDetailDTO>> GetAllWithProducts();
+        Task<List<EventPackageDetailDTO>> GetAllPackageOfEvent(int eventId);
         Task<List<ProductInPackageDTO>> GetProductsInPackagesWithProduct_Package();
+        Task<ResponseGenericModel<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds);
     }
 }

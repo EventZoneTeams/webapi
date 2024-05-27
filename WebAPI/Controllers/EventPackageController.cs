@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Repositories.DTO;
+using Services.BusinessModels.EventPackageModels;
 using Services.BusinessModels.EventProductsModel;
 using Services.Interface;
 using Services.Services;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/eventpackages")]
+    [Route("api/event-packages")]
     [ApiController]
     public class EventPackageController : ControllerBase
     {
@@ -19,11 +21,11 @@ namespace WebAPI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromQuery]int eventId, List<int> productIds)
+        public async Task<IActionResult> CreateAsync([FromQuery]int eventId, CreatePackageRequest package)
         {
             try
             {
-                var result = await _eventPackageService.CreatePackageWithProducts(eventId, productIds);
+                var result = await _eventPackageService.CreatePackageWithProducts(eventId, package.Description ,package.Products);
                 if (result.Status)
                 {
                 return Ok(result);
@@ -39,7 +41,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("products")]
         public async Task<IActionResult> GetProductsInPackagesWithProduct_Package()
         {
             try
@@ -52,13 +54,44 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("special")]
-        public async Task<IActionResult> GetAllAsync()
+        [HttpGet]
+        public async Task<IActionResult> GetAllPackageAsync()
         {
             try
             {
-                var data = await _eventPackageService.GetAll();
+                var data = await _eventPackageService.GetAllWithProducts();
                 return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("events/{id}")]
+        public async Task<IActionResult> GetAllPackagesInEventAsync(int id)
+        {
+            try
+            {
+                var data = await _eventPackageService.GetAllPackageOfEvent(id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync([FromBody] List<int> packageIds)
+        {
+            try
+            {
+                var result = await _eventPackageService.DeleteEventPackagesAsync(packageIds);
+                if (result.Status)
+                {
+                    return Ok(result);
+                }
+
+                return NotFound(result);
             }
             catch (Exception ex)
             {
