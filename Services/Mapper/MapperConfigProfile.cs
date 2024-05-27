@@ -4,6 +4,7 @@ using Repositories.Entities;
 using Services.BusinessModels.EventCategoryModels;
 using Services.BusinessModels.EventProductsModel;
 using Services.BusinessModels.EventModels;
+using Services.BusinessModels.UserModels;
 
 namespace Services.Mapper
 {
@@ -13,6 +14,10 @@ namespace Services.Mapper
         {
             CreateMap<User, UserDetailsModel>()
            .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender != null && src.Gender == true ? "Male" : "Female"))
+           .ReverseMap();
+
+            CreateMap<UserUpdateModel, User>().
+            ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToLower() == "male")).ReverseMap()
            .ReverseMap();
 
             CreateMap<EventModel, Event>()

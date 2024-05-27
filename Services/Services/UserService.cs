@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Repositories.DTO;
 using Repositories.Interfaces;
+using Services.BusinessModels.EmailModels;
 using Services.BusinessModels.ResponseModels;
+using Services.BusinessModels.UserModels;
 using Services.Interface;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Services.Services
 {
@@ -57,9 +60,113 @@ namespace Services.Services
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
                 Status = true,
+                Message = "Register Successfuly"
+            };
+        }
+
+        public async Task<ResponseGenericModel<UserDetailsModel>> UpdateStudentProfileAsync(int userId, UserUpdateModel userUpdateMode)
+        {
+            var existingUser = await _unitOfWork.UserRepository.GetAccountDetailsAsync(userId);
+            if (existingUser != null)
+            {
+                existingUser = _mapper.Map(userUpdateMode, existingUser);
+                var updatedAccount = await _unitOfWork.UserRepository.UpdateAccountAsync(existingUser);
+
+                if (updatedAccount != null)
+                {
+                    var response = new ResponseGenericModel<UserDetailsModel>();
+                    response.Data = _mapper.Map<UserDetailsModel>(existingUser);
+                    response.Message = "Updated user successfully";
+                    response.Status = true;
+                    return response;
+                }
+
+            }
+
+            return new ResponseGenericModel<UserDetailsModel>
+            {
+                Data = null,
+                Status = false,
+                Message = "This user is not existed"
+            };
+
+        }
+
+        public async Task<ResponseGenericModel<UserDetailsModel>> UpdateAccountAsync(int userId, UserUpdateModel userUpdateMode, string role)
+        {
+            try
+            {
+                var existingUser = await _unitOfWork.UserRepository.GetAccountDetailsAsync(userId);
+                if (existingUser != null)
+                {
+                    existingUser = _mapper.Map(userUpdateMode, existingUser);
+                    // exiistingUser.RoleId = EnumHelper.ConvertToRoleId(accountUpdateModel.Role);
+                    var updatedAccount = await _unitOfWork.UserRepository.UpdateAccountAsync(existingUser);
+
+                    if (updatedAccount != null)
+                    {
+                        var response = new ResponseGenericModel<UserDetailsModel>();
+                        response.Data = _mapper.Map<UserDetailsModel>(existingUser);
+                        response.Message = "Updated user successfully";
+                        response.Status = true;
+                        if (!string.IsNullOrEmpty(role))
+                        {
+                            var result = await _unitOfWork.UserRepository.UpdateUserRole(existingUser, role);
+                            if (result)
+                            {
+
+                                response.Message = "Updated user and role Successfuly";
+                            }
+                            else
+                            {
+
+                                response.Message = "Updated user successfully but role are not changed";
+                            }
+                        }
+                        return response;
+                    }
+
+                }
+
+                return new ResponseGenericModel<UserDetailsModel>
+                {
+                    Data = null,
+                    Status = false,
+                    Message = "This user is not existed"
+                };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
+
+        public async Task<ResponseGenericModel<UserDetailsModel>> CreateManagerAsync(UserSignupModel UserLogin)
+        {
+            var result = await _unitOfWork.UserRepository.AddUser(UserLogin, "MANAGER");
+            if (result == null)
+            {
+                return new ResponseGenericModel<UserDetailsModel>
+                {
+                    Data = null,
+                    Status = false,
+                    Message = "User have been existed"
+                };
+            }
+
+            //  var token = await _unitOfWork.UserRepository.GenerateEmailConfirmationToken(result);
+
+            return new ResponseGenericModel<UserDetailsModel>
+            {
+                Data = _mapper.Map<UserDetailsModel>(result),
+                Status = true,
                 Message = ""
             };
         }
+
 
         public async Task<ResponseGenericModel<UserDetailsModel>> GetCurrentUserAsync()
         {
@@ -92,6 +199,8 @@ namespace Services.Services
 
             return await _unitOfWork.UserRepository.LoginByEmailAndPassword(User);
         }
+
+
 
         public async Task<ResponseGenericModel<UserDetailsModel>> UserChangePasswordAsync(string email, string token, string newPassword)
         {
@@ -133,6 +242,8 @@ namespace Services.Services
         {
             return await _unitOfWork.UserRepository.ConfirmEmail(email, token);
         }
+
+
 
 
 

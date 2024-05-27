@@ -25,7 +25,7 @@ namespace Repositories.Repositories
         private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
 
-        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService, 
+        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService,
             IClaimsService claimsService, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
         {
             _templateDbContext = templateDbContext;
@@ -74,24 +74,24 @@ namespace Repositories.Repositories
                 if (result.Succeeded)
                 {
                     Console.WriteLine($"New user ID: {user.Id}");
-                    if (!await _roleManager.RoleExistsAsync(role.ToString()))
+                    if (!await _roleManager.RoleExistsAsync(role))
                     {
                         var newRole = new Role();
-                        newRole.Name = role.ToString();
+                        newRole.Name = role;
                         await _roleManager.CreateAsync(newRole);
                     }
 
-                    if (await _roleManager.RoleExistsAsync(role.ToString()))
+                    if (await _roleManager.RoleExistsAsync(role))
                     {
-                        await _userManager.AddToRoleAsync(user, role.ToString());
+                        await _userManager.AddToRoleAsync(user, role);
                     }
 
-                    if (!await _roleManager.RoleExistsAsync(role.ToString()))
+                    if (!await _roleManager.RoleExistsAsync(role))
                         //await _roleManager.CreateAsync(new IdentityRole(role));
 
-                        if (await _roleManager.RoleExistsAsync(role.ToString()))
+                        if (await _roleManager.RoleExistsAsync(role))
                         {
-                            await _userManager.AddToRoleAsync(user, role.ToString());
+                            await _userManager.AddToRoleAsync(user, role);
                         }
                     return user;
                 }
@@ -111,9 +111,7 @@ namespace Repositories.Repositories
             {
                 throw;
             }
-            return null;
         }
-
 
 
         public async Task<string> GenerateEmailConfirmationToken(User user)
@@ -129,7 +127,7 @@ namespace Repositories.Repositories
         public async Task<User> GetCurrentUserAsync()
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == _claimsService.GetCurrentUserId);
-            if( user != null)
+            if (user != null)
             {
                 return user;
             }
@@ -159,21 +157,21 @@ namespace Repositories.Repositories
             };
 
             var payload = await GoogleJsonWebSignature.ValidateAsync(credential, settings);
-            if(payload == null)
+            if (payload == null)
             {
                 throw new Exception("Credential incorrect!");
             }
 
             var accountExist = await _userManager.FindByEmailAsync(payload.Email);
 
-            if(accountExist != null)
+            if (accountExist != null)
             {
                 if (accountExist.IsDeleted == true)
                 {
                     return new ResponseLoginModel
                     {
-                        Status=false,
-                        Message="Account has been banned"
+                        Status = false,
+                        Message = "Account has been banned"
                     };
                 }
 
@@ -202,13 +200,13 @@ namespace Repositories.Repositories
             var roles = await _userManager.GetRolesAsync(accountExist);
 
             var authClaims = new List<Claim>
-            { 
+            {
                 new Claim(ClaimTypes.Name, accountExist.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 
             };
 
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
             }
@@ -314,6 +312,18 @@ namespace Repositories.Repositories
 
         }
 
+        public async Task<User> GetAccountDetailsAsync(int userId)
+        {
+
+            var accounts = await _userManager.FindByIdAsync(userId.ToString());
+            var account = await _templateDbContext.Users.FirstOrDefaultAsync(a => a.Id == userId);
+            if (account == null)
+            {
+                return null;
+            }
+            return account;
+        }
+
         public async Task<List<User>> GetAllUsersAsync()
         {
             try
@@ -325,6 +335,93 @@ namespace Repositories.Repositories
             catch (Exception)
             {
                 throw new Exception();
+            }
+        }
+
+        public async Task<User> UpdateAccountAsync(User user)
+        {
+            try
+            {
+                user.ModifiedDate = _timeService.GetCurrentTime();
+                user.ModifiedBy = _claimsService.GetCurrentUserId;
+                user.UnsignFullName = StringTools.ConvertToUnSign(user.FullName);
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return user;
+                }
+                else
+                {
+                    // Tạo người dùng không thành công, xem thông tin lỗi và xử lý
+                    StringBuilder errorValue = new StringBuilder();
+                    foreach (var item in result.Errors)
+                    {
+                        errorValue.Append($"{item.Description}");
+                    }
+                    throw new Exception(errorValue.ToString()); // bắn zề cho GlobalEx midw
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateUserRole(User user, string role)
+        {
+
+            try
+            {
+                // Lấy danh sách vai trò hiện tại của người dùng
+                var currentRoles = await _userManager.GetRolesAsync(user);
+
+                if (currentRoles.Count ==0 )
+                {
+                    return false;
+                }
+
+                if (role.ToLower() == currentRoles.First().ToLower() )
+                {
+                    return false;
+                }
+
+                // Xóa tất cả vai trò hiện tại của người dùng
+                var removeCheck = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+                if (removeCheck.Succeeded)
+                {
+                    // Kiểm tra xem vai trò mới có tồn tại hay không
+                    if (!await _roleManager.RoleExistsAsync(role))
+                    {
+                        var newRole = new Role();
+                        newRole.Name = role;
+                        // Vai trò mới không tồn tại, tạo mới vai trò
+                        await _roleManager.CreateAsync(newRole);
+                    }
+
+                    var result = await _userManager.AddToRoleAsync(user, role);
+
+                    return result.Succeeded;
+                }
+                else
+                {
+                    // Tạo người dùng không thành công, xem thông tin lỗi và xử lý
+                    StringBuilder errorValue = new StringBuilder();
+                    foreach (var item in removeCheck.Errors)
+                    {
+                        errorValue.Append($"{item.Description}");
+                    }
+                    throw new Exception(errorValue.ToString()); // bắn zề cho GlobalEx midw
+                }
+               
+
+                
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
 
@@ -358,6 +455,8 @@ namespace Repositories.Repositories
             return UserDetailsModels;
             return null;
         }
+
+
 
         public async Task<User> ChangeUserPasswordAsync(string email, string token, string newPassword)
         {
