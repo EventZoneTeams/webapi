@@ -16,5 +16,8 @@ namespace Repositories.Interfaces
         Task<List<string>> GetRoleName(User user);
         Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel user);
         Task<User> GetCurrentUserAsync();
+        Task<User> GetAccountDetailsAsync(int userId);
+        Task<User> UpdateAccountAsync(User user);
+        Task<bool> UpdateUserRole(User user, string role);
     }
 }

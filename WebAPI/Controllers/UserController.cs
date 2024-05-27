@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTO;
 using Services.BusinessModels.EmailModels;
+using Services.BusinessModels.UserModels;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -20,11 +21,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(UserSignupModel userLogin, [FromQuery] RoleEnums role)
+        public async Task<IActionResult> RegisterAsync(UserSignupModel userLogin)
         {
             try
             {
-                var data = await _userService.ResigerAsync(userLogin, role.ToString());
+                var data = await _userService.ResigerAsync(userLogin, "STUDENT");
                 if (data.Status)
                 {
                     // var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);
@@ -42,6 +43,55 @@ namespace WebAPI.Controllers
                 throw;
             }
         }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums  role)
+        {
+            try
+            {
+                var newRole = RoleEnums.ADMIN.Equals(role) ? "" : role.ToString();
+
+
+                var result = await _userService.UpdateAccountAsync(id, userUpdatemodel, newRole);
+                if (result.Status == false)
+                {
+                    return NotFound(result);
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("manager")]
+        public async Task<IActionResult> CreateUserAsync(UserSignupModel newUser)
+        {
+            try
+            {
+                var data = await _userService.CreateManagerAsync(newUser);
+                if (data.Status)
+                {
+                    // var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);
+                    //var message = new Message(new string[] { data.Data.Email }, "Confirmation email link", confirmationLink!);
+                    // await _emailService.SendEmail(message);
+                    data.Message = "Created sucessfully <3";
+                    return Ok(data);
+                }
+
+                return BadRequest(data);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(UserLoginModel user)
