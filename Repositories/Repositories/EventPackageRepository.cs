@@ -30,54 +30,43 @@ namespace Repositories.Repositories
             return result;
         }
 
-        public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, List<int> productIds)
+        public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, List<ProductQuantityDTO> products)
         {
 
             try
             {
-                var Event = await _context.Events.FindAsync(eventId);
-                if (Event == null)
-                {
-                    return null;
-                }
-
                 var newPackage = new EventPackage
                 {
                     EventId = eventId,
                     CreatedAt = _timeService.GetCurrentTime(),
                     CreatedBy = _claimsService.GetCurrentUserId,
-                    Description = ""
+                    Description = description
                 };
 
                 await _context.EventPackages.AddAsync(newPackage);
                 await _context.SaveChangesAsync();
 
-                int totalPrice = 0;
+
                 List<ProductInPackage> productsInPackage = new List<ProductInPackage>();
-                var productsList = await _context.EventProducts.Where(x => productIds.Contains(x.Id)).ToListAsync();
-                foreach (var id in productIds) //kiểu này gà quá
+                var productsList = await _context.EventProducts.Where(x => products.Select(x => x.ProductID).Contains(x.Id)).ToListAsync();
+                foreach (var product in products)
                 {
                     var newProduct = new ProductInPackage
                     {
-                        ProductId = id,
+                        ProductId = product.ProductID,
                         PackageId = newPackage.Id,
-                        Quantity = 0
+                        Quantity = product.Quantity
                     };
                     productsInPackage.Add(newProduct);
-                    totalPrice += (int)productsList.Find(x => x.Id == id).Price;
+                    newPackage.TotalPrice += ((int)productsList.Find(x => x.Id == product.ProductID).Price * product.Quantity);
 
                 }
-                newPackage.TotalPrice = totalPrice;
-                _context.Update(newPackage);
-                //var productsInPackage = productIds.Select(id => new ProductInPackage
-                //{
-                //    ProductId = id,
-                //    PackageId = newPackage.Id
-                //}).ToList();
+                _context.Entry(newPackage).State = EntityState.Modified; // UPDATE TỔNG SỐ TIỀN
+
                 await _context.AddRangeAsync(productsInPackage);
                 await _context.SaveChangesAsync();
-                //await transaction.CommitAsync();
-                return await _context.ProductInPackages.ToListAsync();
+                //await transaction.CommitAsync(); //IMPROVISE CODE
+                return productsInPackage;
 
             }
             catch (Exception)
@@ -129,6 +118,39 @@ namespace Repositories.Repositories
                     ).ToListAsync();
 
                 return productsInPackage;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<List<EventPackageDetailDTO>> GetAllPackageWithProductsByEventId(int eventId) // SỬ DỤNG EAGER LOADING
+        {
+            try
+            {
+                var eventPackages = await _context.EventPackages
+                .Where(x => x.EventId == eventId)
+                .Include(x => x.ProductsInPackage)
+                .ThenInclude(x => x.EventProduct)
+                .ToListAsync();
+
+                var productsInPackage = eventPackages.Select(x => new EventPackageDetailDTO
+                {
+                    Id = x.Id,
+                    EventId = x.EventId,
+                    TotalPrice = x.TotalPrice,
+                    Description = x.Description,
+                    Products = x.ProductsInPackage.Select(p => new EventProductDetailDTO
+                    {
+                        Id = p.EventProduct.Id, 
+                        Name = p.EventProduct.Name,
+                        Price = p.EventProduct.Price
+                    }).ToList()
+                }).ToList();
+
+                return productsInPackage ?? new List<EventPackageDetailDTO>();
             }
             catch (Exception)
             {

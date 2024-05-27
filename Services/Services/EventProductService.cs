@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Repositories.Entities;
 using Repositories.Interfaces;
 using Services.BusinessModels.EventProductsModel;
@@ -52,6 +53,51 @@ namespace Services.Services
                     };
                 }
                 return null;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+
+        }
+
+        public async Task<ResponseGenericModel<List<EventProductCreateModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts)
+        {
+            try
+            {
+                var createProducts = new List<EventProduct>();
+                foreach( var newProduct in newProducts)
+                {
+                    var product = new EventProduct
+                    {
+                        Name = newProduct.Name,
+                        Description = newProduct.Description,
+                        EventId = newProduct.EventId,
+                        Price = newProduct.Price,
+                        QuantityInStock = newProduct.QuantityInStock
+                    };
+                    createProducts.Add(product);
+                }
+
+                await _unitOfWork.EventProductRepository.AddRangeAsync(createProducts);
+
+                var check = await _unitOfWork.SaveChangeAsync();
+                if (check > 0)
+                {
+                    return new ResponseGenericModel<List<EventProductCreateModel>>()
+                    {
+                        Status = true,
+                        Message = " Added successfully",
+                        Data = _mapper.Map<List<EventProductCreateModel>>(createProducts)
+                    };
+                }
+                return new ResponseGenericModel<List<EventProductCreateModel>>()
+                {
+                    Status = false,
+                    Message = " Added failed",
+                    Data = _mapper.Map<List<EventProductCreateModel>>(createProducts)
+                };
             }
             catch (Exception ex)
             {
