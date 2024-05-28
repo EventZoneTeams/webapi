@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Repositories.Commons;
 using Repositories.DTO;
 using Repositories.Interfaces;
 using Services.BusinessModels.EmailModels;
@@ -227,7 +228,7 @@ namespace Services.Services
                     return new ResponseGenericModel<List<UserDetailsModel>>()
                     {
                         Status = false,
-                        Message = "There are few ids that is not existed product: " + nonExistingIdsString,
+                        Message = "There are few ids that is not existed user: " + nonExistingIdsString,
                         Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
@@ -264,6 +265,25 @@ namespace Services.Services
                 Message = "Update Sucessfully"
             };
 
+        }
+
+        public async Task<Pagination<UserDetailsModel>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel userFilterModel)
+        {
+            var accounts = await _unitOfWork.UserRepository.GetUsersByFiltersAsync(paginationParameter, userFilterModel);
+            var mappedResult = new List<UserDetailsModel>();
+            //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
+            if (accounts != null)
+            {
+                foreach (var model in accounts)
+                {
+                    var mappedModel = _mapper.Map<UserDetailsModel>(model);
+                    mappedModel.Gender = model.Gender == true ? "Male" : "Female";
+                    mappedModel.RoleName = (await _unitOfWork.UserRepository.GetRoleName(model)).First();
+                    mappedResult.Add(mappedModel);
+                }
+                return new Pagination<UserDetailsModel>(mappedResult, accounts.TotalCount, accounts.CurrentPage, accounts.PageSize);
+            }
+            return null;
         }
 
         public async Task<ResponseGenericModel<string>> ForgotPassword(string email)
