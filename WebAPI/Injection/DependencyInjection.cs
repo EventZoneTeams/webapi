@@ -34,6 +34,7 @@ namespace WebAPI.Injection
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
             services.AddScoped<IClaimsService, ClaimsService>();
+            services.AddScoped<IVnPayService, VnPayService>();
             // add repositories
             services.AddScoped<IEventPackageRepository, EventPackageRepository>();
             services.AddScoped<IEventProductRepository, EventProductRepository>();

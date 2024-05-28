@@ -18,22 +18,22 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<List<EventModel>> GetEvent()
+        public async Task<List<ResponseEventModel>> GetEvent()
         {
             var events = await _unitOfWork.EventRepository
                 .GetQueryable()
                 .ToListAsync<Event>();
 
-            var result = new List<EventModel>();
+            var result = new List<ResponseEventModel>();
             foreach (var ev in events)
             {
-                var eventModel = _mapper.Map<EventModel>(ev);
+                var eventModel = _mapper.Map<ResponseEventModel>(ev);
                 result.Add(eventModel);
             }
             return result;
         }
 
-        public async Task<EventModel> GetEventById(int id)
+        public async Task<ResponseEventModel> GetEventById(int id)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
 
@@ -42,10 +42,10 @@ namespace Services.Services
                 throw new Exception("Event not found");
             }
 
-            var result = _mapper.Map<EventModel>(existingEvent);
+            var result = _mapper.Map<ResponseEventModel>(existingEvent);
             return result;
         }
-        public async Task<EventModel> CreateEvent(EventModel eventModel)
+        public async Task<ResponseEventModel> CreateEvent(EventModel eventModel)
         {
             var eventEntity = _mapper.Map<Event>(eventModel);
             //check user
@@ -66,12 +66,12 @@ namespace Services.Services
 
             var newEvent = await _unitOfWork.EventRepository.AddAsync(eventEntity);
 
-            var result = _mapper.Map<EventModel>(newEvent);
+            var result = _mapper.Map<ResponseEventModel>(newEvent);
             await _unitOfWork.SaveChangeAsync();
             return result;
         }
 
-        public async Task<EventModel> UpdateEvent(int id, EventModel eventModel)
+        public async Task<ResponseEventModel> UpdateEvent(int id, EventModel eventModel)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
 
@@ -82,6 +82,7 @@ namespace Services.Services
 
             existingEvent.Name = eventModel.Name ?? existingEvent.Name;
             existingEvent.Description = eventModel.Description ?? existingEvent.Description;
+            existingEvent.ThumbnailUrl = eventModel.ThumbnailUrl ?? existingEvent.ThumbnailUrl;
             existingEvent.DonationStartDate = eventModel.DonationStartDate ?? existingEvent.DonationStartDate;
             existingEvent.DonationEndDate = eventModel.DonationEndDate ?? existingEvent.DonationEndDate;
             existingEvent.EventStartDate = eventModel.EventStartDate ?? existingEvent.EventStartDate;
@@ -108,11 +109,11 @@ namespace Services.Services
                 throw new Exception("Failed to update event");
             }
 
-            var result = _mapper.Map<EventModel>(existingEvent);
+            var result = _mapper.Map<ResponseEventModel>(existingEvent);
             await _unitOfWork.SaveChangeAsync();
             return result;
         }
-        public async Task<EventModel> DeleteEvent(int id)
+        public async Task<ResponseEventModel> DeleteEvent(int id)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
 
@@ -124,7 +125,7 @@ namespace Services.Services
             var isDeleted = await _unitOfWork.EventRepository.SoftRemove(existingEvent);
             if (isDeleted)
             {
-                var result = _mapper.Map<EventModel>(existingEvent);
+                var result = _mapper.Map<ResponseEventModel>(existingEvent);
                 await _unitOfWork.SaveChangeAsync();
                 return result;
             }

@@ -4,5 +4,7 @@
     {
         public int GetCurrentUserId { get; }
 
+        public string? IpAddress { get; }
+
     }
 }

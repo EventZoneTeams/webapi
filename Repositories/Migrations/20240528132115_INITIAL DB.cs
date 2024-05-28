@@ -32,11 +32,13 @@ namespace Repositories.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UnsignFullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UnsignFullName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Dob = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Gender = table.Column<bool>(type: "bit", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    University = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -46,7 +48,6 @@ namespace Repositories.Migrations
                     DeletionDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeleteBy = table.Column<int>(type: "int", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true),
-                    University = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -55,7 +56,6 @@ namespace Repositories.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -222,6 +222,7 @@ namespace Repositories.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DonationStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DonationEndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EventStartDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -301,6 +302,7 @@ namespace Repositories.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: true),
                     ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -312,6 +314,12 @@ namespace Repositories.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EventFeedbacks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EventFeedbacks_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_EventFeedbacks_Events_EventId",
                         column: x => x.EventId,
@@ -362,6 +370,7 @@ namespace Repositories.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EventId = table.Column<int>(type: "int", nullable: false),
+                    ThumbnailUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalPrice = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -542,25 +551,23 @@ namespace Repositories.Migrations
                 {
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     PackageId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    EventProductId = table.Column<int>(type: "int", nullable: false),
-                    EventPackageId = table.Column<int>(type: "int", nullable: false)
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductInPackages", x => new { x.ProductId, x.PackageId });
                     table.ForeignKey(
-                        name: "FK_ProductInPackages_EventPackages_EventPackageId",
-                        column: x => x.EventPackageId,
+                        name: "FK_ProductInPackages_EventPackages_PackageId",
+                        column: x => x.PackageId,
                         principalTable: "EventPackages",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductInPackages_EventProducts_EventProductId",
-                        column: x => x.EventProductId,
+                        name: "FK_ProductInPackages_EventProducts_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "EventProducts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -687,6 +694,11 @@ namespace Repositories.Migrations
                 column: "EventId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EventFeedbacks_UserId",
+                table: "EventFeedbacks",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EventImages_EventId",
                 table: "EventImages",
                 column: "EventId");
@@ -762,14 +774,9 @@ namespace Repositories.Migrations
                 column: "EventProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductInPackages_EventPackageId",
+                name: "IX_ProductInPackages_PackageId",
                 table: "ProductInPackages",
-                column: "EventPackageId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductInPackages_EventProductId",
-                table: "ProductInPackages",
-                column: "EventProductId");
+                column: "PackageId");
         }
 
         /// <inheritdoc />

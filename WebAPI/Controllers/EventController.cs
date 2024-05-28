@@ -12,10 +12,12 @@ namespace WebAPI.Controllers
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
+        private readonly IImageService _imageService;
 
-        public EventController(IEventService eventService)
+        public EventController(IEventService eventService, IImageService imageService)
         {
             _eventService = eventService;
+            _imageService = imageService;
         }
 
         /// <summary>
@@ -41,7 +43,7 @@ namespace WebAPI.Controllers
             try
             {
                 var events = await _eventService.GetEvent();
-                return Ok(ApiResult<List<EventModel>>.Succeed(events, "Get Events Successfully!"));
+                return Ok(ApiResult<List<ResponseEventModel>>.Succeed(events, "Get Events Successfully!"));
             }
             catch (Exception ex)
             {
@@ -73,7 +75,7 @@ namespace WebAPI.Controllers
             try
             {
                 var eventModel = await _eventService.GetEventById(id);
-                return Ok(ApiResult<EventModel>.Succeed(eventModel, "Get Event Successfully!"));
+                return Ok(ApiResult<ResponseEventModel>.Succeed(eventModel, "Get Event Successfully!"));
             }
             catch (Exception ex)
             {
@@ -92,6 +94,7 @@ namespace WebAPI.Controllers
         ///     {
         ///         "name": "Charity Fundraiser for Children's Education",
         ///         "description": "A charity event to raise funds for underprivileged children's education and school supplies.",
+        ///         "thumbnailUrl": "https://eventzoneblob.blob.core.windows.net/images/event-thumbnails/419976033_907448214020009_8314703696454832411_n.png",
         ///         "donationStartDate": "2024-05-15T09:00:00.000Z",
         ///         "donationEndDate": "2024-05-30T18:00:00.000Z",
         ///         "eventStartDate": "2024-05-25T10:00:00.000Z",
@@ -126,14 +129,21 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns a event</response>
         /// <response code="400">Requied field is null</response>
         [HttpPost]
-        public async Task<IActionResult> CreateEventAsync(CreateEventModel createEventModel)
+        public async Task<IActionResult> CreateEventAsync([FromForm] CreateEventModel createEventModel)
         {
             try
             {
+                string imageUrl = null;
+                if (createEventModel.ThumbnailUrl != null)
+                {
+                    imageUrl = await _imageService.UploadImageAsync(createEventModel.ThumbnailUrl, "event-thumbnails");
+                }
+
                 var format = new EventModel
                 {
                     Name = createEventModel.Name,
                     Description = createEventModel.Description,
+                    ThumbnailUrl = imageUrl,
                     DonationStartDate = createEventModel.DonationStartDate,
                     DonationEndDate = createEventModel.DonationEndDate,
                     EventStartDate = createEventModel.EventStartDate,
@@ -148,7 +158,7 @@ namespace WebAPI.Controllers
                     TotalCost = createEventModel?.TotalCost
                 };
                 var eventModel = await _eventService.CreateEvent(format);
-                return Ok(ApiResult<EventModel>.Succeed(eventModel, "Create Event Successfully!"));
+                return Ok(ApiResult<ResponseEventModel>.Succeed(eventModel, "Create Event Successfully!"));
             }
             catch (Exception ex)
             {
@@ -169,6 +179,7 @@ namespace WebAPI.Controllers
         ///     {
         ///         "name": "Charity Fundraiser for Children's Education Updated",
         ///         "description": "A charity event to raise funds for underprivileged children's education and school supplies Updated.",
+        ///         "thumbnailUrl": "https://eventzoneblob.blob.core.windows.net/images/event-thumbnails/419976033_907448214020009_8314703696454832411_n.png",
         ///         "donationStartDate": "2024-05-15T09:00:00.000Z",
         ///         "donationEndDate": "2024-05-30T18:00:00.000Z",
         ///         "eventStartDate": "2024-05-25T10:00:00.000Z",
@@ -204,14 +215,21 @@ namespace WebAPI.Controllers
         /// <response code="400">If the event or the update data is invalid</response>
         /// <response code="404">If the event is not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEventAsync(int id, CreateEventModel updateEventModel)
+        public async Task<IActionResult> UpdateEventAsync(int id, [FromForm] CreateEventModel updateEventModel)
         {
             try
             {
+                string imageUrl = null;
+                if (updateEventModel.ThumbnailUrl != null)
+                {
+                    imageUrl = await _imageService.UploadImageAsync(updateEventModel.ThumbnailUrl, "event-thumbnails");
+                }
+
                 var format = new EventModel
                 {
                     Name = updateEventModel.Name,
                     Description = updateEventModel.Description,
+                    ThumbnailUrl = imageUrl,
                     DonationStartDate = updateEventModel.DonationStartDate,
                     DonationEndDate = updateEventModel.DonationEndDate,
                     EventStartDate = updateEventModel.EventStartDate,
@@ -226,7 +244,7 @@ namespace WebAPI.Controllers
                     TotalCost = updateEventModel.TotalCost ?? 0
                 };
                 var updatedEvent = await _eventService.UpdateEvent(id, format);
-                return Ok(ApiResult<EventModel>.Succeed(updatedEvent, "Event updated successfully!"));
+                return Ok(ApiResult<ResponseEventModel>.Succeed(updatedEvent, "Event updated successfully!"));
             }
             catch (Exception ex)
             {
@@ -254,7 +272,7 @@ namespace WebAPI.Controllers
             try
             {
                 var deletedEvent = await _eventService.DeleteEvent(id);
-                return Ok(ApiResult<EventModel>.Succeed(deletedEvent, "Event deleted successfully!"));
+                return Ok(ApiResult<ResponseEventModel>.Succeed(deletedEvent, "Event deleted successfully!"));
             }
             catch (Exception ex)
             {
