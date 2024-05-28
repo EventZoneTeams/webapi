@@ -34,8 +34,8 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns list of event categories</response>
         /// <response code="400">If the item is null</response>
         [HttpGet("")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResult<List<EventCategoryModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<List<object>>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetCategoriesOfEventAsync([FromQuery] string? SearchTerm, [FromQuery] EventCategoryOrderBy eventCategoryOrderBy)
         {
             try
@@ -79,8 +79,8 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns the event category</response>
         /// <response code="404">If the event category is not found</response>
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResult<List<EventCategoryModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<List<object>>), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetCategoryEventByIdAsync(int id)
         {
             try
@@ -117,8 +117,8 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns the created event category</response>
         /// <response code="400">If the model state is invalid or an error occurs during creation</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResult<List<EventCategoryModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<List<object>>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateEventCategory([FromForm] CreateEventCategoryModel data)
         {
             try
@@ -166,7 +166,7 @@ namespace WebAPI.Controllers
         /// <response code="404">If the event category is not found</response>
         /// <response code="400">If the model state is invalid or an error occurs during update</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<List<EventCategoryModel>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateEventCategory(int id, [FromForm] UpdateEventCategoryModel data)

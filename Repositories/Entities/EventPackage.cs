@@ -3,6 +3,7 @@
     public class EventPackage : BaseEntity
     {
         public int EventId { get; set; }
+        public string? ThumbnailUrl { get; set; }
         public int TotalPrice { get; set; }
         public string Description { get; set; }
 
