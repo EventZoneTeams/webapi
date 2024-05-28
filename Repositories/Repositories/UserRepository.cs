@@ -368,7 +368,33 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task<bool> UpdateUserRole(User user, string role)
+        public async Task<List<User>> SoftRemoveRangeUserAsync(List<int> userIds)
+        {
+            try
+            {
+                var users = await _userManager.Users.Where(x => userIds.Contains(x.Id)).ToListAsync();
+                foreach (var user in users)
+                {
+                    user.IsDeleted = true;
+                    user.DeletionDate = _timeService.GetCurrentTime();
+                    user.DeleteBy = _claimsService.GetCurrentUserId;
+                    _templateDbContext.Entry(user).State = EntityState.Modified;
+                    // await _dbContext.SaveChangesAsync();
+                }
+                return users;
+
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+        }
+
+        public async Task<string> UpdateUserRole(User user, string role)
         {
 
             try
@@ -376,20 +402,20 @@ namespace Repositories.Repositories
                 // Lấy danh sách vai trò hiện tại của người dùng
                 var currentRoles = await _userManager.GetRolesAsync(user);
 
-                if (currentRoles.Count ==0 )
+                if (currentRoles.Count == 0)
                 {
-                    return false;
+                    return null;
                 }
 
-                if (role.ToLower() == currentRoles.First().ToLower() )
+                if (role.ToLower() == currentRoles.First().ToLower())
                 {
-                    return false;
+                    return currentRoles.First();
                 }
 
                 // Xóa tất cả vai trò hiện tại của người dùng
-                var removeCheck = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                var result = await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
-                if (removeCheck.Succeeded)
+                if (result.Succeeded)
                 {
                     // Kiểm tra xem vai trò mới có tồn tại hay không
                     if (!await _roleManager.RoleExistsAsync(role))
@@ -400,23 +426,21 @@ namespace Repositories.Repositories
                         await _roleManager.CreateAsync(newRole);
                     }
 
-                    var result = await _userManager.AddToRoleAsync(user, role);
+                    result = await _userManager.AddToRoleAsync(user, role);
 
-                    return result.Succeeded;
-                }
-                else
-                {
-                    // Tạo người dùng không thành công, xem thông tin lỗi và xử lý
-                    StringBuilder errorValue = new StringBuilder();
-                    foreach (var item in removeCheck.Errors)
+                    if (result.Succeeded)
                     {
-                        errorValue.Append($"{item.Description}");
+                        return role;
                     }
-                    throw new Exception(errorValue.ToString()); // bắn zề cho GlobalEx midw
                 }
-               
 
-                
+                // Tạo người dùng không thành công, xem thông tin lỗi và xử lý
+                StringBuilder errorValue = new StringBuilder();
+                foreach (var item in result.Errors)
+                {
+                    errorValue.Append($"{item.Description}");
+                }
+                throw new Exception(errorValue.ToString()); // bắn zề cho GlobalEx midw
             }
             catch (Exception)
             {
@@ -482,7 +506,7 @@ namespace Repositories.Repositories
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception();
             }
         }
 

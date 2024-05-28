@@ -2,6 +2,7 @@
 using Repositories.DTO;
 using Repositories.Interfaces;
 using Services.BusinessModels.EmailModels;
+using Services.BusinessModels.EventProductsModel;
 using Services.BusinessModels.ResponseModels;
 using Services.BusinessModels.UserModels;
 using Services.Interface;
@@ -112,9 +113,9 @@ namespace Services.Services
                         if (!string.IsNullOrEmpty(role))
                         {
                             var result = await _unitOfWork.UserRepository.UpdateUserRole(existingUser, role);
-                            if (result)
+                            if (result.Equals(role))
                             {
-
+                                response.Data.RoleName = role;
                                 response.Message = "Updated user and role Successfuly";
                             }
                             else
@@ -142,6 +143,8 @@ namespace Services.Services
             }
 
         }
+
+
 
 
         public async Task<ResponseGenericModel<UserDetailsModel>> CreateManagerAsync(UserSignupModel UserLogin)
@@ -192,6 +195,50 @@ namespace Services.Services
                 Message = "Not found"
             };
 
+
+        }
+
+        public async Task<ResponseGenericModel<List<UserDetailsModel>>> DeleteRangeUsers(List<int> userIds)
+        {
+            var users = await _unitOfWork.UserRepository.GetAllUsersAsync();
+            var existingIds = users.Where(e => userIds.Contains(e.Id)).Select(e => e.Id).ToList();
+            var nonExistingIds = userIds.Except(existingIds).ToList();
+
+            if (existingIds.Count > 0)
+            {
+                 await _unitOfWork.UserRepository.SoftRemoveRangeUserAsync(existingIds);
+                var result = await _unitOfWork.SaveChangeAsync();
+                if (result > 0 )
+                {
+                    return new ResponseGenericModel<List<UserDetailsModel>>()
+                    {
+                        Status = true,
+                        Message = " Added successfully",
+                        Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
+                    };
+                }
+            }
+            else
+            {
+                if (nonExistingIds.Count > 0)
+                {
+                    string nonExistingIdsString = string.Join(", ", nonExistingIds);
+
+                    return new ResponseGenericModel<List<UserDetailsModel>>()
+                    {
+                        Status = false,
+                        Message = "There are few ids that is not existed product: " + nonExistingIdsString,
+                        Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
+                    };
+                }
+
+            }
+            return new ResponseGenericModel<List<UserDetailsModel>>()
+            {
+                Status = false,
+                Message = "failed",
+                Data = null
+            };
 
         }
         public async Task<ResponseLoginModel> LoginAsync(UserLoginModel User)

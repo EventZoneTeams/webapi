@@ -18,6 +18,7 @@ namespace Repositories.Interfaces
         Task<User> GetCurrentUserAsync();
         Task<User> GetAccountDetailsAsync(int userId);
         Task<User> UpdateAccountAsync(User user);
-        Task<bool> UpdateUserRole(User user, string role);
+        Task<string> UpdateUserRole(User user, string role);
+        Task<List<User>> SoftRemoveRangeUserAsync(List<int> userIds);
     }
 }
