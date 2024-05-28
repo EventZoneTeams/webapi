@@ -117,7 +117,7 @@ builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicyDevelopement", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://student-event-forum.netlify.app", "https://webapp-git-main-srudent-event-forum.vercel.app/");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://student-event-forum.netlify.app", "https://webapp-git-main-srudent-event-forum.vercel.app/", "https://eventzone.id.vn");
     });
     //opt.AddPolicy("CorsPolicyProduction", policy =>
     //{
