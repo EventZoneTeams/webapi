@@ -40,6 +40,11 @@ namespace Repositories.Repositories
         public async Task<List<string>> GetRoleName(User User)
         {
             var result = await _userManager.GetRolesAsync(User);
+            if(result != null && result.Count >0)
+            {
+                return result.ToList();
+            }
+            result.Add("");
             return result.ToList();
         }
 
@@ -338,6 +343,19 @@ namespace Repositories.Repositories
             }
         }
 
+        public async Task<List<string>> GetAllRoleNamesAsync()
+        {
+            try
+            {
+                // get all users
+                var roles = await _roleManager.Roles.Select(x=>x.Name).ToListAsync();
+                return roles;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
         public async Task<User> UpdateAccountAsync(User user)
         {
             try
@@ -538,16 +556,16 @@ namespace Repositories.Repositories
 
         public async Task<Pagination<User>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel UserFilterModel)
         {
-            var UsersQuery = _templateDbContext.Users.AsQueryable();
+            var UsersQuery = _templateDbContext.Users.AsNoTracking();
             UsersQuery = await ApplyFilterSortAndSearch(UsersQuery, UserFilterModel);
             if (UsersQuery != null)
             {
-                var sortedQuery = ApplySorting(UsersQuery, UserFilterModel);
-                var totalCount = await sortedQuery.CountAsync();
-                var UsersPagination = await sortedQuery
+                var sortedQuery =  await ApplySorting(UsersQuery, UserFilterModel).ToListAsync();
+                var totalCount = sortedQuery.Count;
+                var UsersPagination =  sortedQuery
                     .Skip((paginationParameter.PageIndex - 1) * paginationParameter.PageSize)
                     .Take(paginationParameter.PageSize)
-                    .ToListAsync();
+                    .ToList();
                 return new Pagination<User>(UsersPagination, totalCount, paginationParameter.PageIndex, paginationParameter.PageSize);
             }
             return null;
@@ -557,7 +575,7 @@ namespace Repositories.Repositories
 
         private IQueryable<User> ApplySorting(IQueryable<User> query, UserFilterModel UserFilterModel)
         {
-            switch (UserFilterModel.Sort.ToLower())
+            switch (UserFilterModel.SortBy.ToLower())
             {
                 case "fullname":
                     query = (UserFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.FullName) : query.OrderByDescending(a => a.FullName);
@@ -579,17 +597,15 @@ namespace Repositories.Repositories
                 return query;
             }
 
+    
             if (UserFilterModel.isDeleted == true)
             {
-                query = query.Where(a => a.IsDeleted == true);
+                query = query.Where(a => a.IsDeleted == UserFilterModel.isDeleted);
             }
             else if (UserFilterModel.isDeleted == false)
             {
-                query = query.Where(a => a.IsDeleted == false);
-            }
-            else
-            {
-                query = query.Where(a => a.IsDeleted == true || a.IsDeleted == false);
+                query = query.Where(a => a.IsDeleted == UserFilterModel.isDeleted);
+
             }
 
             if (!string.IsNullOrEmpty(UserFilterModel.Gender))
@@ -600,12 +616,13 @@ namespace Repositories.Repositories
 
             if (!string.IsNullOrEmpty(UserFilterModel.Role))
             {
-                var UsersInRole = await _userManager.GetUsersInRoleAsync(UserFilterModel.Role);
+                var UsersInRole = await _userManager.GetUsersInRoleAsync(UserFilterModel.Role.ToUpper());
 
-                if (UsersInRole != null)
+                if (UsersInRole != null && UsersInRole.Count >0)
                 {
                     var userIdsInRole = UsersInRole.Select(u => u.Id);
                     query = query.Where(a => userIdsInRole.Contains(a.Id));
+
                 }
                 else
                 {
@@ -613,13 +630,16 @@ namespace Repositories.Repositories
                 }
             }
 
-            if (!string.IsNullOrEmpty(UserFilterModel.Search))
+            if (!string.IsNullOrEmpty(UserFilterModel.SearchName))
             {
                 query = query.Where(a =>
-                    a.FullName.Contains(UserFilterModel.Search) ||
-                    a.UnsignFullName.Contains(UserFilterModel.Search)
+                    a.FullName.Contains(UserFilterModel.SearchName) ||
+                    a.UnsignFullName.Contains(UserFilterModel.SearchName)
                 );
             }
+
+
+
             return query;
 
 

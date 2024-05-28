@@ -1,4 +1,5 @@
-﻿using Repositories.DTO;
+﻿using Repositories.Commons;
+using Repositories.DTO;
 using Repositories.Entities;
 
 namespace Repositories.Interfaces
@@ -20,5 +21,7 @@ namespace Repositories.Interfaces
         Task<User> UpdateAccountAsync(User user);
         Task<string> UpdateUserRole(User user, string role);
         Task<List<User>> SoftRemoveRangeUserAsync(List<int> userIds);
+        Task<Pagination<User>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel UserFilterModel);
+        Task<List<string>> GetAllRoleNamesAsync();
     }
 }

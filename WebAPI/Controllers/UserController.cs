@@ -1,9 +1,12 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Repositories.Commons;
 using Repositories.DTO;
 using Services.BusinessModels.EmailModels;
 using Services.BusinessModels.UserModels;
 using Services.Interface;
+using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -66,6 +69,26 @@ namespace WebAPI.Controllers
             }
         }
 
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUsersAsync([FromBody] List<int> userIds)
+        {
+            try
+            {
+                var result = await _userService.DeleteRangeUsers(userIds);
+                if (result.Status)
+                {
+                    return Ok(result);
+                }
+
+                return NotFound(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("manager")]
         public async Task<IActionResult> CreateUserAsync(UserSignupModel newUser)
         {
@@ -111,11 +134,42 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("wdqdwq")]
         public async Task<IActionResult> GetAllusersAsync()
         {
             return Ok(await _userService.GetAllUsers());
         }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetAccountByFilters([FromQuery] PaginationParameter paginationParameter, [FromQuery] UserFilterModel userFilterModel)
+        {
+            try
+            {
+                var result = await _userService.GetUsersByFiltersAsync(paginationParameter, userFilterModel);
+                if (result == null)
+                {
+                    return NotFound("No accounts found with the specified filters.");
+                }
+                var metadata = new
+                {
+                    result.TotalCount,
+                    result.PageSize,
+                    result.CurrentPage,
+                    result.TotalPages,
+                    result.HasNext,
+                    result.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUserAsync()

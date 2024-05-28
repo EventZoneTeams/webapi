@@ -16,7 +16,7 @@
         public string? Image { get; set; } = "";
         public string? University { get; set; }
         public bool? IsDeleted { get; set; } = false;
-        public string RoleName { get; set; } = null;
+        public string? RoleName { get; set; } = null;
         public List<RoleInfoModel>? Role { get; set; } = null;// 
 
     }
