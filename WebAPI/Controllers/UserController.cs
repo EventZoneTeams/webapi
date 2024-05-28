@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums  role)
+        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums?  role)
         {
             try
             {
