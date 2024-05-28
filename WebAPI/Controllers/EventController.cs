@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
-using Repositories.Commons.Payload.RequestModels;
+using Repositories.Extensions;
+using Repositories.Helper;
 using Services.BusinessModels.EventModels;
 using Services.Interface;
 
@@ -35,15 +35,15 @@ namespace WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetEventsAsync([FromQuery] EventParams eventParams,
-               OriganizationStatusEnums? origanizationStatusEnums,
-               EventStatusEnums? eventStatusEnums
-            )
+        public async Task<IActionResult> GetEventsAsync([FromQuery] EventParams eventParams)
         {
             try
             {
-                var events = await _eventService.GetEvent();
-                return Ok(ApiResult<List<ResponseEventModel>>.Succeed(events, "Get Events Successfully!"));
+                var events = await _eventService.GetEvent(eventParams);
+
+                Response.AddPaginationHeader(events.MetaData);
+
+                return Ok(events);
             }
             catch (Exception ex)
             {

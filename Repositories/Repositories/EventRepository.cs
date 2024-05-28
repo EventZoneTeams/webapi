@@ -1,4 +1,6 @@
 ﻿using Repositories.Entities;
+using Repositories.Extensions;
+using Repositories.Helper;
 using Repositories.Interfaces;
 
 namespace Repositories.Repositories
@@ -16,6 +18,21 @@ namespace Repositories.Repositories
             _context = studentEventForumDbContext;
             _timeService = timeService;
             _claimsService = claims;
+        }
+
+
+        public IQueryable<Event> FilterAllField(EventParams eventParams)
+        {
+            var query = _context.Events
+                .Search(eventParams.SearchTerm)
+                .Filter(eventParams.EventCategoryId)
+                .FilterByDonationDate(eventParams.DonationStartDate, eventParams.DonationEndDate)
+                .FilterByEventDate(eventParams.EventStartDate, eventParams.EventEndDate)
+                .FilterByLocation(eventParams.Location)
+                .FilterByUniversity(eventParams.University)
+                .FilterByStatus(eventParams.Status.ToString(), eventParams.OriganizationStatusEnums.ToString(), eventParams.IsDonation);
+
+            return query;
         }
 
     }
