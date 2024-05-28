@@ -117,13 +117,25 @@ builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicyDevelopement", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://student-event-forum.netlify.app");
     });
     opt.AddPolicy("CorsPolicyProduction", policy =>
     {
         policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://student-event-forum.netlify.app");
     });
 });
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("app-cors",
+//        builder =>
+//        {
+//            builder.AllowAnyOrigin()
+//            .AllowAnyHeader()
+//            .WithExposedHeaders("X-Pagination")
+//            .AllowAnyMethod();
+//        });
+//});
 
 //ADD EMAIL CONFIG
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration")
