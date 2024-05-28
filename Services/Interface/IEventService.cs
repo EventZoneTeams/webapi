@@ -1,10 +1,12 @@
-﻿using Services.BusinessModels.EventModels;
+﻿using Repositories.Entities;
+using Repositories.Helper;
+using Services.BusinessModels.EventModels;
 
 namespace Services.Interface
 {
     public interface IEventService
     {
-        Task<List<ResponseEventModel>> GetEvent();
+        Task<PagedList<Event>> GetEvent(EventParams eventParams);
         Task<ResponseEventModel> GetEventById(int id);
         Task<ResponseEventModel> CreateEvent(EventModel eventModel);
         Task<ResponseEventModel> UpdateEvent(int id, EventModel eventModel);

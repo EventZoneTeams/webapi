@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helper\" />
+    <Folder Include="Commons\Payload\RequestModels\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Repositories.Entities;
+using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.BusinessModels.EventModels;
 using Services.Interface;
@@ -18,19 +18,15 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<List<ResponseEventModel>> GetEvent()
+        public async Task<PagedList<Event>> GetEvent(EventParams eventParams)
         {
-            var events = await _unitOfWork.EventRepository
-                .GetQueryable()
-                .ToListAsync<Event>();
+            var query = _unitOfWork.EventRepository.FilterAllField(eventParams).AsQueryable();
 
-            var result = new List<ResponseEventModel>();
-            foreach (var ev in events)
-            {
-                var eventModel = _mapper.Map<ResponseEventModel>(ev);
-                result.Add(eventModel);
-            }
-            return result;
+            var products = await PagedList<Event>.ToPagedList(query, eventParams.PageNumber, eventParams.PageSize);
+
+            //.Sort(eventParams.OrderBy);
+
+            return products;
         }
 
         public async Task<ResponseEventModel> GetEventById(int id)
