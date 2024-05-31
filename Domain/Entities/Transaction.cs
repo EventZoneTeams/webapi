@@ -9,6 +9,6 @@
         public DateTime TransactionDate { get; set; }
         public string Status { get; set; }
         public Wallet Wallet { get; set; }
-        public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<TransactionDetail> TransactionDetails { get; set; }
     }
 }
