@@ -238,6 +238,59 @@ namespace Repositories.Repositories
 
         }
 
+        public async Task<ResponseLoginModel> RefreshToken(TokenModel token)
+        {
+            if (token is null)
+            {
+                return new ResponseLoginModel
+                {
+                    Status = false,
+                    Message = "Token is null"
+                };
+            }
+
+            string? accessToken = token.AccessToken;
+            string? refreshToken = token.RefreshToken;
+
+            var principal = TokenTools.GetPrincipalFromExpiredToken(accessToken, _configuration);
+            if (principal == null)
+            {
+                return new ResponseLoginModel
+                {
+                    Status = false,
+                    Message = "Invalid access token or refresh token!"
+                };
+            }
+
+            string accountId = principal.Identity.Name;
+
+            var account = await _userManager.FindByIdAsync(accountId);
+
+            if (account == null || account.RefreshToken != refreshToken || account.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return new ResponseLoginModel
+                {
+                    Status = false,
+                    Message = "Invalid access token or refresh token!"
+                };
+            }
+
+            var newAccessToken = GenerateJWTToken.CreateToken(principal.Claims.ToList(), _configuration, _timeService.GetCurrentTime());
+            var newRefreshToken = TokenTools.GenerateRefreshToken();
+
+            account.RefreshToken = newRefreshToken;
+            await _userManager.UpdateAsync(account);
+
+            return new ResponseLoginModel
+            {
+                Status = true,
+                Message = "Refresh Token successfully!",
+                JWT = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+                Expired = newAccessToken.ValidTo,
+                JWTRefreshToken = newRefreshToken,
+                UserId = int.Parse(accountId)
+            };
+        }
 
 
 

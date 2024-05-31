@@ -20,5 +20,6 @@ namespace Services.Interface
         Task<ResponseGenericModel<UserDetailsModel>> CreateManagerAsync(UserSignupModel UserLogin);
         Task<ResponseGenericModel<List<UserDetailsModel>>> DeleteRangeUsers(List<int> userIds);
         Task<Pagination<UserDetailsModel>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel userFilterModel);
+        Task<ResponseLoginModel> RefreshToken(TokenModel token);
     }
 }

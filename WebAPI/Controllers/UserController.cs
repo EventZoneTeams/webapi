@@ -47,6 +47,23 @@ namespace WebAPI.Controllers
             }
         }
 
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(TokenModel model)
+        {
+            try
+            {
+                var result = await _userService.RefreshToken(model); 
+                if (result.Status.Equals(false))
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums?  role)
@@ -181,7 +198,6 @@ namespace WebAPI.Controllers
             }
             return NotFound(result);
 
-            return Ok(await _userService.GetAllUsers());
         }
 
         [HttpGet("test-email")]
