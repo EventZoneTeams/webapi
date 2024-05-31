@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Repositories.Entities;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace Repositories.Repositories
 {
@@ -17,7 +18,6 @@ namespace Repositories.Repositories
             _dbContext = context;
             _timeService = timeService;
             _claimsService = claimsService;
-
         }
 
         public async Task<TEntity> AddAsync(TEntity entity)
@@ -40,18 +40,28 @@ namespace Repositories.Repositories
             await _dbSet.AddRangeAsync(entities);
         }
 
-        public Task<List<TEntity>> GetAllAsync()
+        public Task<List<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)
         {
-            return _dbSet.ToListAsync();
+            IQueryable<TEntity> query = _dbSet;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query.ToListAsync();
         }
 
-        public async Task<TEntity?> GetByIdAsync(int id)
+        public async Task<TEntity?> GetByIdAsync(int id, params Expression<Func<TEntity, object>>[] includes)
         {
-            var result = await _dbSet.FirstOrDefaultAsync(x => x.Id == id);
+            IQueryable<TEntity> query = _dbSet;
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            var result = await query.FirstOrDefaultAsync(x => x.Id == id);
             return result;
         }
-
-
 
         public async Task<bool> SoftRemove(TEntity entity)
         {

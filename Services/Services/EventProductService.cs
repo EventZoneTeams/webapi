@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
-using Repositories.Entities;
+using Domain.Entities;
 using Repositories.Interfaces;
 using Services.BusinessModels.EventProductsModel;
 using Services.BusinessModels.ResponseModels;
 using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -67,7 +61,7 @@ namespace Services.Services
             try
             {
                 var createProducts = new List<EventProduct>();
-                foreach( var newProduct in newProducts)
+                foreach (var newProduct in newProducts)
                 {
                     var product = new EventProduct
                     {
@@ -113,16 +107,16 @@ namespace Services.Services
             var existingIds = allProduct.Where(e => productIds.Contains(e.Id)).Select(e => e.Id).ToList();
             var nonExistingIds = productIds.Except(existingIds).ToList();
 
-            if(existingIds.Count > 0)
+            if (existingIds.Count > 0)
             {
                 var result = await _unitOfWork.EventProductRepository.SoftRemoveRangeById(existingIds);
-                if(result)
+                if (result)
                 {
                     return new ResponseGenericModel<List<EventProductDetailModel>>()
                     {
                         Status = true,
                         Message = " Added successfully",
-                        Data = _mapper.Map<List<EventProductDetailModel>>(allProduct.Where(e=> existingIds.Contains(e.Id)))
+                        Data = _mapper.Map<List<EventProductDetailModel>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
             }
@@ -139,7 +133,7 @@ namespace Services.Services
                         Data = _mapper.Map<List<EventProductDetailModel>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
-              
+
             }
             return new ResponseGenericModel<List<EventProductDetailModel>>()
             {
@@ -160,9 +154,9 @@ namespace Services.Services
         public async Task<ResponseGenericModel<EventProductDetailModel>> UpdateEventProductAsync(int productId, EventProductUpdateModel updateModel)
         {
             var existingProduct = await _unitOfWork.EventProductRepository.GetByIdAsync(productId);
-            if(existingProduct != null)
+            if (existingProduct != null)
             {
-                existingProduct = _mapper.Map(updateModel,existingProduct);
+                existingProduct = _mapper.Map(updateModel, existingProduct);
                 await _unitOfWork.EventProductRepository.Update(existingProduct);
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
@@ -183,7 +177,7 @@ namespace Services.Services
                         Data = null
                     };
                 }
-             
+
             }
             return new ResponseGenericModel<EventProductDetailModel>()
             {

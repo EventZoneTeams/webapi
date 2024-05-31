@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Repositories.Entities
+namespace Domain.Entities
 {
     public class User : IdentityUser<int>
     {
@@ -21,8 +21,6 @@ namespace Repositories.Entities
         public DateTime? DeletionDate { get; set; }
         public int? DeleteBy { get; set; }
         public bool? IsDeleted { get; set; } = false;
-
-
-        public virtual Wallet Wallet { get; set; }
+        public virtual ICollection<Wallet> Wallets { get; set; }
     }
 }

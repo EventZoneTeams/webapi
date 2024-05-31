@@ -1,4 +1,4 @@
-﻿namespace Repositories.Entities
+﻿namespace Domain.Entities
 {
     public class EventOrder : BaseEntity
     {
@@ -10,6 +10,6 @@
         public virtual Event Event { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<EventOrderDetail> EventOrderDetails { get; set; }
-        public virtual ICollection<OrderTransaction> OrderTransactions { get; set; }
+        public virtual ICollection<TransactionDetail> TransactionDetail { get; set; }
     }
 }

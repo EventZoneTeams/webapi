@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Repositories.Entities;
+using Domain.Entities;
 using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.BusinessModels.EventModels;

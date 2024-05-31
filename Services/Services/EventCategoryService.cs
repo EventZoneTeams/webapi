@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Entities;
 using Repositories.Extensions;
 using Repositories.Interfaces;
 using Services.BusinessModels.EventCategoryModels;
