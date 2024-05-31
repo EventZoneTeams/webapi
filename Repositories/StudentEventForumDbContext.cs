@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Entities;
 
 namespace Repositories
 {
@@ -19,10 +19,12 @@ namespace Repositories
         public DbSet<EventPackage> EventPackages { get; set; }
         public DbSet<EventProduct> EventProducts { get; set; }
         public DbSet<ProductInPackage> ProductInPackages { get; set; }
-        public DbSet<OrderTransaction> OrderTransactions { get; set; }
         public DbSet<EventFeedback> EventFeedbacks { get; set; }
         public DbSet<EventImage> EventImages { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<TransactionDetail> TransactionDetails { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,22 +35,15 @@ namespace Repositories
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            modelBuilder.Entity<User>()
-               .HasOne(U => U.Wallet)
-               .WithOne(e => e.User)
-               .HasForeignKey<Wallet>(u => u.UserId).OnDelete(DeleteBehavior.Cascade);
-
-
-
             // Configure entity relationships
             modelBuilder.Entity<ProductInPackage>()
                 .HasKey(pp => new { pp.ProductId, pp.PackageId });
 
             modelBuilder.Entity<ProductInPackage>()
-    .HasOne(pp => pp.EventProduct)
-    .WithMany(p => p.ProductsInPackage)
-    .HasForeignKey(pp => pp.ProductId)
-    .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(pp => pp.EventProduct)
+                .WithMany(p => p.ProductsInPackage)
+                .HasForeignKey(pp => pp.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProductInPackage>()
                 .HasOne(pp => pp.EventPackage)

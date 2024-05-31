@@ -1,10 +1,10 @@
-﻿using Google.Apis.Auth;
+﻿using Domain.Entities;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Repositories.Commons;
 using Repositories.DTO;
-using Repositories.Entities;
 using Repositories.Interfaces;
 using Repositories.Utils;
 using System.Data;
@@ -40,7 +40,7 @@ namespace Repositories.Repositories
         public async Task<List<string>> GetRoleName(User User)
         {
             var result = await _userManager.GetRolesAsync(User);
-            if(result != null && result.Count >0)
+            if (result != null && result.Count > 0)
             {
                 return result.ToList();
             }
@@ -401,7 +401,7 @@ namespace Repositories.Repositories
             try
             {
                 // get all users
-                var roles = await _roleManager.Roles.Select(x=>x.Name).ToListAsync();
+                var roles = await _roleManager.Roles.Select(x => x.Name).ToListAsync();
                 return roles;
             }
             catch (Exception)
@@ -613,9 +613,9 @@ namespace Repositories.Repositories
             UsersQuery = await ApplyFilterSortAndSearch(UsersQuery, UserFilterModel);
             if (UsersQuery != null)
             {
-                var sortedQuery =  await ApplySorting(UsersQuery, UserFilterModel).ToListAsync();
+                var sortedQuery = await ApplySorting(UsersQuery, UserFilterModel).ToListAsync();
                 var totalCount = sortedQuery.Count;
-                var UsersPagination =  sortedQuery
+                var UsersPagination = sortedQuery
                     .Skip((paginationParameter.PageIndex - 1) * paginationParameter.PageSize)
                     .Take(paginationParameter.PageSize)
                     .ToList();
@@ -650,7 +650,7 @@ namespace Repositories.Repositories
                 return query;
             }
 
-    
+
             if (UserFilterModel.isDeleted == true)
             {
                 query = query.Where(a => a.IsDeleted == UserFilterModel.isDeleted);
@@ -671,7 +671,7 @@ namespace Repositories.Repositories
             {
                 var UsersInRole = await _userManager.GetUsersInRoleAsync(UserFilterModel.Role.ToUpper());
 
-                if (UsersInRole != null && UsersInRole.Count >0)
+                if (UsersInRole != null && UsersInRole.Count > 0)
                 {
                     var userIdsInRole = UsersInRole.Select(u => u.Id);
                     query = query.Where(a => userIdsInRole.Contains(a.Id));

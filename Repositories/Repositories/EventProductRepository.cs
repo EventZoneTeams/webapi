@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Repositories.Entities;
+﻿using Domain.Entities;
 using Repositories.Interfaces;
 
 namespace Repositories.Repositories
 {
-    public class EventProductRepository : GenericRepository<EventProduct> , IEventProductRepository
+    public class EventProductRepository : GenericRepository<EventProduct>, IEventProductRepository
     {
         private readonly StudentEventForumDbContext _context;
         private readonly ICurrentTime _timeService;

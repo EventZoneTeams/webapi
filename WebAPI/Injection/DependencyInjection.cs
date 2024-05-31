@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repositories;
 using Repositories.Commons;
-using Repositories.Entities;
 using Repositories.Interfaces;
 using Repositories.Repositories;
 using Services.Interface;

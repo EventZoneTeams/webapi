@@ -1,4 +1,4 @@
-﻿namespace Repositories.Entities
+﻿namespace Domain.Entities
 {
     public class Event : BaseEntity
     {
@@ -16,6 +16,7 @@
         public string? University { get; set; }
         public string? Status { get; set; }
         public string? OriganizationStatus { get; set; }
+        public string? Note { get; set; }
         public bool IsDonation { get; set; }
         public decimal TotalCost { get; set; }
 

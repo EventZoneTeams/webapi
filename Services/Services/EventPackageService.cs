@@ -1,16 +1,8 @@
 ﻿using AutoMapper;
-using Repositories;
 using Repositories.DTO;
-using Repositories.Entities;
 using Repositories.Interfaces;
-using Services.BusinessModels.EventProductsModel;
 using Services.BusinessModels.ResponseModels;
 using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -30,7 +22,7 @@ namespace Services.Services
         public async Task<ResponseGenericModel<List<ProductInPackageDTO>>> CreatePackageWithProducts(int eventId, string description, List<ProductQuantityDTO> products)
         {
             var existedEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventId);
-            if(existedEvent == null)
+            if (existedEvent == null)
             {
                 return new ResponseGenericModel<List<ProductInPackageDTO>>
                 {
@@ -41,12 +33,12 @@ namespace Services.Services
             }
 
             var result = await _unitOfWork.EventPackageRepository.CreatePackageWithProducts(eventId, description, products);
-            if ( result !=null )
+            if (result != null)
             {
                 return new ResponseGenericModel<List<ProductInPackageDTO>>
                 {
-                    Status=true,
-                    Message="Add sucessfully",
+                    Status = true,
+                    Message = "Add sucessfully",
                     Data = _mapper.Map<List<ProductInPackageDTO>>(result)
                 };
             }
@@ -90,16 +82,16 @@ namespace Services.Services
                     };
                 }
             }
-         
+
             return new ResponseGenericModel<List<EventPackageDetailDTO>>()
             {
                 Status = false,
-                Message = "There are no existed packages:"  + string.Join(", ", packageIds) + " please try again",
+                Message = "There are no existed packages:" + string.Join(", ", packageIds) + " please try again",
                 Data = null
             };
 
         }
-     
+
         public async Task<List<EventPackageDetailDTO>> GetAllWithProducts()
         {
             return await _unitOfWork.EventPackageRepository.GetAllPackageWithProducts();

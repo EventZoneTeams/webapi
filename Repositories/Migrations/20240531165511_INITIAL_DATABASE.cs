@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class INITIALDB : Migration
+    public partial class INITIAL_DATABASE : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -198,20 +198,28 @@ namespace Repositories.Migrations
                 name: "Wallets",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    PointBalance = table.Column<int>(type: "int", nullable: false),
-                    PersonalWallet = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrganizationalWallet = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    WalletType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<int>(type: "int", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Wallets", x => x.UserId);
+                    table.PrimaryKey("PK_Wallets", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Wallets_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -256,6 +264,44 @@ namespace Repositories.Migrations
                         name: "FK_Events_EventCategories_EventCategoryId",
                         column: x => x.EventCategoryId,
                         principalTable: "EventCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WalletId = table.Column<int>(type: "int", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransactionDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionId = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<int>(type: "int", nullable: true),
+                    ModifiedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ModifiedBy = table.Column<int>(type: "int", nullable: true),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedBy = table.Column<int>(type: "int", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Transactions_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transactions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Wallets_WalletId",
+                        column: x => x.WalletId,
+                        principalTable: "Wallets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -451,14 +497,13 @@ namespace Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderTransactions",
+                name: "TransactionDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    TransactionId = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EventOrderId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<int>(type: "int", nullable: true),
@@ -470,11 +515,17 @@ namespace Repositories.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderTransactions", x => x.Id);
+                    table.PrimaryKey("PK_TransactionDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderTransactions_EventOrders_EventOrderId",
+                        name: "FK_TransactionDetails_EventOrders_EventOrderId",
                         column: x => x.EventOrderId,
                         principalTable: "EventOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TransactionDetails_Transactions_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transactions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -749,11 +800,6 @@ namespace Repositories.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderTransactions_EventOrderId",
-                table: "OrderTransactions",
-                column: "EventOrderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PostComments_PostId",
                 table: "PostComments",
                 column: "PostId");
@@ -777,6 +823,31 @@ namespace Repositories.Migrations
                 name: "IX_ProductInPackages_PackageId",
                 table: "ProductInPackages",
                 column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionDetails_EventOrderId",
+                table: "TransactionDetails",
+                column: "EventOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TransactionDetails_TransactionId",
+                table: "TransactionDetails",
+                column: "TransactionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_TransactionId",
+                table: "Transactions",
+                column: "TransactionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_WalletId",
+                table: "Transactions",
+                column: "WalletId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Wallets_UserId",
+                table: "Wallets",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -810,9 +881,6 @@ namespace Repositories.Migrations
                 name: "EventOrderDetails");
 
             migrationBuilder.DropTable(
-                name: "OrderTransactions");
-
-            migrationBuilder.DropTable(
                 name: "PostComments");
 
             migrationBuilder.DropTable(
@@ -822,13 +890,10 @@ namespace Repositories.Migrations
                 name: "ProductInPackages");
 
             migrationBuilder.DropTable(
-                name: "Wallets");
+                name: "TransactionDetails");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "EventOrders");
 
             migrationBuilder.DropTable(
                 name: "Posts");
@@ -840,13 +905,22 @@ namespace Repositories.Migrations
                 name: "EventProducts");
 
             migrationBuilder.DropTable(
+                name: "EventOrders");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
+
+            migrationBuilder.DropTable(
                 name: "Events");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Wallets");
 
             migrationBuilder.DropTable(
                 name: "EventCategories");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

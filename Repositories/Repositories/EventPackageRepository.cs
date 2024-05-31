@@ -1,12 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories.DTO;
-using Repositories.Entities;
 using Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Repositories
 {
@@ -144,7 +139,7 @@ namespace Repositories.Repositories
                     Description = x.Description,
                     Products = x.ProductsInPackage.Select(p => new EventProductDetailDTO
                     {
-                        Id = p.EventProduct.Id, 
+                        Id = p.EventProduct.Id,
                         Name = p.EventProduct.Name,
                         Price = p.EventProduct.Price
                     }).ToList()

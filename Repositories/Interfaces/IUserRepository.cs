@@ -1,6 +1,6 @@
-﻿using Repositories.Commons;
+﻿using Domain.Entities;
+using Repositories.Commons;
 using Repositories.DTO;
-using Repositories.Entities;
 
 namespace Repositories.Interfaces
 {

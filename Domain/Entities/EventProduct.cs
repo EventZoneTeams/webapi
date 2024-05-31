@@ -1,4 +1,4 @@
-﻿namespace Repositories.Entities
+﻿namespace Domain.Entities
 {
     public class EventProduct : BaseEntity
     {

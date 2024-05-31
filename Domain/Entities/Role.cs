@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Repositories.Entities
+namespace Domain.Entities
 {
     public class Role : IdentityRole<int>
     {

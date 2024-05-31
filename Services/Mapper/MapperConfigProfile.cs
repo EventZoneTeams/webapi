@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Repositories.DTO;
-using Repositories.Entities;
 using Services.BusinessModels.EventCategoryModels;
 using Services.BusinessModels.EventModels;
 using Services.BusinessModels.EventProductsModel;

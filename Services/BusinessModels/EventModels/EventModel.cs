@@ -1,5 +1,5 @@
-﻿using Domain.Enums;
-using Repositories.Entities;
+﻿using Domain.Entities;
+using Domain.Enums;
 
 namespace Services.BusinessModels.EventModels
 {

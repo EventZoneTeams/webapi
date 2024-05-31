@@ -1,4 +1,4 @@
-﻿using Repositories.Entities;
+﻿using Domain.Entities;
 using Repositories.Helper;
 using Services.BusinessModels.EventModels;
 

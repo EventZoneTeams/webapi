@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Repositories.Entities;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Repositories.Utils;
 
 namespace Repositories

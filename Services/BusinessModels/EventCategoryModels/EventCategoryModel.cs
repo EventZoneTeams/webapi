@@ -1,4 +1,4 @@
-﻿using Repositories.Entities;
+﻿using Domain.Entities;
 
 namespace Services.BusinessModels.EventCategoryModels
 {
