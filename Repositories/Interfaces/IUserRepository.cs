@@ -23,5 +23,6 @@ namespace Repositories.Interfaces
         Task<List<User>> SoftRemoveRangeUserAsync(List<int> userIds);
         Task<Pagination<User>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel UserFilterModel);
         Task<List<string>> GetAllRoleNamesAsync();
+        Task<ResponseLoginModel> RefreshToken(TokenModel token);
     }
 }

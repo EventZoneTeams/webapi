@@ -66,6 +66,11 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseLoginModel> RefreshToken(TokenModel token)
+        {
+            return await _unitOfWork.UserRepository.RefreshToken(token);
+        }
+
         public async Task<ResponseGenericModel<UserDetailsModel>> UpdateStudentProfileAsync(int userId, UserUpdateModel userUpdateMode)
         {
             var existingUser = await _unitOfWork.UserRepository.GetAccountDetailsAsync(userId);
@@ -193,7 +198,7 @@ namespace Services.Services
             {
                 Data = null,
                 Status = false,
-                Message = "Not found"
+                Message = "User is not found due to error or expiration token"
             };
 
 
