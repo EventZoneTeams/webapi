@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Repositories.DTO;
 using Repositories.Interfaces;
+using Services.BusinessModels.EventModels;
+using Services.BusinessModels.EventPackageModels;
 using Services.BusinessModels.ResponseModels;
 using Services.Interface;
 
@@ -19,7 +21,7 @@ namespace Services.Services
             _eventService = eventService;
         }
 
-        public async Task<ResponseGenericModel<List<ProductInPackageDTO>>> CreatePackageWithProducts(int eventId, string description, List<ProductQuantityDTO> products)
+        public async Task<ResponseGenericModel<List<ProductInPackageDTO>>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage)
         {
             var existedEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventId);
             if (existedEvent == null)
@@ -32,7 +34,7 @@ namespace Services.Services
                 };
             }
 
-            var result = await _unitOfWork.EventPackageRepository.CreatePackageWithProducts(eventId, description, products);
+            var result = await _unitOfWork.EventPackageRepository.CreatePackageWithProducts(eventId, newPackage.Description, thumbnailurl, newPackage.Products);
             if (result != null)
             {
                 return new ResponseGenericModel<List<ProductInPackageDTO>>

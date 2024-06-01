@@ -25,17 +25,20 @@ namespace Repositories.Repositories
             return result;
         }
 
-        public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, List<ProductQuantityDTO> products)
+        public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, string thumbnailUrl, List<ProductQuantityDTO> products)
         {
 
             try
             {
+
+
                 var newPackage = new EventPackage
                 {
                     EventId = eventId,
                     CreatedAt = _timeService.GetCurrentTime(),
                     CreatedBy = _claimsService.GetCurrentUserId,
-                    Description = description
+                    Description = description,
+                    ThumbnailUrl = thumbnailUrl
                 };
 
                 await _context.EventPackages.AddAsync(newPackage);
