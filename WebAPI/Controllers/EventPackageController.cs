@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.DTO;
+using Services.BusinessModels.EventModels;
 using Services.BusinessModels.EventPackageModels;
 using Services.BusinessModels.EventProductsModel;
 using Services.Interface;
 using Services.Services;
+using System.Security.Policy;
 
 namespace WebAPI.Controllers
 {
@@ -13,22 +15,29 @@ namespace WebAPI.Controllers
     public class EventPackageController : ControllerBase
     {
         private readonly IEventPackageService _eventPackageService;
+        private readonly IImageService _imageService;
 
-        public EventPackageController(IEventPackageService eventPackageService)
+        public EventPackageController(IEventPackageService eventPackageService, IImageService imageService)
         {
             _eventPackageService = eventPackageService;
+            _imageService = imageService;
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromQuery]int eventId, CreatePackageRequest package)
+        public async Task<IActionResult> CreateAsync([FromQuery] int eventId, [FromForm] CreatePackageRequest package)
         {
             try
             {
-                var result = await _eventPackageService.CreatePackageWithProducts(eventId, package.Description ,package.Products);
+                string url="";
+                if (package.Thumbnail != null)
+                {
+                     url = await _imageService.UploadImageAsync(package.Thumbnail, "package-thumbnails");
+                }
+                var result = await _eventPackageService.CreatePackageWithProducts(eventId, url, package);
+
                 if (result.Status)
                 {
-                return Ok(result);
+                    return Ok(result);
 
                 }
 
