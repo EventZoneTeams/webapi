@@ -12,8 +12,8 @@ using Repositories;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(StudentEventForumDbContext))]
-    [Migration("20240531165511_INITIAL_DATABASE")]
-    partial class INITIAL_DATABASE
+    [Migration("20240601150831_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,6 +80,9 @@ namespace Repositories.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OriganizationStatus")
@@ -742,9 +745,6 @@ namespace Repositories.Migrations
                     b.Property<DateTime>("TransactionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TransactionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("TransactionType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -753,8 +753,6 @@ namespace Repositories.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TransactionId");
 
                     b.HasIndex("WalletId");
 
@@ -1268,11 +1266,6 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
                 {
-                    b.HasOne("Domain.Entities.Transaction", null)
-                        .WithMany("Transactions")
-                        .HasForeignKey("TransactionId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("Domain.Entities.Wallet", "Wallet")
                         .WithMany("Transactions")
                         .HasForeignKey("WalletId")
@@ -1291,7 +1284,7 @@ namespace Repositories.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Transaction", "Transaction")
-                        .WithMany()
+                        .WithMany("TransactionDetails")
                         .HasForeignKey("TransactionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1415,7 +1408,7 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
                 {
-                    b.Navigation("Transactions");
+                    b.Navigation("TransactionDetails");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

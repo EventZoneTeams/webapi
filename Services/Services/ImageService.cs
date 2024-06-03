@@ -3,6 +3,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Repositories.DTO.ImageDTOs;
 using Services.Interface;
 
 namespace Services.Services
@@ -65,6 +66,34 @@ namespace Services.Services
             }
         }
 
+        public async Task<List<ImageReturnDTO>> UploadMultipleImagesAsync(List<IFormFile> fileImages, string folderName)
+        {
+            try
+            {
+                List<ImageReturnDTO> uploadedFileUrls = new List<ImageReturnDTO>();
+
+                foreach (var file in fileImages)
+                {
+                    string fileUrl = await UploadImageAsync(file, folderName);
+                    if (!string.IsNullOrEmpty(fileUrl))
+                    {
+                        var imageReturnDTO = new ImageReturnDTO
+                        {
+                            ImageName = file.FileName,
+                            ImageUrl = fileUrl
+                        };
+                        uploadedFileUrls.Add(imageReturnDTO);
+                    }
+                }
+                return uploadedFileUrls;
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+                throw ex;
+            }
+        }
+
         private string GetContentType(string fileName)
         {
             string contentType;
@@ -89,6 +118,5 @@ namespace Services.Services
 
             return contentType;
         }
-
     }
 }

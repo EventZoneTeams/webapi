@@ -19,6 +19,14 @@ namespace WebAPI.Controllers
             _imageService = imageService;
         }
 
+        //[HttpPost("test")]
+        //public IActionResult Test([FromForm] )
+        //{
+        //    var imageUrl = _imageService.UploadImageAsync(files, "test-image-multiple");
+
+        //    return Ok(imageUrl);
+        //}
+
 
 
         /// <summary>
