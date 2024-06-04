@@ -42,7 +42,6 @@ namespace WebAPI.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -52,7 +51,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var result = await _userService.RefreshToken(model); 
+                var result = await _userService.RefreshToken(model);
                 if (result.Status.Equals(false))
                 {
                     return BadRequest(result);
@@ -66,12 +65,11 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums?  role)
+        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums? role)
         {
             try
             {
                 var newRole = RoleEnums.ADMIN.Equals(role) ? "" : role.ToString();
-
 
                 var result = await _userService.UpdateAccountAsync(id, userUpdatemodel, newRole);
                 if (result.Status == false)
@@ -85,7 +83,6 @@ namespace WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         [HttpDelete]
         public async Task<IActionResult> DeleteUsersAsync([FromBody] List<int> userIds)
@@ -125,13 +122,9 @@ namespace WebAPI.Controllers
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
-
-
 
         [HttpPost("login")]
         public async Task<IActionResult> LoginAsync(UserLoginModel user)
@@ -151,11 +144,11 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("wdqdwq")]
-        public async Task<IActionResult> GetAllusersAsync()
-        {
-            return Ok(await _userService.GetAllUsers());
-        }
+        //[HttpGet("wdqdwq")]
+        //public async Task<IActionResult> GetAllusersAsync()
+        //{
+        //    return Ok(await _userService.GetAllUsers());
+        //}
 
         [HttpGet()]
         public async Task<IActionResult> GetAccountByFilters([FromQuery] PaginationParameter paginationParameter, [FromQuery] UserFilterModel userFilterModel)
@@ -187,34 +180,32 @@ namespace WebAPI.Controllers
             }
         }
 
-
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUserAsync()
-        {   
-            var result = await _userService.GetCurrentUserAsync();   
+        {
+            var result = await _userService.GetCurrentUserAsync();
             if (result.Status)
             {
                 return Ok(result);
             }
             return NotFound(result);
-
         }
 
-        [HttpGet("test-email")]
-        public async Task<IActionResult> TestEmail()
-        {
-            var message = new Message(new string[]
-            {
-                "manhdung5289@gmail.com"
-            },
-             "Test",
-             "<h1> Wassup bro ! </h1>"
-            );
+        //[HttpGet("test-email")]
+        //public async Task<IActionResult> TestEmail()
+        //{
+        //    var message = new Message(new string[]
+        //    {
+        //        "manhdung5289@gmail.com"
+        //    },
+        //     "Test",
+        //     "<h1> Wassup bro ! </h1>"
+        //    );
 
-            await _emailService.SendEmail(message);
+        //    await _emailService.SendEmail(message);
 
-            return Ok(new { status = "success", Message = " email sent" });
-        }
+        //    return Ok(new { status = "success", Message = " email sent" });
+        //}
 
         [HttpGet("confirm-email")]
         [ApiExplorerSettings(IgnoreApi = true)]
@@ -247,11 +238,5 @@ namespace WebAPI.Controllers
         {
             return Ok(await _userService.UserChangePasswordAsync(email, token, newPassword));
         }
-
-
-
-
-
-
     }
 }
