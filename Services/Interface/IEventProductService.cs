@@ -1,5 +1,5 @@
-﻿using Services.BusinessModels.EventProductsModel;
-using Services.BusinessModels.ResponseModels;
+﻿using Services.DTO.EventProductsModel;
+using Services.DTO.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

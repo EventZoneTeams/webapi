@@ -1,6 +1,6 @@
-﻿using Repositories.DTO;
-using Services.BusinessModels.EventPackageModels;
-using Services.BusinessModels.ResponseModels;
+﻿using Repositories.Models;
+using Services.DTO.EventPackageModels;
+using Services.DTO.ResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

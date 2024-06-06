@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Repositories.DTO;
-using Services.BusinessModels.EventCategoryModels;
-using Services.BusinessModels.EventModels;
-using Services.BusinessModels.EventProductsModel;
-using Services.BusinessModels.UserModels;
+using Repositories.Models;
+using Services.DTO.EventCategoryDTOs;
+using Services.DTO.EventModels;
+using Services.DTO.EventProductsModel;
+using Services.DTO.UserModels;
 
 namespace Services.Mapper
 {
@@ -29,9 +29,12 @@ namespace Services.Mapper
             CreateMap<Event, ResponseEventModel>()
                 .ReverseMap();
 
-            CreateMap<EventCategory, EventCategoryModel>()
+            CreateMap<EventCategory, EventCategoryDTO>()
                 .ReverseMap()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? (string)null));
+
+            CreateMap<EventCategory, EventCategoryResponseDTO>()
+                .ReverseMap();
 
             CreateMap<EventProduct, EventProductDetailModel>().ReverseMap();
             CreateMap<EventProduct, EventProductUpdateModel>().ReverseMap();

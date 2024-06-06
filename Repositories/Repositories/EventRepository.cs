@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Extensions;
 using Repositories.Helper;
 using Repositories.Interfaces;
@@ -24,6 +25,7 @@ namespace Repositories.Repositories
         public IQueryable<Event> FilterAllField(EventParams eventParams)
         {
             var query = _context.Events
+                .Include(x => x.EventCategory)
                 .Search(eventParams.SearchTerm)
                 .Filter(eventParams.EventCategoryId)
                 .FilterByDonationDate(eventParams.DonationStartDate, eventParams.DonationEndDate)

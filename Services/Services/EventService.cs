@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Repositories.Helper;
 using Repositories.Interfaces;
-using Services.BusinessModels.EventModels;
+using Services.DTO.EventModels;
 using Services.Interface;
 
 namespace Services.Services

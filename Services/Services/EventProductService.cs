@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Repositories.Interfaces;
-using Services.BusinessModels.EventProductsModel;
-using Services.BusinessModels.ResponseModels;
+using Services.DTO.EventProductsModel;
+using Services.DTO.ResponseModels;
 using Services.Interface;
 
 namespace Services.Services

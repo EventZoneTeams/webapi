@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Repositories.Repositories;
-using Services.BusinessModels.EventProductsModel;
+using Services.DTO.EventProductsModel;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -59,7 +58,7 @@ namespace WebAPI.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute]int id, [FromBody] EventProductUpdateModel model)
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] EventProductUpdateModel model)
         {
             try
             {

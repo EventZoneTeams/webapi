@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Repositories.DTO;
+using Repositories.Models;
 
 namespace Repositories.Interfaces
 {

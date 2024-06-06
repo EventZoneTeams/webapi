@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Repositories.Utils;
-using Services.BusinessModels.ResponseModels;
+using Services.DTO.ResponseModels;
 using Services.Interface;
 using Services.Services;
 

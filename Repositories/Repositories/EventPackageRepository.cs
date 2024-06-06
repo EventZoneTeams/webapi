@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Repositories.DTO;
 using Repositories.Interfaces;
+using Repositories.Models;
 
 namespace Repositories.Repositories
 {

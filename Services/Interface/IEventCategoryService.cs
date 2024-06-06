@@ -1,13 +1,13 @@
-﻿using Services.BusinessModels.EventCategoryModels;
+﻿using Services.DTO.EventCategoryDTOs;
 
 namespace Services.Interface
 {
     public interface IEventCategoryService
     {
-        Task<List<EventCategoryModel>> GetEventCategories(CategoryParam categoryParam);
-        Task<EventCategoryModel> GetEventCategoryById(int id);
-        Task<EventCategoryModel> CreateEventCategory(EventCategoryModel eventCategoryModel);
-        Task<EventCategoryModel> UpdateEventCategory(int id, EventCategoryModel eventCategoryModel);
-        Task<EventCategoryModel> DeleteEventCategory(int id);
+        Task<List<EventCategoryResponseDTO>> GetEventCategories(CategoryParam categoryParam);
+        Task<EventCategoryResponseDTO> GetEventCategoryById(int id);
+        Task<EventCategoryResponseDTO> CreateEventCategory(EventCategoryDTO eventCategoryModel);
+        Task<EventCategoryResponseDTO> UpdateEventCategory(int id, EventCategoryDTO eventCategoryModel);
+        Task<bool> DeleteEventCategory(int id);
     }
 }

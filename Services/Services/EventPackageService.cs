@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Repositories.DTO;
 using Repositories.Interfaces;
-using Services.BusinessModels.EventModels;
-using Services.BusinessModels.EventPackageModels;
-using Services.BusinessModels.ResponseModels;
+using Repositories.Models;
+using Services.DTO.EventPackageModels;
+using Services.DTO.ResponseModels;
 using Services.Interface;
 
 namespace Services.Services

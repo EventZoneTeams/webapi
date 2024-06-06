@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
-using Services.BusinessModels.EmailModels;
+using Services.DTO.EmailModels;
 using Services.Interface;
 using Services.Services;
 using System.Reflection;

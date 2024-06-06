@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
-using Repositories.DTO;
-using Services.BusinessModels.EmailModels;
-using Services.BusinessModels.UserModels;
+using Repositories.Models;
+using Services.DTO.EmailModels;
+using Services.DTO.UserModels;
 using Services.Interface;
-using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -52,7 +51,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var result = await _userService.RefreshToken(model); 
+                var result = await _userService.RefreshToken(model);
                 if (result.Status.Equals(false))
                 {
                     return BadRequest(result);
@@ -66,7 +65,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums?  role)
+        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums? role)
         {
             try
             {
@@ -190,8 +189,8 @@ namespace WebAPI.Controllers
 
         [HttpGet("me")]
         public async Task<IActionResult> GetCurrentUserAsync()
-        {   
-            var result = await _userService.GetCurrentUserAsync();   
+        {
+            var result = await _userService.GetCurrentUserAsync();
             if (result.Status)
             {
                 return Ok(result);
@@ -235,7 +234,7 @@ namespace WebAPI.Controllers
             if (result.Status)
             {
                 var confirmationLink = "Code:\n\"" + result.Data + "\"";
-                var message = new Message(new string[] { email }, "Reset password token", confirmationLink!);
+                var message = new Services.DTO.EmailModels.Message(new string[] { email }, "Reset password token", confirmationLink!);
                 await _emailService.SendEmail(message);
                 return Ok(result);
             }
