@@ -2,7 +2,7 @@
 using Repositories.Commons;
 using Repositories.Extensions;
 using Repositories.Helper;
-using Services.DTO.EventModels;
+using Services.DTO.EventDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -75,7 +75,7 @@ namespace WebAPI.Controllers
             try
             {
                 var eventModel = await _eventService.GetEventById(id);
-                return Ok(ApiResult<ResponseEventModel>.Succeed(eventModel, "Get Event Successfully!"));
+                return Ok(ApiResult<EventResponseDTO>.Succeed(eventModel, "Get Event Successfully!"));
             }
             catch (Exception ex)
             {
@@ -130,7 +130,7 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns a event</response>
         /// <response code="400">Requied field is null</response>
         [HttpPost]
-        public async Task<IActionResult> CreateEventAsync([FromForm] CreateEventModel createEventModel)
+        public async Task<IActionResult> CreateEventAsync([FromForm] EventCreateDTO createEventModel)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace WebAPI.Controllers
                     imageUrl = await _imageService.UploadImageAsync(createEventModel.ThumbnailUrl, "event-thumbnails");
                 }
 
-                var format = new EventModel
+                var format = new EventDTO
                 {
                     Name = createEventModel.Name,
                     Description = createEventModel.Description,
@@ -149,6 +149,7 @@ namespace WebAPI.Controllers
                     DonationEndDate = createEventModel.DonationEndDate,
                     EventStartDate = createEventModel.EventStartDate,
                     EventEndDate = createEventModel.EventEndDate,
+                    Note = createEventModel.Note,
                     Location = createEventModel.Location,
                     UserId = createEventModel.UserId,
                     EventCategoryId = createEventModel.EventCategoryId,
@@ -159,7 +160,7 @@ namespace WebAPI.Controllers
                     TotalCost = createEventModel?.TotalCost
                 };
                 var eventModel = await _eventService.CreateEvent(format);
-                return Ok(ApiResult<ResponseEventModel>.Succeed(eventModel, "Create Event Successfully!"));
+                return Ok(ApiResult<EventResponseDTO>.Succeed(eventModel, "Create Event Successfully!"));
             }
             catch (Exception ex)
             {
@@ -216,7 +217,7 @@ namespace WebAPI.Controllers
         /// <response code="400">If the event or the update data is invalid</response>
         /// <response code="404">If the event is not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEventAsync(int id, [FromForm] CreateEventModel updateEventModel)
+        public async Task<IActionResult> UpdateEventAsync(int id, [FromForm] EventCreateDTO updateEventModel)
         {
             try
             {
@@ -226,7 +227,7 @@ namespace WebAPI.Controllers
                     imageUrl = await _imageService.UploadImageAsync(updateEventModel.ThumbnailUrl, "event-thumbnails");
                 }
 
-                var format = new EventModel
+                var format = new EventDTO
                 {
                     Name = updateEventModel.Name,
                     Description = updateEventModel.Description,
@@ -235,6 +236,7 @@ namespace WebAPI.Controllers
                     DonationEndDate = updateEventModel.DonationEndDate,
                     EventStartDate = updateEventModel.EventStartDate,
                     EventEndDate = updateEventModel.EventEndDate,
+                    Note = updateEventModel.Note,
                     Location = updateEventModel.Location,
                     UserId = updateEventModel.UserId,
                     EventCategoryId = updateEventModel.EventCategoryId,
@@ -245,7 +247,7 @@ namespace WebAPI.Controllers
                     TotalCost = updateEventModel.TotalCost ?? 0
                 };
                 var updatedEvent = await _eventService.UpdateEvent(id, format);
-                return Ok(ApiResult<ResponseEventModel>.Succeed(updatedEvent, "Event updated successfully!"));
+                return Ok(ApiResult<EventResponseDTO>.Succeed(updatedEvent, "Event updated successfully!"));
             }
             catch (Exception ex)
             {
@@ -273,7 +275,7 @@ namespace WebAPI.Controllers
             try
             {
                 var deletedEvent = await _eventService.DeleteEvent(id);
-                return Ok(ApiResult<ResponseEventModel>.Succeed(deletedEvent, "Event deleted successfully!"));
+                return Ok(ApiResult<EventResponseDTO>.Succeed(deletedEvent, "Event deleted successfully!"));
             }
             catch (Exception ex)
             {

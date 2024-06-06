@@ -2,7 +2,7 @@
 using Domain.Entities;
 using Repositories.Models;
 using Services.DTO.EventCategoryDTOs;
-using Services.DTO.EventModels;
+using Services.DTO.EventDTOs;
 using Services.DTO.EventProductsModel;
 using Services.DTO.UserModels;
 
@@ -20,13 +20,13 @@ namespace Services.Mapper
             ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToLower() == "male")).ReverseMap()
            .ReverseMap();
 
-            CreateMap<EventModel, Event>()
+            CreateMap<EventDTO, Event>()
                 .ReverseMap();
 
-            CreateMap<EventModel, ResponseEventModel>()
+            CreateMap<EventDTO, EventResponseDTO>()
                 .ReverseMap();
 
-            CreateMap<Event, ResponseEventModel>()
+            CreateMap<Event, EventResponseDTO>()
                 .ReverseMap();
 
             CreateMap<EventCategory, EventCategoryDTO>()

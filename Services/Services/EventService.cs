@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories.Helper;
 using Repositories.Interfaces;
-using Services.DTO.EventModels;
+using Services.DTO.EventDTOs;
 using Services.Interface;
 
 namespace Services.Services
@@ -18,40 +19,42 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<PagedList<Event>> GetEvent(EventParams eventParams)
+        public async Task<PagedList<EventResponseDTO>> GetEvent(EventParams eventParams)
         {
             var query = _unitOfWork.EventRepository.FilterAllField(eventParams).AsQueryable();
-
-            var products = await PagedList<Event>.ToPagedList(query, eventParams.PageNumber, eventParams.PageSize);
+            //mapping to EventDTO
+            var eventDTO = _mapper.Map<List<EventResponseDTO>>(query);
+            var count = await query.CountAsync();
+            var products = await PagedList<EventResponseDTO>.ToPagedListMapping(eventDTO, count, eventParams.PageNumber, eventParams.PageSize);
 
             //.Sort(eventParams.OrderBy);
 
             return products;
         }
 
-        public async Task<ResponseEventModel> GetEventById(int id)
+        public async Task<EventResponseDTO> GetEventById(int id)
         {
-            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.EventCategory);
 
             if (existingEvent == null)
             {
                 throw new Exception("Event not found");
             }
 
-            var result = _mapper.Map<ResponseEventModel>(existingEvent);
+            var result = _mapper.Map<EventResponseDTO>(existingEvent);
             return result;
         }
-        public async Task<ResponseEventModel> CreateEvent(EventModel eventModel)
+        public async Task<EventResponseDTO> CreateEvent(EventDTO eventModel)
         {
             var eventEntity = _mapper.Map<Event>(eventModel);
             //check user
             var user = await _unitOfWork.UserRepository.GetAllUsersAsync();
-            var isExist = user.FirstOrDefault(x => x.Id == eventModel.UserId);
-            if (isExist == null)
+            var isExistUser = user.FirstOrDefault(x => x.Id == eventModel.UserId);
+            if (isExistUser == null)
             {
                 throw new Exception("User not null when create event");
             }
-
+            eventEntity.User = isExistUser;
             //check eventCategory
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(eventModel.EventCategoryId);
             if (eventCategory == null)
@@ -62,12 +65,12 @@ namespace Services.Services
 
             var newEvent = await _unitOfWork.EventRepository.AddAsync(eventEntity);
 
-            var result = _mapper.Map<ResponseEventModel>(newEvent);
+            var result = _mapper.Map<EventResponseDTO>(newEvent);
             await _unitOfWork.SaveChangeAsync();
             return result;
         }
 
-        public async Task<ResponseEventModel> UpdateEvent(int id, EventModel eventModel)
+        public async Task<EventResponseDTO> UpdateEvent(int id, EventDTO eventModel)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
 
@@ -75,6 +78,21 @@ namespace Services.Services
             {
                 throw new Exception("Event not found");
             }
+            //check user
+            var user = await _unitOfWork.UserRepository.GetAllUsersAsync();
+            var isExistUser = user.FirstOrDefault(x => x.Id == eventModel.UserId);
+            if (isExistUser == null)
+            {
+                throw new Exception("User does not exist!");
+            }
+            existingEvent.User = isExistUser;
+            //check eventCategory
+            var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(eventModel.EventCategoryId);
+            if (eventCategory == null)
+            {
+                throw new Exception("Event category does not exist!");
+            }
+            existingEvent.EventCategory = eventCategory;
 
             existingEvent.Name = eventModel.Name ?? existingEvent.Name;
             existingEvent.Description = eventModel.Description ?? existingEvent.Description;
@@ -84,14 +102,6 @@ namespace Services.Services
             existingEvent.EventStartDate = eventModel.EventStartDate ?? existingEvent.EventStartDate;
             existingEvent.EventEndDate = eventModel.EventEndDate ?? existingEvent.EventEndDate;
             existingEvent.Location = eventModel.Location ?? existingEvent.Location;
-            if (eventModel.UserId != 0)
-            {
-                existingEvent.UserId = eventModel.UserId;
-            }
-            if (eventModel.EventCategoryId != 0)
-            {
-                existingEvent.EventCategoryId = eventModel.EventCategoryId;
-            }
             existingEvent.University = eventModel.University ?? existingEvent.University;
             existingEvent.Status = eventModel.Status.ToString() ?? existingEvent.Status;
             existingEvent.OriganizationStatus = eventModel.OriganizationStatus.ToString() ?? existingEvent.OriganizationStatus;
@@ -105,11 +115,11 @@ namespace Services.Services
                 throw new Exception("Failed to update event");
             }
 
-            var result = _mapper.Map<ResponseEventModel>(existingEvent);
+            var result = _mapper.Map<EventResponseDTO>(existingEvent);
             await _unitOfWork.SaveChangeAsync();
             return result;
         }
-        public async Task<ResponseEventModel> DeleteEvent(int id)
+        public async Task<EventResponseDTO> DeleteEvent(int id)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
 
@@ -121,7 +131,7 @@ namespace Services.Services
             var isDeleted = await _unitOfWork.EventRepository.SoftRemove(existingEvent);
             if (isDeleted)
             {
-                var result = _mapper.Map<ResponseEventModel>(existingEvent);
+                var result = _mapper.Map<EventResponseDTO>(existingEvent);
                 await _unitOfWork.SaveChangeAsync();
                 return result;
             }

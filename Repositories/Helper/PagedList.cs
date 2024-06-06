@@ -24,5 +24,10 @@ namespace Repositories.Helper
             var items = await query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync<T>();
             return new PagedList<T>(items, count, pageNumber, pageSize);
         }
+
+        public static async Task<PagedList<T>> ToPagedListMapping(List<T> items, int count, int pageNumber, int pageSize)
+        {
+            return new PagedList<T>(items, count, pageNumber, pageSize);
+        }
     }
 }

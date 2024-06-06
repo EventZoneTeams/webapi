@@ -1,15 +1,14 @@
-﻿using Domain.Entities;
-using Repositories.Helper;
-using Services.DTO.EventModels;
+﻿using Repositories.Helper;
+using Services.DTO.EventDTOs;
 
 namespace Services.Interface
 {
     public interface IEventService
     {
-        Task<PagedList<Event>> GetEvent(EventParams eventParams);
-        Task<ResponseEventModel> GetEventById(int id);
-        Task<ResponseEventModel> CreateEvent(EventModel eventModel);
-        Task<ResponseEventModel> UpdateEvent(int id, EventModel eventModel);
-        Task<ResponseEventModel> DeleteEvent(int id);
+        Task<PagedList<EventResponseDTO>> GetEvent(EventParams eventParams);
+        Task<EventResponseDTO> GetEventById(int id);
+        Task<EventResponseDTO> CreateEvent(EventDTO eventModel);
+        Task<EventResponseDTO> UpdateEvent(int id, EventDTO eventModel);
+        Task<EventResponseDTO> DeleteEvent(int id);
     }
 }
