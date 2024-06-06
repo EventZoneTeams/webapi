@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Repositories.DTO;
-using Services.BusinessModels.EventModels;
-using Services.BusinessModels.EventPackageModels;
-using Services.BusinessModels.EventProductsModel;
+﻿using Microsoft.AspNetCore.Mvc;
+using Services.DTO.EventPackageModels;
 using Services.Interface;
-using Services.Services;
-using System.Security.Policy;
 
 namespace WebAPI.Controllers
 {
@@ -28,10 +22,10 @@ namespace WebAPI.Controllers
         {
             try
             {
-                string url="";
+                string url = "";
                 if (package.Thumbnail != null)
                 {
-                     url = await _imageService.UploadImageAsync(package.Thumbnail, "package-thumbnails");
+                    url = await _imageService.UploadImageAsync(package.Thumbnail, "package-thumbnails");
                 }
                 var result = await _eventPackageService.CreatePackageWithProducts(eventId, url, package);
 

@@ -8,7 +8,69 @@ namespace Repositories
     {
         public static async Task Initialize(StudentEventForumDbContext context, UserManager<User> userManager)
         {
-            //context.Database.EnsureCreated();
+
+            if (!context.EventCategories.Any())
+            {
+                var eventCategories = new List<EventCategory>()
+{
+                  new EventCategory
+                  {
+                    Title = "Education",
+                    ImageUrl = "https://www.timeshighereducation.com/student/sites/default/files/istock-499343530.jpg"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Music",
+                    ImageUrl = "https://artsreview.b-cdn.net/wp-content/uploads/2022/06/A-crowd-at-a-music-concert.jpg"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Sports",
+                    ImageUrl = "https://www.coe.int/documents/24916852/0/Supporters3.jpg/63b405d6-be6d-d2ec-bd11-0f03c6ca8130?t=1503560660000"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Technology",
+                    ImageUrl = "https://blog.bishopmccann.com/hubfs/event%20tech%20main_%20AdobeStock_352613171.jpeg#keepProtocol"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Business",
+                    ImageUrl = "https://www.loghicconnect.com.au/wp-content/uploads/2020/05/Untitled-design-2023-03-16T112342.403.jpg"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Art",
+                    ImageUrl = "https://freeyorkk.b-cdn.net/wp-content/uploads/2021/06/AdobeStock_380232446-2400x1233.jpeg"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Food & Drink",
+                    ImageUrl = "https://goeshow.com/wp-content/uploads/2022/11/Blog-Image-10112022-700x423.jpg"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Travel",
+                    ImageUrl = "https://au.travelctm.com/wp-content/uploads/2019/10/Double-Image-Incentive-600x438.jpg"
+                  },
+                  new  EventCategory
+                  {
+                    Title = "Film",
+                    ImageUrl = "https://images.lifestyleasia.com/wp-content/uploads/sites/7/2023/01/23162628/shutterstock_95844517.jpg"
+                  },
+                  new EventCategory
+                  {
+                    Title = "Other",
+                    ImageUrl = "https://static.ra.co/images/promoter/za-theotherevents.jpg?dateUpdated=1576847763880s"
+                  },
+                };
+
+                foreach (var eventCategory in eventCategories)
+                {
+                    await context.EventCategories.AddAsync(eventCategory);
+                }
+                await context.SaveChangesAsync();
+            }
 
             if (!context.Roles.Any())
             {
@@ -133,55 +195,57 @@ namespace Repositories
                 await context.SaveChangesAsync();
             }
 
-            if (!context.Events.Any())
-            {
-                var events = new List<Event>
-                {
-                    new Event
-                    {
-                        Name= "Charity Fundraiser for Children's Education",
-                        Description= "A charity event to raise funds for underprivileged children's education and school supplies.",
-                        DonationStartDate= DateTime.Parse("2024-05-15T09:00:00.000Z"),
-                        DonationEndDate= DateTime.Parse("2024-05-30T18:00:00.000Z"),
-                        EventStartDate= DateTime.Parse("2024-05-25T10:00:00.000Z"),
-                        EventEndDate= DateTime.Parse("2024-05-25T18:00:00.000Z"),
-                        Location= "Central Park, New York City",
-                        UserId= 1,
-                        University= "New York University",
-                        Status= "Upcoming",
-                        OriganizationStatus= "Approved",
-                        IsDonation= true,
-                        TotalCost= 25000
-                    }
-                };
 
-                foreach (var eventItem in events)
-                {
-                    await context.Events.AddAsync(eventItem);
-                }
-                await context.SaveChangesAsync();
-            }
 
-            if (!context.EventProducts.Any())
-            {
-                var eventProducts = new List<EventProduct>
-                {
-                    new EventProduct
-                    {
-                        Name = "Product 1",
-                        Description = "Description 1",
-                        Price = 1000,
-                        EventId = 1
-                    }
-                };
+            //if (!context.Events.Any())
+            //{
+            //    var events = new List<Event>
+            //    {
+            //        new Event
+            //        {
+            //            Name= "Charity Fundraiser for Children's Education",
+            //            Description= "A charity event to raise funds for underprivileged children's education and school supplies.",
+            //            DonationStartDate= DateTime.Parse("2024-05-15T09:00:00.000Z"),
+            //            DonationEndDate= DateTime.Parse("2024-05-30T18:00:00.000Z"),
+            //            EventStartDate= DateTime.Parse("2024-05-25T10:00:00.000Z"),
+            //            EventEndDate= DateTime.Parse("2024-05-25T18:00:00.000Z"),
+            //            Location= "Central Park, New York City",
+            //            UserId= 1,
+            //            University= "New York University",
+            //            Status= "Upcoming",
+            //            OriganizationStatus= "Approved",
+            //            IsDonation= true,
+            //            TotalCost= 25000
+            //        }
+            //    };
 
-                foreach (var eventProduct in eventProducts)
-                {
-                    await context.EventProducts.AddAsync(eventProduct);
-                }
+            //    foreach (var eventItem in events)
+            //    {
+            //        await context.Events.AddAsync(eventItem);
+            //    }
+            //    await context.SaveChangesAsync();
+            //}
 
-                await context.SaveChangesAsync();
-            }
+            //if (!context.EventProducts.Any())
+            //{
+            //    var eventProducts = new List<EventProduct>
+            //    {
+            //        new EventProduct
+            //        {
+            //            Name = "Product 1",
+            //            Description = "Description 1",
+            //            Price = 1000,
+            //            EventId = 1
+            //        }
+            //    };
+
+            //    foreach (var eventProduct in eventProducts)
+            //    {
+            //        await context.EventProducts.AddAsync(eventProduct);
+            //    }
+
+            //    await context.SaveChangesAsync();
+            //}
         }
     }
 }

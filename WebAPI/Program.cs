@@ -1,11 +1,10 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
-using Services.BusinessModels.EmailModels;
+using Services.DTO.EmailModels;
 using Services.Interface;
 using Services.Services;
 using System.Reflection;
@@ -152,7 +151,6 @@ var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 try
 {
-    await context.Database.MigrateAsync();
     await DBInitializer.Initialize(context, userManager);
 }
 catch (Exception ex)

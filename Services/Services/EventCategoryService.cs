@@ -3,7 +3,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Extensions;
 using Repositories.Interfaces;
-using Services.BusinessModels.EventCategoryModels;
+using Services.DTO.EventCategoryDTOs;
 using Services.Interface;
 
 namespace Services.Services
@@ -19,7 +19,7 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<EventCategoryModel> CreateEventCategory(EventCategoryModel eventCategoryModel)
+        public async Task<EventCategoryResponseDTO> CreateEventCategory(EventCategoryDTO eventCategoryModel)
         {
             // check if event category already exists
             var existingCategory = await _unitOfWork.EventCategoryRepository
@@ -43,12 +43,12 @@ namespace Services.Services
             var newCategory = await _unitOfWork.EventCategoryRepository.AddAsync(eventCategory);
 
             // mapper
-            var result = _mapper.Map<EventCategoryModel>(newCategory);
+            var result = _mapper.Map<EventCategoryResponseDTO>(newCategory);
             await _unitOfWork.SaveChangeAsync();
             return result;
         }
 
-        public async Task<EventCategoryModel> DeleteEventCategory(int id)
+        public async Task<bool> DeleteEventCategory(int id)
         {
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
 
@@ -58,19 +58,10 @@ namespace Services.Services
             }
 
             var isDeleted = await _unitOfWork.EventCategoryRepository.SoftRemove(eventCategory);
-            if (isDeleted)
-            {
-                var result = _mapper.Map<EventCategoryModel>(eventCategory);
-                await _unitOfWork.SaveChangeAsync();
-                return result;
-            }
-            else
-            {
-                throw new Exception("Failed to delete event category");
-            }
+            return isDeleted;
         }
 
-        public async Task<List<EventCategoryModel>> GetEventCategories(CategoryParam categoryParam)
+        public async Task<List<EventCategoryResponseDTO>> GetEventCategories(CategoryParam categoryParam)
         {
             var eventCategories = await _unitOfWork.EventCategoryRepository
                 .GetQueryable()
@@ -78,16 +69,16 @@ namespace Services.Services
                 .Sort(categoryParam.OrderBy)
                 .ToListAsync<EventCategory>();
 
-            var result = new List<EventCategoryModel>();
+            var result = new List<EventCategoryResponseDTO>();
             foreach (var category in eventCategories)
             {
-                var eventFormat = _mapper.Map<EventCategoryModel>(category);
+                var eventFormat = _mapper.Map<EventCategoryResponseDTO>(category);
                 result.Add(eventFormat);
             }
             return result;
         }
 
-        public async Task<EventCategoryModel> GetEventCategoryById(int id)
+        public async Task<EventCategoryResponseDTO> GetEventCategoryById(int id)
         {
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
 
@@ -96,12 +87,12 @@ namespace Services.Services
                 throw new Exception("Event category not found");
             }
 
-            var result = _mapper.Map<EventCategoryModel>(eventCategory);
+            var result = _mapper.Map<EventCategoryResponseDTO>(eventCategory);
 
             return result;
         }
 
-        public async Task<EventCategoryModel> UpdateEventCategory(int id, EventCategoryModel eventCategoryModel)
+        public async Task<EventCategoryResponseDTO> UpdateEventCategory(int id, EventCategoryDTO eventCategoryModel)
         {
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
 
@@ -120,7 +111,7 @@ namespace Services.Services
                 throw new Exception("Failed to update event category");
             }
 
-            var result = _mapper.Map<EventCategoryModel>(eventCategory);
+            var result = _mapper.Map<EventCategoryResponseDTO>(eventCategory);
             await _unitOfWork.SaveChangeAsync();
             return result;
         }

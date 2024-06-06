@@ -3,6 +3,7 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Repositories.Models.ImageDTOs;
 using Services.Interface;
 
 namespace Services.Services
@@ -36,7 +37,10 @@ namespace Services.Services
             {
                 BlobContainerClient containerClient = await GetContainerClientAsync();
 
-                string blobPath = $"{folderName}/{file.FileName}";
+                Random rnd = new Random();
+                int randomUrl = rnd.Next(1, 1000);
+
+                string blobPath = $"{folderName}/{file.FileName}+{randomUrl}";
                 BlobClient blobClient = containerClient.GetBlobClient(blobPath);
 
                 using (Stream stream = file.OpenReadStream())
@@ -57,6 +61,82 @@ namespace Services.Services
 
                     return blobClient.Uri.AbsoluteUri;
                 }
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+                throw ex;
+            }
+        }
+
+        public async Task<List<ImageReturnDTO>> UploadMultipleImagesAsync(List<IFormFile> fileImages, string folderName)
+        {
+            try
+            {
+                List<ImageReturnDTO> uploadedFileUrls = new List<ImageReturnDTO>();
+
+                foreach (var file in fileImages)
+                {
+                    string fileUrl = await UploadImageAsync(file, folderName);
+                    if (!string.IsNullOrEmpty(fileUrl))
+                    {
+                        var imageReturnDTO = new ImageReturnDTO
+                        {
+                            ImageName = file.FileName,
+                            ImageUrl = fileUrl
+                        };
+                        uploadedFileUrls.Add(imageReturnDTO);
+                    }
+                }
+                return uploadedFileUrls;
+            }
+            catch (Exception ex)
+            {
+                // Xử lý ngoại lệ
+                throw ex;
+            }
+        }
+
+        public async Task<List<ImageReturnDTO>> UploadImageRangeAsync(List<IFormFile> fileImages, string folderName)
+        {
+            try
+            {
+                List<ImageReturnDTO> uploadedFileUrls = new List<ImageReturnDTO>();
+
+                foreach (IFormFile imageFile in fileImages)
+                {
+                    BlobContainerClient containerClient = await GetContainerClientAsync();
+
+                    Random rnd = new Random();
+                    int randomUrl = rnd.Next(1, 1000);
+
+                    string blobPath = $"{folderName}/{imageFile.FileName}+{randomUrl}";
+                    BlobClient blobClient = containerClient.GetBlobClient(blobPath);
+
+                    using (Stream stream = imageFile.OpenReadStream())
+                    {
+                        string contentType = GetContentType(imageFile.FileName);
+                        var headers = new BlobHttpHeaders
+                        {
+                            ContentType = contentType
+                        };
+
+                        Response<BlobContentInfo> response = await blobClient.UploadAsync(stream, headers);
+
+                        if (response.GetRawResponse().IsError)
+                        {
+                            // Xử lý lỗi khi tải lên
+                        }
+
+                        var imageReturnDTO = new ImageReturnDTO
+                        {
+                            ImageName = imageFile.FileName,
+                            ImageUrl = blobClient.Uri.AbsoluteUri
+                        };
+                        uploadedFileUrls.Add(imageReturnDTO);
+                    }
+                }
+                return uploadedFileUrls;
             }
             catch (Exception ex)
             {
@@ -89,6 +169,5 @@ namespace Services.Services
 
             return contentType;
         }
-
     }
 }

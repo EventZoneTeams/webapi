@@ -2,7 +2,7 @@
 using Repositories.Commons;
 using Repositories.Extensions;
 using Repositories.Helper;
-using Services.BusinessModels.EventModels;
+using Services.DTO.EventModels;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get all events
+        /// Get list events
         /// </summary>
         /// <returns>A list of events</returns>
         /// <remarks>
@@ -100,6 +100,7 @@ namespace WebAPI.Controllers
         ///         "eventStartDate": "2024-05-25T10:00:00.000Z",
         ///         "eventEndDate": "2024-05-25T18:00:00.000Z",
         ///         "location": "Central Park, New York City",
+        ///         "note": "Please approve this event",
         ///         "userId": 1,
         ///         "eventCategoryId": 1,
         ///         "university": "New York University",

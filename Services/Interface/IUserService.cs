@@ -1,7 +1,7 @@
 ﻿using Repositories.Commons;
-using Repositories.DTO;
-using Services.BusinessModels.ResponseModels;
-using Services.BusinessModels.UserModels;
+using Repositories.Models;
+using Services.DTO.ResponseModels;
+using Services.DTO.UserModels;
 
 namespace Services.Interface
 {

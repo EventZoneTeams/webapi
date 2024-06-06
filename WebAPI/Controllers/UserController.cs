@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
-using Repositories.DTO;
-using Services.BusinessModels.EmailModels;
-using Services.BusinessModels.UserModels;
+using Repositories.Models;
+using Services.DTO.EmailModels;
+using Services.DTO.UserModels;
 using Services.Interface;
-using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -226,7 +225,7 @@ namespace WebAPI.Controllers
             if (result.Status)
             {
                 var confirmationLink = "Code:\n\"" + result.Data + "\"";
-                var message = new Message(new string[] { email }, "Reset password token", confirmationLink!);
+                var message = new Services.DTO.EmailModels.Message(new string[] { email }, "Reset password token", confirmationLink!);
                 await _emailService.SendEmail(message);
                 return Ok(result);
             }

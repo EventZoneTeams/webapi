@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Repositories.Helper;
-using Services.BusinessModels.EventModels;
+using Services.DTO.EventModels;
 
 namespace Services.Interface
 {

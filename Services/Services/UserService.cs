@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using Repositories.Commons;
-using Repositories.DTO;
 using Repositories.Interfaces;
-using Services.BusinessModels.EmailModels;
-using Services.BusinessModels.EventProductsModel;
-using Services.BusinessModels.ResponseModels;
-using Services.BusinessModels.UserModels;
+using Repositories.Models;
+using Services.DTO.ResponseModels;
+using Services.DTO.UserModels;
 using Services.Interface;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Services.Services
 {
@@ -192,7 +189,7 @@ namespace Services.Services
                     Status = true,
                     Message = "This is current user"
                 };
-             
+
             }
             return new ResponseGenericModel<UserDetailsModel>
             {
@@ -212,9 +209,9 @@ namespace Services.Services
 
             if (existingIds.Count > 0)
             {
-                 await _unitOfWork.UserRepository.SoftRemoveRangeUserAsync(existingIds);
+                await _unitOfWork.UserRepository.SoftRemoveRangeUserAsync(existingIds);
                 var result = await _unitOfWork.SaveChangeAsync();
-                if (result > 0 )
+                if (result > 0)
                 {
                     return new ResponseGenericModel<List<UserDetailsModel>>()
                     {
