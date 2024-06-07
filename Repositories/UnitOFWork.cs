@@ -10,7 +10,7 @@ namespace Repositories
         private readonly IEventCategoryRepository _eventCategoryRepository;
         private readonly IEventProductRepository _eventProductRepository;
         private readonly IEventPackageRepository _eventPackageRepository;
-
+        private readonly IWalletRepository _walletRepository;
 
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
@@ -18,7 +18,8 @@ namespace Repositories
             IEventRepository eventRepository,
             IEventCategoryRepository eventCategoryRepository,
             IEventProductRepository eventProductRepository,
-            IEventPackageRepository eventPackageRepository
+            IEventPackageRepository eventPackageRepository,
+            IWalletRepository walletRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -27,16 +28,15 @@ namespace Repositories
             _eventCategoryRepository = eventCategoryRepository;
             _eventProductRepository = eventProductRepository;
             _eventPackageRepository = eventPackageRepository;
+            _walletRepository = walletRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
         public IEventRepository EventRepository => _eventRepository;
         public IEventCategoryRepository EventCategoryRepository => _eventCategoryRepository;
-
         public IEventProductRepository EventProductRepository => _eventProductRepository;
         public IEventPackageRepository EventPackageRepository => _eventPackageRepository;
-
-
+        public IWalletRepository WalletRepository => _walletRepository;
 
 
         public Task<int> SaveChangeAsync()
