@@ -7,6 +7,7 @@
         IEventCategoryRepository EventCategoryRepository { get; }
         IEventProductRepository EventProductRepository { get; }
         IEventPackageRepository EventPackageRepository { get; }
+        IWalletRepository WalletRepository { get; }
 
         Task<int> SaveChangeAsync();
     }
