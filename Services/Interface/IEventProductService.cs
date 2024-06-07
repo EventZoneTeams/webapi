@@ -14,6 +14,6 @@ namespace Services.Interface
         Task<List<EventProductDetailModel>> GetAllProductsAsync();
         Task<ResponseGenericModel<EventProductDetailModel>> UpdateEventProductAsync(int productId, EventProductUpdateModel updateModel);
         Task<ResponseGenericModel<List<EventProductDetailModel>>> DeleteEventProductAsync(List<int> productIds);
-        Task<ResponseGenericModel<List<EventProductCreateModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts);
+        Task<ResponseGenericModel<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts);
     }
 }
