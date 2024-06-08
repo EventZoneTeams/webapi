@@ -79,13 +79,6 @@ builder.Services.AddSwaggerGen(config =>
     // using System.Reflection;
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-
-    config.MapType<List<EventProductDetailDTO>>(() => new OpenApiSchema
-    {
-        Type = "string",
-        Format = "json",
-        Example = new OpenApiString("[{\"id\":1,\"quantity\":5},{\"id\":2,\"quantity\":3}]")
-    });
 });
 
 //SETUP INJECTION SERVICE

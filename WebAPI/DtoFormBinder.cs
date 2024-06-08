@@ -33,6 +33,7 @@ namespace WebAPI
                 var result = new List<EventProductDetailDTO>();
                 foreach (var value in values)
                 {
+                    Console.WriteLine($"Received value: {value}");
                     var item = JsonSerializer.Deserialize<EventProductDetailDTO>(value);
                     if (item != null)
                         result.Add(item);

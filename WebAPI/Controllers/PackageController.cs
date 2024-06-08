@@ -9,8 +9,8 @@ namespace WebAPI.Controllers
     [ApiController]
     public class PackageController : ControllerBase
     {
-        [HttpPost("lmao")]
-        public async Task<IActionResult> TestAsync(int eventId, [FromForm] test input)
+        [HttpPost()]
+        public async Task<IActionResult> TestAsync( [FromForm] test input)
         {
             try
             {
@@ -29,15 +29,14 @@ namespace WebAPI.Controllers
 
     public class test
     {
-        [ModelBinder(BinderType = typeof(DtoFormBinder))]
-        public List<EventProductDetailDTO> product { get; set; } = null;
+        public List<EventProductDetailDTO> product { get; set; }
 
         public List<string>? properties { get; set; } = null;
     }
 
     public class EventProductDetailDTO
     {
-        public int Id { get; set; }
-        public int Quantity { get; set; }
+        public int id { get; set; }
+        public int quantity { get; set; }
     }
 }
