@@ -10,11 +10,15 @@ namespace WebAPI.Controllers
     public class PackageController : ControllerBase
     {
         [HttpPost("lmao")]
-        public async Task<IActionResult> CreatedqwdAsync(int eventId, [FromForm] test lqwdjqdwn)
+        public async Task<IActionResult> TestAsync(int eventId, [FromForm] test input)
         {
             try
             {
-                return BadRequest(lqwdjqdwn);
+                if (input.product.Count == 0)
+                {
+                    return BadRequest(input);
+                }
+                return Ok(input);
             }
             catch (Exception ex)
             {
@@ -25,12 +29,15 @@ namespace WebAPI.Controllers
 
     public class test
     {
+        [ModelBinder(BinderType = typeof(DtoFormBinder))]
         public List<EventProductDetailDTO> product { get; set; } = null;
+
         public List<string>? properties { get; set; } = null;
     }
 
-    public class Image
+    public class EventProductDetailDTO
     {
-        public IFormFile? image { get; set; }
+        public int Id { get; set; }
+        public int Quantity { get; set; }
     }
 }
