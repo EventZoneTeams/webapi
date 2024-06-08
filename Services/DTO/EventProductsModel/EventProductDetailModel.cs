@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Domain.Entities;
+using Repositories.Models.ImageDTOs;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,5 +15,7 @@ namespace Services.DTO.EventProductsModel
         public int Id { get; set; }
         public bool? IsDeleted { get; set; }
         public DateTime? CreatedAt { get; set; }
+
+        public virtual ICollection<ImageReturnDTO>? ProductImages { get; set; }
     }
 }

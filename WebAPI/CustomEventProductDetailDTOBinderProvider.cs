@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Repositories.Models;
 using WebAPI.Controllers;
 
 namespace WebAPI
@@ -13,7 +14,7 @@ namespace WebAPI
                 throw new ArgumentNullException(nameof(context));
             }
 
-            if (context.Metadata.ModelType == typeof(List<EventProductDetailDTO>))
+            if (context.Metadata.ModelType == typeof(List<ProductQuantityDTO>))
             {
                 return new BinderTypeModelBinder(typeof(DtoFormBinder));
             }

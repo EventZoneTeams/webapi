@@ -27,11 +27,8 @@ namespace Repositories.Repositories
 
         public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, string thumbnailUrl, List<ProductQuantityDTO> products)
         {
-
             try
             {
-
-
                 var newPackage = new EventPackage
                 {
                     EventId = eventId,
@@ -44,20 +41,18 @@ namespace Repositories.Repositories
                 await _context.EventPackages.AddAsync(newPackage);
                 await _context.SaveChangesAsync();
 
-
                 List<ProductInPackage> productsInPackage = new List<ProductInPackage>();
-                var productsList = await _context.EventProducts.Where(x => products.Select(x => x.ProductID).Contains(x.Id)).ToListAsync();
+                var productsList = await _context.EventProducts.Where(x => products.Select(x => x.productid).Contains(x.Id)).ToListAsync();
                 foreach (var product in products)
                 {
                     var newProduct = new ProductInPackage
                     {
-                        ProductId = product.ProductID,
+                        ProductId = product.productid,
                         PackageId = newPackage.Id,
-                        Quantity = product.Quantity
+                        Quantity = product.quantity
                     };
                     productsInPackage.Add(newProduct);
-                    newPackage.TotalPrice += ((int)productsList.Find(x => x.Id == product.ProductID).Price * product.Quantity);
-
+                    newPackage.TotalPrice += ((int)productsList.Find(x => x.Id == product.productid).Price * product.quantity);
                 }
                 _context.Entry(newPackage).State = EntityState.Modified; // UPDATE TỔNG SỐ TIỀN
 
@@ -65,7 +60,6 @@ namespace Repositories.Repositories
                 await _context.SaveChangesAsync();
                 //await transaction.CommitAsync(); //IMPROVISE CODE
                 return productsInPackage;
-
             }
             catch (Exception)
             {
@@ -73,7 +67,6 @@ namespace Repositories.Repositories
                 //  await transaction.RollbackAsync();
                 throw;
             }
-
         }
 
         public async Task<List<ProductInPackage>> GetProductsInPackagesWithProduct()
@@ -85,7 +78,6 @@ namespace Repositories.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -119,7 +111,6 @@ namespace Repositories.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -152,15 +143,8 @@ namespace Repositories.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
-
-
-
-
-
     }
 }

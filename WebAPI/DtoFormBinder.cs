@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Repositories.Models;
 using System.Text.Json;
 using WebAPI.Controllers;
 
@@ -30,11 +31,11 @@ namespace WebAPI
 
             try
             {
-                var result = new List<EventProductDetailDTO>();
+                var result = new List<ProductQuantityDTO>();
                 foreach (var value in values)
                 {
                     Console.WriteLine($"Received value: {value}");
-                    var item = JsonSerializer.Deserialize<EventProductDetailDTO>(value);
+                    var item = JsonSerializer.Deserialize<ProductQuantityDTO>(value);
                     if (item != null)
                         result.Add(item);
                 }
