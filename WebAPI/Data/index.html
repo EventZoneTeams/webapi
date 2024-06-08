@@ -3,76 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventZone Payment Status Page</title>
+    <title>EventZone Payment</title>
     <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap");
-    * {{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Inter", sans-serif;
-    }}
-    .payment-respone{{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #1A94FF;
-    }}
-    .payment-respone .box{{
-      width: 400px;
-      height: 400px;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-    }}
-    .payment-respone .title{{
-      width: 100%;
-      padding-top: 10px;
-      background-color: #424040;
-      border-radius: 10px 10px 0 0;
-    }}
-    .payment-respone svg{{
-      width: 100%;
-      height: 200px;
-      background-color: #424040;
-      object-fit: cover;
-      object-position: 100% 45%;
-    }}
-    .payment-respone .body{{
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 20px;
-      font-size: 16px;
-      font-weight: 500;
-    }}
-    .payment-respone .body .info{{
-      margin-left: 5px;
-    }}
-    .payment-respone .info.success{{
-      color: #10e310;
-    }}
-    .payment-respone .info .error{{
-      color: #e31010;
-    }}
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
     </style>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 </head>
 <body>
-    <section class="payment-respone">
-        <div class="box">
-            <div class="title">
-                Logo
+    <div class="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+            <div class="relative w-full h-64 transform-style-3d">
+                <!--blue: from-[#38B6FF] to-[#9CDEFF] -->
+                <!--green: from-[#00b894] to-[#55efc4] -->
+                <!-- red: from-[#FF4B4B] to-[#FF8B8B] -->
+                <div class="absolute inset-0 bg-gradient-to-br from-[#00b894] to-[#55efc4] rounded-lg shadow-lg">
+                    <div class="flex flex-col items-center justify-center h-full text-white">
+                        <div class="text-6xl font-bold star">✨</div>
+                        <!-- <div className="text-6xl font-bold hidden">❌</div> -->
+                        <div class="wrapper">
+                            <h1 class="mt-4 text-2xl font-bold">Payment Successful</h1>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="body">
-                <p>Mã đơn: <b class="info">{0:RESERVATION_CODE}</b></p>
-                <p>Trạng thái: <b class="info success">{1:STATUS}</b></p>
+            <div class="mt-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Transaction ID</label>
+                        <p class="mt-1 text-md text-black dark:text-white font-bold">{0: TransationId}</p>
+                    </div>
+                    <div>
+                        <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Price</label>
+                        <p class="mt-1 text-md text-black dark:text-white font-bold">{1: Price}</p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Status</label>
+                    <p class="mt-1 text-md text-green-500 dark:text-green-300">{2: Status}</p>
+                </div>
+                <div>
+                    <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Note</label>
+                    <p class="mt-1 text-md text-black dark:text-white font-bold">{3: Note}</p>
+                </div>
+                <div class="mt-6 text-white">
+                    <button class="w-full text-md bg-[#38B6FF] py-2 px-4 rounded-md font-medium mt-4">Back to your profile</button>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 </body>
 </html>

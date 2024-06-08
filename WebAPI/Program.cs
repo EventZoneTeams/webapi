@@ -10,6 +10,7 @@ using Services.Interface;
 using Services.Services;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebAPI;
 using WebAPI.Controllers;
@@ -24,6 +25,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
     });
 
 builder.Services.AddControllers(options =>

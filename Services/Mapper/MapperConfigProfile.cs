@@ -5,6 +5,7 @@ using Services.DTO.EventCategoryDTOs;
 using Services.DTO.EventDTOs;
 using Services.DTO.EventProductsModel;
 using Services.DTO.UserModels;
+using Services.DTO.WalletDTOs;
 
 namespace Services.Mapper
 {
@@ -42,6 +43,7 @@ namespace Services.Mapper
 
             CreateMap<ProductInPackage, ProductInPackageDTO>().ReverseMap();
             CreateMap<EventPackage, EventPackageDetailDTO>().ReverseMap();
+            CreateMap<Wallet, WalletResponseDTO>().ReverseMap();
         }
     }
 }

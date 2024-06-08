@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Repositories.Interfaces;
 using Repositories.Utils;
+using Services.DTO.WalletDTOs;
 using Services.Interface;
 using System.Net;
 using System.Text;
@@ -23,12 +24,7 @@ namespace Services.Services
         public SortedList<string, string> requestData
            = new SortedList<string, string>(new VnpayCompare());
 
-        public class OrderInfo
-        {
-            public int OrderId { get; set; }
-            public decimal Amount { get; set; }
-        }
-        public string CreateLink(OrderInfo orderInfo)
+        public string CreateLink(VnpayOrderInfo orderInfo)
         {
             var vnp_ReturnUrl = _configuration["Vnpay:ReturnUrl"];
             var vnp_PaymentUrl = _configuration["Vnpay:PaymentUrl"];
@@ -43,11 +39,11 @@ namespace Services.Services
             this.vnp_CurrCode = "VND";
             this.vnp_IpAddr = _claimsService.IpAddress; // LẤY RA IP ADDRESS TRONG CLAIMS
             this.vnp_Locale = "vn";
-            this.vnp_OrderInfo = "Thanh toan don hang: " + orderInfo.OrderId;
+            this.vnp_OrderInfo = "Deposit " + orderInfo.Amount + " into wallet with transaction id: " + orderInfo.TransactionId;
             this.vnp_OrderType = "other";
             this.vnp_ReturnUrl = vnp_ReturnUrl;
             this.vnp_TmnCode = vnp_TmnCode;
-            this.vnp_TxnRef = orderInfo.OrderId.ToString();
+            this.vnp_TxnRef = orderInfo.TransactionId.ToString();
             this.vnp_ExpireDate = _currentTime.GetCurrentTime().AddMinutes(15).ToString("yyyyMMddHHmmss");
             this.vnp_BankCode = string.Empty;
 
