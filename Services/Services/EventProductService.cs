@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Repositories.Interfaces;
+using Repositories.Models.ImageDTOs;
 using Services.DTO.EventProductsModel;
 using Services.DTO.ResponseModels;
 using Services.Interface;
@@ -21,7 +22,7 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseGenericModel<EventProductDetailModel>> CreateEventProductAsync(EventProductCreateModel newProduct)
+        public async Task<ResponseGenericModel<EventProductDetailModel>> CreateEventProductAsync(EventProductCreateModel newProduct, List<ImageReturnDTO> images)
         {
             try
             {
@@ -35,18 +36,28 @@ namespace Services.Services
                 };
 
                 var result = await _unitOfWork.EventProductRepository.AddAsync(product);
+                var returnData = _mapper.Map<EventProductDetailModel>(result);
 
                 var check = await _unitOfWork.SaveChangeAsync();
                 if (check > 0)
                 {
+                    var imagerResult = await _unitOfWork.EventProductRepository.AddImagesForProduct(result.Id, images);
+                    check = await _unitOfWork.SaveChangeAsync();
+                    returnData.ProductImages = _mapper.Map<List<ImageReturnDTO>>(imagerResult);
+
                     return new ResponseGenericModel<EventProductDetailModel>()
                     {
                         Status = true,
                         Message = " Added successfully",
-                        Data = _mapper.Map<EventProductDetailModel>(result)
+                        Data = returnData
                     };
                 }
-                return null;
+                return new ResponseGenericModel<EventProductDetailModel>()
+                {
+                    Status = false,
+                    Message = " Added failed",
+                    Data = returnData
+                };
             }
             catch (Exception ex)
             {
@@ -140,7 +151,18 @@ namespace Services.Services
 
         public async Task<List<EventProductDetailModel>> GetAllProductsAsync()
         {
-            var result = await _unitOfWork.EventProductRepository.GetAllAsync();
+            var result = await _unitOfWork.EventProductRepository.GetAllProductsWithImages();
+
+            return _mapper.Map<List<EventProductDetailModel>>(result);
+        }
+
+        public async Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(int eventId)
+        {
+            var result = await _unitOfWork.EventProductRepository.GetAllProductsByEvent(eventId);
+            if( result == null)
+            {
+                return null;
+            }
 
             return _mapper.Map<List<EventProductDetailModel>>(result);
         }

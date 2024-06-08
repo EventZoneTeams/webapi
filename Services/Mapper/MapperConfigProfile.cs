@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Repositories.Models;
+using Repositories.Models.ImageDTOs;
 using Services.DTO.EventCategoryDTOs;
 using Services.DTO.EventDTOs;
 using Services.DTO.EventProductsModel;
@@ -44,6 +45,8 @@ namespace Services.Mapper
             CreateMap<ProductInPackage, ProductInPackageDTO>().ReverseMap();
             CreateMap<EventPackage, EventPackageDetailDTO>().ReverseMap();
             CreateMap<Wallet, WalletResponseDTO>().ReverseMap();
+
+            CreateMap<ProductImage, ImageReturnDTO>().ReverseMap();
         }
     }
 }

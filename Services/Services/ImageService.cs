@@ -19,6 +19,7 @@ namespace Services.Services
             _blobServiceClient = new BlobServiceClient(connectionString);
             _containerName = configuration.GetValue<string>("BlobContainerName");
         }
+
         private async Task<BlobContainerClient> GetContainerClientAsync()
         {
             BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
@@ -82,7 +83,7 @@ namespace Services.Services
                     {
                         var imageReturnDTO = new ImageReturnDTO
                         {
-                            ImageName = file.FileName,
+                            Name = file.FileName,
                             ImageUrl = fileUrl
                         };
                         uploadedFileUrls.Add(imageReturnDTO);
@@ -130,7 +131,7 @@ namespace Services.Services
 
                         var imageReturnDTO = new ImageReturnDTO
                         {
-                            ImageName = imageFile.FileName,
+                            Name = imageFile.FileName,
                             ImageUrl = blobClient.Uri.AbsoluteUri
                         };
                         uploadedFileUrls.Add(imageReturnDTO);
@@ -156,12 +157,15 @@ namespace Services.Services
                 case ".jpeg":
                     contentType = "image/jpeg";
                     break;
+
                 case ".png":
                     contentType = "image/png";
                     break;
+
                 case ".gif":
                     contentType = "image/gif";
                     break;
+
                 default:
                     contentType = "application/octet-stream";
                     break;
