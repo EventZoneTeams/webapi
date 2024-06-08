@@ -18,8 +18,6 @@ namespace WebAPI.Controllers
         [HttpPost("test-upload-multiple")]
         public async Task<IActionResult> Test([FromForm] UploadMultipleImage uploadMultipleImage)
         {
-
-
             if (uploadMultipleImage.fileImages == null || uploadMultipleImage.fileImages.Count == 0)
             {
                 return BadRequest("No files were provided.");
@@ -38,8 +36,6 @@ namespace WebAPI.Controllers
         [HttpPost("test-upload-multiple-ver-2")]
         public async Task<IActionResult> TestVer2([FromForm] UploadMultipleImage uploadMultipleImage)
         {
-
-
             if (uploadMultipleImage.fileImages == null || uploadMultipleImage.fileImages.Count == 0)
             {
                 return BadRequest("No files were provided.");

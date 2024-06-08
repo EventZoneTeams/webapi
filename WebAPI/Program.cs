@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Services.DTO.EmailModels;
@@ -11,6 +12,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using WebAPI;
+using WebAPI.Controllers;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
 
@@ -24,6 +27,11 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
     });
+
+builder.Services.AddControllers(options =>
+{
+    options.ModelBinderProviders.Insert(0, new CustomEventProductDetailDTOBinderProvider());
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
@@ -60,7 +68,6 @@ builder.Services.AddSwaggerGen(config =>
             Name = "Front-end URL",
             Url = new Uri("https://example.com/license")
         }
-
     });
 
     config.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
@@ -144,7 +151,6 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
-
 // SCOPE FOR MIGRATION
 // explain: The CreateScope method creates a new scope. The scope is a way to manage the lifetime of objects in the container.
 var scope = app.Services.CreateScope();
@@ -178,7 +184,6 @@ app.UseAuthorization();
 
 app.UseAuthentication();
 
-
 // USE MIDDLEWARE
 app.UseMiddleware<UserStatusMiddleware>();
 
@@ -187,6 +192,5 @@ app.MapControllers();
 //USE CORS
 app.UseCors("CorsPolicyDevelopement");
 app.UseCors("app-cors");
-
 
 app.Run();

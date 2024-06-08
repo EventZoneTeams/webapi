@@ -50,13 +50,11 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
-
         }
 
-        public async Task<ResponseGenericModel<List<EventProductCreateModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts)
+        public async Task<ResponseGenericModel<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts)
         {
             try
             {
@@ -79,26 +77,24 @@ namespace Services.Services
                 var check = await _unitOfWork.SaveChangeAsync();
                 if (check > 0)
                 {
-                    return new ResponseGenericModel<List<EventProductCreateModel>>()
+                    return new ResponseGenericModel<List<EventProductDetailModel>>()
                     {
                         Status = true,
                         Message = " Added successfully",
-                        Data = _mapper.Map<List<EventProductCreateModel>>(createProducts)
+                        Data = _mapper.Map<List<EventProductDetailModel>>(createProducts)
                     };
                 }
-                return new ResponseGenericModel<List<EventProductCreateModel>>()
+                return new ResponseGenericModel<List<EventProductDetailModel>>()
                 {
                     Status = false,
                     Message = " Added failed",
-                    Data = _mapper.Map<List<EventProductCreateModel>>(createProducts)
+                    Data = _mapper.Map<List<EventProductDetailModel>>(createProducts)
                 };
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
-
         }
 
         public async Task<ResponseGenericModel<List<EventProductDetailModel>>> DeleteEventProductAsync(List<int> productIds)
@@ -133,7 +129,6 @@ namespace Services.Services
                         Data = _mapper.Map<List<EventProductDetailModel>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
-
             }
             return new ResponseGenericModel<List<EventProductDetailModel>>()
             {
@@ -141,7 +136,6 @@ namespace Services.Services
                 Message = "failed",
                 Data = null
             };
-
         }
 
         public async Task<List<EventProductDetailModel>> GetAllProductsAsync()
@@ -177,7 +171,6 @@ namespace Services.Services
                         Data = null
                     };
                 }
-
             }
             return new ResponseGenericModel<EventProductDetailModel>()
             {

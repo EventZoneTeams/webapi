@@ -66,7 +66,6 @@ namespace Services.Services
                     allPackages.ForEach(x => x.IsDeleted = true);
                     if (nonExistingIds.Count > 0)
                     {
-
                         return new ResponseGenericModel<List<EventPackageDetailDTO>>()
                         {
                             Status = false,
@@ -90,7 +89,6 @@ namespace Services.Services
                 Message = "There are no existed packages:" + string.Join(", ", packageIds) + " please try again",
                 Data = null
             };
-
         }
 
         public async Task<List<EventPackageDetailDTO>> GetAllWithProducts()
@@ -106,11 +104,6 @@ namespace Services.Services
         public async Task<List<ProductInPackageDTO>> GetProductsInPackagesWithProduct_Package()
         {
             return _mapper.Map<List<ProductInPackageDTO>>(await _unitOfWork.EventPackageRepository.GetProductsInPackagesWithProduct());
-
         }
-
-
-
-
     }
 }

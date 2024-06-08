@@ -5,6 +5,6 @@ namespace Services.DTO.TestModels
     public class UploadMultipleImage
     {
         public List<IFormFile> fileImages { get; set; }
-        public string OthersField { get; set; }
+        public List<string> OthersField { get; set; }
     }
 }
