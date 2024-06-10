@@ -44,6 +44,7 @@ namespace WebAPI.Injection
             services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();// ****
             services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<ITransactionRepository, TransactionRepository>();
+            services.AddScoped<IEventOrderRepository, EventOrderRepository>();
             // add generic repositories
             services.AddScoped<IGenericRepository<EventPackage>, GenericRepository<EventPackage>>();
             services.AddScoped<IGenericRepository<EventProduct>, GenericRepository<EventProduct>>();
@@ -51,6 +52,7 @@ namespace WebAPI.Injection
             services.AddScoped<IGenericRepository<EventCategory>, GenericRepository<EventCategory>>();// ****
             services.AddScoped<IGenericRepository<Wallet>, GenericRepository<Wallet>>();
             services.AddScoped<IGenericRepository<Transaction>, GenericRepository<Transaction>>();
+            services.AddScoped<IGenericRepository<EventOrder>, GenericRepository<EventOrder>>();
             // add signInManager
             services.AddScoped<SignInManager<User>>();
             // add services
@@ -61,6 +63,7 @@ namespace WebAPI.Injection
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IEventCategoryService, EventCategoryService>(); // ****
             services.AddScoped<IWalletService, WalletService>();
+            services.AddScoped<IEventOrderService, EventOrderService>();
 
             // add unitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();
