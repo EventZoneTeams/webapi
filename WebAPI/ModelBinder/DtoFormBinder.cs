@@ -3,7 +3,7 @@ using Repositories.Models;
 using System.Text.Json;
 using WebAPI.Controllers;
 
-namespace WebAPI
+namespace WebAPI.ModelBinder
 {
     public class DtoFormBinder : IModelBinder
     {

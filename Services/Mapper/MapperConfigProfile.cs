@@ -4,6 +4,7 @@ using Repositories.Models;
 using Repositories.Models.ImageDTOs;
 using Services.DTO.EventCategoryDTOs;
 using Services.DTO.EventDTOs;
+using Services.DTO.EventFeedbackModel;
 using Services.DTO.EventProductsModel;
 using Services.DTO.UserModels;
 using Services.DTO.WalletDTOs;
@@ -31,6 +32,9 @@ namespace Services.Mapper
             CreateMap<Event, EventResponseDTO>()
                 .ReverseMap();
 
+            CreateMap<EventResponseDTO, Event >()
+              .ReverseMap();
+
             CreateMap<EventCategory, EventCategoryDTO>()
                 .ReverseMap()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? (string)null));
@@ -48,6 +52,8 @@ namespace Services.Mapper
 
             CreateMap<ProductImage, ImageReturnDTO>().ReverseMap();
             CreateMap<TransactionResponsesDTO, Transaction>().ReverseMap();
+
+            CreateMap<EventFeedbackDetailModel, EventFeedback>().ReverseMap();
         }
     }
 }

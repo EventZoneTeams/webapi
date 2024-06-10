@@ -16,10 +16,10 @@ namespace Services.DTO.EventDTOs
         public string Note { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
         public int UserId { get; set; }
-        public EventCategoryResponseDTO EventCategory { get; set; }
+        public EventCategoryResponseDTO? EventCategory { get; set; }
         public string University { get; set; }
-        public EventStatusEnums Status { get; set; } = EventStatusEnums.PENDING;
-        public OriganizationStatusEnums OriganizationStatus { get; set; } = OriganizationStatusEnums.PREPARING;
+        public EventStatusEnums? Status { get; set; } = EventStatusEnums.PENDING;
+        public OriganizationStatusEnums? OriganizationStatus { get; set; } = OriganizationStatusEnums.PREPARING;
         public bool IsDonation { get; set; }
         public decimal TotalCost { get; set; }
     }

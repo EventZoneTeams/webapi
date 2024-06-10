@@ -13,7 +13,6 @@
         PENDING,
         REJECTED,
         ISFEEDBACK,
-        APRROVED,
         DONATING,
         SUCCESSFUL,
         FAILED
