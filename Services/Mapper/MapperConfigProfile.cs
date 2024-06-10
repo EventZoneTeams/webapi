@@ -32,6 +32,9 @@ namespace Services.Mapper
             CreateMap<Event, EventResponseDTO>()
                 .ReverseMap();
 
+            CreateMap<EventResponseDTO, Event >()
+              .ReverseMap();
+
             CreateMap<EventCategory, EventCategoryDTO>()
                 .ReverseMap()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? (string)null));

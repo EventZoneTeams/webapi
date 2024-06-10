@@ -38,25 +38,24 @@ namespace Services.Services
                 };
             }
 
-            EventFeedback newFeeback = new EventFeedback
+            EventFeedback newFeedback = new EventFeedback
             {
                 EventId = inputFeedback.EventId,
                 Content = inputFeedback.Content,
             };
 
-            newFeeback = await _unitOfWork.EventFeedbackRepository.CreateFeedbackAsync(newFeeback);
+            newFeedback = await _unitOfWork.EventFeedbackRepository.CreateFeedbackAsync(newFeedback);
             checkEvent.Status = type.ToString();
             bool updateStatus = await _unitOfWork.EventRepository.Update(checkEvent);
 
             var saveCheck = await _unitOfWork.SaveChangeAsync();
             if (updateStatus || saveCheck > 0)
             {
-                var result = _mapper.Map<EventFeedbackDetailModel>(newFeeback);
-                //  result.Event = _mapper.Map<EventDTO>(checkEvent);
+               
                 return new ResponseGenericModel<EventFeedbackDetailModel>
                 {
                     Status = true,
-                    Data = result,
+                    Data = _mapper.Map<EventFeedbackDetailModel>(newFeedback),
                     Message = "Added and updated event successfully"
                 };
             }
@@ -71,8 +70,15 @@ namespace Services.Services
 
         public async Task<List<EventFeedbackDetailModel>> GettAllFeedbacksAsync()
         {
-            var data = await _unitOfWork.EventFeedbackRepository.GettAllFeedbacksAsync();
-            return _mapper.Map<List<EventFeedbackDetailModel>>(data);
+            try
+            {
+                var data = _mapper.Map<List<EventFeedbackDetailModel>>(await _unitOfWork.EventFeedbackRepository.GettAllFeedbacksAsync());
+                return data;
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
         }
     }
 }

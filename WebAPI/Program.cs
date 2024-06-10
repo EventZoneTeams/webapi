@@ -16,6 +16,7 @@ using WebAPI;
 using WebAPI.Controllers;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
+using WebAPI.ModelBinder;
 
 var builder = WebApplication.CreateBuilder(args);
 
