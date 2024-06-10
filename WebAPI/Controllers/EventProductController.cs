@@ -41,8 +41,7 @@ namespace WebAPI.Controllers
                 var data = await _eventProductService.GetAllProductsByEventAsync(id);
                 if (data == null)
                 {
-                    return BadRequest(new {status=false , msg="Event is not existed"});
-
+                    return BadRequest(new { status = false, msg = "Event is not existed" });
                 }
                 return Ok(data);
             }

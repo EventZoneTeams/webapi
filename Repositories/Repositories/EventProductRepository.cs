@@ -21,7 +21,7 @@ namespace Repositories.Repositories
         public async Task<List<EventProduct>> GetAllProductsByEvent(int eventId)
         {
             var check = await _context.Events.FindAsync(eventId);
-            if ( check == null) {  return null; }
+            if (check == null) { return null; }
             return await _context.EventProducts.Where(x => x.EventId == eventId).Include(x => x.ProductImages).ToListAsync();
         }
 

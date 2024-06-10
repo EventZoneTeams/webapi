@@ -11,7 +11,7 @@ namespace Services.Interface
 {
     public interface IEventPackageService
     {
-        Task<ResponseGenericModel<List<ProductInPackageDTO>>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage);
+        Task<ResponseGenericModel<EventPackageDetailDTO>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage);
 
         Task<List<EventPackageDetailDTO>> GetAllWithProducts();
 
