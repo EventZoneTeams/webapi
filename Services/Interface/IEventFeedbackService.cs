@@ -12,6 +12,11 @@ namespace Services.Interface
     public interface IEventFeedbackService
     {
         Task<ResponseGenericModel<EventFeedbackDetailModel>> CreateFeedBackForEvent(CreateFeedbackModel inputFeedback, FeedbackTypeEnums type);
+
+        Task<ResponseGenericModel<List<EventFeedbackDetailModel>>> DeleteFeedbacksAsync(List<int> feedbackIds);
+
         Task<List<EventFeedbackDetailModel>> GettAllFeedbacksAsync();
+
+        Task<List<EventFeedbackDetailModel>> GettAllFeedbacksByEventIdAsync(int eventId);
     }
 }

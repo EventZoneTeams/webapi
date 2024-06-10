@@ -5,6 +5,7 @@ using Services.DTO.EventFeedbackModel;
 using Services.DTO.EventPackageModels;
 using Services.Interface;
 using Services.Services;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebAPI.Controllers
 {
@@ -22,7 +23,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromQuery] FeedbackTypeEnums type, [FromBody] CreateFeedbackModel input)
+        public async Task<IActionResult> CreateAsync([FromQuery, Required] FeedbackTypeEnums type, [FromBody] CreateFeedbackModel input)
         {
             try
             {
@@ -48,6 +49,39 @@ namespace WebAPI.Controllers
             {
                 var data = await _eventFeedbackService.GettAllFeedbacksAsync();
                 return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("events/{id}")]
+        public async Task<IActionResult> GetAllPackageAsync(int id)
+        {
+            try
+            {
+                var data = await _eventFeedbackService.GettAllFeedbacksByEventIdAsync(id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync([FromBody] List<int> feedbackIds)
+        {
+            try
+            {
+                var result = await _eventFeedbackService.DeleteFeedbacksAsync(feedbackIds);
+                if (result.Status)
+                {
+                    return Ok(result);
+                }
+
+                return NotFound(result);
             }
             catch (Exception ex)
             {

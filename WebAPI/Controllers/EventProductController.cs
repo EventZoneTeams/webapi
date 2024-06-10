@@ -6,7 +6,7 @@ using Services.Services;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/v1/event-products")]
+    [Route("api/v1/")]
     [ApiController]
     public class EventProductController : Controller
     {
@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
             _imageService = imageService;
         }
 
-        [HttpGet]
+        [HttpGet("event-products")]
         public async Task<IActionResult> GetAllAsync()
         {
             try
@@ -33,12 +33,12 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("event/{id}")]
-        public async Task<IActionResult> GetAllAsync(int id)
+        [HttpGet("{eventid}/event-products")]
+        public async Task<IActionResult> GetAllAsync(int eventid)
         {
             try
             {
-                var data = await _eventProductService.GetAllProductsByEventAsync(id);
+                var data = await _eventProductService.GetAllProductsByEventAsync(eventid);
                 if (data == null)
                 {
                     return BadRequest(new { status = false, msg = "Event is not existed" });
@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("event-products")]
         public async Task<IActionResult> CreateAsync([FromForm] EventProductCreateModel model)
         {
             try
@@ -90,7 +90,7 @@ namespace WebAPI.Controllers
         //    }
         //}
 
-        [HttpPut("{id}")]
+        [HttpPut("event-products/{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] EventProductUpdateModel model)
         {
             try
@@ -109,7 +109,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("event-products")]
         public async Task<IActionResult> DeleteAsync([FromBody] List<int> productIds)
         {
             try

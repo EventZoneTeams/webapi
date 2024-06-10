@@ -5,7 +5,7 @@ using Services.Interface;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/event-packages")]
+    [Route("api/v1/")]
     [ApiController]
     public class EventPackageController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
             _imageService = imageService;
         }
 
-        [HttpPost]
+        [HttpPost("event-packages")]
         public async Task<IActionResult> CreateAsync([FromQuery] int eventId, [FromForm] CreatePackageRequest package)
         {
             try
@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("products")]
+        [HttpGet("products/event-packages")]
         public async Task<IActionResult> GetProductsInPackagesWithProduct_Package()
         {
             try
@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("event-packages")]
         public async Task<IActionResult> GetAllPackageAsync()
         {
             try
@@ -71,12 +71,12 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("events/{id}")]
-        public async Task<IActionResult> GetAllPackagesInEventAsync(int id)
+        [HttpGet("{eventid}/event-packages")]
+        public async Task<IActionResult> GetAllPackagesInEventAsync(int eventid)
         {
             try
             {
-                var data = await _eventPackageService.GetAllPackageOfEvent(id);
+                var data = await _eventPackageService.GetAllPackageOfEvent(eventid);
                 return Ok(data);
             }
             catch (Exception ex)
