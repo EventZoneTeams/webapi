@@ -20,12 +20,12 @@ namespace Services.Services
             _eventService = eventService;
         }
 
-        public async Task<ResponseGenericModel<List<ProductInPackageDTO>>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage)
+        public async Task<ResponseGenericModel<EventPackageDetailDTO>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage)
         {
             var existedEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventId);
             if (existedEvent == null)
             {
-                return new ResponseGenericModel<List<ProductInPackageDTO>>
+                return new ResponseGenericModel<EventPackageDetailDTO>
                 {
                     Status = false,
                     Message = "This event is not existed",
@@ -33,18 +33,20 @@ namespace Services.Services
                 };
             }
 
-            var result = await _unitOfWork.EventPackageRepository.CreatePackageWithProducts(eventId, newPackage.Description, thumbnailurl, newPackage.Products);
-            if (result != null)
+            var check = await _unitOfWork.EventPackageRepository.CreatePackageWithProducts(eventId, newPackage.Description, thumbnailurl, newPackage.Products);
+            if (check != null)
             {
-                return new ResponseGenericModel<List<ProductInPackageDTO>>
+                var result = _mapper.Map<EventPackageDetailDTO>(check.First().EventPackage);
+                result.Products = _mapper.Map<List<EventProductDetailDTO>>(check.Select(x => x.EventProduct).ToList());
+                return new ResponseGenericModel<EventPackageDetailDTO>
                 {
                     Status = true,
                     Message = "Add sucessfully",
-                    Data = _mapper.Map<List<ProductInPackageDTO>>(result)
+                    Data = result
                 };
             }
 
-            return new ResponseGenericModel<List<ProductInPackageDTO>>
+            return new ResponseGenericModel<EventPackageDetailDTO>
             {
                 Status = false,
                 Message = "Failed",

@@ -5,7 +5,7 @@ using Services.Interface;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/event-packages")]
     [ApiController]
     public class EventPackageController : ControllerBase
     {

@@ -65,7 +65,7 @@ namespace Repositories.Repositories
             {
                 // Rollback transaction nếu có lỗi xảy ra
                 //  await transaction.RollbackAsync();
-                throw;
+                throw new Exception();
             }
         }
 
@@ -103,7 +103,8 @@ namespace Repositories.Repositories
                                                        Id = x.product.Id,
                                                        Name = x.product.Name,
                                                        Price = x.product.Price
-                                                   }).ToList()
+                                                   }).ToList(),
+                                                   ThumbnailUrl = packageProductsGroup.First().package.ThumbnailUrl
                                                }
                     ).ToListAsync();
 
@@ -131,6 +132,7 @@ namespace Repositories.Repositories
                     EventId = x.EventId,
                     TotalPrice = x.TotalPrice,
                     Description = x.Description,
+                    ThumbnailUrl= x.ThumbnailUrl,
                     Products = x.ProductsInPackage.Select(p => new EventProductDetailDTO
                     {
                         Id = p.EventProduct.Id,

@@ -159,7 +159,7 @@ namespace Services.Services
         public async Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(int eventId)
         {
             var result = await _unitOfWork.EventProductRepository.GetAllProductsByEvent(eventId);
-            if( result == null)
+            if (result == null)
             {
                 return null;
             }
