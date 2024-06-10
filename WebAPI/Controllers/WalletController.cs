@@ -5,6 +5,7 @@ using Repositories.Commons;
 using Services.DTO.ResponseModels;
 using Services.DTO.WalletDTOs;
 using Services.Interface;
+using Services.Services.VnPayConfig;
 using System.Reflection;
 using System.Web;
 
@@ -178,7 +179,7 @@ namespace WebAPI.Controllers
                 var requestNameValue = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
 
 
-                var response = await _vnPayService.IPNReceiver(
+                IPNReponse iPNReponse = await _vnPayService.IPNReceiver(
                     vnpayResponseModel.vnp_TmnCode,
                     vnpayResponseModel.vnp_SecureHash,
                     vnpayResponseModel.vnp_TxnRef,
@@ -191,18 +192,7 @@ namespace WebAPI.Controllers
                     vnpayResponseModel.vnp_BankTranNo,
                     vnpayResponseModel.vnp_CardType, requestNameValue);
 
-                var message = response switch
-                {
-                    "00" => "Hóa đơn đã được cập nhật thành công",
-                    "01" => "Hóa đơn không tìm thấy",
-                    "02" => "Bill đã được thanh toán hoặc đã bị hủy",
-                    "03" => "Bill đã bị hủy",
-                    "69" => "Mã giao dịch không hợp lệ",
-                    "97" => "Chữ kí không hợp lệ",
-                    "04" => "Số tiền không đúng",
-                    _ => "Fatal Error"
-                };
-                Console.WriteLine(message);
+
 
                 htmlString += "vnpayResponseModel.vnp_ResponseCode: " + vnpayResponseModel.vnp_ResponseCode + "<br>";
 
@@ -218,7 +208,23 @@ namespace WebAPI.Controllers
                 }
                 string orderInfo = vnpayResponseModel.vnp_OrderInfo ?? "Không có thông tin";
                 //format html
-                string htmlFormat = string.Format(htmlString, vnpayResponseModel.vnp_TxnRef, 100000, message, orderInfo);
+                var isSuccess = iPNReponse.status.ToString() == TransactionStatusEnums.SUCCESS.ToString();
+                var textColor = isSuccess ? "text-green-500 dark:text-green-300" : "text-red-500 dark:text-red-300";
+                var statusHTML = $"<p class=\"mt-1 text-md {textColor}\">{iPNReponse.status.ToString()}</p>";
+
+                //format image
+                var imageHTML = string.Empty;
+                if (isSuccess)
+                {
+                    imageHTML = $"<!--green: from-[#00b894] to-[#55efc4] -->\r\n                <!-- red: from-[#FF4B4B] to-[#FF8B8B] -->\r\n                <div class=\"absolute inset-0 bg-gradient-to-br from-[#00b894] to-[#55efc4] rounded-lg shadow-lg\">\r\n                    <div class=\"flex flex-col items-center justify-center h-full text-white\">\r\n                        <div class=\"text-6xl font-bold star\">✨</div>\r\n                        <!-- <div className=\"text-6xl font-bold hidden\">❌</div> -->\r\n                        <div class=\"wrapper\">\r\n                            <h1 class=\"mt-4 text-2xl font-bold\">Payment Successful</h1>\r\n                        </div>\r\n                    </div>\r\n                </div>";
+                }
+                else
+                {
+                    imageHTML = "<!--green: from-[#00b894] to-[#55efc4] -->\r\n                <!-- red: from-[#FF4B4B] to-[#FF8B8B] -->\r\n                <div class=\"absolute inset-0 bg-gradient-to-br from-[#FF4B4B] to-[#FF8B8B] rounded-lg shadow-lg\">\r\n                    <div class=\"flex flex-col items-center justify-center h-full text-white\">\r\n                        \r\n                        <div className=\"text-6xl font-bold hidden\">❌</div>\r\n                        <div class=\"wrapper\">\r\n                            <h1 class=\"mt-4 text-2xl font-bold\">Payment Failed</h1>\r\n                        </div>\r\n                    </div>\r\n                </div>>";
+                }
+
+                string htmlFormat = string.Format(htmlString, imageHTML, iPNReponse.transactionId.ToString(), $"{int.Parse(iPNReponse.price) / 100}", statusHTML, iPNReponse.message);
+
 
                 return Content(htmlFormat, "text/html");
             }

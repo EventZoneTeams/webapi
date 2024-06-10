@@ -1,4 +1,5 @@
-﻿using Repositories.Utils;
+﻿using Domain.Enums;
+using Repositories.Utils;
 using System.Globalization;
 using System.Net;
 using System.Text;
@@ -105,6 +106,14 @@ namespace Services.Services.VnPayConfig
         }
 
         #endregion
+    }
+
+    public class IPNReponse
+    {
+        public TransactionStatusEnums status { get; set; }
+        public int transactionId { get; set; }
+        public string price { get; set; }
+        public string message { get; set; }
     }
 
     public class VnPayCompare : IComparer<string>

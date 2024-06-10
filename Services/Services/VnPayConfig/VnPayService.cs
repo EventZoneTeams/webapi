@@ -78,7 +78,7 @@ namespace Services.Services.VnPayConfig
             return result += "vnp_SecureHash=" + secureHash;
         }
 
-        public async Task<string> IPNReceiver(string vnpTmnCode, string vnpSecureHash, string vnpTxnRef,
+        public async Task<IPNReponse> IPNReceiver(string vnpTmnCode, string vnpSecureHash, string vnpTxnRef,
             string vnpTransactionStatus, string vnpResponseCode, string vnpTransactionNo, string vnpBankCode,
             string vnpAmount, string vnpPayDate, string vnpBankTranNo, string vnpCardType,
             NameValueCollection requestNameValue)
@@ -92,46 +92,105 @@ namespace Services.Services.VnPayConfig
                 }
             }
 
+            IPNReponse iPNReponse = new IPNReponse
+            {
+                price = vnpAmount,
+                message = "Transaction Invalid",
+                status = TransactionStatusEnums.FAILED,
+                transactionId = 0
+            };
+
             // Get HashSecret from env
             var vnp_HashSecret = _configuration["Vnpay:HashSecret"];
 
             var checkSignature = ValidateSignature(vnpSecureHash, vnp_HashSecret);
             if (checkSignature)
             {
-                var txnId = 0;
                 try
                 {
-                    txnId = int.Parse(vnpTxnRef);
+                    var txnId = int.Parse(vnpTxnRef);
+                    iPNReponse.transactionId = txnId;
                 }
                 catch (Exception ex)
                 {
-                    return "69";
+                    return iPNReponse;
                 }
-                var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(txnId);
+                var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(iPNReponse.transactionId);
                 if (transaction == null)
                 {
                     //payment not found
-                    return "01";
+                    return iPNReponse;
                 }
                 if (transaction.Status == TransactionStatusEnums.SUCCESS.ToString())
                 {
                     //payment paid
-                    return "02";
+                    iPNReponse.status = TransactionStatusEnums.SUCCESS;
+                    iPNReponse.message = "This transaction has been paid!";
+                    return iPNReponse;
                 }
                 if (transaction.Status == TransactionStatusEnums.FAILED.ToString())
                 {
                     //payment failed
-                    return "03";
+                    iPNReponse.status = TransactionStatusEnums.FAILED;
+                    iPNReponse.message = "This transaction has been cancelled! Please create new order!";
+                    return iPNReponse;
                 }
 
-                if (vnpResponseCode == "00") //giao dịch thành công
+                switch (vnpTransactionStatus)
                 {
-                    await UpdateStatusTransaction(transaction);
+                    case "01": //Giao dich chưa hoàn tất
+                        iPNReponse.status = TransactionStatusEnums.FAILED;
+                        if (vnpResponseCode == "24")
+                        {
+                            iPNReponse.message = "Khách hàng hủy giao dịch";
+                            await UpdateErrorTransaction(transaction, "Khách hàng hủy giao dịch");
+                        }
+                        else
+                        {
+                            iPNReponse.message = "Error 99: Giao dịch bị lỗi khác";
+                            await UpdateErrorTransaction(transaction, "Error 99: Giao dịch bị lỗi khác");
+                        }
+                        break;
+
+                    case "02": //Giao dịch bị lỗi
+                        iPNReponse.status = TransactionStatusEnums.FAILED;
+                        if (vnpResponseCode == "10")
+                        {
+                            iPNReponse.message = "Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần";
+                            await UpdateErrorTransaction(transaction, "Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần");
+                        }
+                        else if (vnpResponseCode == "24")
+                        {
+                            iPNReponse.message = "Khách hàng hủy giao dịch";
+                            await UpdateErrorTransaction(transaction, "Khách hàng hủy giao dịch");
+                        }
+                        else if (vnpResponseCode == "51")
+                        {
+                            iPNReponse.message = "Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.";
+                            await UpdateErrorTransaction(transaction, "Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.");
+                        }
+                        else
+                        {
+                            iPNReponse.message = "Error 99: Giao dịch bị lỗi khác";
+                            await UpdateErrorTransaction(transaction, "Error 99: Giao dịch bị lỗi khác");
+                        }
+                        break;
+                    case "00": //giao dịch thành công
+                        await UpdateStatusTransaction(transaction);
+                        iPNReponse.status = TransactionStatusEnums.SUCCESS;
+                        iPNReponse.message = "Transaction has been paid successfully!";
+                        break;
+                    default:
+                        iPNReponse.status = TransactionStatusEnums.FAILED;
+                        iPNReponse.message = "Invalid signature!";
+                        break;
                 }
-                return "00";
+                return iPNReponse;
             }
             //Invalid signature
-            return "97";
+            iPNReponse.status = TransactionStatusEnums.FAILED;
+            iPNReponse.message = "Invalid signature!";
+            return iPNReponse;
         }
 
         private async Task UpdateStatusTransaction(Transaction transaction)
@@ -158,6 +217,14 @@ namespace Services.Services.VnPayConfig
                 // Handle values not in enum here if needed
                 throw new InvalidOperationException("Transaction type is not valid");
             }
+        }
+
+        private async Task UpdateErrorTransaction(Transaction transaction, string message)
+        {
+            transaction.Status = TransactionStatusEnums.FAILED.ToString();
+            transaction.Description = message;
+            await _unitOfWork.TransactionRepository.Update(transaction);
+            await _unitOfWork.SaveChangeAsync();
         }
 
         private bool ValidateSignature(string inputHash, string secretKey)
