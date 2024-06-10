@@ -15,37 +15,26 @@
     <div class="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
         <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
             <div class="relative w-full h-64 transform-style-3d">
-                <!--blue: from-[#38B6FF] to-[#9CDEFF] -->
-                <!--green: from-[#00b894] to-[#55efc4] -->
-                <!-- red: from-[#FF4B4B] to-[#FF8B8B] -->
-                <div class="absolute inset-0 bg-gradient-to-br from-[#00b894] to-[#55efc4] rounded-lg shadow-lg">
-                    <div class="flex flex-col items-center justify-center h-full text-white">
-                        <div class="text-6xl font-bold star">✨</div>
-                        <!-- <div className="text-6xl font-bold hidden">❌</div> -->
-                        <div class="wrapper">
-                            <h1 class="mt-4 text-2xl font-bold">Payment Successful</h1>
-                        </div>
-                    </div>
-                </div>
+                {0: Image}
             </div>
             <div class="mt-6 space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Transaction ID</label>
-                        <p class="mt-1 text-md text-black dark:text-white font-bold">{0: TransationId}</p>
+                        <p class="mt-1 text-md text-black dark:text-white font-bold">#{1: TransationId}</p>
                     </div>
                     <div>
                         <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Price</label>
-                        <p class="mt-1 text-md text-black dark:text-white font-bold">{1: Price}</p>
+                        <p class="mt-1 text-md text-black dark:text-white font-bold">{2: Price} VND</p>
                     </div>
                 </div>
                 <div>
                     <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Status</label>
-                    <p class="mt-1 text-md text-green-500 dark:text-green-300">{2: Status}</p>
+                    {3: Status}
                 </div>
                 <div>
                     <label class="block text-md font-medium text-gray-700 dark:text-gray-400">Note</label>
-                    <p class="mt-1 text-md text-black dark:text-white font-bold">{3: Note}</p>
+                    <p class="mt-1 text-md text-black dark:text-white font-bold">{4: Note}</p>
                 </div>
                 <div class="mt-6 text-white">
                     <button class="w-full text-md bg-[#38B6FF] py-2 px-4 rounded-md font-medium mt-4">Back to your profile</button>

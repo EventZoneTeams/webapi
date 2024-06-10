@@ -47,6 +47,7 @@ namespace Services.Mapper
             CreateMap<Wallet, WalletResponseDTO>().ReverseMap();
 
             CreateMap<ProductImage, ImageReturnDTO>().ReverseMap();
+            CreateMap<TransactionResponsesDTO, Transaction>().ReverseMap();
         }
     }
 }

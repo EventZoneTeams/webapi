@@ -38,6 +38,22 @@ namespace Services.Services
             return result;
         }
 
+
+
+        public async Task<List<TransactionResponsesDTO>> GetTransactions(int userId)
+        {
+            var transactions = await _unitOfWork.TransactionRepository.GetAllAsync(x => x.Wallet);
+            var filteredTransactions = transactions.Where(x => x.Wallet.UserId == userId).ToList();
+            var result = _mapper.Map<List<TransactionResponsesDTO>>(filteredTransactions);
+            return result;
+        }
+        public async Task<Transaction> GetTransactionById(int transactionId)
+        {
+            var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(transactionId);
+            var result = _mapper.Map<Transaction>(transaction);
+            return result;
+        }
+
         public async Task<Transaction> ConfirmTransaction(int transactionId)
         {
             var transaction = await _unitOfWork.WalletRepository.ConfirmTransaction(transactionId);

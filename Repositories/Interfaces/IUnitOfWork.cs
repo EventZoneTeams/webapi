@@ -8,6 +8,7 @@
         IEventProductRepository EventProductRepository { get; }
         IEventPackageRepository EventPackageRepository { get; }
         IWalletRepository WalletRepository { get; }
+        ITransactionRepository TransactionRepository { get; }
 
         Task<int> SaveChangeAsync();
     }
