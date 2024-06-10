@@ -194,25 +194,40 @@ namespace Repositories.Repositories
             }
 
             //Check transaction type
-            switch (transaction.TransactionType.ToString().ToUpper())
+            if (Enum.IsDefined(typeof(TransactionTypeEnums), transaction.TransactionType))
             {
-                case "DEPOSIT":
-                    wallet.Balance += transaction.Amount;
-                    break;
-                case "WITHDRAW":
-                    wallet.Balance -= transaction.Amount;
-                    break;
-                case "PURCHASE":
-                    wallet.Balance -= transaction.Amount;
-                    //Update order status
-                    var transactionDetail = await _context.TransactionDetails.FirstOrDefaultAsync(x => x.TransactionId == transactionId);
-                    var order = await _context.EventOrders.FirstOrDefaultAsync(x => x.Id == transactionDetail.OrderId);
-                    order.Status = EventOrderStatusEnums.PAID.ToString();
-                    _context.EventOrders.Update(order);
-
-                    break;
-                default:
-                    throw new Exception("Transaction type not found");
+                switch ((TransactionTypeEnums)Enum.Parse(typeof(TransactionTypeEnums), transaction.TransactionType.ToUpper()))
+                {
+                    case TransactionTypeEnums.DEPOSIT:
+                        wallet.Balance += transaction.Amount;
+                        break;
+                    case TransactionTypeEnums.WITHDRAW:
+                        wallet.Balance -= transaction.Amount;
+                        if (wallet.Balance < 0)
+                        {
+                            throw new Exception("WITHDRAW: Balance is not enough");
+                        }
+                        break;
+                    case TransactionTypeEnums.PURCHASE:
+                        wallet.Balance -= transaction.Amount;
+                        if (wallet.Balance < 0)
+                        {
+                            throw new Exception("PURCHASE: Balance is not enough");
+                        }
+                        //Update order status
+                        var transactionDetail = await _context.TransactionDetails.FirstOrDefaultAsync(x => x.TransactionId == transactionId);
+                        var order = await _context.EventOrders.FirstOrDefaultAsync(x => x.Id == transactionDetail.OrderId);
+                        order.Status = EventOrderStatusEnums.PAID.ToString();
+                        _context.EventOrders.Update(order);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                // Handle values not in enum here if needed
+                throw new InvalidOperationException("Transaction type is not valid");
             }
 
             transaction.Status = TransactionStatusEnums.SUCCESS.ToString();

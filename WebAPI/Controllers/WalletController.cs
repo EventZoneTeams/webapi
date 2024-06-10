@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Services.DTO.ResponseModels;
 using Services.DTO.WalletDTOs;
 using Services.Interface;
 using System.Reflection;
+using System.Web;
 
 namespace WebAPI.Controllers
 {
@@ -22,8 +24,10 @@ namespace WebAPI.Controllers
             _mapper = mapper;
             _vnPayService = vnPayService;
         }
-
-        [HttpGet("{userId}/wallets")]
+        /// <summary>
+        /// Get 2 Wallets By UserId
+        /// </summary>
+        [HttpGet("users/{userId}/wallets")]
         public async Task<IActionResult> GetListWalletByUserId(int userId)
         {
             try
@@ -39,16 +43,37 @@ namespace WebAPI.Controllers
             {
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
+        }
 
+
+        /// <summary>
+        /// Get List Transactions By UserId And Type
+        /// </summary>
+        [HttpGet("users/{userId}/transactions")]
+        public async Task<IActionResult> GetTransactions(int userId, [FromQuery] TransactionTypeEnums transactionTypeEnums, [FromQuery] WalletTypeEnums walletTypeEnums)
+        {
+            try
+            {
+                if (userId <= 0)
+                {
+                    throw new Exception("UserId is invalid");
+                }
+                var result = await _walletService.GetTransactions(userId);
+                return Ok(ApiResult<List<TransactionResponsesDTO>>.Succeed(result, "Get Transactions Of User with Id " + userId + " Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
         }
 
         /// <summary>
-        /// Create payment to get link
+        /// Create deposit transaction and return direct url
         /// </summary>
         /// <returns>
         ///     URL of payment
         /// </returns>
-        [HttpPost("{userId}/wallets/deposit")]
+        [HttpPost("wallets/{userId}/transactions")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         public async Task<IActionResult> Deposit(int userId, [FromBody] DepositRequestDTO depositRequest)
@@ -67,7 +92,7 @@ namespace WebAPI.Controllers
 
                 if (result == null)
                 {
-                    throw new Exception("Deposit Failed!");
+                    throw new Exception("Create Deposit Transaction Failed!");
                 }
                 else
                 {
@@ -88,19 +113,91 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("/payment/vnpay-return")]
+        /// <summary>
+        /// Create direct url for old pending transaction
+        /// </summary>
+        /// <returns>
+        ///     URL of payment
+        /// </returns>
+        [HttpPost("payment/{transactionId}/complete-pending")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> SubmitOldTransactionToPay(int transactionId)
+        {
+            try
+            {
+                if (transactionId <= 0)
+                {
+                    throw new Exception("TransactionId is invalid");
+                }
+                var result = await _walletService.GetTransactionById(transactionId);
+
+                if (result == null)
+                {
+                    throw new Exception("Create Payment Transaction Failed!");
+                }
+                else
+                {
+
+                    if (result.Status == TransactionStatusEnums.SUCCESS.ToString())
+                    {
+                        throw new Exception("Transaction is already confirmed!");
+                    }
+                    else if (result.Status == TransactionStatusEnums.FAILED.ToString())
+                    {
+                        throw new Exception("Transaction is already failed! Please create new transactions");
+                    }
+
+                    var orderInfo = new VnpayOrderInfo
+                    {
+                        Amount = result.Amount,
+                        TransactionId = result.Id,
+                    };
+
+                    var paymentUrl = _vnPayService.CreateLink(orderInfo);
+                    return Ok(ApiResult<string>.Succeed(paymentUrl, "Payment to pay!"));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+
+        /// <summary>
+        /// [DONT'T TOUCH] VnPay IPN Receiver
+        /// </summary>
+        [HttpGet("payment/vnpay-ipn-receive")]
         public async Task<IActionResult> PaymentReturn([FromQuery] VnpayResponseModel vnpayResponseModel)
         {
             try
             {
                 var htmlString = string.Empty;
+                var requestNameValue = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
 
 
-                var message = vnpayResponseModel.vnp_ResponseCode switch
+                var response = await _vnPayService.IPNReceiver(
+                    vnpayResponseModel.vnp_TmnCode,
+                    vnpayResponseModel.vnp_SecureHash,
+                    vnpayResponseModel.vnp_TxnRef,
+                    vnpayResponseModel.vnp_TransactionStatus,
+                    vnpayResponseModel.vnp_ResponseCode,
+                    vnpayResponseModel.vnp_TransactionNo,
+                    vnpayResponseModel.vnp_BankCode,
+                    vnpayResponseModel.vnp_Amount,
+                    vnpayResponseModel.vnp_PayDate,
+                    vnpayResponseModel.vnp_BankTranNo,
+                    vnpayResponseModel.vnp_CardType, requestNameValue);
+
+                var message = response switch
                 {
                     "00" => "Hóa đơn đã được cập nhật thành công",
                     "01" => "Hóa đơn không tìm thấy",
                     "02" => "Bill đã được thanh toán hoặc đã bị hủy",
+                    "03" => "Bill đã bị hủy",
+                    "69" => "Mã giao dịch không hợp lệ",
                     "97" => "Chữ kí không hợp lệ",
                     "04" => "Số tiền không đúng",
                     _ => "Fatal Error"
@@ -122,9 +219,6 @@ namespace WebAPI.Controllers
                 string orderInfo = vnpayResponseModel.vnp_OrderInfo ?? "Không có thông tin";
                 //format html
                 string htmlFormat = string.Format(htmlString, vnpayResponseModel.vnp_TxnRef, 100000, message, orderInfo);
-
-                //update transaction status
-                await _walletService.ConfirmTransaction(int.Parse(vnpayResponseModel.vnp_TxnRef));
 
                 return Content(htmlFormat, "text/html");
             }
