@@ -9,6 +9,7 @@ using Repositories.Repositories;
 using Services.Interface;
 using Services.Mapper;
 using Services.Services;
+using Services.Services.VnPayConfig;
 using System.Diagnostics;
 using WebAPI.MiddleWares;
 
@@ -43,6 +44,7 @@ namespace WebAPI.Injection
             services.AddScoped<IEventRepository, EventRepository>();
             services.AddScoped<IEventCategoryRepository, EventCategoryRepository>();// ****
             services.AddScoped<IWalletRepository, WalletRepository>();
+            services.AddScoped<ITransactionRepository, TransactionRepository>();
             // add generic repositories
             services.AddScoped<IGenericRepository<EventFeedback>, GenericRepository<EventFeedback>>();
             services.AddScoped<IGenericRepository<EventPackage>, GenericRepository<EventPackage>>();
@@ -50,6 +52,7 @@ namespace WebAPI.Injection
             services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>();
             services.AddScoped<IGenericRepository<EventCategory>, GenericRepository<EventCategory>>();// ****
             services.AddScoped<IGenericRepository<Wallet>, GenericRepository<Wallet>>();
+            services.AddScoped<IGenericRepository<Transaction>, GenericRepository<Transaction>>();
             // add signInManager
             services.AddScoped<SignInManager<User>>();
             // add services

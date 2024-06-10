@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Repositories;
 using Services.DTO.EmailModels;
@@ -13,7 +12,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebAPI;
-using WebAPI.Controllers;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
 using WebAPI.ModelBinder;
@@ -62,12 +60,12 @@ builder.Services.AddSwaggerGen(config =>
         Contact = new OpenApiContact
         {
             Name = "Fanpage",
-            Url = new Uri("https://example.com/contact")
+            Url = new Uri("https://www.facebook.com/profile.php?id=61560347204793")
         },
         License = new OpenApiLicense
         {
             Name = "Front-end URL",
-            Url = new Uri("https://example.com/license")
+            Url = new Uri("https://eventzone.id.vn/")
         }
     });
 
