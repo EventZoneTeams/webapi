@@ -6,7 +6,7 @@ using Services.Services;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/v1/event-products")]
+    [Route("api/v1/")]
     [ApiController]
     public class EventProductController : Controller
     {
@@ -19,7 +19,11 @@ namespace WebAPI.Controllers
             _imageService = imageService;
         }
 
-        [HttpGet]
+        /// <summary>
+        /// Get list all existing products
+        /// </summary>
+        /// <response code="200">Returns a list of products</response>
+        [HttpGet("event-products")]
         public async Task<IActionResult> GetAllAsync()
         {
             try
@@ -33,12 +37,16 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet("event/{id}")]
-        public async Task<IActionResult> GetAllAsync(int id)
+        /// <summary>
+        /// Get list existing products of an event
+        /// </summary>
+        /// <response code="200">Returns a list of products</response>
+        [HttpGet("{eventid}/event-products")]
+        public async Task<IActionResult> GetAllAsync(int eventid)
         {
             try
             {
-                var data = await _eventProductService.GetAllProductsByEventAsync(id);
+                var data = await _eventProductService.GetAllProductsByEventAsync(eventid);
                 if (data == null)
                 {
                     return BadRequest(new { status = false, msg = "Event is not existed" });
@@ -51,7 +59,27 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Create an product and can add many images including
+        /// </summary>
+        /// <returns>the added event product</returns>
+        ///    /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /event-products
+        ///     {
+        ///         "EventId":1,
+        ///         "Name": First package,
+        ///         "Description": "Nice package for student with free purchase",
+        ///         "Price":1000,
+        ///         "QuantityInStock":10
+        ///         "fileImages":[{"input1"}, {"input2"}]
+        ///      }
+        /// </remarks>
+        /// <response code="200">Returns a list of products</response>
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("event-products")]
         public async Task<IActionResult> CreateAsync([FromForm] EventProductCreateModel model)
         {
             try
@@ -90,7 +118,11 @@ namespace WebAPI.Controllers
         //    }
         //}
 
-        [HttpPut("{id}")]
+        /// <summary>
+        /// update an event product by its id
+        /// </summary>
+        /// <response code="200">Returns a product</response>
+        [HttpPut("event-products/{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] EventProductUpdateModel model)
         {
             try
@@ -109,7 +141,11 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        /// <summary>
+        /// delete a list of event product by their IDs
+        /// </summary>
+        /// <response code="200">Returns list of remove products</response>
+        [HttpDelete("event-products")]
         public async Task<IActionResult> DeleteAsync([FromBody] List<int> productIds)
         {
             try

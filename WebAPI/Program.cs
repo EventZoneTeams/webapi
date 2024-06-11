@@ -14,6 +14,7 @@ using System.Text.Json.Serialization;
 using WebAPI;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
+using WebAPI.ModelBinder;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Repositories.Models;
 using WebAPI.Controllers;
 
-namespace WebAPI
+namespace WebAPI.ModelBinder
 {
     public class CustomEventProductDetailDTOBinderProvider : IModelBinderProvider
     {
