@@ -64,7 +64,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns>A list of products</returns>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("products/event-packages")]
+        [HttpGet("event-packages/products")]
         public async Task<IActionResult> GetProductsInPackagesWithProduct_Package()
         {
             try
@@ -79,7 +79,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get list all event packages
+        /// Get list event packages
         /// </summary>
         /// <returns>A list of event packages</returns>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -98,10 +98,10 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get list all event packages of an event
+        /// Get list event packages of an event
         /// </summary>
         /// <returns>A list of event packages</returns>
-        [HttpGet("{eventid}/event-packages")]
+        [HttpGet("events/{eventid}/event-packages")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllPackagesInEventAsync(int eventid)
         {

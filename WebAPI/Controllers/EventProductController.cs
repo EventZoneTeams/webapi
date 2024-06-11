@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get list all existing products
+        /// Get list existing products
         /// </summary>
         /// <response code="200">Returns a list of products</response>
         [HttpGet("event-products")]

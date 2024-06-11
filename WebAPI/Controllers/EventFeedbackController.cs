@@ -62,9 +62,9 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets all event feedbacks.
+        /// Gets  event feedbacks.
         /// </summary>
-        /// <returns>A list of all event feedbacks.</returns>
+        /// <returns>A list event feedbacks.</returns>
         /// <response code="200">Returns the list of event feedbacks.</response>
         /// <response code="400">Returns an error message if the retrieval fails.</response>
         [HttpGet]
@@ -82,7 +82,7 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Gets all event feedbacks for a specific event.
+        /// Gets event feedbacks for a specific event.
         /// </summary>
         /// <param name="id">The ID of the event.</param>
         /// <returns>A list of event feedbacks for the specified event.</returns>
