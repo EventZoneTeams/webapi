@@ -18,6 +18,22 @@ namespace WebAPI.Controllers
             _imageService = imageService;
         }
 
+        /// <summary>
+        /// Create an package with event product included
+        /// </summary>
+        /// <returns>the added event package</returns>
+        ///    /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /event-packages
+        ///     {
+        ///         "eventId":1,
+        ///         "description": "Nice package for student with free purchase",
+        ///         "products":[{"productid": 1,"quantity": 10}, {"productid": 1,"quantity": 10}],
+        ///         "thumbnailUrl": "any input"
+        ///      }
+        /// </remarks>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("event-packages")]
         public async Task<IActionResult> CreateAsync([FromQuery] int eventId, [FromForm] CreatePackageRequest package)
         {
@@ -43,6 +59,11 @@ namespace WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get list products with event packages included
+        /// </summary>
+        /// <returns>A list of products</returns>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("products/event-packages")]
         public async Task<IActionResult> GetProductsInPackagesWithProduct_Package()
         {
@@ -57,6 +78,11 @@ namespace WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get list all event packages
+        /// </summary>
+        /// <returns>A list of event packages</returns>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("event-packages")]
         public async Task<IActionResult> GetAllPackageAsync()
         {
@@ -71,7 +97,12 @@ namespace WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get list all event packages of an event
+        /// </summary>
+        /// <returns>A list of event packages</returns>
         [HttpGet("{eventid}/event-packages")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAllPackagesInEventAsync(int eventid)
         {
             try
@@ -85,6 +116,11 @@ namespace WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove a list of event packages by their id
+        /// </summary>
+        /// <returns>A list of event packages removed</returns>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete]
         public async Task<IActionResult> DeleteAsync([FromBody] List<int> packageIds)
         {
