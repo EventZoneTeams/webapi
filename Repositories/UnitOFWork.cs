@@ -24,7 +24,7 @@ namespace Repositories
             IEventPackageRepository eventPackageRepository,
             IWalletRepository walletRepository,
             ITransactionRepository transactionRepository,
-            IEventOrderRepository eventOrderRepository
+            IEventOrderRepository eventOrderRepository,
             IEventFeedbackRepository eventFeedbackRepository
             )
         {

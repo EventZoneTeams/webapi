@@ -1,10 +1,7 @@
 ﻿using Domain.Enums;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO.EventFeedbackModel;
-using Services.DTO.EventPackageModels;
 using Services.Interface;
-using Services.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebAPI.Controllers
