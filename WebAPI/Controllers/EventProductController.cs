@@ -19,6 +19,10 @@ namespace WebAPI.Controllers
             _imageService = imageService;
         }
 
+        /// <summary>
+        /// Get list all existing products
+        /// </summary>
+        /// <response code="200">Returns a list of products</response>
         [HttpGet("event-products")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -33,6 +37,10 @@ namespace WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get list existing products of an event
+        /// </summary>
+        /// <response code="200">Returns a list of products</response>
         [HttpGet("{eventid}/event-products")]
         public async Task<IActionResult> GetAllAsync(int eventid)
         {
@@ -51,6 +59,26 @@ namespace WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Create an product and can add many images including
+        /// </summary>
+        /// <returns>the added event product</returns>
+        ///    /// <remarks>
+        /// Sample request:
+        ///
+        ///     POST /event-products
+        ///     {
+        ///         "EventId":1,
+        ///         "Name": First package,
+        ///         "Description": "Nice package for student with free purchase",
+        ///         "Price":1000,
+        ///         "QuantityInStock":10
+        ///         "fileImages":[{"input1"}, {"input2"}]
+        ///      }
+        /// </remarks>
+        /// <response code="200">Returns a list of products</response>
+
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("event-products")]
         public async Task<IActionResult> CreateAsync([FromForm] EventProductCreateModel model)
         {
@@ -90,6 +118,10 @@ namespace WebAPI.Controllers
         //    }
         //}
 
+        /// <summary>
+        /// update an event product by its id
+        /// </summary>
+        /// <response code="200">Returns a product</response>
         [HttpPut("event-products/{id}")]
         public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] EventProductUpdateModel model)
         {
@@ -109,6 +141,10 @@ namespace WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// delete a list of event product by their IDs
+        /// </summary>
+        /// <response code="200">Returns list of remove products</response>
         [HttpDelete("event-products")]
         public async Task<IActionResult> DeleteAsync([FromBody] List<int> productIds)
         {
