@@ -384,9 +384,6 @@ namespace Repositories.Migrations
                     b.Property<int?>("ModifiedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
 
@@ -786,9 +783,6 @@ namespace Repositories.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("TransactionId")

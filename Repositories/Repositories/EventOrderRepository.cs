@@ -48,9 +48,13 @@ namespace Repositories.Repositories
                         var orderDetail = new EventOrderDetail
                         {
                             PackageId = item.PackageId,
-                            OrderId = newOrder.Id,
+                            EventOrderId = newOrder.Id,
                             Quantity = item.Quantity,
-                            Price = package.TotalPrice
+                            Price = package.TotalPrice,
+                            EventOrder = newOrder,
+                            EventPackage = package,
+                            CreatedAt = _timeService.GetCurrentTime(),
+                            CreatedBy = _claimsService.GetCurrentUserId,
                         };
 
                         eventOrderDetails.Add(orderDetail);
