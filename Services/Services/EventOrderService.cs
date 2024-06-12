@@ -1,18 +1,51 @@
-﻿using Services.DTO.EventOrderDTOs;
+﻿using AutoMapper;
+using Domain.Entities;
+using Repositories.Interfaces;
+using Services.DTO.EventOrderDTOs;
 using Services.Interface;
 
 namespace Services.Services
 {
     public class EventOrderService : IEventOrderService
     {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public EventOrderService(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
+
         public Task<EventOrderReponseDTO> GetEventOrder(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<List<EventOrderReponseDTO>> GetEventOrders()
+        public async Task<List<EventOrderReponseDTO>> GetEventOrders()
         {
-            throw new NotImplementedException();
+            var orders = await _unitOfWork.EventOrderRepository.GetAllAsync(x => x.EventOrderDetails);
+            return _mapper.Map<List<EventOrderReponseDTO>>(orders);
+        }
+        public async Task<EventOrderReponseDTO> CreateEventOrder(CreateEventOrderReponseDTO order)
+        {
+            var eventObject = await _unitOfWork.EventRepository.GetByIdAsync(order.EventId);
+            if (eventObject == null)
+            {
+                throw new Exception("Event not found");
+            }
+
+            var users = await _unitOfWork.UserRepository.GetAllUsersAsync();
+            var userObject = users.FirstOrDefault(x => x.Id == order.UserId);
+            if (userObject == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var newOrderDetailsList = _mapper.Map<List<EventOrderDetail>>(order.EventOrderDetails);
+            var orderResponse = await _unitOfWork.EventOrderRepository.CreateOrderWithOrderDetails(order.EventId, order.UserId, newOrderDetailsList);
+
+            //newOrder = await _unitOfWork.EventOrderRepository.AddAsync(newOrder);
+            return _mapper.Map<EventOrderReponseDTO>(orderResponse);
         }
     }
 }

@@ -170,7 +170,7 @@ namespace Repositories.Repositories
             var transactionDetail = new TransactionDetail
             {
                 TransactionId = transaction.Id,
-                OrderId = order.Id,
+                EventOrderId = order.Id,
             };
             //add transaction detail to database
             await _context.TransactionDetails.AddAsync(transactionDetail);
@@ -216,7 +216,7 @@ namespace Repositories.Repositories
                         }
                         //Update order status
                         var transactionDetail = await _context.TransactionDetails.FirstOrDefaultAsync(x => x.TransactionId == transactionId);
-                        var order = await _context.EventOrders.FirstOrDefaultAsync(x => x.Id == transactionDetail.OrderId);
+                        var order = await _context.EventOrders.FirstOrDefaultAsync(x => x.Id == transactionDetail.EventOrderId);
                         order.Status = EventOrderStatusEnums.PAID.ToString();
                         _context.EventOrders.Update(order);
                         break;

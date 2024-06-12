@@ -12,8 +12,8 @@ using Repositories;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(StudentEventForumDbContext))]
-    [Migration("20240601150831_Initial")]
-    partial class Initial
+    [Migration("20240612162003_InitialDB")]
+    partial class InitialDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -385,9 +385,6 @@ namespace Repositories.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("PackageId")
@@ -789,9 +786,6 @@ namespace Repositories.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("ModifiedBy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("TransactionId")

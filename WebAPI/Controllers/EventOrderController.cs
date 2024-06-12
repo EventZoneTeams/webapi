@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Repositories.Commons;
 using Services.DTO.EventOrderDTOs;
 using Services.Interface;
 
@@ -22,7 +23,14 @@ namespace WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventOrders()
         {
-            return await _eventOrderService.GetEventOrders();
+            try
+            {
+                return await _eventOrderService.GetEventOrders();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
         }
 
         // GET: api/v1/event-orders/5
@@ -32,7 +40,31 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<EventOrderReponseDTO>> GetEventOrder(int id)
         {
-            return await _eventOrderService.GetEventOrder(id);
+            try
+            {
+                return await _eventOrderService.GetEventOrder(id);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // POST: api/v1/event-orders
+        // <summary>
+        // Create event order
+        // </summary>
+        [HttpPost]
+        public async Task<ActionResult<EventOrderReponseDTO>> CreateEventOrder(CreateEventOrderReponseDTO order)
+        {
+            try
+            {
+                return await _eventOrderService.CreateEventOrder(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
         }
 
     }

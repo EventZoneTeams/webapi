@@ -10,6 +10,7 @@
         IWalletRepository WalletRepository { get; }
         ITransactionRepository TransactionRepository { get; }
         IEventFeedbackRepository EventFeedbackRepository { get; }
+        IEventOrderRepository EventOrderRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

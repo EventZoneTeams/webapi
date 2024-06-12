@@ -6,5 +6,6 @@ namespace Services.Interface
     {
         Task<List<EventOrderReponseDTO>> GetEventOrders();
         Task<EventOrderReponseDTO> GetEventOrder(int id);
+        Task<EventOrderReponseDTO> CreateEventOrder(CreateEventOrderReponseDTO order);
     }
 }

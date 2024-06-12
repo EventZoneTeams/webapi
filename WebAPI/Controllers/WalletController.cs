@@ -50,17 +50,17 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Get List Transactions By UserId And Type
         /// </summary>
-        [HttpGet("users/{userId}/transactions")]
-        public async Task<IActionResult> GetTransactions(int userId, [FromQuery] TransactionTypeEnums transactionTypeEnums, [FromQuery] WalletTypeEnums walletTypeEnums)
+        [HttpGet("wallets/{walletId}/transactions")]
+        public async Task<IActionResult> GetTransactions(int walletId, [FromQuery] TransactionTypeEnums transactionTypeEnums, [FromQuery] WalletTypeEnums walletTypeEnums)
         {
             try
             {
-                if (userId <= 0)
+                if (walletId <= 0)
                 {
-                    throw new Exception("UserId is invalid");
+                    throw new Exception("Wallet Id is invalid");
                 }
-                var result = await _walletService.GetTransactions(userId);
-                return Ok(ApiResult<List<TransactionResponsesDTO>>.Succeed(result, "Get Transactions Of User with Id " + userId + " Successfully!"));
+                var result = await _walletService.GetTransactions(walletId);
+                return Ok(ApiResult<List<TransactionResponsesDTO>>.Succeed(result, "Get Transactions Of Wallet with Id " + walletId + " Successfully!"));
             }
             catch (Exception ex)
             {
