@@ -23,9 +23,13 @@ namespace Services.Services
         {
             var query = _unitOfWork.EventRepository.FilterAllField(eventParams).AsQueryable();
             //mapping to EventDTO
-            var eventDTO = _mapper.Map<List<EventResponseDTO>>(query);
-            var count = await query.CountAsync();
-            var products = await PagedList<EventResponseDTO>.ToPagedListMapping(eventDTO, count, eventParams.PageNumber, eventParams.PageSize);
+            var eventDTOList = await query.ToListAsync<Event>();
+            var result = new List<EventResponseDTO>();
+            for (int i = 0; i < eventDTOList.Count; i++)
+            {
+                result.Add(_mapper.Map<EventResponseDTO>(eventDTOList[i]));
+            }
+            var products = await PagedList<EventResponseDTO>.ToPagedListMapping(result, eventDTOList.Count, eventParams.PageNumber, eventParams.PageSize);
 
             //.Sort(eventParams.OrderBy);
 

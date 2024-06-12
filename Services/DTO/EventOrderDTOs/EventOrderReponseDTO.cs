@@ -7,6 +7,7 @@
         public int UserId { get; set; }
         public decimal TotalAmount { get; set; }
         public string Status { get; set; }
+        public List<EventOrderDetailsReponseDTO> EventOrderDetails { get; set; }
 
     }
 }

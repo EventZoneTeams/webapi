@@ -40,11 +40,11 @@ namespace Services.Services
 
 
 
-        public async Task<List<TransactionResponsesDTO>> GetTransactions(int userId)
+        public async Task<List<TransactionResponsesDTO>> GetTransactions(int walletId)
         {
-            var transactions = await _unitOfWork.TransactionRepository.GetAllAsync(x => x.Wallet);
-            var filteredTransactions = transactions.Where(x => x.Wallet.UserId == userId).ToList();
-            var result = _mapper.Map<List<TransactionResponsesDTO>>(filteredTransactions);
+            var transactions = await _unitOfWork.TransactionRepository.GetAllAsync();
+            var filterTransactions = transactions.Where(x => x.WalletId == walletId).ToList();
+            var result = _mapper.Map<List<TransactionResponsesDTO>>(filterTransactions);
             return result;
         }
         public async Task<Transaction> GetTransactionById(int transactionId)
