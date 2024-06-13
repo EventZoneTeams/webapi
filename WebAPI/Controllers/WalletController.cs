@@ -234,5 +234,42 @@ namespace WebAPI.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Purchase a order
+        /// </summary>
+        [HttpPost("payment/event-orders/{orderId}")]
+        public async Task<IActionResult> PurchaseOrder(int orderId, int userId)
+        {
+            try
+            {
+                if (orderId <= 0)
+                {
+                    throw new Exception("OrderId is invalid");
+                }
+                var result = await _walletService.PurchaseOrder(orderId, userId);
+                if (result.Status == TransactionStatusEnums.FAILED.ToString())
+                {
+                    throw new Exception("Purchase Order Failed!");
+                }
+
+                if (result.Status == TransactionStatusEnums.PENDING.ToString())
+                {
+                    throw new Exception("Purchase Order Pending!");
+                }
+
+                if (result.Status == TransactionStatusEnums.SUCCESS.ToString())
+                {
+                    return Ok(ApiResult<TransactionResponsesDTO>.Succeed(result, "Purchase Order Successfully!"));
+                }
+
+                throw new Exception("Purchase Order Failed! Not Have a Type!");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
     }
 }

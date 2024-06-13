@@ -139,44 +139,79 @@ namespace Repositories.Repositories
             {
                 throw new Exception("Order not belong to user");
             }
+            if (order.Status == EventOrderStatusEnums.PAID.ToString())
+            {
+                throw new Exception("This order has been paid already");
+            }
+            if (order.Status == EventOrderStatusEnums.CANCELLED.ToString())
+            {
+                throw new Exception("This order has been cancelled");
+            }
 
-
-            var wallet = await GetWalletByUserIdAndType(userId, WalletTypeEnums.PERSONAL);
-            if (wallet == null)
+            var wallet = await GetListWalletByUserId(userId);
+            var personalWallet = wallet.FirstOrDefault(x => x.WalletType.ToUpper() == WalletTypeEnums.PERSONAL.ToString().ToUpper());
+            if (personalWallet == null)
             {
                 throw new Exception("Wallet not found");
             }
 
-            if (wallet.Balance < order.TotalAmount)
+            if (personalWallet.Balance < order.TotalAmount)
             {
                 throw new Exception("Balance is not enough");
             }
 
-            //Create new transaction
-            var transaction = new Transaction
+            using (var txn = _context.Database.BeginTransaction())
             {
-                WalletId = wallet.Id,
-                TransactionType = TransactionTypeEnums.PURCHASE.ToString(),
-                Amount = order.TotalAmount,
-                Description = "Purchase order with amount: " + order.TotalAmount,
-                TransactionDate = _timeService.GetCurrentTime(),
-                CreatedAt = _timeService.GetCurrentTime(),
-                Status = TransactionStatusEnums.PENDING.ToString()
-            };
-            //add transaction to database
-            await _context.Transactions.AddAsync(transaction);
+                try
+                {
+                    //Create new transaction
+                    var transaction = new Transaction
+                    {
+                        WalletId = personalWallet.Id,
+                        TransactionType = TransactionTypeEnums.PURCHASE.ToString(),
+                        Amount = order.TotalAmount,
+                        Description = "Purchase order with amount: " + order.TotalAmount,
+                        TransactionDate = _timeService.GetCurrentTime(),
+                        CreatedAt = _timeService.GetCurrentTime(),
+                        Status = TransactionStatusEnums.SUCCESS.ToString()
+                    };
 
-            //Create new transaction detail
-            var transactionDetail = new TransactionDetail
-            {
-                TransactionId = transaction.Id,
-                EventOrderId = order.Id,
-            };
-            //add transaction detail to database
-            await _context.TransactionDetails.AddAsync(transactionDetail);
+                    //add transaction to database
+                    await _context.Transactions.AddAsync(transaction);
+                    await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
-            return transaction;
+                    //Create new transaction detail
+                    var transactionDetail = new TransactionDetail
+                    {
+                        TransactionId = transaction.Id,
+                        EventOrderId = order.Id,
+                    };
+                    //add transaction detail to database
+                    await _context.TransactionDetails.AddAsync(transactionDetail);
+                    await _context.SaveChangesAsync();
+
+                    //Update wallet balance
+                    personalWallet.Balance -= order.TotalAmount;
+                    if (personalWallet.Balance < 0)
+                    {
+                        throw new Exception("PURCHASE: Balance is not enough");
+                    }
+                    _context.Entry(personalWallet).State = EntityState.Modified;
+
+                    //update order status
+                    order.Status = EventOrderStatusEnums.PAID.ToString();
+                    _context.Entry(order).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+
+                    await txn.CommitAsync();
+                    return transaction;
+                }
+                catch (Exception ex)
+                {
+                    await txn.RollbackAsync();
+                    throw ex;
+                }
+            }
         }
         public async Task<Transaction> ConfirmTransaction(int transactionId)
         {

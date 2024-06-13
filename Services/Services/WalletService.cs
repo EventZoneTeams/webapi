@@ -38,7 +38,43 @@ namespace Services.Services
             return result;
         }
 
+        // Purchase
+        public async Task<TransactionResponsesDTO> PurchaseOrder(int orderId, int userId)
+        {
+            var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId);
+            if (order == null)
+            {
+                throw new Exception("Order not found");
+            }
+            if (order.UserId != userId)
+            {
+                throw new Exception("You are not owner of this order");
+            }
+            if (order.Status == EventOrderStatusEnums.PAID.ToString())
+            {
+                throw new Exception("This order has been paid already");
+            }
+            if (order.Status == EventOrderStatusEnums.CANCELLED.ToString())
+            {
+                throw new Exception("This order has been cancelled");
+            }
+            var wallet = await _unitOfWork.WalletRepository.GetListWalletByUserId(userId);
+            var personalWallet = wallet.FirstOrDefault(x => x.WalletType == WalletTypeEnums.PERSONAL.ToString());
+            if (personalWallet == null)
+            {
+                throw new Exception("Peronsal Wallet not found");
+            }
 
+            // Check balance
+            if (personalWallet.Balance < order.TotalAmount)
+            {
+                throw new Exception("You dont have enough money to purchase this order");
+            }
+
+            var transation = await _unitOfWork.WalletRepository.PurchaseItem(userId, orderId);
+            var result = _mapper.Map<TransactionResponsesDTO>(transation);
+            return result;
+        }
 
         public async Task<List<TransactionResponsesDTO>> GetTransactions(int walletId)
         {
@@ -54,10 +90,10 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<Transaction> ConfirmTransaction(int transactionId)
+        public async Task<TransactionResponsesDTO> ConfirmTransaction(int transactionId)
         {
             var transaction = await _unitOfWork.WalletRepository.ConfirmTransaction(transactionId);
-            var result = _mapper.Map<Transaction>(transaction);
+            var result = _mapper.Map<TransactionResponsesDTO>(transaction);
             return result;
         }
 
