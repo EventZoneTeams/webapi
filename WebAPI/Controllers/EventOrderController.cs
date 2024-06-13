@@ -92,7 +92,5 @@ namespace WebAPI.Controllers
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
-
-
     }
 }
