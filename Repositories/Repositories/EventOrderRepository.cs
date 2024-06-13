@@ -17,6 +17,15 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
+        public async Task<List<EventOrder>> GetEventOrdersByEventId(int eventId)
+        {
+            return await _context.EventOrders
+                .Where(x => x.EventId == eventId)
+                .Include(x => x.EventOrderDetails)
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync();
+        }
+
         public async Task<EventOrder> CreateOrderWithOrderDetails(int eventId, int userId, List<EventOrderDetail> orderDetails)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
@@ -74,6 +83,20 @@ namespace Repositories.Repositories
                     throw ex;
                 }
             }
+        }
+
+        public async Task<EventOrder> UpdateOrderStatus(int orderId, EventOrderStatusEnums eventOrderStatusEnums)
+        {
+            var order = await _context.EventOrders.FindAsync(orderId);
+            if (order == null)
+            {
+                throw new Exception("Order not found");
+            }
+
+            order.Status = eventOrderStatusEnums.ToString();
+            _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return order;
         }
     }
 }
