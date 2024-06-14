@@ -193,9 +193,6 @@ namespace WebAPI.Controllers
                     vnpayResponseModel.vnp_CardType, requestNameValue);
 
 
-
-                htmlString += "vnpayResponseModel.vnp_ResponseCode: " + vnpayResponseModel.vnp_ResponseCode + "<br>";
-
                 //Get root path and read index.html
                 var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Data", "index.html");
 
