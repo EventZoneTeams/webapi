@@ -20,6 +20,11 @@ namespace Services.Services
             var emailMessage = CreateEmailMessage(message);
             await Send(emailMessage);
         }
+        public async Task SendHTMLEmail(Message message)
+        {
+            var emailMessage = CreateEmailHTMLMessage(message);
+            await Send(emailMessage);
+        }
 
         private MimeMessage CreateEmailMessage(Message message)
         {
@@ -28,6 +33,16 @@ namespace Services.Services
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Text) { Text = message.Content };
+            return emailMessage;
+        }
+
+        private MimeMessage CreateEmailHTMLMessage(Message message)
+        {
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("email", _emailConfig.From));
+            emailMessage.To.AddRange(message.To);
+            emailMessage.Subject = message.Subject;
+            emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = message.Content };
             return emailMessage;
         }
 
