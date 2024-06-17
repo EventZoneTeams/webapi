@@ -2,6 +2,7 @@
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
+using Services.DTO.EventDTOs;
 using Services.DTO.ResponseModels;
 using Services.DTO.UserModels;
 using Services.Interface;
@@ -18,6 +19,7 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
         public async Task<List<UserDetailsModel>> GetAllUsers()
         {
             //var Users = await _unitOfWork.UserRepository.GetAllUsersAsync();
@@ -27,7 +29,7 @@ namespace Services.Services
             //    var roleName = await _unitOfWork.UserRepository.GetRoleName(User);
             //    var lmao = _mapper.Map<UserDetailsModel>(User);
             //    lmao.RoleName = roleName;
-            //    result.Add(lmao); 
+            //    result.Add(lmao);
             //}
 
             var result = await _unitOfWork.UserRepository.GetAllUsersWithRoleAsync();
@@ -38,6 +40,19 @@ namespace Services.Services
         public Task<UserDetailsModel> GetUserByEmail(string email)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<UserDetailsModel> GetUserById(int id)
+        {
+            var existingUser = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+
+            if (existingUser == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var result = _mapper.Map<UserDetailsModel>(existingUser);
+            return result;
         }
 
         public async Task<ResponseGenericModel<UserDetailsModel>> ResigerAsync(UserSignupModel UserLogin, string role)
@@ -84,7 +99,6 @@ namespace Services.Services
                     response.Status = true;
                     return response;
                 }
-
             }
 
             return new ResponseGenericModel<UserDetailsModel>
@@ -93,7 +107,6 @@ namespace Services.Services
                 Status = false,
                 Message = "This user is not existed"
             };
-
         }
 
         public async Task<ResponseGenericModel<UserDetailsModel>> UpdateAccountAsync(int userId, UserUpdateModel userUpdateMode, string role)
@@ -123,13 +136,11 @@ namespace Services.Services
                             }
                             else
                             {
-
                                 response.Message = "Updated user successfully but role are not changed";
                             }
                         }
                         return response;
                     }
-
                 }
 
                 return new ResponseGenericModel<UserDetailsModel>
@@ -141,14 +152,9 @@ namespace Services.Services
             }
             catch (Exception)
             {
-
                 throw;
             }
-
         }
-
-
-
 
         public async Task<ResponseGenericModel<UserDetailsModel>> CreateManagerAsync(UserSignupModel UserLogin)
         {
@@ -173,7 +179,6 @@ namespace Services.Services
             };
         }
 
-
         public async Task<ResponseGenericModel<UserDetailsModel>> GetCurrentUserAsync()
         {
             var result = await _unitOfWork.UserRepository.GetCurrentUserAsync();
@@ -189,7 +194,6 @@ namespace Services.Services
                     Status = true,
                     Message = "This is current user"
                 };
-
             }
             return new ResponseGenericModel<UserDetailsModel>
             {
@@ -197,8 +201,6 @@ namespace Services.Services
                 Status = false,
                 Message = "User is not found due to error or expiration token"
             };
-
-
         }
 
         public async Task<ResponseGenericModel<List<UserDetailsModel>>> DeleteRangeUsers(List<int> userIds)
@@ -234,7 +236,6 @@ namespace Services.Services
                         Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
-
             }
             return new ResponseGenericModel<List<UserDetailsModel>>()
             {
@@ -242,15 +243,12 @@ namespace Services.Services
                 Message = "failed",
                 Data = null
             };
-
         }
+
         public async Task<ResponseLoginModel> LoginAsync(UserLoginModel User)
         {
-
             return await _unitOfWork.UserRepository.LoginByEmailAndPassword(User);
         }
-
-
 
         public async Task<ResponseGenericModel<UserDetailsModel>> UserChangePasswordAsync(string email, string token, string newPassword)
         {
@@ -266,7 +264,6 @@ namespace Services.Services
                 Status = true,
                 Message = "Update Sucessfully"
             };
-
         }
 
         public async Task<Pagination<UserDetailsModel>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel userFilterModel)
@@ -294,7 +291,6 @@ namespace Services.Services
             if (user == null)
             {
                 return new ResponseGenericModel<string> { Data = null, Status = false, Message = "User is not existed" };
-
             }
             else
             {
@@ -305,17 +301,11 @@ namespace Services.Services
                     Message = "Token to your email " + user.Email + " have been sent for reset password"
                 };
             }
-
         }
+
         public async Task<bool> ConfirmEmail(string email, string token)
         {
             return await _unitOfWork.UserRepository.ConfirmEmail(email, token);
         }
-
-
-
-
-
-
     }
 }
