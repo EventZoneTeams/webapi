@@ -36,7 +36,7 @@ namespace Services.Services
             await _unitOfWork.NotificationRepository.AddAsync(newNotification);
             await _unitOfWork.SaveChangeAsync();
 
-            //push noti to signalR
+            //push notification to signalR
             await _notificationHubContext.Clients.All.SendAsync("sendToUser", title, body);
         }
 
