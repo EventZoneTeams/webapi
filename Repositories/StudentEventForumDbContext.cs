@@ -8,6 +8,7 @@ namespace Repositories
     {
         public StudentEventForumDbContext(DbContextOptions options) : base(options) { }
 
+        public DbSet<Notification> Notifications { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventCategory> EventCategories { get; set; }

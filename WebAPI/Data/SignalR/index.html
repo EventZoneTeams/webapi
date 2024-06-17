@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/admin.html" class="btn btn-primary">Admin</a>
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p id="user"></p>
+        <div id="articleList"></div>
+    </div>
+
+    <!--Script references. -->
+    <!--Reference the SignalR library. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+    <!--Add script to update the page and send messages.-->
+    <script type="text/javascript">
+        function ready() {
+
+        }
+        //random number between 1 and 100 for demo
+        var userId = Math.floor((Math.random() * 100) + 1);
+        document.addEventListener("DOMContentLoaded", ready);
+        document.getElementById("user").innerHTML = "UserId: " + userId;
+
+        var articleList = document.getElementById("articleList");
+        const connection = new signalR.HubConnectionBuilder()
+            .configureLogging(signalR.LogLevel.Debug)
+            .withUrl("https://localhost:7006/notification-hub",{
+                skipNegotiation: true,
+                transport: signalR.HttpTransportType.WebSockets
+                })
+            .build();
+
+        connection.on("sendToUser", (title, content) => {
+            const m = document.createElement("div");
+            m.innerHTML = `
+                <div class="message-author">${title}</div>
+                <div>${content}</div>
+                <div>${new Date().toLocaleString()}</div>
+                <hr>
+            `;
+
+            articleList.appendChild(m);
+            articleList.scrollTop = articleList.scrollHeight;
+        
+        })
+
+        connection.start().catch((err) => document.write(err));
+
+        // tbMessage.addEventListener("keyup", (e) => {
+        // if (e.key === "Enter") {
+        //     send();
+        // }
+        // });
+
+        // btnSend.addEventListener("click", send);
+
+        // function send() {
+        // connection.send("newMessage", username, tbMessage.value)
+        //     .then(() => (tbMessage.value = ""));
+        // }
+    </script>
+
+
+    
+
+
+</body>
+</html>

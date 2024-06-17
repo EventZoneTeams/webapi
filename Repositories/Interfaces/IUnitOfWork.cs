@@ -11,6 +11,7 @@
         ITransactionRepository TransactionRepository { get; }
         IEventFeedbackRepository EventFeedbackRepository { get; }
         IEventOrderRepository EventOrderRepository { get; }
+        INotificationRepository NotificationRepository { get; }
 
         Task<int> SaveChangeAsync();
     }
