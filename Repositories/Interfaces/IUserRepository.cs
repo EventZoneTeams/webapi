@@ -24,5 +24,6 @@ namespace Repositories.Interfaces
         Task<Pagination<User>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel UserFilterModel);
         Task<List<string>> GetAllRoleNamesAsync();
         Task<ResponseLoginModel> RefreshToken(TokenModel token);
+        Task<User> GetUserByIdAsync(int id);
     }
 }

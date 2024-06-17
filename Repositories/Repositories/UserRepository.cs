@@ -20,8 +20,10 @@ namespace Repositories.Repositories
         private readonly ICurrentTime _timeService;
         private readonly IClaimsService _claimsService;
         private readonly IConfiguration _configuration;
+
         // identity collection
         private readonly UserManager<User> _userManager;
+
         private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
 
@@ -109,7 +111,6 @@ namespace Repositories.Repositories
                         errorValue.Append($"{item.Description}");
                     }
                     throw new Exception(errorValue.ToString()); // bắn zề cho GlobalEx midw
-
                 }
             }
             catch (Exception)
@@ -117,7 +118,6 @@ namespace Repositories.Repositories
                 throw;
             }
         }
-
 
         public async Task<string> GenerateEmailConfirmationToken(User user)
         {
@@ -138,9 +138,7 @@ namespace Repositories.Repositories
             }
 
             return null;
-
         }
-
 
         public async Task<ResponseLoginModel> LoginGoogleAsync(string credential)
         {
@@ -150,7 +148,6 @@ namespace Repositories.Repositories
             if (string.IsNullOrEmpty(clientID) && string.IsNullOrEmpty(clientID1))
             {
                 throw new Exception("CliendId Is null!");
-
             }
 
             var settings = new GoogleJsonWebSignature.ValidationSettings()
@@ -208,7 +205,6 @@ namespace Repositories.Repositories
             {
                 new Claim(ClaimTypes.Name, accountExist.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-
             };
 
             foreach (var role in roles)
@@ -235,7 +231,6 @@ namespace Repositories.Repositories
                 Expired = token.ValidTo.ToLocalTime(),
                 JWTRefreshToken = refreshToken
             };
-
         }
 
         public async Task<ResponseLoginModel> RefreshToken(TokenModel token)
@@ -292,8 +287,6 @@ namespace Repositories.Repositories
             };
         }
 
-
-
         public async Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel User)
         {
             var UserExist = await _userManager.FindByEmailAsync(User.Email);
@@ -316,7 +309,6 @@ namespace Repositories.Repositories
                 {
                     new Claim(ClaimTypes.Name, UserExist.Id.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-
                 };
 
                 foreach (var role in roles)
@@ -367,12 +359,20 @@ namespace Repositories.Repositories
                 return null;
             }
             return result;
+        }
 
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            var result = await _userManager.FindByIdAsync(id.ToString());
+            if (result == null)
+            {
+                return null;
+            }
+            return result;
         }
 
         public async Task<User> GetAccountDetailsAsync(int userId)
         {
-
             var accounts = await _userManager.FindByIdAsync(userId.ToString());
             var account = await _templateDbContext.Users.FirstOrDefaultAsync(a => a.Id == userId);
             if (account == null)
@@ -409,6 +409,7 @@ namespace Repositories.Repositories
                 throw new Exception();
             }
         }
+
         public async Task<User> UpdateAccountAsync(User user)
         {
             try
@@ -434,7 +435,6 @@ namespace Repositories.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -453,21 +453,15 @@ namespace Repositories.Repositories
                     // await _dbContext.SaveChangesAsync();
                 }
                 return users;
-
-
             }
             catch (Exception)
             {
-
                 throw;
             }
-
-
         }
 
         public async Task<string> UpdateUserRole(User user, string role)
         {
-
             try
             {
                 // Lấy danh sách vai trò hiện tại của người dùng
@@ -515,7 +509,6 @@ namespace Repositories.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -550,8 +543,6 @@ namespace Repositories.Repositories
             return UserDetailsModels;
             return null;
         }
-
-
 
         public async Task<User> ChangeUserPasswordAsync(string email, string token, string newPassword)
         {
@@ -624,8 +615,6 @@ namespace Repositories.Repositories
             return null;
         }
 
-
-
         private IQueryable<User> ApplySorting(IQueryable<User> query, UserFilterModel UserFilterModel)
         {
             switch (UserFilterModel.SortBy.ToLower())
@@ -633,9 +622,11 @@ namespace Repositories.Repositories
                 case "fullname":
                     query = (UserFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.FullName) : query.OrderByDescending(a => a.FullName);
                     break;
+
                 case "dob":
                     query = (UserFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Dob) : query.OrderByDescending(a => a.Dob);
                     break;
+
                 default:
                     query = (UserFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
                     break;
@@ -650,7 +641,6 @@ namespace Repositories.Repositories
                 return query;
             }
 
-
             if (UserFilterModel.isDeleted == true)
             {
                 query = query.Where(a => a.IsDeleted == UserFilterModel.isDeleted);
@@ -658,7 +648,6 @@ namespace Repositories.Repositories
             else if (UserFilterModel.isDeleted == false)
             {
                 query = query.Where(a => a.IsDeleted == UserFilterModel.isDeleted);
-
             }
 
             if (!string.IsNullOrEmpty(UserFilterModel.Gender))
@@ -675,7 +664,6 @@ namespace Repositories.Repositories
                 {
                     var userIdsInRole = UsersInRole.Select(u => u.Id);
                     query = query.Where(a => userIdsInRole.Contains(a.Id));
-
                 }
                 else
                 {
@@ -691,13 +679,7 @@ namespace Repositories.Repositories
                 );
             }
 
-
-
             return query;
-
-
-
         }
-
     }
 }
