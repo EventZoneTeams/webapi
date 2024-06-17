@@ -22,5 +22,6 @@ namespace Domain.Entities
         public int? DeleteBy { get; set; }
         public bool? IsDeleted { get; set; } = false;
         public virtual ICollection<Wallet> Wallets { get; set; }
+        public virtual ICollection<Notification> Notifications { get; set; }
     }
 }

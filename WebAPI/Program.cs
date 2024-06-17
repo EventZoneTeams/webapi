@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WebAPI;
+using WebAPI.Hubs;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
 using WebAPI.ModelBinder;
@@ -33,6 +33,9 @@ builder.Services.AddControllers(options =>
 });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+//CONFIG FOR SIGNALR
+builder.Services.AddSignalR();
 
 //CONFIG FOR JWT AUTHENTICATION ON SWAGGER
 builder.Services.AddSwaggerGen(config =>
@@ -122,7 +125,7 @@ builder.Services.AddCors(opt =>
 {
     opt.AddPolicy("CorsPolicyDevelopement", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "https://student-event-forum.netlify.app", "https://webapp-git-main-srudent-event-forum.vercel.app/", "https://eventzone.id.vn");
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000", "http://localhost:3001", "http://127.0.0.1:5500/", "https://student-event-forum.netlify.app", "https://webapp-git-main-srudent-event-forum.vercel.app/", "https://eventzone.id.vn");
     });
     //opt.AddPolicy("CorsPolicyProduction", policy =>
     //{
@@ -177,7 +180,7 @@ app.UseSwaggerUI(config =>
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<PerformanceTimeMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseRouting();
 // USE AUTHENTICATION, AUTHORIZATION
 app.UseAuthorization();
 
@@ -187,6 +190,9 @@ app.UseAuthentication();
 app.UseMiddleware<UserStatusMiddleware>();
 
 app.MapControllers();
+app.MapHub<NotificationHub>("/notification-hub");
+app.MapHub<ChatHub>("/notification-hub");
+app.MapHub<DataHub>("/notification-hub");
 
 //USE CORS
 app.UseCors("CorsPolicyDevelopement");

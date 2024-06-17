@@ -7,6 +7,7 @@ using Services.DTO.EventDTOs;
 using Services.DTO.EventFeedbackModel;
 using Services.DTO.EventOrderDTOs;
 using Services.DTO.EventProductsModel;
+using Services.DTO.NotificationDTOs;
 using Services.DTO.UserModels;
 using Services.DTO.WalletDTOs;
 
@@ -57,6 +58,8 @@ namespace Services.Mapper
             CreateMap<EventOrder, EventOrderReponseDTO>().ReverseMap();
             CreateMap<EventOrderDetail, EventOrderDetailsReponseDTO>().ReverseMap();
             CreateMap<EventOrderDetail, CreateEventOrderDetailsReponseDTO>().ReverseMap();
+
+            CreateMap<Notification, NotificationDTO>().ReverseMap();
         }
     }
 }
