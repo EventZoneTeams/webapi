@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Repositories.Extensions;
 using Repositories.Helper;
@@ -13,11 +14,13 @@ namespace WebAPI.Controllers
     {
         private readonly IEventService _eventService;
         private readonly IImageService _imageService;
+        private readonly IMapper _mapper;
 
-        public EventController(IEventService eventService, IImageService imageService)
+        public EventController(IEventService eventService, IImageService imageService, IMapper mapper)
         {
             _eventService = eventService;
             _imageService = imageService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -43,7 +46,21 @@ namespace WebAPI.Controllers
 
                 Response.AddPaginationHeader(events.MetaData);
 
-                return Ok(events);
+                var eventReponseDTOs = new List<EventResponseDTO>();
+
+                foreach (var erdto in events)
+                {
+                    var eventReponseDTO = _mapper.Map<EventResponseDTO>(erdto);
+                    eventReponseDTOs.Add(eventReponseDTO);
+                }
+
+                var result = new
+                {
+                    events = eventReponseDTOs,
+                    metaData = events.MetaData
+                };
+
+                return Ok(ApiResult<object>.Succeed(result, "Get List Of Event Successfully!"));
             }
             catch (Exception ex)
             {
