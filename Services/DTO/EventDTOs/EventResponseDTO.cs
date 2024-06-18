@@ -24,5 +24,7 @@ namespace Services.DTO.EventDTOs
         public OriganizationStatusEnums? OriganizationStatus { get; set; } = OriganizationStatusEnums.PREPARING;
         public bool IsDonation { get; set; }
         public decimal TotalCost { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
