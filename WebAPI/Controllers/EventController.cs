@@ -58,7 +58,10 @@ namespace WebAPI.Controllers
                 {
                     success = true,
                     data = eventReponseDTOs,
-                    metaData = events.MetaData,
+                    CurrentPage = events.MetaData.CurrentPage,
+                    PageSize = events.MetaData.PageSize,
+                    TotalCount = events.MetaData.TotalCount,
+                    TotalPages = events.MetaData.TotalPages,
                     message = "Get List Of Event Successfully!"
                 };
 
