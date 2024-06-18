@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="dialog" onsubmit="onSubmit()">
+        <input type="email" name="email" placeholder="Email"><br/>
+        <input type="password" name="password" placeholder="Password"><br/>
+        <button type="submit">Login</button>
+    </form>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
+<script>
+    function onSubmit(){
+        //get value
+        var email = document.querySelector("input[name='email']").value;
+        var password = document.querySelector("input[name='password']").value;
+        //send to server
+        fetch("https://localhost:7006/api/v1/users/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "http://localhost:5500",
+                'Access-Control-Allow-Credentials': true
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        }).then(response => {
+            if(response.status == 200){
+                alert("Login success");
+            }else{
+                alert("Login failed");
+            }
+        });
+    }
+</script>
+</html>

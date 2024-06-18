@@ -31,7 +31,7 @@ namespace Services.Services
 
         public async Task<EventResponseDTO> GetEventById(int id)
         {
-            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.EventCategory);
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.EventCategory, x => x.User);
 
             if (existingEvent == null)
             {

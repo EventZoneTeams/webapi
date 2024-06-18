@@ -4,14 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
 </head>
 <body>
-    <form id="articleForm" onsubmit="postArticle()">
+    <form id="articleForm" onsubmit="postArticleTest()">
         <input type="text" id="title" placeholder="Title">
         <input type="text" id="content" placeholder="Content">
         <button type="submit">Submit</button>
     </form>
     <script>
+        //signalr
+        const connection = new signalR.HubConnectionBuilder()
+            .configureLogging(signalR.LogLevel.Debug)
+            .withUrl("https://localhost:7006/notification-hub",{
+                skipNegotiation: true,
+                transport: signalR.HttpTransportType.WebSockets
+                })
+            .build();
+
+        // connection.on("sendToUser", (title, content) => {
+        //     const m = document.createElement("div");
+        //     m.innerHTML = `
+        //         <div class="message-author">${title}</div>
+        //         <div>${content}</div>
+        //         <div>${new Date().toLocaleString()}</div>
+        //         <hr>
+        //     `;
+        //     articleList.appendChild(m);
+        //     articleList.scrollTop = articleList.scrollHeight;
+        // })
+
+        connection.start().catch((err) => document.write(err));
         //fetch api post
         async function postArticle() {
             const title = document.getElementById('title').value;
@@ -25,6 +48,12 @@
             });
             const data = await response.json();
             console.log(data);
+        }
+        async function postArticleTest() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            connection.invoke("SendMessage", title, content)
+                .catch(err => console.error(err.toString()));
         }
     </script>
 </body>

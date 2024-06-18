@@ -4,12 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <a href="/admin.html" class="btn btn-primary">Admin</a>
+
+    <!-- login form -->
+    <form method="dialog" onsubmit="onSubmit()">
+        <input type="email" name="email" placeholder="Email"><br/>
+        <input type="password" name="password" placeholder="Password"><br/>
+        <button type="submit">Login</button>
+    </form>
+
+
     <div class="text-center">
         <h1 class="display-4">Welcome</h1>
-        <p id="user"></p>
+        <hr/>
+        <h2>User Info</h2>
+        <button onclick="getInfo()">Get User Info</button>
+        <h5 id="user-id"></h5>
+        <h5 id="user-email"></h5>
+        <h5 id="user-role"></h5>
+        <p id="jwt"></p>
+        <hr/>
+        <h2>WebSocket Message</h2>
         <div id="articleList"></div>
     </div>
 
@@ -18,13 +38,65 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.1/signalr.js"></script>
     <!--Add script to update the page and send messages.-->
     <script type="text/javascript">
+        // login form
+        function onSubmit(){
+        //get value
+        var email = document.querySelector("input[name='email']").value;
+        var password = document.querySelector("input[name='password']").value;
+        //send to server
+        fetch("https://localhost:7006/api/v1/users/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "http://localhost:5500",
+                'Access-Control-Allow-Credentials': true
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        }).then(response => {
+            if(response.status == 200){
+                toastr.info('Login success')
+                return response.json();
+            }else{
+                alert("Login failed");
+            }
+        })
+        .then(data => {
+            localStorage.setItem("jwt", data.jwt)
+            document.getElementById("jwt").innerHTML = "JWT: " + data.jwt;
+        })
+        ;
+        }
+        //getInfo
+        function getInfo(){
+            fetch("https://localhost:7006/api/v1/users/me", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("jwt")
+                },
+            }
+            ).then(response => {
+                if(response.status == 200){
+                    return response.json();
+                }else{
+                    alert("Get info failed");
+                }
+            }).then(data => {
+                document.getElementById("user-id").innerHTML = "ID: " + data.data.id;
+                document.getElementById("user-email").innerHTML = "EMAIL: " + data.data.email;
+                document.getElementById("user-role").innerHTML = "ROLE: " + data.data["role-name"];
+            })
+        }
+
+
         function ready() {
 
         }
-        //random number between 1 and 100 for demo
-        var userId = Math.floor((Math.random() * 100) + 1);
-        document.addEventListener("DOMContentLoaded", ready);
-        document.getElementById("user").innerHTML = "UserId: " + userId;
+
+        document.getElementById("jwt").innerHTML = "JWT: " + localStorage.getItem("jwt");
 
         var articleList = document.getElementById("articleList");
         const connection = new signalR.HubConnectionBuilder()
