@@ -56,11 +56,13 @@ namespace WebAPI.Controllers
 
                 var result = new
                 {
-                    events = eventReponseDTOs,
-                    metaData = events.MetaData
+                    success = true,
+                    data = eventReponseDTOs,
+                    metaData = events.MetaData,
+                    message = "Get List Of Event Successfully!"
                 };
 
-                return Ok(ApiResult<object>.Succeed(result, "Get List Of Event Successfully!"));
+                return Ok(result);
             }
             catch (Exception ex)
             {
