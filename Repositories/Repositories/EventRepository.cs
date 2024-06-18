@@ -25,13 +25,13 @@ namespace Repositories.Repositories
         public IQueryable<Event> FilterAllField(EventParams eventParams)
         {
             var query = _context.Events
+                .Include(x => x.User)
                 .Include(x => x.EventCategory)
                 .Search(eventParams.SearchTerm)
                 .Filter(eventParams.EventCategoryId)
+                .FilterByUserId(eventParams.UserId)
                 .FilterByDonationDate(eventParams.DonationStartDate, eventParams.DonationEndDate)
                 .FilterByEventDate(eventParams.EventStartDate, eventParams.EventEndDate)
-                .FilterByLocation(eventParams.Location)
-                .FilterByUniversity(eventParams.University)
                 .FilterByStatus(eventParams.Status.ToString(), eventParams.OriganizationStatusEnums.ToString(), eventParams.IsDonation);
 
             return query;

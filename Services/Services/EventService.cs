@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.DTO.EventDTOs;
@@ -19,21 +18,15 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<PagedList<EventResponseDTO>> GetEvent(EventParams eventParams)
+        public async Task<PagedList<Event>> GetEvent(EventParams eventParams)
         {
             var query = _unitOfWork.EventRepository.FilterAllField(eventParams).AsQueryable();
-            //mapping to EventDTO
-            var eventDTOList = await query.ToListAsync<Event>();
-            var result = new List<EventResponseDTO>();
-            for (int i = 0; i < eventDTOList.Count; i++)
-            {
-                result.Add(_mapper.Map<EventResponseDTO>(eventDTOList[i]));
-            }
-            var products = await PagedList<EventResponseDTO>.ToPagedListMapping(result, eventDTOList.Count, eventParams.PageNumber, eventParams.PageSize);
+
+            var events = await PagedList<Event>.ToPagedList(query, eventParams.PageNumber, eventParams.PageSize);
 
             //.Sort(eventParams.OrderBy);
 
-            return products;
+            return events;
         }
 
         public async Task<EventResponseDTO> GetEventById(int id)

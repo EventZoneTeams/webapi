@@ -191,8 +191,8 @@ app.UseMiddleware<UserStatusMiddleware>();
 
 app.MapControllers();
 app.MapHub<NotificationHub>("/notification-hub");
-app.MapHub<ChatHub>("/notification-hub");
-app.MapHub<DataHub>("/notification-hub");
+app.MapHub<ChatHub>("/chat-hub");
+app.MapHub<DataHub>("/data-hub");
 
 //USE CORS
 app.UseCors("CorsPolicyDevelopement");

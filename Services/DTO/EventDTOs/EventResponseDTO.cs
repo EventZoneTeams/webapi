@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Repositories.Models;
 using Services.DTO.EventCategoryDTOs;
 
 namespace Services.DTO.EventDTOs
@@ -16,6 +17,7 @@ namespace Services.DTO.EventDTOs
         public string Note { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
         public int UserId { get; set; }
+        public UserDetailsModel User { get; set; }
         public EventCategoryResponseDTO? EventCategory { get; set; }
         public string University { get; set; }
         public EventStatusEnums? Status { get; set; } = EventStatusEnums.PENDING;
