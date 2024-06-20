@@ -80,10 +80,12 @@ namespace Services.Services
             var saveCheck = await _unitOfWork.SaveChangeAsync();
             if (updateStatus || saveCheck > 0)
             {
+                var result = _mapper.Map<EventFeedbackDetailModel>(newFeedback);
+                //  result.FeedbackType = type.ToString();
                 return new ResponseGenericModel<EventFeedbackDetailModel>
                 {
                     Status = true,
-                    Data = _mapper.Map<EventFeedbackDetailModel>(newFeedback),
+                    Data = result,
                     Message = "Added and updated status event successfully"
                 };
             }
