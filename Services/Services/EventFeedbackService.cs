@@ -84,7 +84,7 @@ namespace Services.Services
                 {
                     Status = true,
                     Data = _mapper.Map<EventFeedbackDetailModel>(newFeedback),
-                    Message = "Added and updated event successfully"
+                    Message = "Added and updated status event successfully"
                 };
             }
 
