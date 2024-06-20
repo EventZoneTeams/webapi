@@ -65,6 +65,9 @@ namespace WebAPI.Controllers
         /// Gets  event feedbacks.
         /// </summary>
         /// <returns>A list event feedbacks.</returns>
+        /// /// <remarks>
+        ///
+        /// </remarks>
         /// <response code="200">Returns the list of event feedbacks.</response>
         /// <response code="400">Returns an error message if the retrieval fails.</response>
         [HttpGet]
