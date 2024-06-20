@@ -2,16 +2,9 @@
 using Domain.Entities;
 using Domain.Enums;
 using Repositories.Interfaces;
-using Services.DTO.EventDTOs;
 using Services.DTO.EventFeedbackModel;
-using Services.DTO.EventProductsModel;
 using Services.DTO.ResponseModels;
 using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -49,7 +42,7 @@ namespace Services.Services
             switch (type)
             {
                 case FeedbackTypeEnums.ISFEEDBACK:
-                    checkEvent.Status = type.ToString();
+                    checkEvent.Status = EventStatusEnums.ISFEEDBACK.ToString();
                     break;
 
                 case FeedbackTypeEnums.APPROVE:
@@ -64,7 +57,7 @@ namespace Services.Services
                     break;
 
                 case FeedbackTypeEnums.REJECT:
-                    checkEvent.Status = type.ToString();
+                    checkEvent.Status = EventStatusEnums.REJECTED.ToString();
                     break;
 
                 default:

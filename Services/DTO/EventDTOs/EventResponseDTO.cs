@@ -20,8 +20,8 @@ namespace Services.DTO.EventDTOs
         public UserDetailsModel User { get; set; }
         public EventCategoryResponseDTO? EventCategory { get; set; }
         public string University { get; set; }
-        public EventStatusEnums? Status { get; set; } = EventStatusEnums.PENDING;
-        public OriganizationStatusEnums? OriganizationStatus { get; set; } = OriganizationStatusEnums.PREPARING;
+        public EventStatusEnums? Status { get; set; }
+        public OriganizationStatusEnums? OriganizationStatus { get; set; }
         public bool IsDonation { get; set; }
         public decimal TotalCost { get; set; }
         public DateTime CreatedAt { get; set; }
