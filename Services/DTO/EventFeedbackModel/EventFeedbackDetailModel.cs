@@ -15,8 +15,8 @@ namespace Services.DTO.EventFeedbackModel
         public string? Content { get; set; }
         public int? UserId { get; set; }
 
-        public virtual EventResponseDTO? Event { get; set; } = null;
+        // public virtual EventResponseDTO? Event { get; set; } = null;
 
-        public virtual UserDetailsModel? User { get; set; }
+       // public virtual UserDetailsModel? User { get; set; }
     }
 }
