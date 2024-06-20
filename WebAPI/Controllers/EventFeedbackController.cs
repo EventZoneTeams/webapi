@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/event-feedbacks")]
+    [Route("api/v1/event-feedbacks")]
     [ApiController]
     public class EventFeedbackController : ControllerBase
     {
