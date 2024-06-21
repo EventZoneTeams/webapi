@@ -4,6 +4,11 @@ namespace Services.Hubs
 {
     public class NotificationHub : Hub
     {
+        public async Task SendNotification(string user, string message)
+        {
+            await Clients.All.SendAsync("ReceiveNotification", user, message);
+        }
+
         //private readonly UserManager _userManager;
         //public NotificationUserHub(UserManager userManager)
         //{

@@ -1,4 +1,5 @@
-﻿using Services.DTO.NotificationDTOs;
+﻿using Domain.Entities;
+using Services.DTO.NotificationDTOs;
 
 namespace Services.Interface
 {
@@ -6,7 +7,7 @@ namespace Services.Interface
     {
         Task<List<NotificationDTO>> GetNotifications(int userId);
         Task<int> GetUnreadNotificationQuantity(int userId);
-        Task PushNotification(int userId, string title, string body);
+        Task PushNotification(Notification notification);
         Task<List<NotificationDTO>> ReadAllNotification(int userId);
     }
 }

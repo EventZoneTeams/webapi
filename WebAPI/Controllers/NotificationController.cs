@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         [HttpPost("send-all")]
         public async Task<IActionResult> SendAll(string title, string content)
         {
-            await _notificationHubContext.Clients.All.SendAsync("sendToUser", title, content);
+            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotification", title, content);
             return Ok("oke");
         }
 
