@@ -31,7 +31,7 @@ namespace Services.Services
             return result;
         }
         // Deposit money to wallet
-        public async Task<Transaction> Deposit(int userId, decimal amount)
+        public async Task<Transaction> Deposit(int userId, Int64 amount)
         {
             var transaction = await _unitOfWork.WalletRepository.DepositMoney(userId, WalletTypeEnums.PERSONAL, amount);
             var result = _mapper.Map<Transaction>(transaction);

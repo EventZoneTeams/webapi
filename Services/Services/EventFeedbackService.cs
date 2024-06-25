@@ -55,25 +55,25 @@ namespace Services.Services
             switch (type)
             {
                 case FeedbackTypeEnums.ISFEEDBACK:
-                    checkEvent.Status = EventStatusEnums.ISFEEDBACK.ToString();
+                    //checkEvent.Status = EventStatusEnums.ISFEEDBACK.ToString();
                     //update notification
                     notification.Title = "Feedback" + "(Event Id = " + checkEvent.Id + ")";
                     notification.Body = "You have a new feedback";
                     break;
 
                 case FeedbackTypeEnums.APPROVE:
-                    if (checkEvent.IsDonation)
-                    {
-                        checkEvent.Status = EventStatusEnums.DONATING.ToString();
-                        notification.Title = "Your event is approved" + "(Event Id = " + checkEvent.Id + ")";
-                        notification.Body = "Your event is approved, please check your event for more information";
-                    }
-                    else
-                    {
-                        checkEvent.Status = EventStatusEnums.SUCCESSFUL.ToString();
-                        notification.Title = "Your event is successful" + "(Event Id = " + checkEvent.Id + ")";
-                        notification.Body = "Your event is successful, please check your event for more information";
-                    }
+                    //if (checkEvent.IsDonation)
+                    //{
+                    //    checkEvent.Status = EventStatusEnums.DONATING.ToString();
+                    //    notification.Title = "Your event is approved" + "(Event Id = " + checkEvent.Id + ")";
+                    //    notification.Body = "Your event is approved, please check your event for more information";
+                    //}
+                    //else
+                    //{
+                    //    checkEvent.Status = EventStatusEnums.SUCCESSFUL.ToString();
+                    //    notification.Title = "Your event is successful" + "(Event Id = " + checkEvent.Id + ")";
+                    //    notification.Body = "Your event is successful, please check your event for more information";
+                    //}
                     break;
 
                 case FeedbackTypeEnums.REJECT:

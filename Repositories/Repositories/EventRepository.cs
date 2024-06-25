@@ -30,9 +30,8 @@ namespace Repositories.Repositories
                 .Search(eventParams.SearchTerm)
                 .Filter(eventParams.EventCategoryId)
                 .FilterByUserId(eventParams.UserId)
-                .FilterByDonationDate(eventParams.DonationStartDate, eventParams.DonationEndDate)
                 .FilterByEventDate(eventParams.EventStartDate, eventParams.EventEndDate)
-                .FilterByStatus(eventParams.Status.ToString(), eventParams.OriganizationStatusEnums.ToString(), eventParams.IsDonation);
+                .FilterByStatus(eventParams.Status.ToString());
 
             return query;
         }

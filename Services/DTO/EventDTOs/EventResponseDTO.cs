@@ -21,9 +21,7 @@ namespace Services.DTO.EventDTOs
         public EventCategoryResponseDTO? EventCategory { get; set; }
         public string University { get; set; }
         public EventStatusEnums? Status { get; set; }
-        public OriganizationStatusEnums? OriganizationStatus { get; set; }
-        public bool IsDonation { get; set; }
-        public decimal TotalCost { get; set; }
+        public Int64 TotalCost { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; }
     }

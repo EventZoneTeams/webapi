@@ -50,19 +50,6 @@ namespace Repositories.Extensions
             return query;
         }
 
-        public static IQueryable<Event> FilterByDonationDate(this IQueryable<Event> query, DateTime? donationStartDate, DateTime? donationEndDate)
-        {
-            if (donationStartDate != null)
-            {
-                query = query.Where(p => p.DonationStartDate >= donationStartDate);
-            }
-            if (donationEndDate != null)
-            {
-                query = query.Where(p => p.DonationEndDate <= donationEndDate);
-            }
-            return query;
-        }
-
         public static IQueryable<Event> FilterByEventDate(this IQueryable<Event> query, DateTime? eventStartDate, DateTime? eventEndDate)
         {
             if (eventStartDate != null)
@@ -94,24 +81,13 @@ namespace Repositories.Extensions
             return query.Where(p => p.University.ToLower().Contains(lowerCaseUniversity));
         }
 
-        public static IQueryable<Event> FilterByStatus(this IQueryable<Event> query, string eventStatus, string origanizationStatusEnums, bool? isDonation)
+        public static IQueryable<Event> FilterByStatus(this IQueryable<Event> query, string eventStatus)
         {
-            if (isDonation != null)
-            {
-                query = query.Where(p => p.IsDonation == isDonation);
-            }
             if (!string.IsNullOrWhiteSpace(eventStatus))
             {
                 query = query.Where(p => p.Status.ToLower() == eventStatus.ToString().ToLower());
             }
-            if (!string.IsNullOrWhiteSpace(origanizationStatusEnums))
-            {
-                query = query.Where(p => p.OriganizationStatus.ToLower() == origanizationStatusEnums.ToString().ToLower());
-            }
             return query;
         }
-
-
-
     }
 }

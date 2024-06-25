@@ -3,6 +3,6 @@
     public class VnpayOrderInfo
     {
         public int TransactionId { get; set; }
-        public decimal Amount { get; set; }
+        public Int64 Amount { get; set; }
     }
 }

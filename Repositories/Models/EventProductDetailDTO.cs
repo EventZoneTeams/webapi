@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Repositories.Models
+﻿namespace Repositories.Models
 {
     public class EventProductDetailDTO
     {
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public decimal Price { get; set; }
+        public Int64 Price { get; set; }
 
     }
 }

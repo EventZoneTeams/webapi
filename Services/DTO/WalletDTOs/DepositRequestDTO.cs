@@ -2,6 +2,6 @@
 {
     public class DepositRequestDTO
     {
-        public decimal Amount { get; set; }
+        public Int64 Amount { get; set; }
     }
 }

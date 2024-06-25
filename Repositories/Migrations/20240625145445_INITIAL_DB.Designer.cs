@@ -12,7 +12,7 @@ using Repositories;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(StudentEventForumDbContext))]
-    [Migration("20240617093556_INITIAL_DB")]
+    [Migration("20240625145445_INITIAL_DB")]
     partial class INITIAL_DB
     {
         /// <inheritdoc />
@@ -48,12 +48,6 @@ namespace Repositories.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DonationEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DonationStartDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("EventCategoryId")
                         .HasColumnType("int");
 
@@ -64,9 +58,6 @@ namespace Repositories.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<bool?>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDonation")
                         .HasColumnType("bit");
 
                     b.Property<string>("Location")
@@ -85,7 +76,7 @@ namespace Repositories.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OriganizationStatus")
+                    b.Property<string>("ReasonNote")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -93,9 +84,6 @@ namespace Repositories.Migrations
 
                     b.Property<string>("ThumbnailUrl")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TotalCost")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("University")
                         .HasColumnType("nvarchar(max)");
@@ -110,6 +98,68 @@ namespace Repositories.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventCampaign", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("CollectedAmount")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DeletedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("GoalAmount")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ModifiedBy")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventCampaign");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventCategory", b =>
@@ -337,8 +387,8 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("TotalAmount")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -390,8 +440,8 @@ namespace Repositories.Migrations
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -494,8 +544,8 @@ namespace Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("Price")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("QuantityInStock")
                         .HasColumnType("int");
@@ -763,8 +813,8 @@ namespace Repositories.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -976,8 +1026,8 @@ namespace Repositories.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<long>("Balance")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -1134,6 +1184,17 @@ namespace Repositories.Migrations
                     b.Navigation("EventCategory");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.EventCampaign", b =>
+                {
+                    b.HasOne("Domain.Entities.Event", "Event")
+                        .WithMany("EventCampaigns")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("Domain.Entities.EventComment", b =>
@@ -1417,6 +1478,8 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Domain.Entities.Event", b =>
                 {
+                    b.Navigation("EventCampaigns");
+
                     b.Navigation("EventComments");
 
                     b.Navigation("EventFeedbacks");

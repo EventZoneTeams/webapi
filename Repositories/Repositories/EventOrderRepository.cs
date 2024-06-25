@@ -36,7 +36,7 @@ namespace Repositories.Repositories
                     {
                         EventId = eventId,
                         UserId = userId,
-                        TotalAmount = 0m,
+                        TotalAmount = 0,
                         Status = EventOrderStatusEnums.PENDING.ToString(),
                         CreatedAt = _timeService.GetCurrentTime(),
                         CreatedBy = _claimsService.GetCurrentUserId,
@@ -67,7 +67,7 @@ namespace Repositories.Repositories
                         };
 
                         eventOrderDetails.Add(orderDetail);
-                        newOrder.TotalAmount += ((decimal)package.TotalPrice * item.Quantity);
+                        newOrder.TotalAmount += ((Int64)package.TotalPrice * item.Quantity);
                     }
 
                     _context.Entry(newOrder).State = EntityState.Modified;

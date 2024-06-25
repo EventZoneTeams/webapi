@@ -177,8 +177,6 @@ namespace WebAPI.Controllers
                     EventCategoryId = createEventModel.EventCategoryId,
                     University = createEventModel.University,
                     Status = createEventModel.Status,
-                    OriganizationStatus = createEventModel.OriganizationStatus,
-                    IsDonation = createEventModel?.IsDonation,
                     TotalCost = createEventModel?.TotalCost
                 };
                 var eventModel = await _eventService.CreateEvent(format);
@@ -264,8 +262,6 @@ namespace WebAPI.Controllers
                     EventCategoryId = updateEventModel.EventCategoryId,
                     University = updateEventModel.University,
                     Status = updateEventModel.Status,
-                    OriganizationStatus = updateEventModel.OriganizationStatus,
-                    IsDonation = updateEventModel.IsDonation ?? false,
                     TotalCost = updateEventModel.TotalCost ?? 0
                 };
                 var updatedEvent = await _eventService.UpdateEvent(id, format);

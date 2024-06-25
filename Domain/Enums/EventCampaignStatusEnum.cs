@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enums
 {
-    public enum EventStatusEnums
+    public enum EventCampaignStatusEnum
     {
         DRAFT,
         PENDING,

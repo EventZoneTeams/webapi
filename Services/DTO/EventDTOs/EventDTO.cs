@@ -18,8 +18,6 @@ namespace Services.DTO.EventDTOs
         public int EventCategoryId { get; set; }
         public string? University { get; set; }
         public EventStatusEnums Status { get; set; } = EventStatusEnums.PENDING;
-        public OriganizationStatusEnums OriganizationStatus { get; set; } = OriganizationStatusEnums.PREPARING;
-        public bool? IsDonation { get; set; }
-        public decimal? TotalCost { get; set; }
+        public Int64? TotalCost { get; set; }
     }
 }

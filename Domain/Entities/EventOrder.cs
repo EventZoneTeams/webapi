@@ -4,7 +4,7 @@
     {
         public int EventId { get; set; }
         public int UserId { get; set; }
-        public decimal TotalAmount { get; set; }
+        public Int64 TotalAmount { get; set; }
         public string Status { get; set; }
 
         public virtual Event Event { get; set; }

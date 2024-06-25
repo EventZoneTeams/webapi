@@ -70,7 +70,7 @@ namespace Repositories.Repositories
             return wallet;
         }
         // Deposit money to wallet
-        public async Task<Transaction> DepositMoney(int userId, WalletTypeEnums walletType, decimal amount)
+        public async Task<Transaction> DepositMoney(int userId, WalletTypeEnums walletType, Int64 amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, walletType);
             if (wallet == null)
@@ -97,7 +97,7 @@ namespace Repositories.Repositories
         }
 
         // Withdraw money from wallet
-        public async Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, decimal amount)
+        public async Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, Int64 amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, walletType);
             if (wallet == null)
