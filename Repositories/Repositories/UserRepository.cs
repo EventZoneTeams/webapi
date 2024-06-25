@@ -67,6 +67,8 @@ namespace Repositories.Repositories
                     FullName = User.FullName,
                     Dob = User.Dob,
                     Gender = User.Gender.ToLower() == "male" ? true : false,
+                    Image = User.Image,
+                    University = User.University,
                     CreatedBy = _claimsService.GetCurrentUserId,
                     CreatedDate = _timeService.GetCurrentTime()
                 };
