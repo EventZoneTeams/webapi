@@ -1,4 +1,7 @@
-﻿using Repositories.Models.ImageDTOs;
+﻿using Repositories.Commons;
+using Repositories.Models;
+using Repositories.Models.ImageDTOs;
+using Repositories.Models.ProductModels;
 using Services.DTO.EventProductsModel;
 using Services.DTO.ResponseModels;
 using System;
@@ -22,5 +25,6 @@ namespace Services.Interface
         Task<ResponseGenericModel<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts);
 
         Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(int eventId);
+        Task<Pagination<EventProductDetailDTO>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
     }
 }
