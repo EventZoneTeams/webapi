@@ -1,4 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Repositories.Commons;
+using Repositories.Models;
+using Repositories.Models.ProductModels;
 using Services.DTO.EventProductsModel;
 using Services.DTO.TestModels;
 using Services.Interface;
@@ -24,18 +28,47 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a list of products</response>
         [HttpGet("event-products")]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAccountByFilters([FromQuery] PaginationParameter paginationParameter, [FromQuery] ProductFilterModel productFilterModel)
         {
             try
             {
-                var data = await _eventProductService.GetAllProductsAsync();
-                return Ok(data);
+                var result = await _eventProductService.GetProductsByFiltersAsync(paginationParameter, productFilterModel);
+                if (result == null)
+                {
+                    return NotFound("No accounts found with the specified filters.");
+                }
+                var metadata = new
+                {
+                    result.TotalCount,
+                    result.PageSize,
+                    result.CurrentPage,
+                    result.TotalPages,
+                    result.HasNext,
+                    result.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
+        //public async Task<IActionResult> GetAllAsync()
+        //{
+        //    try
+        //    {
+        //        var data = await _eventProductService.GetAllProductsAsync();
+        //        return Ok(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         /// <summary>
         /// Get list existing products of an event

@@ -1,7 +1,11 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Commons;
 using Repositories.Interfaces;
+using Repositories.Models;
 using Repositories.Models.ImageDTOs;
+using Repositories.Models.ProductModels;
 
 namespace Repositories.Repositories
 {
@@ -62,6 +66,93 @@ namespace Repositories.Repositories
             {
                 throw;
             }
+        }
+
+        public async Task<Pagination<EventProduct>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
+        {
+            try
+            {
+                var ProductsQuery = _context.EventProducts.AsNoTracking();
+                ProductsQuery = ApplyFilterSortAndSearch(ProductsQuery, productFilterModel);
+                var sortedQuery = await ApplySorting(ProductsQuery, productFilterModel).ToListAsync();
+
+                if (sortedQuery != null)
+                {
+                    var totalCount = sortedQuery.Count;
+                    var UsersPagination = sortedQuery
+                        .Skip((paginationParameter.PageIndex - 1) * paginationParameter.PageSize)
+                        .Take(paginationParameter.PageSize)
+                        .ToList();
+                    return new Pagination<EventProduct>(UsersPagination, totalCount, paginationParameter.PageIndex, paginationParameter.PageSize);
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private IQueryable<EventProduct> ApplySorting(IQueryable<EventProduct> query, ProductFilterModel productFilterModel)
+        {
+            try
+            {
+                switch (productFilterModel.SortBy.ToLower())
+                {
+                    case "name":
+                        query = (productFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Name) : query.OrderByDescending(a => a.Name);
+                        break;
+
+                    case "price":
+                        query = (productFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Price) : query.OrderByDescending(a => a.Price);
+                        break;
+
+                    default:
+                        query = (productFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
+                        break;
+                }
+                return query;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        private IQueryable<EventProduct> ApplyFilterSortAndSearch(IQueryable<EventProduct> query, ProductFilterModel productFilterModel)
+        {
+            if (productFilterModel == null)
+            {
+                return query;
+            }
+
+            if (productFilterModel.isDeleted == true)
+            {
+                query = query.Where(a => a.IsDeleted == productFilterModel.isDeleted);
+            }
+            else if (productFilterModel.isDeleted == false)
+            {
+                query = query.Where(a => a.IsDeleted == productFilterModel.isDeleted);
+            }
+
+            //if (productFilterModel.MinPrice.HasValue)
+            //{
+            //    query = query.Where(p => p.Price >= productFilterModel.MinPrice);
+            //}
+
+            //if (productFilterModel.MaxPrice.HasValue)
+            //{
+            //    query = query.Where(p => p.Price <= productFilterModel.MaxPrice);
+            //}
+
+            if (!string.IsNullOrEmpty(productFilterModel.SearchName))
+            {
+                query = query.Where(a =>
+                    a.Name.Contains(productFilterModel.SearchName));
+            }
+
+            return query;
         }
     }
 }
