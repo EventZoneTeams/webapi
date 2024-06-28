@@ -54,17 +54,20 @@ namespace Services.Services
 
             switch (type)
             {
-                case FeedbackTypeEnums.ISFEEDBACK:
-                    //checkEvent.Status = EventStatusEnums.ISFEEDBACK.ToString();
-                    //update notification
-                    notification.Title = "Feedback" + "(Event Id = " + checkEvent.Id + ")";
-                    notification.Body = "You have a new feedback";
-                    break;
+                //case FeedbackTypeEnums.ISFEEDBACK:
+                //    //checkEvent.Status = EventStatusEnums.ISFEEDBACK.ToString();
+                //    //update notification
+                //    notification.Title = "Feedback" + "(Event Id = " + checkEvent.Id + ")";
+                //    notification.Body = "You have a new feedback";
+                //    break;
 
                 case FeedbackTypeEnums.APPROVE:
+                    checkEvent.Status = EventStatusEnums.APPROVED.ToString();
+
                     //if (checkEvent.IsDonation)
                     //{
                     //    checkEvent.Status = EventStatusEnums.DONATING.ToString();
+
                     //    notification.Title = "Your event is approved" + "(Event Id = " + checkEvent.Id + ")";
                     //    notification.Body = "Your event is approved, please check your event for more information";
                     //}
@@ -74,12 +77,15 @@ namespace Services.Services
                     //    notification.Title = "Your event is successful" + "(Event Id = " + checkEvent.Id + ")";
                     //    notification.Body = "Your event is successful, please check your event for more information";
                     //}
+
                     break;
 
                 case FeedbackTypeEnums.REJECT:
                     checkEvent.Status = EventStatusEnums.REJECTED.ToString();
                     notification.Title = "Your event is rejected" + "(Event Id = " + checkEvent.Id + ")";
                     notification.Body = "Your event is rejected, please check your event for more information";
+                    checkEvent.Status = EventStatusEnums.REJECTED.ToString();
+
                     break;
 
                 default:
