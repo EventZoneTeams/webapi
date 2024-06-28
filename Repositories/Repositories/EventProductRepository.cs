@@ -115,7 +115,6 @@ namespace Repositories.Repositories
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -136,15 +135,20 @@ namespace Repositories.Repositories
                 query = query.Where(a => a.IsDeleted == productFilterModel.isDeleted);
             }
 
-            //if (productFilterModel.MinPrice.HasValue)
-            //{
-            //    query = query.Where(p => p.Price >= productFilterModel.MinPrice);
-            //}
+            if (productFilterModel.EventId.HasValue)
+            {
+                query = query.Where(p => p.EventId == productFilterModel.EventId);
+            }
 
-            //if (productFilterModel.MaxPrice.HasValue)
-            //{
-            //    query = query.Where(p => p.Price <= productFilterModel.MaxPrice);
-            //}
+            if (productFilterModel.MinPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= productFilterModel.MinPrice);
+            }
+
+            if (productFilterModel.MaxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= productFilterModel.MaxPrice);
+            }
 
             if (!string.IsNullOrEmpty(productFilterModel.SearchName))
             {

@@ -8,8 +8,9 @@ namespace Domain.Enums
 {
     public enum FeedbackTypeEnums
     {
-        ISFEEDBACK,
+        // ISFEEDBACK,
         APPROVE,
+
         REJECT
     }
 }
