@@ -12,6 +12,7 @@ namespace Repositories.Interfaces
         Task<List<EventProduct>> GetAllProductsByEvent(int eventId);
 
         Task<List<EventProduct>> GetAllProductsWithImages();
+
         Task<Pagination<EventProduct>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
     }
 }

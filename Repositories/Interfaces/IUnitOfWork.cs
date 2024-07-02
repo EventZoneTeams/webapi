@@ -12,6 +12,7 @@
         IEventFeedbackRepository EventFeedbackRepository { get; }
         IEventOrderRepository EventOrderRepository { get; }
         INotificationRepository NotificationRepository { get; }
+        IEventCampaignRepository EventCampaignRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

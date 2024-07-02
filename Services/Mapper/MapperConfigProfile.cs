@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Repositories.Models;
 using Repositories.Models.ImageDTOs;
+using Services.DTO.EventCampaignDTOs;
 using Services.DTO.EventCategoryDTOs;
 using Services.DTO.EventDTOs;
 using Services.DTO.EventFeedbackModel;
@@ -44,6 +45,8 @@ namespace Services.Mapper
             CreateMap<EventProduct, EventProductDetailModel>().ReverseMap();
             CreateMap<EventProduct, EventProductUpdateModel>().ReverseMap();
             CreateMap<EventProduct, EventProductDetailDTO>().ReverseMap();
+
+            CreateMap<EventCampaign, EventCampaignDTO>().ReverseMap();
 
             CreateMap<ProductInPackage, ProductInPackageDTO>().ReverseMap();
             CreateMap<EventPackage, EventPackageDetailDTO>().ReverseMap();
