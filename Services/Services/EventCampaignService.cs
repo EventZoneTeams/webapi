@@ -165,14 +165,14 @@ namespace Services.Services
             };
         }
 
-        public async Task<List<EventCampaignDTO>> GetAllProductsAsync()
+        public async Task<List<EventCampaignDTO>> GetAllCampaignsAsync()
         {
             var result = await _unitOfWork.EventCampaignRepository.GetAllAsync();
 
             return _mapper.Map<List<EventCampaignDTO>>(result);
         }
 
-        public async Task<List<EventCampaignDTO>> GetAllProductsByEventAsync(int eventId)
+        public async Task<List<EventCampaignDTO>> GetAllCampaignsByEventAsync(int eventId)
         {
             var result = await _unitOfWork.EventCampaignRepository.GetAllCampaignByEvent(eventId);
             if (result == null)
@@ -183,7 +183,7 @@ namespace Services.Services
             return _mapper.Map<List<EventCampaignDTO>>(result);
         }
 
-        public async Task<ResponseGenericModel<EventCampaignDTO>> UpdateEventProductAsync(int id, EventCampaignDTO eventCampaignDTO)
+        public async Task<ResponseGenericModel<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignDTO eventCampaignDTO)
         {
             var esistingCampaign = await _unitOfWork.EventCampaignRepository.GetByIdAsync(id);
             if (esistingCampaign != null)
@@ -218,7 +218,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<Pagination<EventCampaignDTO>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, CampaignFilterModel campaignFilterModel)
+        public async Task<Pagination<EventCampaignDTO>> GetCampaignsByFiltersAsync(PaginationParameter paginationParameter, CampaignFilterModel campaignFilterModel)
         {
             var campaigns = await _unitOfWork.EventCampaignRepository.GetCampaignsByFilterAsync(paginationParameter, campaignFilterModel);
             //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
