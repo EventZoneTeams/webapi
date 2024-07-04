@@ -8,8 +8,7 @@ namespace Services.DTO.EventDTOs
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? ThumbnailUrl { get; set; }
-        public DateTime? DonationStartDate { get; set; }
-        public DateTime? DonationEndDate { get; set; }
+
         public DateTime? EventStartDate { get; set; }
         public DateTime? EventEndDate { get; set; }
         public string Note { get; set; } = string.Empty;

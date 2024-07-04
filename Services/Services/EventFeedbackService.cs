@@ -23,101 +23,104 @@ namespace Services.Services
 
         public async Task<ResponseGenericModel<EventFeedbackDetailModel>> CreateFeedBackForEvent(CreateFeedbackModel inputFeedback, FeedbackTypeEnums type)
         {
-            var checkEvent = await _unitOfWork.EventRepository.GetByIdAsync(inputFeedback.EventId);
-            if (checkEvent == null)
+            try
             {
+                var checkEvent = await _unitOfWork.EventRepository.GetByIdAsync(inputFeedback.EventId);
+                if (checkEvent == null)
+                {
+                    return new ResponseGenericModel<EventFeedbackDetailModel>
+                    {
+                        Status = false,
+                        Data = null,
+                        Message = "This event is no longer existing, please try again"
+                    };
+                }
+
+                EventFeedback newFeedback = new EventFeedback
+                {
+                    EventId = inputFeedback.EventId,
+                    Content = inputFeedback.Content,
+                };
+
+                newFeedback = await _unitOfWork.EventFeedbackRepository.CreateFeedbackAsync(newFeedback);
+
+                Notification notification = new Notification
+                {
+                    Body = "You have a new feedback",
+                    Title = "Feedback",
+                    UserId = checkEvent.UserId,
+                    IsRead = false,
+                    Url = "/event/" + checkEvent.Id,
+                    Sender = "System"
+                };
+
+                if (checkEvent.Status == EventStatusEnums.PENDING.ToString())
+                {
+                    switch (type)
+                    {
+                        case FeedbackTypeEnums.APPROVE:
+                            checkEvent.Status = EventStatusEnums.APPROVED.ToString();
+
+                            //if (checkEvent.IsDonation)
+                            //{
+                            //    checkEvent.Status = EventStatusEnums.DONATING.ToString();
+
+                            //    notification.Title = "Your event is approved" + "(Event Id = " + checkEvent.Id + ")";
+                            //    notification.Body = "Your event is approved, please check your event for more information";
+                            //}
+                            //else
+                            //{
+                            //    checkEvent.Status = EventStatusEnums.SUCCESSFUL.ToString();
+                            //    notification.Title = "Your event is successful" + "(Event Id = " + checkEvent.Id + ")";
+                            //    notification.Body = "Your event is successful, please check your event for more information";
+                            //}
+
+                            break;
+
+                        case FeedbackTypeEnums.REJECT:
+                            checkEvent.Status = EventStatusEnums.REJECTED.ToString();
+                            notification.Title = "Your event is rejected" + "(Event Id = " + checkEvent.Id + ")";
+                            notification.Body = "Your event is rejected, please check your event for more information";
+                            checkEvent.Status = EventStatusEnums.REJECTED.ToString();
+
+                            break;
+
+                        default:
+                            if (Enum.IsDefined(typeof(FeedbackTypeEnums), type))
+                            {
+                                throw new Exception("trôn");
+                            }
+                            break;
+                    }
+
+                    bool updateStatus = await _unitOfWork.EventRepository.Update(checkEvent);
+
+                    var saveCheck = await _unitOfWork.SaveChangeAsync();
+                    if (updateStatus || saveCheck > 0)
+                    {
+                        var result = _mapper.Map<EventFeedbackDetailModel>(newFeedback);
+                        await _notificationService.PushNotification(notification);
+                        //  result.FeedbackType = type.ToString();
+                        return new ResponseGenericModel<EventFeedbackDetailModel>
+                        {
+                            Status = true,
+                            Data = result,
+                            Message = "Added and updated status event successfully"
+                        };
+                    }
+                }
+
                 return new ResponseGenericModel<EventFeedbackDetailModel>
                 {
                     Status = false,
-                    Data = null,
-                    Message = "This event is no longer existing, please try again"
+                    Data = _mapper.Map<EventFeedbackDetailModel>(checkEvent),
+                    Message = "This event  have already feedback"
                 };
             }
-
-            EventFeedback newFeedback = new EventFeedback
+            catch (Exception)
             {
-                EventId = inputFeedback.EventId,
-                Content = inputFeedback.Content,
-            };
-
-            newFeedback = await _unitOfWork.EventFeedbackRepository.CreateFeedbackAsync(newFeedback);
-
-            Notification notification = new Notification
-            {
-                Body = "You have a new feedback",
-                Title = "Feedback",
-                UserId = checkEvent.UserId,
-                IsRead = false,
-                Url = "/event/" + checkEvent.Id,
-                Sender = "System"
-            };
-
-            switch (type)
-            {
-                //case FeedbackTypeEnums.ISFEEDBACK:
-                //    //checkEvent.Status = EventStatusEnums.ISFEEDBACK.ToString();
-                //    //update notification
-                //    notification.Title = "Feedback" + "(Event Id = " + checkEvent.Id + ")";
-                //    notification.Body = "You have a new feedback";
-                //    break;
-
-                case FeedbackTypeEnums.APPROVE:
-                    checkEvent.Status = EventStatusEnums.APPROVED.ToString();
-
-                    //if (checkEvent.IsDonation)
-                    //{
-                    //    checkEvent.Status = EventStatusEnums.DONATING.ToString();
-
-                    //    notification.Title = "Your event is approved" + "(Event Id = " + checkEvent.Id + ")";
-                    //    notification.Body = "Your event is approved, please check your event for more information";
-                    //}
-                    //else
-                    //{
-                    //    checkEvent.Status = EventStatusEnums.SUCCESSFUL.ToString();
-                    //    notification.Title = "Your event is successful" + "(Event Id = " + checkEvent.Id + ")";
-                    //    notification.Body = "Your event is successful, please check your event for more information";
-                    //}
-
-                    break;
-
-                case FeedbackTypeEnums.REJECT:
-                    checkEvent.Status = EventStatusEnums.REJECTED.ToString();
-                    notification.Title = "Your event is rejected" + "(Event Id = " + checkEvent.Id + ")";
-                    notification.Body = "Your event is rejected, please check your event for more information";
-                    checkEvent.Status = EventStatusEnums.REJECTED.ToString();
-
-                    break;
-
-                default:
-                    if (Enum.IsDefined(typeof(FeedbackTypeEnums), type))
-                    {
-                        throw new Exception("trôn");
-                    }
-                    break;
+                throw;
             }
-
-            bool updateStatus = await _unitOfWork.EventRepository.Update(checkEvent);
-
-            var saveCheck = await _unitOfWork.SaveChangeAsync();
-            if (updateStatus || saveCheck > 0)
-            {
-                var result = _mapper.Map<EventFeedbackDetailModel>(newFeedback);
-                await _notificationService.PushNotification(notification);
-                //  result.FeedbackType = type.ToString();
-                return new ResponseGenericModel<EventFeedbackDetailModel>
-                {
-                    Status = true,
-                    Data = result,
-                    Message = "Added and updated status event successfully"
-                };
-            }
-
-            return new ResponseGenericModel<EventFeedbackDetailModel>
-            {
-                Status = false,
-                Data = null,
-                Message = "Added failed"
-            };
         }
 
         public async Task<List<EventFeedbackDetailModel>> GettAllFeedbacksAsync()
