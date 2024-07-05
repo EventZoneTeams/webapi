@@ -47,9 +47,7 @@ namespace Services.DTO.EventDTOs
         [BindProperty(Name = "university")]
         public string? University { get; set; }
 
-        [Required]
-        [BindProperty(Name = "status")]
-        public EventStatusEnums Status { get; set; } = EventStatusEnums.PENDING;
+     
 
         [BindProperty(Name = "total-cost")]
         public Int64? TotalCost { get; set; }
