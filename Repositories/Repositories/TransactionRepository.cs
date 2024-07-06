@@ -1,4 +1,6 @@
 ﻿using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Repositories.Helper;
 using Repositories.Interfaces;
 
 namespace Repositories.Repositories
@@ -15,6 +17,27 @@ namespace Repositories.Repositories
             _context = studentEventForumDbContext;
             _timeService = timeService;
             _claimsService = claims;
+        }
+
+        public async Task<List<Transaction>> GetTransactionsByUserId(int userId, string walletRequestTypeEnums)
+        {
+            if (walletRequestTypeEnums == WalletRequestTypeEnums.ALL.ToString())
+            {
+                return await _context.Transactions.Where(x => x.Wallet.UserId == userId).ToListAsync();
+            }
+            else if (walletRequestTypeEnums == WalletRequestTypeEnums.PERSONAL.ToString())
+            {
+                return await _context.Transactions.Where(x => x.Wallet.UserId == userId && x.Wallet.WalletType == WalletRequestTypeEnums.PERSONAL.ToString()).ToListAsync();
+            }
+            else if (walletRequestTypeEnums == WalletRequestTypeEnums.ORGANIZATIONAL.ToString())
+            {
+                return await _context.Transactions.Where(x => x.Wallet.UserId == userId && x.Wallet.WalletType == WalletRequestTypeEnums.ORGANIZATIONAL.ToString()).ToListAsync();
+            }
+            else
+            {
+                throw new Exception("Invalid wallet type");
+            }
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.DTO.WalletDTOs;
 using Services.Interface;
@@ -76,11 +77,10 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<List<TransactionResponsesDTO>> GetTransactions(int walletId)
+        public async Task<List<TransactionResponsesDTO>> GetTransactionsByUserId(int userId, WalletRequestTypeEnums walletRequestTypeEnums)
         {
-            var transactions = await _unitOfWork.TransactionRepository.GetAllAsync();
-            var filterTransactions = transactions.Where(x => x.WalletId == walletId).ToList();
-            var result = _mapper.Map<List<TransactionResponsesDTO>>(filterTransactions);
+            var transactions = await _unitOfWork.TransactionRepository.GetTransactionsByUserId(userId, walletRequestTypeEnums.ToString());
+            var result = _mapper.Map<List<TransactionResponsesDTO>>(transactions);
             return result;
         }
         public async Task<Transaction> GetTransactionById(int transactionId)
