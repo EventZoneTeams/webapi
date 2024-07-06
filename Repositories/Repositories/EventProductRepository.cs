@@ -72,7 +72,7 @@ namespace Repositories.Repositories
         {
             try
             {
-                var ProductsQuery = _context.EventProducts.AsNoTracking();
+                var ProductsQuery = _context.EventProducts.Include(x => x.ProductImages).AsNoTracking();
                 ProductsQuery = ApplyFilterSortAndSearch(ProductsQuery, productFilterModel);
                 var sortedQuery = await ApplySorting(ProductsQuery, productFilterModel).ToListAsync();
 

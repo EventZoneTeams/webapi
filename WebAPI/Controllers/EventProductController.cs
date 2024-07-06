@@ -121,6 +121,10 @@ namespace WebAPI.Controllers
                 {
                     return BadRequest("No files were provided.");
                 }
+                else
+                {
+
+                }
                 var uploadedFileUrls = await _imageService.UploadMultipleImagesAsync(model.fileImages, "test-image-multiple");
 
                 if (uploadedFileUrls.Count == 0)
