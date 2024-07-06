@@ -25,6 +25,7 @@ namespace Services.Interface
         Task<ResponseGenericModel<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts);
 
         Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(int eventId);
-        Task<Pagination<EventProductDetailDTO>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
+
+        Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
     }
 }

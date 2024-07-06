@@ -215,14 +215,14 @@ namespace Services.Services
             };
         }
 
-        public async Task<Pagination<EventProductDetailDTO>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
+        public async Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
         {
             var products = await _unitOfWork.EventProductRepository.GetProductsByFiltersAsync(paginationParameter, productFilterModel);
             //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
             if (products != null)
             {
-                var result = _mapper.Map<List<EventProductDetailDTO>>(products);
-                return new Pagination<EventProductDetailDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
+                var result = _mapper.Map<List<EventProductDetailModel>>(products);
+                return new Pagination<EventProductDetailModel>(result, products.TotalCount, products.CurrentPage, products.PageSize);
             }
             return null;
         }
