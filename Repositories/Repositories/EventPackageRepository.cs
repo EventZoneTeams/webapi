@@ -49,7 +49,6 @@ namespace Repositories.Repositories
                 if (productsList.Count == 0)
                 {
                     throw new Exception("Product is not existing in system, please add product");
-
                 }
                 foreach (var product in products)
                 {
@@ -124,32 +123,17 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task<List<EventPackageDetailDTO>> GetAllPackageWithProductsByEventId(int eventId) // SỬ DỤNG EAGER LOADING
+        public async Task<List<EventPackage>> GetAllPackageWithProductsByEventId(int eventId) // SỬ DỤNG EAGER LOADING
         {
             try
             {
                 var eventPackages = await _context.EventPackages
                 .Where(x => x.EventId == eventId)
                 .Include(x => x.ProductsInPackage)
-                .ThenInclude(x => x.EventProduct)
+                .ThenInclude(x => x.EventProduct).ThenInclude(x => x.ProductImages)
                 .ToListAsync();
 
-                var productsInPackage = eventPackages.Select(x => new EventPackageDetailDTO
-                {
-                    Id = x.Id,
-                    EventId = x.EventId,
-                    TotalPrice = x.TotalPrice,
-                    Description = x.Description,
-                    ThumbnailUrl = x.ThumbnailUrl,
-                    Products = x.ProductsInPackage.Select(p => new EventProductDetailDTO
-                    {
-                        Id = p.EventProduct.Id,
-                        Name = p.EventProduct.Name,
-                        Price = p.EventProduct.Price
-                    }).ToList()
-                }).ToList();
-
-                return productsInPackage ?? new List<EventPackageDetailDTO>();
+                return eventPackages;
             }
             catch (Exception)
             {
@@ -217,7 +201,10 @@ namespace Repositories.Repositories
         {
             try
             {
-                var PackagesQuery = _context.EventPackages.AsNoTracking();
+                var PackagesQuery = _context.EventPackages
+                    .Include(x => x.ProductsInPackage).
+                    ThenInclude(x => x.EventProduct).ThenInclude(x => x.ProductImages)
+                    .AsNoTracking();
                 PackagesQuery = ApplyFilterSortAndSearch(PackagesQuery, packageFilterModel);
                 var sortedQuery = await ApplySorting(PackagesQuery, packageFilterModel).ToListAsync();
 

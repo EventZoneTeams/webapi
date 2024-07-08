@@ -14,7 +14,9 @@ namespace Repositories.Models
         public string Description { get; set; }
         public string? ThumbnailUrl { get; set; }
         public bool? IsDeleted { get; set; } = false;
+        public virtual ICollection<ProductInPackageDTO>? ProductsInPackage { get; set; }
 
+        //tam thoi
         public List<EventProductDetailDTO>? Products { get; set; }
     }
 }
