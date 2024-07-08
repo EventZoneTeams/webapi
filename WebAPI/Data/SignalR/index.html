@@ -60,7 +60,7 @@
                 toastr.info('Login success')
                 return response.json();
             }else{
-                alert("Login failed");
+                toastr.info('Login failed', "hehehe")
             }
         })
         .then(data => {
@@ -101,25 +101,29 @@
         var articleList = document.getElementById("articleList");
         const connection = new signalR.HubConnectionBuilder()
             .configureLogging(signalR.LogLevel.Debug)
-            .withUrl("https://localhost:7006/notification-hub",{
+            .withUrl("https://ez-api.azurewebsites.net/notification-hub",{
                 skipNegotiation: true,
                 transport: signalR.HttpTransportType.WebSockets
                 })
             .build();
 
-        connection.on("sendToUser", (title, content) => {
-            const m = document.createElement("div");
-            m.innerHTML = `
-                <div class="message-author">${title}</div>
-                <div>${content}</div>
-                <div>${new Date().toLocaleString()}</div>
-                <hr>
-            `;
-
-            articleList.appendChild(m);
-            articleList.scrollTop = articleList.scrollHeight;
-        
+        connection.on("ReceiveNotification", (title, content) => {
+            toastr.info(content, title)
         })
+
+        // connection.on("sendToUser", (title, content) => {
+        //     const m = document.createElement("div");
+        //     m.innerHTML = `
+        //         <div class="message-author">${title}</div>
+        //         <div>${content}</div>
+        //         <div>${new Date().toLocaleString()}</div>
+        //         <hr>
+        //     `;
+
+        //     articleList.appendChild(m);
+        //     articleList.scrollTop = articleList.scrollHeight;
+        
+        // })
 
         connection.start().catch((err) => document.write(err));
 

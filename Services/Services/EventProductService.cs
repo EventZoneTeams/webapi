@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Repositories.Commons;
 using Repositories.Interfaces;
+using Repositories.Models;
 using Repositories.Models.ImageDTOs;
+using Repositories.Models.ProductModels;
 using Services.DTO.EventProductsModel;
 using Services.DTO.ResponseModels;
 using Services.Interface;
@@ -26,6 +29,16 @@ namespace Services.Services
         {
             try
             {
+                if (await _unitOfWork.EventRepository.GetByIdAsync(newProduct.EventId) == null)
+                {
+                    return new ResponseGenericModel<EventProductDetailModel>()
+                    {
+                        Status = false,
+                        Message = " Added failed, event is not existed",
+                        Data = null
+                    };
+                }
+
                 var product = new EventProduct
                 {
                     Name = newProduct.Name,
@@ -200,6 +213,18 @@ namespace Services.Services
                 Message = "This account is not existed",
                 Data = null
             };
+        }
+
+        public async Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
+        {
+            var products = await _unitOfWork.EventProductRepository.GetProductsByFiltersAsync(paginationParameter, productFilterModel);
+            //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
+            if (products != null)
+            {
+                var result = _mapper.Map<List<EventProductDetailModel>>(products);
+                return new Pagination<EventProductDetailModel>(result, products.TotalCount, products.CurrentPage, products.PageSize);
+            }
+            return null;
         }
     }
 }

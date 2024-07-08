@@ -47,19 +47,9 @@ namespace Services.DTO.EventDTOs
         [BindProperty(Name = "university")]
         public string? University { get; set; }
 
-        [Required]
-        [BindProperty(Name = "status")]
-        public EventStatusEnums Status { get; set; } = EventStatusEnums.PENDING;
-
-        [Required]
-        [BindProperty(Name = "organization-status")]
-        public OriganizationStatusEnums OriganizationStatus { get; set; } = OriganizationStatusEnums.PREPARING;
-
-        [Required]
-        [BindProperty(Name = "is-donation")]
-        public bool? IsDonation { get; set; }
+     
 
         [BindProperty(Name = "total-cost")]
-        public decimal? TotalCost { get; set; }
+        public Int64? TotalCost { get; set; }
     }
 }

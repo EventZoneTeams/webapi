@@ -1,7 +1,10 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
+using Repositories.Models.PackageModels;
+using Repositories.Models.ProductModels;
 
 namespace Repositories.Repositories
 {
@@ -43,6 +46,11 @@ namespace Repositories.Repositories
 
                 List<ProductInPackage> productsInPackage = new List<ProductInPackage>();
                 var productsList = await _context.EventProducts.Where(x => products.Select(x => x.productid).Contains(x.Id)).ToListAsync();
+                if (productsList.Count == 0)
+                {
+                    throw new Exception("Product is not existing in system, please add product");
+
+                }
                 foreach (var product in products)
                 {
                     var newProduct = new ProductInPackage
@@ -52,7 +60,7 @@ namespace Repositories.Repositories
                         Quantity = product.quantity
                     };
                     productsInPackage.Add(newProduct);
-                    newPackage.TotalPrice += ((int)productsList.Find(x => x.Id == product.productid).Price * product.quantity);
+                    newPackage.TotalPrice += (productsList.Find(x => x.Id == product.productid).Price * product.quantity);
                 }
                 _context.Entry(newPackage).State = EntityState.Modified; // UPDATE TỔNG SỐ TIỀN
 
@@ -61,11 +69,11 @@ namespace Repositories.Repositories
                 //await transaction.CommitAsync(); //IMPROVISE CODE
                 return productsInPackage;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // Rollback transaction nếu có lỗi xảy ra
                 //  await transaction.RollbackAsync();
-                throw new Exception();
+                throw new Exception(ex.Message);
             }
         }
 
@@ -132,7 +140,7 @@ namespace Repositories.Repositories
                     EventId = x.EventId,
                     TotalPrice = x.TotalPrice,
                     Description = x.Description,
-                    ThumbnailUrl= x.ThumbnailUrl,
+                    ThumbnailUrl = x.ThumbnailUrl,
                     Products = x.ProductsInPackage.Select(p => new EventProductDetailDTO
                     {
                         Id = p.EventProduct.Id,
@@ -142,6 +150,87 @@ namespace Repositories.Repositories
                 }).ToList();
 
                 return productsInPackage ?? new List<EventPackageDetailDTO>();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private IQueryable<EventPackage> ApplySorting(IQueryable<EventPackage> query, PackageFilterModel packageFilterModel)
+        {
+            try
+            {
+                switch (packageFilterModel.SortBy.ToLower())
+                {
+                    case "price":
+                        query = (packageFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.TotalPrice) : query.OrderByDescending(a => a.TotalPrice);
+                        break;
+
+                    default:
+                        query = (packageFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
+                        break;
+                }
+                return query;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        private IQueryable<EventPackage> ApplyFilterSortAndSearch(IQueryable<EventPackage> query, PackageFilterModel productFilterModel)
+        {
+            if (productFilterModel == null)
+            {
+                return query;
+            }
+
+            if (productFilterModel.isDeleted == true)
+            {
+                query = query.Where(a => a.IsDeleted == productFilterModel.isDeleted);
+            }
+            else if (productFilterModel.isDeleted == false)
+            {
+                query = query.Where(a => a.IsDeleted == productFilterModel.isDeleted);
+            }
+
+            if (productFilterModel.EventId.HasValue)
+            {
+                query = query.Where(p => p.EventId == productFilterModel.EventId);
+            }
+
+            if (productFilterModel.MinTotalPrice.HasValue)
+            {
+                query = query.Where(p => p.TotalPrice >= productFilterModel.MinTotalPrice);
+            }
+
+            if (productFilterModel.MaxTotalPrice.HasValue)
+            {
+                query = query.Where(p => p.TotalPrice <= productFilterModel.MaxTotalPrice);
+            }
+
+            return query;
+        }
+
+        public async Task<Pagination<EventPackage>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel)
+        {
+            try
+            {
+                var PackagesQuery = _context.EventPackages.AsNoTracking();
+                PackagesQuery = ApplyFilterSortAndSearch(PackagesQuery, packageFilterModel);
+                var sortedQuery = await ApplySorting(PackagesQuery, packageFilterModel).ToListAsync();
+
+                if (sortedQuery != null)
+                {
+                    var totalCount = sortedQuery.Count;
+                    var UsersPagination = sortedQuery
+                        .Skip((paginationParameter.PageIndex - 1) * paginationParameter.PageSize)
+                        .Take(paginationParameter.PageSize)
+                        .ToList();
+                    return new Pagination<EventPackage>(UsersPagination, totalCount, paginationParameter.PageIndex, paginationParameter.PageSize);
+                }
+                return null;
             }
             catch (Exception)
             {

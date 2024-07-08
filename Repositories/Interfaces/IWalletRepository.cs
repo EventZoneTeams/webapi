@@ -9,8 +9,8 @@ namespace Repositories.Interfaces
         Task<Wallet> GetWalletByUserIdAndType(int userId, WalletTypeEnums walletType);
 
         Task<Transaction> ConfirmTransaction(int transactionId);
-        Task<Transaction> DepositMoney(int userId, WalletTypeEnums walletType, decimal amount);
+        Task<Transaction> DepositMoney(int userId, WalletTypeEnums walletType, Int64 amount);
         Task<Transaction> PurchaseItem(int userId, int orderId);
-        Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, decimal amount);
+        Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, Int64 amount);
     }
 }

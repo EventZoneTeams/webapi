@@ -21,29 +21,28 @@ namespace Services.Services
             _notificationHubContext = notificationHubContext;
         }
 
-        public async Task PushNotification(int userId, string title, string body)
+        public async Task PushNotification(Notification notification)
         {
             var newNotification = new Notification
             {
-                Title = title,
-                Body = body,
-                UserId = userId,
+                Title = notification.Title,
+                Body = notification.Body,
+                UserId = notification.UserId,
                 IsRead = false,
-                Url = null,
-                Sender = "System"
+                Url = notification.Url,
+                Sender = notification.Sender ?? "System"
             };
             //save notification to DB
             await _unitOfWork.NotificationRepository.AddAsync(newNotification);
             await _unitOfWork.SaveChangeAsync();
 
             //push notification to signalR
-            await _notificationHubContext.Clients.All.SendAsync("sendToUser", title, body);
+            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotification", notification.Title, notification.Body);
+
         }
-
-
         public async Task<List<NotificationDTO>> GetNotifications(int userId)
         {
-            var notifications = await _unitOfWork.NotificationRepository.GetAllAsync(x => x.UserId == userId);
+            var notifications = await _unitOfWork.NotificationRepository.GetListByUserId(userId);
             return _mapper.Map<List<NotificationDTO>>(notifications);
         }
 

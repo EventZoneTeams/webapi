@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
+using Repositories.Commons;
 using Repositories.Models.ImageDTOs;
+using Repositories.Models.ProductModels;
 
 namespace Repositories.Interfaces
 {
@@ -10,5 +12,7 @@ namespace Repositories.Interfaces
         Task<List<EventProduct>> GetAllProductsByEvent(int eventId);
 
         Task<List<EventProduct>> GetAllProductsWithImages();
+
+        Task<Pagination<EventProduct>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
     }
 }

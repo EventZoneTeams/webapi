@@ -34,5 +34,11 @@ namespace Repositories.Repositories
             var result = await _context.Notifications.Where(x => x.UserId == userId && x.IsRead == false).CountAsync();
             return result;
         }
+
+        public async Task<List<Notification>> GetListByUserId(int userId)
+        {
+            var notifications = await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
+            return notifications;
+        }
     }
 }

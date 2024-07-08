@@ -2,6 +2,8 @@
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
+using Repositories.Helper;
+using Repositories.Interfaces;
 using Services.DTO.ResponseModels;
 using Services.DTO.WalletDTOs;
 using Services.Interface;
@@ -17,25 +19,29 @@ namespace WebAPI.Controllers
     {
         private readonly IWalletService _walletService;
         private readonly IVnPayService _vnPayService;
+        private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
 
-        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService)
+        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService, IClaimsService claimsService)
         {
             _walletService = walletService;
             _mapper = mapper;
             _vnPayService = vnPayService;
+            _claimsService = claimsService;
         }
         /// <summary>
         /// Get 2 Wallets By UserId
         /// </summary>
-        [HttpGet("users/{userId}/wallets")]
-        public async Task<IActionResult> GetListWalletByUserId(int userId)
+        [HttpGet("wallets")]
+        public async Task<IActionResult> GetListWalletByUserId()
         {
             try
             {
-                if (userId <= 0)
+                var userId = _claimsService.GetCurrentUserId;
+
+                if (userId < 0)
                 {
-                    throw new Exception("UserId is invalid");
+                    throw new Exception("User Id is invalid");
                 }
                 var result = await _walletService.GetListWalletByUserId(userId);
                 return Ok((ApiResult<List<WalletResponseDTO>>.Succeed(result, "Get 2 Wallet Of User with Id " + userId + " Successfully!")));
@@ -48,19 +54,21 @@ namespace WebAPI.Controllers
 
 
         /// <summary>
-        /// Get List Transactions By UserId And Type
+        /// Get List Transactions By UserId
         /// </summary>
-        [HttpGet("wallets/{walletId}/transactions")]
-        public async Task<IActionResult> GetTransactions(int walletId, [FromQuery] TransactionTypeEnums transactionTypeEnums, [FromQuery] WalletTypeEnums walletTypeEnums)
+        [HttpGet("wallets/transactions")]
+        public async Task<IActionResult> GetTransactionsBtUserId([FromQuery] WalletRequestTypeEnums walletTypeEnums)
         {
             try
             {
-                if (walletId <= 0)
+                var userId = _claimsService.GetCurrentUserId;
+
+                if (userId < 0)
                 {
-                    throw new Exception("Wallet Id is invalid");
+                    throw new Exception("User Id is invalid or you are not login");
                 }
-                var result = await _walletService.GetTransactions(walletId);
-                return Ok(ApiResult<List<TransactionResponsesDTO>>.Succeed(result, "Get Transactions Of Wallet with Id " + walletId + " Successfully!"));
+                var result = await _walletService.GetTransactionsByUserId(userId, walletTypeEnums);
+                return Ok(ApiResult<List<TransactionResponsesDTO>>.Succeed(result, "Get Transactions Of User with Id " + userId + " and type is " + walletTypeEnums.ToString() + " Successfully!"));
             }
             catch (Exception ex)
             {
@@ -74,16 +82,18 @@ namespace WebAPI.Controllers
         /// <returns>
         ///     URL of payment
         /// </returns>
-        [HttpPost("wallets/{userId}/transactions")]
+        [HttpPost("wallets/transactions")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Deposit(int userId, [FromBody] DepositRequestDTO depositRequest)
+        public async Task<IActionResult> Deposit([FromBody] DepositRequestDTO depositRequest)
         {
             try
             {
+                var userId = _claimsService.GetCurrentUserId;
+
                 if (userId <= 0)
                 {
-                    throw new Exception("UserId is invalid");
+                    throw new Exception("UserId is invalid or you are not login");
                 }
                 if (depositRequest.Amount <= 0)
                 {

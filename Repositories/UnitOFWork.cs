@@ -15,7 +15,7 @@ namespace Repositories
         private readonly IEventOrderRepository _eventOrderRepository;
         private readonly IEventFeedbackRepository _eventFeedbackRepository;
         private readonly INotificationRepository _notificationRepository;
-
+        private readonly IEventCampaignRepository _eventCampaignRepository;
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
             , IUserRepository userRepository,
@@ -27,7 +27,8 @@ namespace Repositories
             ITransactionRepository transactionRepository,
             IEventOrderRepository eventOrderRepository,
             IEventFeedbackRepository eventFeedbackRepository,
-            INotificationRepository notificationRepository
+            INotificationRepository notificationRepository,
+            IEventCampaignRepository eventCampaignRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -41,6 +42,7 @@ namespace Repositories
             _eventOrderRepository = eventOrderRepository;
             _eventFeedbackRepository = eventFeedbackRepository;
             _notificationRepository = notificationRepository;
+            _eventCampaignRepository = eventCampaignRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -53,6 +55,8 @@ namespace Repositories
         public IEventOrderRepository EventOrderRepository => _eventOrderRepository;
         public IEventFeedbackRepository EventFeedbackRepository => _eventFeedbackRepository;
         public INotificationRepository NotificationRepository => _notificationRepository;
+        public IEventCampaignRepository EventCampaignRepository => _eventCampaignRepository;
+
         public Task<int> SaveChangeAsync()
         {
             return _studentEventForumDbContext.SaveChangesAsync();

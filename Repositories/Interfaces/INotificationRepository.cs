@@ -6,5 +6,6 @@ namespace Repositories.Interfaces
     {
         Task<int> GetUnreadNotificationQuantity(int userId);
         Task<List<Notification>> ReadAllNotification(int userId);
+        Task<List<Notification>> GetListByUserId(int userId);
     }
 }

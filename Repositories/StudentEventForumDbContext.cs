@@ -6,7 +6,9 @@ namespace Repositories
 {
     public class StudentEventForumDbContext : IdentityDbContext<User, Role, int>
     {
-        public StudentEventForumDbContext(DbContextOptions options) : base(options) { }
+        public StudentEventForumDbContext(DbContextOptions options) : base(options)
+        {
+        }
 
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Wallet> Wallets { get; set; }
@@ -25,7 +27,7 @@ namespace Repositories
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionDetail> TransactionDetails { get; set; }
-
+        public DbSet<EventCampaign> EventCampaigns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -52,7 +54,6 @@ namespace Repositories
                 .HasForeignKey(pp => pp.PackageId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
             modelBuilder.Entity<EventComment>()
                 .HasKey(ec => ec.Id);
             modelBuilder.Entity<EventComment>()
@@ -68,8 +69,6 @@ namespace Repositories
                 .WithMany(p => p.PostComments)
                 .HasForeignKey(pc => pc.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-
         }
     }
 }

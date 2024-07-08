@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.DTO.EventProductsModel
 {
@@ -20,7 +15,7 @@ namespace Services.DTO.EventProductsModel
 
         [Required(ErrorMessage = "Price is required!")]
         [Range(0, 10000)]
-        public decimal Price { get; set; }
+        public Int64 Price { get; set; }
 
         //  [Required(ErrorMessage = "QuantityInStock is required!")]
         public int QuantityInStock { get; set; }

@@ -8,7 +8,6 @@ namespace Repositories.Repositories
 {
     public class EventRepository : GenericRepository<Event>, IEventRepository
     {
-
         private readonly StudentEventForumDbContext _context;
         private readonly ICurrentTime _timeService;
         private readonly IClaimsService _claimsService;
@@ -21,21 +20,19 @@ namespace Repositories.Repositories
             _claimsService = claims;
         }
 
-
         public IQueryable<Event> FilterAllField(EventParams eventParams)
         {
             var query = _context.Events
                 .Include(x => x.User)
                 .Include(x => x.EventCategory)
+                .Include(x => x.EventCampaigns)
                 .Search(eventParams.SearchTerm)
                 .Filter(eventParams.EventCategoryId)
                 .FilterByUserId(eventParams.UserId)
-                .FilterByDonationDate(eventParams.DonationStartDate, eventParams.DonationEndDate)
                 .FilterByEventDate(eventParams.EventStartDate, eventParams.EventEndDate)
-                .FilterByStatus(eventParams.Status.ToString(), eventParams.OriganizationStatusEnums.ToString(), eventParams.IsDonation);
+                .FilterByStatus(eventParams.Status.ToString());
 
             return query;
         }
-
     }
 }

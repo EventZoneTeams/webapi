@@ -94,16 +94,11 @@ namespace Services.Services
             existingEvent.Name = eventModel.Name ?? existingEvent.Name;
             existingEvent.Description = eventModel.Description ?? existingEvent.Description;
             existingEvent.ThumbnailUrl = eventModel.ThumbnailUrl ?? existingEvent.ThumbnailUrl;
-            existingEvent.DonationStartDate = eventModel.DonationStartDate ?? existingEvent.DonationStartDate;
-            existingEvent.DonationEndDate = eventModel.DonationEndDate ?? existingEvent.DonationEndDate;
             existingEvent.EventStartDate = eventModel.EventStartDate ?? existingEvent.EventStartDate;
             existingEvent.EventEndDate = eventModel.EventEndDate ?? existingEvent.EventEndDate;
             existingEvent.Location = eventModel.Location ?? existingEvent.Location;
             existingEvent.University = eventModel.University ?? existingEvent.University;
             existingEvent.Status = eventModel.Status.ToString() ?? existingEvent.Status;
-            existingEvent.OriganizationStatus = eventModel.OriganizationStatus.ToString() ?? existingEvent.OriganizationStatus;
-            existingEvent.IsDonation = eventModel.IsDonation ?? existingEvent.IsDonation;
-            existingEvent.TotalCost = eventModel.TotalCost ?? existingEvent.TotalCost;
 
             var isUpdated = await _unitOfWork.EventRepository.Update(existingEvent);
 

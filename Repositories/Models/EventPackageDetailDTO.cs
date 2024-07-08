@@ -10,7 +10,7 @@ namespace Repositories.Models
     {
         public int Id { get; set; }
         public int EventId { get; set; }
-        public int TotalPrice { get; set; }
+        public Int64 TotalPrice { get; set; }
         public string Description { get; set; }
         public string? ThumbnailUrl { get; set; }
         public bool? IsDeleted { get; set; } = false;

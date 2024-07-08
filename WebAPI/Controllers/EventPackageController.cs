@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Repositories.Commons;
+using Repositories.Models.PackageModels;
 using Services.DTO.EventPackageModels;
 using Services.Interface;
 
@@ -65,12 +68,28 @@ namespace WebAPI.Controllers
         /// <returns>A list of products</returns>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("event-packages/products")]
-        public async Task<IActionResult> GetProductsInPackagesWithProduct_Package()
+        public async Task<IActionResult> GetAccountByFilters([FromQuery] PaginationParameter paginationParameter, [FromQuery] PackageFilterModel packageFilterModel)
         {
             try
             {
-                var data = await _eventPackageService.GetProductsInPackagesWithProduct_Package();
-                return Ok(data);
+                var result = await _eventPackageService.GetPackagessByFiltersAsync(paginationParameter, packageFilterModel);
+                if (result == null)
+                {
+                    return NotFound("No accounts found with the specified filters.");
+                }
+                var metadata = new
+                {
+                    result.TotalCount,
+                    result.PageSize,
+                    result.CurrentPage,
+                    result.TotalPages,
+                    result.HasNext,
+                    result.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return Ok(result);
             }
             catch (Exception ex)
             {

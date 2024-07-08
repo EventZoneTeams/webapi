@@ -1,20 +1,14 @@
 ﻿namespace Domain.Enums
 {
-    public enum OriganizationStatusEnums
-    {
-        PREPARING,
-        ACCOMPLISHED,
-        DELAYED,
-        CANCELED
-    }
-
     public enum EventStatusEnums
     {
+        DRAFT,
         PENDING,
         REJECTED,
-        ISFEEDBACK,
-        DONATING,
-        SUCCESSFUL,
-        FAILED
+        APPROVED,
+        PUBLISHED,
+        ONGOING,
+        COMPLETED,
+        CANCELED
     }
 }

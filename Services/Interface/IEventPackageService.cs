@@ -1,4 +1,6 @@
-﻿using Repositories.Models;
+﻿using Repositories.Commons;
+using Repositories.Models;
+using Repositories.Models.PackageModels;
 using Services.DTO.EventPackageModels;
 using Services.DTO.ResponseModels;
 using System;
@@ -20,5 +22,7 @@ namespace Services.Interface
         Task<List<ProductInPackageDTO>> GetProductsInPackagesWithProduct_Package();
 
         Task<ResponseGenericModel<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds);
+
+        Task<Pagination<EventPackageDetailDTO>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel);
     }
 }

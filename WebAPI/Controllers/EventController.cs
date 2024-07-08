@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Repositories.Extensions;
@@ -88,7 +89,7 @@ namespace WebAPI.Controllers
         ///        "isComplete": true
         ///     }
         ///
-        /// </remarks> 
+        /// </remarks>
         /// <response code="200">Returns a event</response>
         /// <response code="404">Event Not Found</response>
         [HttpGet("{id}")]
@@ -133,13 +134,13 @@ namespace WebAPI.Controllers
         ///      }
         ///
         ///  Note:
-        /// 
-        ///     origanizationStatus: 
+        ///
+        ///     origanizationStatus:
         ///         PREPARING,
         ///         ACCOMPLISHED,
         ///         DELAYED
         ///         CANCELED
-        ///         
+        ///
         ///     status:
         ///         PENDING,
         ///         REJECTED,
@@ -148,7 +149,7 @@ namespace WebAPI.Controllers
         ///         DONATING,
         ///         SUCCESSFUL,
         ///         FAILED
-        /// </remarks> 
+        /// </remarks>
         /// <response code="200">Returns a event</response>
         /// <response code="400">Requied field is null</response>
         [HttpPost]
@@ -167,8 +168,7 @@ namespace WebAPI.Controllers
                     Name = createEventModel.Name,
                     Description = createEventModel.Description,
                     ThumbnailUrl = imageUrl,
-                    DonationStartDate = createEventModel.DonationStartDate,
-                    DonationEndDate = createEventModel.DonationEndDate,
+
                     EventStartDate = createEventModel.EventStartDate,
                     EventEndDate = createEventModel.EventEndDate,
                     Note = createEventModel.Note,
@@ -176,9 +176,7 @@ namespace WebAPI.Controllers
                     UserId = createEventModel.UserId,
                     EventCategoryId = createEventModel.EventCategoryId,
                     University = createEventModel.University,
-                    Status = createEventModel.Status,
-                    OriganizationStatus = createEventModel.OriganizationStatus,
-                    IsDonation = createEventModel?.IsDonation,
+                    Status = EventStatusEnums.PENDING,
                     TotalCost = createEventModel?.TotalCost
                 };
                 var eventModel = await _eventService.CreateEvent(format);
@@ -219,13 +217,13 @@ namespace WebAPI.Controllers
         ///      }
         ///
         ///  Note:
-        /// 
-        ///     origanizationStatus: 
+        ///
+        ///     origanizationStatus:
         ///         PREPARING,
         ///         ACCOMPLISHED,
         ///         DELAYED
         ///         CANCELED
-        ///         
+        ///
         ///     status:
         ///         PENDING,
         ///         REJECTED,
@@ -234,7 +232,7 @@ namespace WebAPI.Controllers
         ///         DONATING,
         ///         SUCCESSFUL,
         ///         FAILED
-        /// </remarks> 
+        /// </remarks>
         /// <response code="200">Returns the updated event</response>
         /// <response code="400">If the event or the update data is invalid</response>
         /// <response code="404">If the event is not found</response>
@@ -254,8 +252,6 @@ namespace WebAPI.Controllers
                     Name = updateEventModel.Name,
                     Description = updateEventModel.Description,
                     ThumbnailUrl = imageUrl,
-                    DonationStartDate = updateEventModel.DonationStartDate,
-                    DonationEndDate = updateEventModel.DonationEndDate,
                     EventStartDate = updateEventModel.EventStartDate,
                     EventEndDate = updateEventModel.EventEndDate,
                     Note = updateEventModel.Note,
@@ -263,9 +259,6 @@ namespace WebAPI.Controllers
                     UserId = updateEventModel.UserId,
                     EventCategoryId = updateEventModel.EventCategoryId,
                     University = updateEventModel.University,
-                    Status = updateEventModel.Status,
-                    OriganizationStatus = updateEventModel.OriganizationStatus,
-                    IsDonation = updateEventModel.IsDonation ?? false,
                     TotalCost = updateEventModel.TotalCost ?? 0
                 };
                 var updatedEvent = await _eventService.UpdateEvent(id, format);

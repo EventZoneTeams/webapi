@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
+using Repositories.Models.PackageModels;
+using Repositories.Models.ProductModels;
 using Services.DTO.EventPackageModels;
 using Services.DTO.ResponseModels;
 using Services.Interface;
@@ -106,6 +109,18 @@ namespace Services.Services
         public async Task<List<ProductInPackageDTO>> GetProductsInPackagesWithProduct_Package()
         {
             return _mapper.Map<List<ProductInPackageDTO>>(await _unitOfWork.EventPackageRepository.GetProductsInPackagesWithProduct());
+        }
+
+        public async Task<Pagination<EventPackageDetailDTO>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel)
+        {
+            var products = await _unitOfWork.EventPackageRepository.GetPackagessByFiltersAsync(paginationParameter, packageFilterModel);
+            //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
+            if (products != null)
+            {
+                var result = _mapper.Map<List<EventPackageDetailDTO>>(products);
+                return new Pagination<EventPackageDetailDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
+            }
+            return null;
         }
     }
 }
