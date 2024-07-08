@@ -1,5 +1,6 @@
 ﻿using Repositories.Commons;
 using Repositories.Models;
+using Services.DTO.EventOrderDTOs;
 using Services.DTO.ResponseModels;
 using Services.DTO.UserModels;
 
@@ -22,5 +23,6 @@ namespace Services.Interface
         Task<Pagination<UserDetailsModel>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel userFilterModel);
         Task<ResponseLoginModel> RefreshToken(TokenModel token);
         Task<UserDetailsModel> GetUserById(int id);
+        Task<List<EventOrderReponseDTO>> GetCurrentUserOrders();
     }
 }
