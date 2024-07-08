@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Repositories.Interfaces;
 
 namespace Repositories.Repositories
@@ -10,6 +11,7 @@ namespace Repositories.Repositories
         private readonly StudentEventForumDbContext _context;
         private readonly ICurrentTime _timeService;
         private readonly IClaimsService _claimsService;
+
         public EventOrderRepository(StudentEventForumDbContext context, ICurrentTime timeService, IClaimsService claimsService) : base(context, timeService, claimsService)
         {
             _context = context;
@@ -97,6 +99,29 @@ namespace Repositories.Repositories
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return order;
+        }
+
+        public async Task<List<EventOrder>> getCurrentUserOrder()
+        {
+            try
+            {
+                var currentUser = _claimsService.GetCurrentUserId;
+                if (currentUser < 0)
+                {
+                    throw new Exception("User havent sign in, can not found");
+                    //return null;
+                }
+
+                return await _context.EventOrders
+                    .Where(x => x.UserId == currentUser)
+                    .Include(x => x.EventOrderDetails)
+                    .OrderByDescending(x => x.CreatedAt)
+                    .ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

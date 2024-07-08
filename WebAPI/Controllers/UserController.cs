@@ -1,10 +1,12 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models;
 using Services.DTO.EmailModels;
 using Services.DTO.EventDTOs;
+using Services.DTO.EventOrderDTOs;
 using Services.DTO.UserModels;
 using Services.Interface;
 using Services.Services;
@@ -293,6 +295,25 @@ namespace WebAPI.Controllers
                 return Ok(result);
             }
             return NotFound(result);
+        }
+
+        [HttpGet("me/event-orders")]
+        public async Task<IActionResult> GetCurrentUserOrders()
+        {
+            try
+            {
+                var result = await _userService.GetCurrentUserOrders();
+                if (result == null)
+                {
+                    return NotFound(ApiResult<object>.Error(null, "User is not existed"));
+                }
+
+                return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
         }
 
         [HttpGet("confirm-email")]

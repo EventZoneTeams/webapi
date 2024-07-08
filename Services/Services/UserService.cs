@@ -3,6 +3,7 @@ using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
 using Services.DTO.EventDTOs;
+using Services.DTO.EventOrderDTOs;
 using Services.DTO.ResponseModels;
 using Services.DTO.UserModels;
 using Services.Interface;
@@ -283,6 +284,23 @@ namespace Services.Services
                 return new Pagination<UserDetailsModel>(mappedResult, accounts.TotalCount, accounts.CurrentPage, accounts.PageSize);
             }
             return null;
+        }
+
+        public async Task<List<EventOrderReponseDTO>> GetCurrentUserOrders()
+        {
+            try
+            {
+                var orders = await _unitOfWork.EventOrderRepository.getCurrentUserOrder();
+                if (orders.Count == 0 || orders == null)
+                {
+                    return null;
+                }
+                return _mapper.Map<List<EventOrderReponseDTO>>(orders);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<ResponseGenericModel<string>> ForgotPassword(string email)
