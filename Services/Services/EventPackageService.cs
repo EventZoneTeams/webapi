@@ -5,6 +5,7 @@ using Repositories.Models;
 using Repositories.Models.PackageModels;
 using Repositories.Models.ProductModels;
 using Services.DTO.EventPackageModels;
+using Services.DTO.EventProductsModel;
 using Services.DTO.ResponseModels;
 using Services.Interface;
 
@@ -111,6 +112,28 @@ namespace Services.Services
         public async Task<List<ProductInPackageDTO>> GetProductsInPackagesWithProduct_Package()
         {
             return _mapper.Map<List<ProductInPackageDTO>>(await _unitOfWork.EventPackageRepository.GetProductsInPackagesWithProduct());
+        }
+
+        public async Task<ResponseGenericModel<EventPackageDetailDTO>> GetPackageById(int packageId)
+        {
+            var package = await _unitOfWork.EventPackageRepository.GetByIdAsync(packageId);
+            if (package == null)
+            {
+                return new ResponseGenericModel<EventPackageDetailDTO>()
+                {
+                    Status = false,
+                    Message = "This package id is not found",
+                    Data = null
+                };
+            }
+
+            return new ResponseGenericModel<EventPackageDetailDTO>()
+            {
+                Status = false,
+                Message = "Found successfully package " + packageId,
+
+                Data = _mapper.Map<EventPackageDetailDTO>(package)
+            };
         }
 
         public async Task<Pagination<EventPackageDetailDTO>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel)

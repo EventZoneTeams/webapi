@@ -57,18 +57,28 @@ namespace WebAPI.Controllers
             }
         }
 
-        //public async Task<IActionResult> GetAllAsync()
-        //{
-        //    try
-        //    {
-        //        var data = await _eventProductService.GetAllProductsAsync();
-        //        return Ok(data);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+        /// <summary>
+        /// Get product by id
+        /// </summary>
+        /// <response code="200">Returns a product</response>
+        [HttpGet("event-products/{id}")]
+        public async Task<IActionResult> GetAccountById(int id)
+        {
+            try
+            {
+                var result = await _eventProductService.GetProductById(id);
+                if (result == null)
+                {
+                    return NotFound(result);
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         /// <summary>
         /// Get list existing products of an event
@@ -123,7 +133,6 @@ namespace WebAPI.Controllers
                 }
                 else
                 {
-
                 }
                 var uploadedFileUrls = await _imageService.UploadMultipleImagesAsync(model.fileImages, "test-image-multiple");
 
