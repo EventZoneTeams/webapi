@@ -103,7 +103,9 @@ namespace Services.Services
 
         public async Task<List<EventPackageDetailDTO>> GetAllPackageOfEvent(int eventId)
         {
-            return await _unitOfWork.EventPackageRepository.GetAllPackageWithProductsByEventId(eventId);
+            var result = await _unitOfWork.EventPackageRepository.GetAllPackageWithProductsByEventId(eventId);
+
+            return _mapper.Map<List<EventPackageDetailDTO>>(result);
         }
 
         public async Task<List<ProductInPackageDTO>> GetProductsInPackagesWithProduct_Package()

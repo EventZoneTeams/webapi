@@ -1,4 +1,6 @@
-﻿namespace Repositories.Models
+﻿using Repositories.Models.ImageDTOs;
+
+namespace Repositories.Models
 {
     public class EventProductDetailDTO
     {
@@ -8,6 +10,6 @@
         public Int64 Price { get; set; }
 
         public DateTime CreatedAt { get; set; }
-        public bool? IsDeleted { get; set; } = false;
+        public virtual ICollection<ImageReturnDTO>? ProductImages { get; set; }
     }
 }

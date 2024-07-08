@@ -63,12 +63,12 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get list products with event packages included
+        /// Get list packages with products included
         /// </summary>
-        /// <returns>A list of products</returns>
+        /// <returns>A list of packages</returns>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("event-packages/products")]
-        public async Task<IActionResult> GetAccountByFilters([FromQuery] PaginationParameter paginationParameter, [FromQuery] PackageFilterModel packageFilterModel)
+        [HttpGet("event-packages")]
+        public async Task<IActionResult> GetPackagesByFilters([FromQuery] PaginationParameter paginationParameter, [FromQuery] PackageFilterModel packageFilterModel)
         {
             try
             {
@@ -90,25 +90,6 @@ namespace WebAPI.Controllers
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Get list event packages
-        /// </summary>
-        /// <returns>A list of event packages</returns>
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpGet("event-packages")]
-        public async Task<IActionResult> GetAllPackageAsync()
-        {
-            try
-            {
-                var data = await _eventPackageService.GetAllWithProducts();
-                return Ok(data);
             }
             catch (Exception ex)
             {

@@ -7,8 +7,5 @@
         public int Quantity { get; set; }
 
         public virtual EventProductDetailDTO? EventProduct { get; set; }
-        public virtual EventPackageDetailDTO? EventPackage { get; set; }
-
-
     }
 }
