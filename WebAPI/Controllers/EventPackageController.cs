@@ -5,6 +5,7 @@ using Repositories.Commons;
 using Repositories.Models.PackageModels;
 using Services.DTO.EventPackageModels;
 using Services.Interface;
+using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -133,6 +134,29 @@ namespace WebAPI.Controllers
                 }
 
                 return NotFound(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Get product by id
+        /// </summary>
+        /// <response code="200">Returns a product</response>
+        [HttpGet("event-packages/{id}")]
+        public async Task<IActionResult> GetAccountById(int id)
+        {
+            try
+            {
+                var result = await _eventPackageService.GetPackageById(id);
+                if (result == null)
+                {
+                    return NotFound(result);
+                }
+
+                return Ok(result);
             }
             catch (Exception ex)
             {

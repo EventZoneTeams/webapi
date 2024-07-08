@@ -13,6 +13,8 @@ namespace Services.DTO.EventProductsModel
     public class EventProductDetailModel : EventProductUpdateModel
     {
         public int Id { get; set; }
+        public int EventId { get; set; }
+
         public bool? IsDeleted { get; set; }
         public DateTime? CreatedAt { get; set; }
 

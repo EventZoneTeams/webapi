@@ -215,6 +215,27 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseGenericModel<EventProductDetailModel>> GetProductById(int productId)
+        {
+            var product = await _unitOfWork.EventProductRepository.GetByIdAsync(productId);
+            if (product == null)
+            {
+                return new ResponseGenericModel<EventProductDetailModel>()
+                {
+                    Status = false,
+                    Message = "This product id is not found",
+                    Data = null
+                };
+            }
+
+            return new ResponseGenericModel<EventProductDetailModel>()
+            {
+                Status = false,
+                Message = "Found successfully product " + productId,
+                Data = _mapper.Map<EventProductDetailModel>(product)
+            };
+        }
+
         public async Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
         {
             var products = await _unitOfWork.EventProductRepository.GetProductsByFiltersAsync(paginationParameter, productFilterModel);
