@@ -22,7 +22,7 @@ namespace Services.DTO.EventDTOs
         public Int64 TotalCost { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; }
-
+        public List<EventPackageDetailDTO>? EventPackages { get; set; }
         public virtual List<EventCampaignDTO>? EventCampaigns { get; set; }
     }
 }
