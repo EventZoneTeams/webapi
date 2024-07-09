@@ -305,7 +305,7 @@ namespace WebAPI.Controllers
                 var result = await _userService.GetCurrentUserOrders();
                 if (result == null)
                 {
-                    return NotFound(ApiResult<object>.Error(null, "User is not existed"));
+                    return NotFound(ApiResult<object>.Error(null, "Cannot find or this user order is empty"));
                 }
 
                 return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
