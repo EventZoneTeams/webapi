@@ -31,7 +31,7 @@ namespace Services.Services
 
         public async Task<EventResponseDTO> GetEventById(int id)
         {
-            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.EventCategory, x => x.User);
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.EventCategory, x => x.User, x => x.EventCampaigns);
 
             if (existingEvent == null)
             {
@@ -41,6 +41,7 @@ namespace Services.Services
             var result = _mapper.Map<EventResponseDTO>(existingEvent);
             return result;
         }
+
         public async Task<EventResponseDTO> CreateEvent(EventDTO eventModel)
         {
             var eventEntity = _mapper.Map<Event>(eventModel);
@@ -111,6 +112,7 @@ namespace Services.Services
             await _unitOfWork.SaveChangeAsync();
             return result;
         }
+
         public async Task<EventResponseDTO> DeleteEvent(int id)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);

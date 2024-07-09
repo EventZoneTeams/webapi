@@ -25,7 +25,7 @@ namespace Repositories.Repositories
             var query = _context.Events
                 .Include(x => x.User)
                 .Include(x => x.EventCategory)
-                .Include(x => x.EventCampaigns)
+                //.Include(x => x.EventCampaigns)
                 .Search(eventParams.SearchTerm)
                 .Filter(eventParams.EventCategoryId)
                 .FilterByUserId(eventParams.UserId)
