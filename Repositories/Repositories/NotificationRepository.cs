@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
 
@@ -9,13 +10,15 @@ namespace Repositories.Repositories
         private readonly StudentEventForumDbContext _context;
         private readonly ICurrentTime _timeService;
         private readonly IClaimsService _claimsService;
+        private readonly UserManager<User> _userManager;
 
-        public NotificationRepository(StudentEventForumDbContext studentEventForumDbContext, ICurrentTime timeService, IClaimsService claims) : base(studentEventForumDbContext, timeService, claims)
+        public NotificationRepository(StudentEventForumDbContext studentEventForumDbContext, ICurrentTime timeService, IClaimsService claims, UserManager<User> userManager) : base(studentEventForumDbContext, timeService, claims)
 
         {
             _context = studentEventForumDbContext;
             _timeService = timeService;
             _claimsService = claims;
+            _userManager = userManager;
         }
 
         public async Task<List<Notification>> ReadAllNotification(int userId)
@@ -37,7 +40,28 @@ namespace Repositories.Repositories
 
         public async Task<List<Notification>> GetListByUserId(int userId)
         {
-            var notifications = await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
+            var notifications = new List<Notification>();
+            //check role of user to get notification
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            if (await _userManager.IsInRoleAsync(user, "Manager"))
+            {
+                notifications = await _context.Notifications.Where(x => x.Sender == "Manager").ToListAsync();
+            }
+            else if (await _userManager.IsInRoleAsync(user, "Admin"))
+            {
+                notifications = await _context.Notifications.Where(x => x.Sender == "Admin").ToListAsync();
+            }
+            else
+            {
+                notifications = await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
+            }
+
+            //sort created date
+            notifications = notifications.OrderByDescending(x => x.CreatedAt).ToList();
             return notifications;
         }
     }

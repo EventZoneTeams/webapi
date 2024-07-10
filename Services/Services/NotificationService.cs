@@ -23,6 +23,8 @@ namespace Services.Services
 
         public async Task PushNotification(Notification notification)
         {
+
+
             var newNotification = new Notification
             {
                 Title = notification.Title,
@@ -30,16 +32,37 @@ namespace Services.Services
                 UserId = notification.UserId,
                 IsRead = false,
                 Url = notification.Url,
-                Sender = notification.Sender ?? "System"
+                Sender = notification.Sender ?? "Admin"
             };
             //save notification to DB
             await _unitOfWork.NotificationRepository.AddAsync(newNotification);
             await _unitOfWork.SaveChangeAsync();
 
             //push notification to signalR
-            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotification", notification.Title, notification.Body);
+            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotification", notification.Title, notification.Body).ConfigureAwait(true);
+
 
         }
+
+        public async Task PushNotificationToManager(Notification notification)
+        {
+            var newNotification = new Notification
+            {
+                Title = notification.Title,
+                Body = notification.Body,
+                UserId = null,
+                IsRead = false,
+                Url = notification.Url,
+                Sender = "Manager"
+            };
+            //save notification to DB
+            await _unitOfWork.NotificationRepository.AddAsync(newNotification);
+            await _unitOfWork.SaveChangeAsync();
+
+            //push notification to signalR
+            await _notificationHubContext.Clients.Group("Manager").SendAsync("ReceiveNotification", notification.Title, notification.Body).ConfigureAwait(true);
+        }
+
         public async Task<List<NotificationDTO>> GetNotifications(int userId)
         {
             var notifications = await _unitOfWork.NotificationRepository.GetListByUserId(userId);
