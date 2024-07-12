@@ -18,5 +18,6 @@ namespace Repositories.Interfaces
         Task<List<EventPackage>> GetAllPackageWithProductsByEventId(int eventId);
 
         Task<Pagination<EventPackage>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel);
+        Task<EventPackage> GetPackageById(int id);
     }
 }

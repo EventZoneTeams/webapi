@@ -116,7 +116,7 @@ namespace Services.Services
 
         public async Task<ResponseGenericModel<EventPackageDetailDTO>> GetPackageById(int packageId)
         {
-            var package = await _unitOfWork.EventPackageRepository.GetByIdAsync(packageId);
+            var package = await _unitOfWork.EventPackageRepository.GetPackageById(packageId);
             if (package == null)
             {
                 return new ResponseGenericModel<EventPackageDetailDTO>()
@@ -127,12 +127,16 @@ namespace Services.Services
                 };
             }
 
+            var result = _mapper.Map<EventPackageDetailDTO>(package);
+
+            result.Products = _mapper.Map<List<EventProductDetailDTO>>(package.ProductsInPackage.Select(x => x.EventProduct));
+
             return new ResponseGenericModel<EventPackageDetailDTO>()
             {
                 Status = false,
                 Message = "Found successfully package " + packageId,
 
-                Data = _mapper.Map<EventPackageDetailDTO>(package)
+                Data = result
             };
         }
 

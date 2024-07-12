@@ -23,13 +23,13 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns a list of order</response>
         /// <response code="400">Event Id is not exist</response>
         /// <response code="404">Not Found</response>
-        [HttpGet("event-orders")]
-        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventOrders(int eventId)
+        [HttpGet("event/{id}/event-orders")]
+        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventOrders(int id)
         {
             try
             {
-                var result = await _eventOrderService.GetEventOrders(eventId);
-                return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event " + eventId + " Successfully!"));
+                var result = await _eventOrderService.GetEventOrders(id);
+                return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event " + id + " Successfully!"));
             }
             catch (Exception ex)
             {
