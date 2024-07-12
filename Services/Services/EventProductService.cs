@@ -2,7 +2,6 @@
 using Domain.Entities;
 using Repositories.Commons;
 using Repositories.Interfaces;
-using Repositories.Models;
 using Repositories.Models.ImageDTOs;
 using Repositories.Models.ProductModels;
 using Services.DTO.EventProductsModel;
@@ -130,6 +129,8 @@ namespace Services.Services
             if (existingIds.Count > 0)
             {
                 var result = await _unitOfWork.EventProductRepository.SoftRemoveRangeById(existingIds);
+                //save changes
+                await _unitOfWork.SaveChangeAsync();
                 if (result)
                 {
                     return new ResponseGenericModel<List<EventProductDetailModel>>()

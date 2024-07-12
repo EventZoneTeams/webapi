@@ -11,11 +11,13 @@ namespace Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly INotificationService _notificationService;
 
-        public EventService(IUnitOfWork unitOfWork, IMapper mapper)
+        public EventService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         public async Task<PagedList<Event>> GetEvent(EventParams eventParams)
@@ -64,8 +66,19 @@ namespace Services.Services
             var newEvent = await _unitOfWork.EventRepository.AddAsync(eventEntity);
 
             var result = _mapper.Map<EventResponseDTO>(newEvent);
-            await _unitOfWork.SaveChangeAsync();
-            return result;
+            var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+            if (isSuccess)
+            {
+                await _notificationService.PushNotificationToManager(new Notification
+                {
+                    Title = "User " + isExistUser.Email + " Has Created Event",
+                    Body = $"Event Name: " + eventModel.Name,
+                    Url = "/dashboard/feedback/event/" + newEvent.Id,
+                });
+                return result;
+            }
+
+            throw new Exception("Failed to create event");
         }
 
         public async Task<EventResponseDTO> UpdateEvent(int id, EventDTO eventModel)

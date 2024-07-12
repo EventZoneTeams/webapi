@@ -46,7 +46,7 @@ namespace Services.Services
 
                 Notification notification = new Notification
                 {
-                    Body = "You have a new feedback",
+                    Body = "You have a new feedback: " + newFeedback.Content,
                     Title = "Feedback",
                     UserId = checkEvent.UserId,
                     IsRead = false,
@@ -80,7 +80,7 @@ namespace Services.Services
                         case FeedbackTypeEnums.REJECT:
                             checkEvent.Status = EventStatusEnums.REJECTED.ToString();
                             notification.Title = "Your event is rejected" + "(Event Id = " + checkEvent.Id + ")";
-                            notification.Body = "Your event is rejected, please check your event for more information";
+                            notification.Body = "Your event is rejected: " + newFeedback.Content;
                             checkEvent.Status = EventStatusEnums.REJECTED.ToString();
 
                             break;
@@ -114,7 +114,7 @@ namespace Services.Services
                 {
                     Status = false,
                     Data = _mapper.Map<EventFeedbackDetailModel>(checkEvent),
-                    Message = "This event  have already feedback"
+                    Message = "This event have already feedback"
                 };
             }
             catch (Exception)

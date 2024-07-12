@@ -16,12 +16,14 @@ namespace WebAPI.Controllers
         private readonly IEventService _eventService;
         private readonly IImageService _imageService;
         private readonly IMapper _mapper;
+        private readonly IEventPackageService _eventPackageService;
 
-        public EventController(IEventService eventService, IImageService imageService, IMapper mapper)
+        public EventController(IEventService eventService, IImageService imageService, IMapper mapper, IEventPackageService eventPackageService)
         {
             _eventService = eventService;
             _imageService = imageService;
             _mapper = mapper;
+            _eventPackageService = eventPackageService;
         }
 
         /// <summary>
@@ -98,6 +100,8 @@ namespace WebAPI.Controllers
             try
             {
                 var eventModel = await _eventService.GetEventById(id);
+                var data = await _eventPackageService.GetAllPackageOfEvent(id);
+                eventModel.EventPackages = data;
                 return Ok(ApiResult<EventResponseDTO>.Succeed(eventModel, "Get Event Successfully!"));
             }
             catch (Exception ex)

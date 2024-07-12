@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
+﻿using Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Services.DTO.NotificationDTOs;
 using Services.Interface;
-using WebAPI.Hubs;
 
 namespace WebAPI.Controllers
 {
@@ -11,12 +10,10 @@ namespace WebAPI.Controllers
     [ApiController]
     public class NotificationController : Controller
     {
-        private readonly IHubContext<NotificationHub> _notificationHubContext;
         private readonly INotificationService _notificationService;
 
-        public NotificationController(IHubContext<NotificationHub> notificationHubContext, INotificationService notificationService)
+        public NotificationController(INotificationService notificationService)
         {
-            _notificationHubContext = notificationHubContext;
             _notificationService = notificationService;
         }
         /// <summary>
@@ -28,7 +25,23 @@ namespace WebAPI.Controllers
         [HttpPost("send-all")]
         public async Task<IActionResult> SendAll(string title, string content)
         {
-            await _notificationHubContext.Clients.All.SendAsync("ReceiveNotification", title, content);
+            await _notificationService.PushNotification(new Notification
+            {
+                Title = title,
+                Body = content,
+            });
+
+            return Ok("oke");
+        }
+
+        [HttpPost("send-manager")]
+        public async Task<IActionResult> SendManager(string title, string content)
+        {
+            await _notificationService.PushNotificationToManager(new Notification
+            {
+                Title = title,
+                Body = content,
+            });
             return Ok("oke");
         }
 
@@ -48,19 +61,6 @@ namespace WebAPI.Controllers
             //        await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", model.articleHeading, model.articleContent);
             //    }
             //}
-            return Ok();
-        }
-        /// <summary>
-        ///     [FOR TESTING PURPOSE] Send notification to group
-        /// </summary>
-        /// <param name="groupName"></param>
-        /// <param name="title"></param>
-        /// <param name="content"></param>
-        /// <returns></returns>
-        [HttpPost("send-group/{groupName}")]
-        public async Task<IActionResult> SendToGroup(string groupName, [FromForm] string title, [FromForm] string content)
-        {
-            await _notificationHubContext.Clients.Group(groupName).SendAsync("sendToGroup", title, content);
             return Ok();
         }
 

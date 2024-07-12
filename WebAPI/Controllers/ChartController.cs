@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using WebAPI.Hubs;
+using Services.Hubs;
 
 namespace WebAPI.Controllers
 {
