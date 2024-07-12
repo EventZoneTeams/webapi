@@ -127,6 +127,12 @@ namespace Repositories.Repositories
         {
             try
             {
+                var checkEvent = await _context.Events.AnyAsync(x => x.Id == eventId);
+                if (!checkEvent)
+                {
+                    throw new Exception("Event is not existed");
+                }
+
                 var eventPackages = await _context.EventPackages
                 .Where(x => x.EventId == eventId)
                 .Include(x => x.ProductsInPackage)
@@ -134,6 +140,26 @@ namespace Repositories.Repositories
                 .ToListAsync();
 
                 return eventPackages;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<EventPackage> GetPackageById(int id) // SỬ DỤNG EAGER LOADING
+        {
+            try
+            {
+                var package = await _context.EventPackages.Include(x => x.ProductsInPackage)
+                .ThenInclude(x => x.EventProduct).ThenInclude(x => x.ProductImages).FirstOrDefaultAsync(x => x.Id == id);
+
+                if (package == null)
+                {
+                    return null;
+                }
+
+                return package;
             }
             catch (Exception)
             {
