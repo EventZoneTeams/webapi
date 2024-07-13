@@ -22,11 +22,20 @@ namespace Repositories.Repositories
 
         public async Task<TEntity> AddAsync(TEntity entity)
         {
-            entity.CreatedAt = _timeService.GetCurrentTime();
-            entity.CreatedBy = _claimsService.GetCurrentUserId;
-            var result = await _dbSet.AddAsync(entity);
-            //await _dbContext.SaveChangesAsync();
-            return result.Entity;
+            try
+            {
+                entity.CreatedAt = _timeService.GetCurrentTime();
+                //var user = await _dbContext.Users.FindAsync(_claimsService.GetCurrentUserId);
+                //if (user == null) throw new Exception("This user is no longer existed");
+                entity.CreatedBy = _claimsService.GetCurrentUserId;
+                var result = await _dbSet.AddAsync(entity);
+                //await _dbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         // riêng hàm này đã sửa để adapt theo Unit Of Work

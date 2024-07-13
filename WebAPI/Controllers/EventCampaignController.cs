@@ -22,6 +22,24 @@ namespace WebAPI.Controllers
             _eventCampaignService = eventCampaignService;
         }
 
+        [HttpGet("campaigns/{id}")]
+        public async Task<IActionResult> UpdateAsync(int id)
+        {
+            try
+            {
+                var result = await _eventCampaignService.GetACampaignsByIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         /// <summary>
         /// Get list existing products
         /// </summary>
@@ -112,7 +130,7 @@ namespace WebAPI.Controllers
 
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("campaigns")]
-        public async Task<IActionResult> CreateAsync(EventCampaignDTO model)
+        public async Task<IActionResult> CreateAsync([FromForm] EventCampaignDTO model)
         {
             try
             {

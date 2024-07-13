@@ -13,6 +13,7 @@
         IEventOrderRepository EventOrderRepository { get; }
         INotificationRepository NotificationRepository { get; }
         IEventCampaignRepository EventCampaignRepository { get; }
+        IEventDonationRepository EventDonationRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

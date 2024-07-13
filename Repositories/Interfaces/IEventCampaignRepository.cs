@@ -13,5 +13,6 @@ namespace Repositories.Interfaces
     {
         Task<List<EventCampaign>> GetAllCampaignByEvent(int id);
         Task<Pagination<EventCampaign>> GetCampaignsByFilterAsync(PaginationParameter paginationParameter, CampaignFilterModel campaignFilter);
+        Task<EventCampaign> GetCampainById(int id);
     }
 }

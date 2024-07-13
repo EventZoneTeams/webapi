@@ -15,7 +15,7 @@ namespace Services.Interface
         Task<ResponseGenericModel<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignDTO eventCampaignDTO);
 
         Task<ResponseGenericModel<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<int> campaignIds);
-
+        Task<EventCampaignStaticticDTO> GetACampaignsByIdAsync(int id);
         Task<List<EventCampaignDTO>> GetAllCampaignsAsync();
 
         Task<List<EventCampaignDTO>> GetAllCampaignsByEventAsync(int eventId);

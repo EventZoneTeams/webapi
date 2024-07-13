@@ -32,6 +32,12 @@ namespace Repositories.Repositories
             return data;
         }
 
+        public async Task<EventCampaign> GetCampainById(int id)
+        {
+            var data = await _context.EventCampaigns.Include(x => x.EventDonations).ThenInclude(x => x.User).FirstOrDefaultAsync(c => c.Id == id);
+            return data;
+        }
+
         public async Task<Pagination<EventCampaign>> GetCampaignsByFilterAsync(PaginationParameter paginationParameter, CampaignFilterModel campaignFilter)
         {
             try
