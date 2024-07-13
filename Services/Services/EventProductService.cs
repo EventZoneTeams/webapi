@@ -163,6 +163,33 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseGenericModel<EventProductDetailModel>> DeleteEventProductByIdAsync(int id)
+        {
+            var product = await _unitOfWork.EventProductRepository.GetByIdAsync(id);
+
+            if (product != null)
+            {
+                var result = await _unitOfWork.EventProductRepository.SoftRemove(product);
+                //save changes
+                await _unitOfWork.SaveChangeAsync();
+                if (result)
+                {
+                    return new ResponseGenericModel<EventProductDetailModel>()
+                    {
+                        Status = true,
+                        Message = " Added successfully",
+                        Data = _mapper.Map<EventProductDetailModel>(product)
+                    };
+                }
+            }
+            return new ResponseGenericModel<EventProductDetailModel>()
+            {
+                Status = false,
+                Message = "There are no existed product id: " + id,
+                Data = null
+            };
+        }
+
         public async Task<List<EventProductDetailModel>> GetAllProductsAsync()
         {
             var result = await _unitOfWork.EventProductRepository.GetAllProductsWithImages();

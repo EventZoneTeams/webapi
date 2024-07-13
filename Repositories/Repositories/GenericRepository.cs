@@ -77,6 +77,8 @@ namespace Repositories.Repositories
             entity.IsDeleted = true;
             entity.DeletedAt = _timeService.GetCurrentTime();
             entity.DeletedBy = _claimsService.GetCurrentUserId;
+            entity.ModifiedAt = _timeService.GetCurrentTime();
+
             _dbSet.Update(entity);
             // await _dbContext.SaveChangesAsync();
             return true;
