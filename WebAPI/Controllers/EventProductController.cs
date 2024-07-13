@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models;
 using Repositories.Models.ProductModels;
+using Services.DTO;
 using Services.DTO.EventProductsModel;
 using Services.DTO.TestModels;
 using Services.Interface;
@@ -192,11 +193,11 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns list of remove products</response>
         [HttpDelete("event-products")]
-        public async Task<IActionResult> DeleteAsync([FromBody] List<int> productIds)
+        public async Task<IActionResult> DeleteAsync([FromBody]ListKeyDto productIds)
         {
             try
             {
-                var result = await _eventProductService.DeleteEventProductAsync(productIds);
+                var result = await _eventProductService.DeleteEventProductAsync(productIds.listIds);
                 if (result.Status)
                 {
                     return Ok(result);
