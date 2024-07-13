@@ -29,6 +29,37 @@ namespace Services.Services
             _mapper = mapper;
         }
 
+        public async Task<EventCampaignStaticticDTO> GetACampaignsByIdAsync(int id)
+        {
+            try
+            {
+                var campaign = await _unitOfWork.EventCampaignRepository.GetCampainById(id);
+
+                if (campaign == null)
+                {
+                    // Xử lý trường hợp không tìm thấy chiến dịch
+                    throw new Exception("Campaign not found"); // Hoặc trả về một ResponseModel với trạng thái lỗi
+                }
+
+                var totalDonors = campaign.EventDonations.Count();
+                var targetAchievementPercentage = ((decimal)campaign.CollectedAmount / campaign.GoalAmount) * 100;
+                var average = (decimal)(totalDonors > 0 ? campaign.EventDonations.Average(d => d.Amount) : 0);
+                var highest = totalDonors > 0 ? campaign.EventDonations.Max(d => d.Amount) : 0;
+
+                var campaignDto = _mapper.Map<EventCampaignStaticticDTO>(campaign);
+                campaignDto.TotalDonors = totalDonors;
+                campaignDto.TargetAchievementPercentage = targetAchievementPercentage;
+                campaignDto.AverageDonationAmount = average;
+                campaignDto.HighestDonationAmount = highest;
+
+                return campaignDto;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<ResponseGenericModel<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignDTO eventCampaignDTO)
         {
             try
@@ -49,9 +80,9 @@ namespace Services.Services
                     Description = eventCampaignDTO.Description,
                     StartDate = eventCampaignDTO.StartDate,
                     EndDate = eventCampaignDTO.EndDate,
-                    Status = eventCampaignDTO.Status,
+                    Status = eventCampaignDTO.Status.ToString(),
                     GoalAmount = eventCampaignDTO.GoalAmount,
-                    CollectedAmount = eventCampaignDTO.CollectedAmount,
+                    CollectedAmount = 0,
                     EventId = eventCampaignDTO.EventId,
                 };
 

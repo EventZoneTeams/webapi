@@ -28,6 +28,7 @@ namespace Repositories
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<TransactionDetail> TransactionDetails { get; set; }
         public DbSet<EventCampaign> EventCampaigns { get; set; }
+        public DbSet<EventDonation> EventDonations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
