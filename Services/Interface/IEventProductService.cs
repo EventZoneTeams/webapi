@@ -29,5 +29,6 @@ namespace Services.Interface
         Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
 
         Task<ResponseGenericModel<EventProductDetailModel>> GetProductById(int productId);
+        Task<ResponseGenericModel<EventProductDetailModel>> DeleteEventProductByIdAsync(int id);
     }
 }

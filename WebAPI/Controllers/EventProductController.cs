@@ -192,12 +192,12 @@ namespace WebAPI.Controllers
         /// delete a list of event product by their IDs
         /// </summary>
         /// <response code="200">Returns list of remove products</response>
-        [HttpDelete("event-products")]
-        public async Task<IActionResult> DeleteAsync([FromBody]ListKeyDto productIds)
+        [HttpDelete("event-products/{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             try
             {
-                var result = await _eventProductService.DeleteEventProductAsync(productIds.listIds);
+                var result = await _eventProductService.DeleteEventProductByIdAsync(id);
                 if (result.Status)
                 {
                     return Ok(result);
