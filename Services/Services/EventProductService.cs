@@ -245,7 +245,7 @@ namespace Services.Services
 
         public async Task<ResponseGenericModel<EventProductDetailModel>> GetProductById(int productId)
         {
-            var product = await _unitOfWork.EventProductRepository.GetByIdAsync(productId);
+            var product = await _unitOfWork.EventProductRepository.GetByIdAsync(productId, x => x.ProductImages);
             if (product == null)
             {
                 return new ResponseGenericModel<EventProductDetailModel>()
