@@ -58,8 +58,10 @@ namespace Repositories.Repositories
                         PackageId = newPackage.Id,
                         Quantity = product.quantity
                     };
+                    var eventProduct = productsList.Find(x => x.Id == product.productid);
                     productsInPackage.Add(newProduct);
-                    newPackage.TotalPrice += (productsList.Find(x => x.Id == product.productid).Price * product.quantity);
+                    newPackage.TotalPrice += eventProduct.Price * product.quantity;
+                    eventProduct.QuantityInStock -= product.quantity;
                 }
                 _context.Entry(newPackage).State = EntityState.Modified; // UPDATE TỔNG SỐ TIỀN
 
