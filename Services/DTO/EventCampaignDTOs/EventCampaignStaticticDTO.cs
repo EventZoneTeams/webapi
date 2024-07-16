@@ -20,6 +20,8 @@ namespace Services.DTO.EventCampaignDTOs
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public EventCampaignStatusEnum Status { get; set; }
+        public Int64 CollectedAmount { get; set; }
+
         public Int64 GoalAmount { get; set; }
 
         //các biến thống kế ở đây

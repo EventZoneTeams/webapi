@@ -62,6 +62,10 @@ namespace Repositories.Repositories
                     productsInPackage.Add(newProduct);
                     newPackage.TotalPrice += eventProduct.Price * product.quantity;
                     eventProduct.QuantityInStock -= product.quantity;
+                    if(eventProduct.QuantityInStock < 0)
+                    {
+                        throw new Exception("Cannot add this package, product is out of stock");
+                    }
                 }
                 _context.Entry(newPackage).State = EntityState.Modified; // UPDATE TỔNG SỐ TIỀN
 

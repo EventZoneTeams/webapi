@@ -1,4 +1,6 @@
-﻿using Domain.Enums;
+﻿using Domain.Entities;
+using Domain.Enums;
+using Services.DTO.EventDonationDTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,8 +19,11 @@ namespace Services.DTO.EventCampaignDTOs
         public DateTime EndDate { get; set; }
         public EventCampaignStatusEnum Status { get; set; }
         public Int64 GoalAmount { get; set; }
+        public Int64 CollectedAmount { get; set; }
 
         [Required(ErrorMessage = "Please input event for this campaign")]
         public int EventId { get; set; }
+
+        public virtual ICollection<EventDonationDetailDTO>? EventDonations { get; set; }
     }
 }

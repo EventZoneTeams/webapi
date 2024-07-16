@@ -214,6 +214,7 @@ namespace Services.Services
             if (existingProduct != null)
             {
                 existingProduct = _mapper.Map(updateModel, existingProduct);
+                existingProduct.QuantityInStock = updateModel.QuantityInStock == 0 ? existingProduct.QuantityInStock : updateModel.QuantityInStock;
                 await _unitOfWork.EventProductRepository.Update(existingProduct);
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
