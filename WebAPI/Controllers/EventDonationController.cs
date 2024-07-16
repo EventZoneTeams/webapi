@@ -7,7 +7,7 @@ using Services.Services;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/")]
     [ApiController]
     public class EventDonationController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
             _eventDonationService = eventCampaignService;
         }
 
-        [HttpPost()]
+        [HttpPost("event-donations")]
         public async Task<IActionResult> CreateAsync(EventDonationCreateDTO model)
         {
             try
@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpGet("campaigns/{id}/event-donations")]
         public async Task<IActionResult> CreateAsync(int id)
         {
             try

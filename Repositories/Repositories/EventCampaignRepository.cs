@@ -28,13 +28,13 @@ namespace Repositories.Repositories
 
         public async Task<List<EventCampaign>> GetAllCampaignByEvent(int id)
         {
-            var data = await _context.EventCampaigns.Where(c => c.EventId == id).ToListAsync();
+            var data = await _context.EventCampaigns.Include(x => x.Event).Include(x => x.EventDonations).Where(c => c.EventId == id).ToListAsync();
             return data;
         }
 
         public async Task<EventCampaign> GetCampainById(int id)
         {
-            var data = await _context.EventCampaigns.Include(x => x.EventDonations).ThenInclude(x => x.User).FirstOrDefaultAsync(c => c.Id == id);
+            var data = await _context.EventCampaigns.Include(x=>x.Event).Include(x => x.EventDonations).ThenInclude(x => x.User).FirstOrDefaultAsync(c => c.Id == id);
             return data;
         }
 
@@ -42,7 +42,7 @@ namespace Repositories.Repositories
         {
             try
             {
-                var CampaignsQuery = _context.EventCampaigns.AsNoTracking();
+                var CampaignsQuery = _context.EventCampaigns.Include(x=> x.Event).Include(x=>x.EventDonations).AsNoTracking();
                 CampaignsQuery = ApplyFilterSortAndSearch(CampaignsQuery, campaignFilter);
                 var sortedQuery = await ApplySorting(CampaignsQuery, campaignFilter).ToListAsync();
 
