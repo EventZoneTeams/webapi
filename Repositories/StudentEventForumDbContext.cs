@@ -70,6 +70,11 @@ namespace Repositories
                 .WithMany(p => p.PostComments)
                 .HasForeignKey(pc => pc.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<EventProduct>()
+      .HasMany(e => e.ProductImages)
+      .WithOne(p => p.EventProduct)
+      .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

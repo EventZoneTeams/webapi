@@ -1,6 +1,9 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Repositories.Utils;
+using System;
 
 namespace Repositories
 {
@@ -8,6 +11,7 @@ namespace Repositories
     {
         public static async Task Initialize(StudentEventForumDbContext context, UserManager<User> userManager)
         {
+            Random random = new Random();
 
             if (!context.EventCategories.Any())
             {
@@ -95,6 +99,10 @@ namespace Repositories
                 {
                     UserName = "admin",
                     Email = "admin@gmail.com",
+                    FullName = "admin",
+                    Dob = DateTime.Now,
+                    PhoneNumber = "0123456789",
+                    Gender = false,
                 };
                 //Add roles
                 await userManager.CreateAsync(admin, "123456");
@@ -103,7 +111,11 @@ namespace Repositories
                 var manager = new User
                 {
                     UserName = "manager",
-                    Email = "manager@gmail.com"
+                    Email = "manager@gmail.com",
+                    FullName = "manager",
+                    Dob = DateTime.Now,
+                    PhoneNumber = "0123456789",
+                    Gender = false
                 };
                 //Add roles
                 await userManager.CreateAsync(manager, "123456");
@@ -112,7 +124,11 @@ namespace Repositories
                 var student = new User
                 {
                     UserName = "student",
-                    Email = "student@gmail.com"
+                    Email = "student@gmail.com",
+                    FullName = "manager",
+                    Dob = DateTime.Now,
+                    PhoneNumber = "0123456789",
+                    Gender = false
                 };
                 //Add roles
                 await userManager.CreateAsync(student, "123456");
@@ -195,57 +211,194 @@ namespace Repositories
                 await context.SaveChangesAsync();
             }
 
+            if (!context.Events.Any())
+            {
+                var events = new List<Event>
+                {
+                    new Event
+                    {
+                      Name = "Hội thảo Công nghệ 4.0",
+            Description = "Khám phá những xu hướng mới nhất trong lĩnh vực công nghệ.",
+            ThumbnailUrl = "https://picsum.photos/500/300/?image=10", // Example image URL
+            EventStartDate = DateTime.Now.AddDays(15),
+            EventEndDate = DateTime.Now.AddDays(16),
+            Location = "FPT Cần Thơ",
+            UserId = 1,
+            EventCategoryId = 1,
+            University = "FPTU Cần Thơ",
+            Status = "Upcoming", // Ví dụ trạng thái: Upcoming, Ongoing, Finished
+            CreatedAt = DateTime.Now,
+                    },
+                    new Event
+                    {
+              Name = "Đêm nhạc Acoustic",
+            Description = "Thưởng thức những giai điệu nhẹ nhàng và sâu lắng.",
+            ThumbnailUrl = "https://picsum.photos/500/300/?image=20",
+            EventStartDate = DateTime.Now.AddDays(30),
+            EventEndDate = DateTime.Now.AddDays(30),
+            Location = "FPT HCM",
+            UserId = 1,
+            EventCategoryId = 1,
+            University = "FPTU HCM",
+            Status = "Upcoming",
+            CreatedAt = DateTime.Now,
+                    },
+                     new Event
+        {
+            Name = "Workshop Khởi nghiệp",
+            Description = "Hướng dẫn các bước để xây dựng một startup thành công.",
+            ThumbnailUrl = "https://picsum.photos/500/300/?image=30",
+            EventStartDate = DateTime.Now.AddDays(20),
+            EventEndDate = DateTime.Now.AddDays(20),
+            Location = "FPT Đà Nẵng",
+            UserId = 1,
+            EventCategoryId = 1,
+            University = "FPTU Đà Nẵng",
+            Status = "Upcoming",
+            CreatedAt = DateTime.Now,
+        }
+                };
 
+                await context.Events.AddRangeAsync(events);
+                await context.SaveChangesAsync();
+            }
+            var existingEvents = await context.Events.ToListAsync(); // get để tham chiếu
 
-            //if (!context.Events.Any())
-            //{
-            //    var events = new List<Event>
-            //    {
-            //        new Event
-            //        {
-            //            Name= "Charity Fundraiser for Children's Education",
-            //            Description= "A charity event to raise funds for underprivileged children's education and school supplies.",
-            //            DonationStartDate= DateTime.Parse("2024-05-15T09:00:00.000Z"),
-            //            DonationEndDate= DateTime.Parse("2024-05-30T18:00:00.000Z"),
-            //            EventStartDate= DateTime.Parse("2024-05-25T10:00:00.000Z"),
-            //            EventEndDate= DateTime.Parse("2024-05-25T18:00:00.000Z"),
-            //            Location= "Central Park, New York City",
-            //            UserId= 1,
-            //            University= "New York University",
-            //            Status= "Upcoming",
-            //            OriganizationStatus= "Approved",
-            //            IsDonation= true,
-            //            TotalCost= 25000
-            //        }
-            //    };
+            if (!context.EventProducts.Any())
+            {
+                var eventProducts = new List<EventProduct>
+                {
+                    new EventProduct
+                    {
+                        Name = "Product 1",
+                        Description = "Description 1",
+                        Price = 1000,
+                        EventId = existingEvents.ElementAt(random.Next(1, existingEvents.Count)).Id,
+                        QuantityInStock= random.Next(10, 1000),
+                        CreatedAt=DateTime.Now,
+                    },
+                    new EventProduct
+                    {
+                        Name = "Product 2",
+                        Description = "Description 2",
+                        Price = 1000,
+                        EventId = existingEvents.ElementAt(random.Next(1, existingEvents.Count)).Id,
+                        QuantityInStock= random.Next(10, 500),
+                       CreatedAt=DateTime.Now,
+                    },
+                    new EventProduct
+                    {
+                        Name = "Product 3",
+                        Description = "Description 2",
+                        Price = 5000,
+                        EventId = existingEvents.ElementAt(random.Next(1, existingEvents.Count)).Id,
+                        QuantityInStock= random.Next(10, 100),
+                       CreatedAt=DateTime.Now,
+                    }
+                };
 
-            //    foreach (var eventItem in events)
-            //    {
-            //        await context.Events.AddAsync(eventItem);
-            //    }
-            //    await context.SaveChangesAsync();
-            //}
+                await context.EventProducts.AddRangeAsync(eventProducts);
 
-            //if (!context.EventProducts.Any())
-            //{
-            //    var eventProducts = new List<EventProduct>
-            //    {
-            //        new EventProduct
-            //        {
-            //            Name = "Product 1",
-            //            Description = "Description 1",
-            //            Price = 1000,
-            //            EventId = 1
-            //        }
-            //    };
+                await context.SaveChangesAsync();
+            }
 
-            //    foreach (var eventProduct in eventProducts)
-            //    {
-            //        await context.EventProducts.AddAsync(eventProduct);
-            //    }
+            // Seed data cho ProductImage
+            if (!context.ProductImages.Any())
+            {
+                var eventProducts = await context.EventProducts.ToListAsync();
 
-            //    await context.SaveChangesAsync();
-            //}
+                var productImages = new List<ProductImage>();
+                foreach (var eventProduct in eventProducts)
+                {
+                    productImages.Add(new ProductImage
+                    {
+                        ProductId = eventProduct.Id,
+                        ImageUrl = $"https://picsum.photos/500/300/?image={random.Next(100, 200)}", // Example image URL
+                        Name = $"Hình ảnh  của sản phẩm {eventProduct.Name}",
+                        CreatedAt = DateTime.Now,
+                        EventProduct = eventProduct
+                    });
+                }
+
+                await context.ProductImages.AddRangeAsync(productImages);
+                try
+                {
+                    var result = await context.SaveChangesAsync();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            // seed cho packages
+            if (!context.EventPackages.Any())
+            {
+                var eventPackages = new List<EventPackage>();
+
+                // Tạo EventPackage trước
+                foreach (var evt in existingEvents)
+                {
+                    for (int i = 0; i < 2; i++) // Tạo 3 gói package cho mỗi event
+                    {
+                        var eventPackage = new EventPackage
+                        {
+                            EventId = evt.Id,
+                            Title = $"Gói {i + 1} cho sự kiện {evt.Name}", // Ví dụ: Gói 1, Gói 2, Gói 3
+                            ThumbnailUrl = $"https://picsum.photos/500/300/?image={random.Next(200, 300)}",
+                            Description = $"Mô tả gói {i + 1} cho sự kiện {evt.Name}",
+                            CreatedAt = DateTime.Now,
+                        };
+
+                        eventPackages.Add(eventPackage);
+                    }
+                }
+
+                await context.EventPackages.AddRangeAsync(eventPackages);
+                await context.SaveChangesAsync();
+            }
+
+            //seed data product package
+            if (!context.ProductInPackages.Any())
+            {
+                var eventPackages = await context.EventPackages.ToListAsync();
+                var products = await context.EventProducts.ToListAsync();
+
+                var productInPackages = new List<ProductInPackage>();
+                foreach (var package in eventPackages)
+                {
+                    // Lấy một số ngẫu nhiên sản phẩm từ sự kiện
+                    var selectedProducts = products.Where(p => p.EventId == package.EventId)
+                                                    .OrderBy(p => Guid.NewGuid())
+                                                    .Take(random.Next(1, 4))
+                                                    .ToList();
+
+                    foreach (var product in selectedProducts)
+                    {
+                        var productInPackage = new ProductInPackage
+                        {
+                            ProductId = product.Id,
+                            PackageId = package.Id,
+                            Quantity = random.Next(1, 5),
+                        };
+                        productInPackages.Add(productInPackage);
+                    }
+
+                    // Tính tổng giá của gói sản phẩm
+                    package.TotalPrice = selectedProducts.Sum(p => p.Price * productInPackages.FirstOrDefault(pip => pip.ProductId == p.Id)?.Quantity ?? 0);
+                }
+
+                await context.ProductInPackages.AddRangeAsync(productInPackages);
+                try
+                {
+                    await context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    // Xử lý lỗi ở đây (ví dụ: ghi log, thông báo lỗi)
+                    throw;
+                }
+            }
         }
     }
 }

@@ -24,7 +24,9 @@ namespace Services.Interface
         Task<ResponseGenericModel<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds);
 
         Task<Pagination<EventPackageDetailDTO>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel);
+
         Task<ResponseGenericModel<EventPackageDetailDTO>> GetPackageById(int packageId);
+
         Task<ResponseGenericModel<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id);
     }
 }
