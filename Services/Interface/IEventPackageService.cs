@@ -25,5 +25,6 @@ namespace Services.Interface
 
         Task<Pagination<EventPackageDetailDTO>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel);
         Task<ResponseGenericModel<EventPackageDetailDTO>> GetPackageById(int packageId);
+        Task<ResponseGenericModel<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id);
     }
 }

@@ -122,12 +122,12 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns>A list of event packages removed</returns>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpDelete("event-packages")]
-        public async Task<IActionResult> DeleteAsync([FromBody] List<int> packageIds)
+        [HttpDelete("event-packages/{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             try
             {
-                var result = await _eventPackageService.DeleteEventPackagesAsync(packageIds);
+                var result = await _eventPackageService.DeleteEventProductByIdAsync(id);
                 if (result.Status)
                 {
                     return Ok(result);

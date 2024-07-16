@@ -462,6 +462,30 @@ namespace Repositories.Repositories
             }
         }
 
+        public async Task<User> SoftRemoveUserAsync(int id)
+        {
+            try
+            {
+                var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == id);
+                if (user == null)
+                {
+                    throw new Exception("This user is not existed");
+                }
+
+                user.IsDeleted = true;
+                user.DeletionDate = _timeService.GetCurrentTime();
+                user.DeleteBy = _claimsService.GetCurrentUserId;
+                _templateDbContext.Entry(user).State = EntityState.Modified;
+                // await _dbContext.SaveChangesAsync();
+
+                return user;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<string> UpdateUserRole(User user, string role)
         {
             try

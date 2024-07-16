@@ -177,7 +177,7 @@ namespace Services.Services
                     return new ResponseGenericModel<EventProductDetailModel>()
                     {
                         Status = true,
-                        Message = " Added successfully",
+                        Message = "Product " + id + " Removed successfully",
                         Data = _mapper.Map<EventProductDetailModel>(product)
                     };
                 }
@@ -258,7 +258,7 @@ namespace Services.Services
 
             return new ResponseGenericModel<EventProductDetailModel>()
             {
-                Status = false,
+                Status = true,
                 Message = "Found successfully product " + productId,
                 Data = _mapper.Map<EventProductDetailModel>(product)
             };

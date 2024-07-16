@@ -24,5 +24,6 @@ namespace Services.Interface
         Task<ResponseLoginModel> RefreshToken(TokenModel token);
         Task<UserDetailsModel> GetUserById(int id);
         Task<List<EventOrderReponseDTO>> GetCurrentUserOrders();
+        Task<ResponseGenericModel<UserDetailsModel>> DeleteUser(int id);
     }
 }

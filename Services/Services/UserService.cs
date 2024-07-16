@@ -246,6 +246,33 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseGenericModel<UserDetailsModel>> DeleteUser(int id)
+        {
+            var package = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+
+            if (package != null)
+            {
+                package = await _unitOfWork.UserRepository.SoftRemoveUserAsync(id);
+                //save changes
+                var result = await _unitOfWork.SaveChangeAsync();
+                if (result > 0)
+                {
+                    return new ResponseGenericModel<UserDetailsModel>()
+                    {
+                        Status = true,
+                        Message = "Package " + id + " Removed successfully",
+                        Data = _mapper.Map<UserDetailsModel>(package)
+                    };
+                }
+            }
+            return new ResponseGenericModel<UserDetailsModel>()
+            {
+                Status = false,
+                Message = "There are no existed user id: " + id,
+                Data = null
+            };
+        }
+
         public async Task<ResponseLoginModel> LoginAsync(UserLoginModel User)
         {
             return await _unitOfWork.UserRepository.LoginByEmailAndPassword(User);
