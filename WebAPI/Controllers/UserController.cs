@@ -139,17 +139,17 @@ namespace WebAPI.Controllers
         /// <summary>
         /// Deletes a list of users by their IDs.
         /// </summary>
-        /// <param name="userIds">A list of user IDs to delete.</param>
+        /// <param name="id">A list of user IDs to delete.</param>
         /// <returns>A result object indicating success or failure, with the list of deleted user IDs if successful.</returns>
         /// <response code="200">Returns a success message with the list of deleted user IDs.</response>
         /// <response code="404">If none of the specified users are found.</response>
         /// <response code="400">Returns an error message if the deletion fails.</response>
-        [HttpDelete]
-        public async Task<IActionResult> DeleteUsersAsync([FromBody] List<int> userIds)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsersAsync(int id)
         {
             try
             {
-                var result = await _userService.DeleteRangeUsers(userIds);
+                var result = await _userService.DeleteUser(id);
                 if (result.Status)
                 {
                     return Ok(result);

@@ -25,5 +25,6 @@ namespace Repositories.Interfaces
         Task<List<string>> GetAllRoleNamesAsync();
         Task<ResponseLoginModel> RefreshToken(TokenModel token);
         Task<User> GetUserByIdAsync(int id);
+        Task<User> SoftRemoveUserAsync(int id);
     }
 }

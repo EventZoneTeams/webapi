@@ -97,6 +97,33 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseGenericModel<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id)
+        {
+            var package = await _unitOfWork.EventPackageRepository.GetByIdAsync(id);
+
+            if (package != null)
+            {
+                var result = await _unitOfWork.EventPackageRepository.SoftRemove(package);
+                //save changes
+                await _unitOfWork.SaveChangeAsync();
+                if (result)
+                {
+                    return new ResponseGenericModel<EventPackageDetailDTO>()
+                    {
+                        Status = true,
+                        Message = "Package " + id + " Removed successfully",
+                        Data = _mapper.Map<EventPackageDetailDTO>(package)
+                    };
+                }
+            }
+            return new ResponseGenericModel<EventPackageDetailDTO>()
+            {
+                Status = false,
+                Message = "There are no existed product id: " + id,
+                Data = null
+            };
+        }
+
         public async Task<List<EventPackageDetailDTO>> GetAllWithProducts()
         {
             return await _unitOfWork.EventPackageRepository.GetAllPackageWithProducts();
