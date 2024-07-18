@@ -94,7 +94,7 @@ namespace Services.Services
                     {
                         Status = false,
                         Message = " Added failed due to event status: " + checkEvent.Status,
-                        Data = null
+                        Data = _mapper.Map<EventCampaignDTO>(newCampaign)
                     };
                 };
 
