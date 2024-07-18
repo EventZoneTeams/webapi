@@ -13,10 +13,12 @@ namespace WebAPI.Controllers
     public class EventOrderController : Controller
     {
         private readonly IEventOrderService _eventOrderService;
+        private readonly INotificationService _notificationService;
 
-        public EventOrderController(IEventOrderService eventOrderService)
+        public EventOrderController(IEventOrderService eventOrderService, INotificationService notificationService)
         {
             _eventOrderService = eventOrderService;
+            _notificationService = notificationService;
         }
 
         /// <summary>
