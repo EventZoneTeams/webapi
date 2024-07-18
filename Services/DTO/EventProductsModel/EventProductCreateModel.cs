@@ -14,7 +14,7 @@ namespace Services.DTO.EventProductsModel
         public string Description { get; set; } = "";
 
         [Required(ErrorMessage = "Price is required!")]
-        [Range(0, 10000)]
+        [Range(0, 10000000)]
         public Int64 Price { get; set; }
 
         //  [Required(ErrorMessage = "QuantityInStock is required!")]
