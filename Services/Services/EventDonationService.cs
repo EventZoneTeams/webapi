@@ -55,7 +55,7 @@ namespace Services.Services
                     EventCampaignId = data.EventCampaignId,
                     UserId = checkUser,
                     Amount = data.Amount,
-                    DonationDate = data.DonationDate
+                    DonationDate = DateTime.UtcNow.AddHours(7)
                 };
 
                 checkEvent.CollectedAmount += newDonation.Amount;
