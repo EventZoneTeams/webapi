@@ -28,13 +28,14 @@ namespace Repositories.Repositories
             return result;
         }
 
-        public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, string thumbnailUrl, List<ProductQuantityDTO> products)
+        public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, string thumbnailUrl, List<ProductQuantityDTO> products, string title)
         {
             try
             {
                 var newPackage = new EventPackage
                 {
                     EventId = eventId,
+                    Title = title,
                     CreatedAt = _timeService.GetCurrentTime(),
                     CreatedBy = _claimsService.GetCurrentUserId,
                     Description = description,
@@ -62,7 +63,7 @@ namespace Repositories.Repositories
                     productsInPackage.Add(newProduct);
                     newPackage.TotalPrice += eventProduct.Price * product.quantity;
                     eventProduct.QuantityInStock -= product.quantity;
-                    if(eventProduct.QuantityInStock < 0)
+                    if (eventProduct.QuantityInStock < 0)
                     {
                         throw new Exception("Cannot add this package, product is out of stock");
                     }

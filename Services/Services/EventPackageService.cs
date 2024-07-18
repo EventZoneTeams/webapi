@@ -37,7 +37,7 @@ namespace Services.Services
                 };
             }
 
-            var check = await _unitOfWork.EventPackageRepository.CreatePackageWithProducts(eventId, newPackage.Description, thumbnailurl, newPackage.Products);
+            var check = await _unitOfWork.EventPackageRepository.CreatePackageWithProducts(eventId, newPackage.Description, thumbnailurl, newPackage.Products, newPackage.Title);
             if (check != null)
             {
                 var result = _mapper.Map<EventPackageDetailDTO>(check.First().EventPackage);
