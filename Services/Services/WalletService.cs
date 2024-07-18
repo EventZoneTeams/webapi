@@ -12,10 +12,12 @@ namespace Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public WalletService(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly INotificationService _notificationService;
+        public WalletService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notificationService = notificationService;
         }
 
         public async Task<List<WalletResponseDTO>> GetListWalletByUserId(int userId)
@@ -71,6 +73,18 @@ namespace Services.Services
             {
                 throw new Exception("You dont have enough money to purchase this order");
             }
+
+            // Send notification
+            var notification = new Notification
+            {
+                Title = "Purchase order " + orderId,
+                Body = "Amount: " + order.TotalAmount,
+                UserId = userId,
+                Url = "/orders",
+                Sender = "System"
+            };
+
+            await _notificationService.PushNotification(notification);
 
             var transation = await _unitOfWork.WalletRepository.PurchaseItem(userId, orderId);
             var result = _mapper.Map<TransactionResponsesDTO>(transation);

@@ -18,14 +18,16 @@ namespace Services.Services.VnPayConfig
         private readonly ICurrentTime _currentTime;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWalletService _walletService;
+        private readonly INotificationService _notificationService;
 
-        public VnPayService(IConfiguration configuration, IClaimsService claimsService, ICurrentTime currentTime, IUnitOfWork unitOfWork, IWalletService walletService)
+        public VnPayService(IConfiguration configuration, IClaimsService claimsService, ICurrentTime currentTime, IUnitOfWork unitOfWork, IWalletService walletService, INotificationService notificationService)
         {
             _configuration = configuration;
             _claimsService = claimsService;
             _currentTime = currentTime;
             _unitOfWork = unitOfWork;
             _walletService = walletService;
+            _notificationService = notificationService;
         }
 
         public SortedList<string, string> requestData
@@ -188,6 +190,7 @@ namespace Services.Services.VnPayConfig
                         iPNReponse.message = "Invalid signature!";
                         break;
                 }
+
                 return iPNReponse;
             }
             //Invalid signature
