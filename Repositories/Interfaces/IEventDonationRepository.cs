@@ -10,5 +10,6 @@ namespace Repositories.Interfaces
     public interface IEventDonationRepository : IGenericRepository<EventDonation>
     {
         Task<List<EventDonation>> GetAllDonationByCampaignId(int id);
+        Task<List<EventDonation>> GetMyDonation();
     }
 }

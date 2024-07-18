@@ -1,6 +1,8 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
+using Repositories.Extensions;
+using Repositories.Helper;
 using Services.DTO.EventOrderDTOs;
 using Services.Interface;
 
@@ -24,12 +26,25 @@ namespace WebAPI.Controllers
         /// <response code="400">Event Id is not exist</response>
         /// <response code="404">Not Found</response>
         [HttpGet("event/{id}/event-orders")]
-        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventOrders(int id)
+        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventOrders(int id, [FromQuery] OrderParams orderParam)
         {
             try
             {
-                var result = await _eventOrderService.GetEventOrders(id);
-                return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event " + id + " Successfully!"));
+                var orders = await _eventOrderService.GetEventOrders(id, orderParam);
+                Response.AddPaginationHeader(orders.MetaData);
+
+                var result = new
+                {
+                    success = true,
+                    data = orders,
+                    CurrentPage = orders.MetaData.CurrentPage,
+                    PageSize = orders.MetaData.PageSize,
+                    TotalCount = orders.MetaData.TotalCount,
+                    TotalPages = orders.MetaData.TotalPages,
+                    message = "Get List Of Event Order Successfully!"
+                };
+
+                return Ok(result);
             }
             catch (Exception ex)
             {

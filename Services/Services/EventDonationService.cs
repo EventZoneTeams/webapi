@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using Azure.Storage.Blobs.Models;
 using Domain.Entities;
 using Repositories.Interfaces;
-using Services.DTO.EventCampaignDTOs;
 using Services.DTO.EventDonationDTOs;
 using Services.DTO.ResponseModels;
 using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Services
 {
@@ -90,6 +83,12 @@ namespace Services.Services
         public async Task<List<EventDonationDetailDTO>> GetAllDonationOfCampaign(int id)
         {
             var result = await _unitOfWork.EventDonationRepository.GetAllDonationByCampaignId(id);
+            return _mapper.Map<List<EventDonationDetailDTO>>(result);
+        }
+
+        public async Task<List<EventDonationDetailDTO>> GetMyDonation()
+        {
+            var result = await _unitOfWork.EventDonationRepository.GetMyDonation();
             return _mapper.Map<List<EventDonationDetailDTO>>(result);
         }
     }

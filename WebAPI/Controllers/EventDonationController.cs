@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Services.DTO.EventCampaignDTOs;
+﻿using Microsoft.AspNetCore.Mvc;
+using Repositories.Commons;
 using Services.DTO.EventDonationDTOs;
 using Services.Interface;
-using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -48,6 +46,20 @@ namespace WebAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("event-donations/me")]
+        public async Task<IActionResult> GetMyDonation()
+        {
+            try
+            {
+                var result = await _eventDonationService.GetMyDonation();
+                return Ok(ApiResult<List<EventDonationDetailDTO>>.Succeed(result, "Get My Donation Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
     }

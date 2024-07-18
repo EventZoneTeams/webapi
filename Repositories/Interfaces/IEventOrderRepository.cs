@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
+using Repositories.Helper;
 
 namespace Repositories.Interfaces
 {
@@ -7,7 +8,7 @@ namespace Repositories.Interfaces
     {
         Task<EventOrder> CreateOrderWithOrderDetails(int eventId, int userId, List<EventOrderDetail> orderDetails);
         Task<List<EventOrder>> getCurrentUserOrder();
-        Task<List<EventOrder>> GetEventOrdersByEventId(int eventId);
         Task<EventOrder> UpdateOrderStatus(int orderId, EventOrderStatusEnums eventOrderStatusEnums);
+        IQueryable<EventOrder> FilterAllField(int eventId, OrderParams orderParams);
     }
 }

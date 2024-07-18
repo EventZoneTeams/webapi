@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Repositories
 {
@@ -25,6 +20,13 @@ namespace Repositories.Repositories
         public async Task<List<EventDonation>> GetAllDonationByCampaignId(int id)
         {
             var data = await _context.EventDonations.Include(x => x.User).Where(c => c.EventCampaignId == id).ToListAsync();
+            return data;
+        }
+
+        public async Task<List<EventDonation>> GetMyDonation()
+        {
+            var userId = _claimsService.GetCurrentUserId;
+            var data = await _context.EventDonations.Include(x => x.User).Where(c => c.UserId == userId).ToListAsync();
             return data;
         }
     }

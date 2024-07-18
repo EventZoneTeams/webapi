@@ -1,7 +1,8 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using Repositories.Extensions;
+using Repositories.Helper;
 using Repositories.Interfaces;
 
 namespace Repositories.Repositories
@@ -19,13 +20,18 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
-        public async Task<List<EventOrder>> GetEventOrdersByEventId(int eventId)
+        public IQueryable<EventOrder> FilterAllField(int eventId, OrderParams orderParams)
         {
-            return await _context.EventOrders
-                .Where(x => x.EventId == eventId)
-                .Include(x => x.EventOrderDetails)
-                .OrderByDescending(x => x.CreatedAt)
-                .ToListAsync();
+            var query = _context.EventOrders
+               .Include(x => x.User)
+               .Include(x => x.EventOrderDetails)
+               .Search(orderParams.SearchTerm)
+               .FilterEventId(eventId)
+               .FilterByStatus(orderParams.Status.ToString())
+               .FilterByEventOrderDate(orderParams.FromDate, orderParams.ToDate)
+               .Sort();
+
+            return query;
         }
 
         public async Task<EventOrder> CreateOrderWithOrderDetails(int eventId, int userId, List<EventOrderDetail> orderDetails)
@@ -123,5 +129,7 @@ namespace Repositories.Repositories
                 throw;
             }
         }
+
+
     }
 }
