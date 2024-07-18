@@ -49,6 +49,7 @@ namespace Services.Mapper
 
             CreateMap<EventCampaign, EventCampaignDTO>().ReverseMap();
             CreateMap<EventCampaign, EventCampaignStaticticDTO>().ReverseMap();
+            CreateMap<EventCampaign, EventCampaignUpdateDTO>().ReverseMap();
 
             CreateMap<ProductInPackage, ProductInPackageDTO>().ReverseMap();
             CreateMap<EventPackage, EventPackageDetailDTO>().ReverseMap();
