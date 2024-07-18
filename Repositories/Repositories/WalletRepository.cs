@@ -66,6 +66,7 @@ namespace Repositories.Repositories
         }
         public async Task<Wallet> GetWalletByUserIdAndType(int userId, WalletTypeEnums walletType)
         {
+            var wallets = await GetListWalletByUserId(userId);
             var wallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == userId && x.WalletType.ToUpper() == walletType.ToString().ToUpper());
             return wallet;
         }

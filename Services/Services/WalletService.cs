@@ -86,7 +86,16 @@ namespace Services.Services
 
             await _notificationService.PushNotification(notification);
 
+            // Purchase
             var transation = await _unitOfWork.WalletRepository.PurchaseItem(userId, orderId);
+
+            //Increase money of event owner
+            var eventModel = await _unitOfWork.EventRepository.GetByIdAsync(order.EventId);
+            var eventOwnerWallet = await _unitOfWork.WalletRepository.GetWalletByUserIdAndType(eventModel.UserId, WalletTypeEnums.PERSONAL);
+            eventOwnerWallet.Balance += order.TotalAmount;
+            await _unitOfWork.WalletRepository.Update(eventOwnerWallet);
+            await _unitOfWork.SaveChangeAsync();
+
             var result = _mapper.Map<TransactionResponsesDTO>(transation);
             return result;
         }

@@ -3,7 +3,7 @@ using Domain.Enums;
 
 namespace Repositories.Interfaces
 {
-    public interface IWalletRepository
+    public interface IWalletRepository : IGenericRepository<Wallet>
     {
         Task<List<Wallet>> GetListWalletByUserId(int userId);
         Task<Wallet> GetWalletByUserIdAndType(int userId, WalletTypeEnums walletType);
