@@ -80,7 +80,7 @@ namespace Services.Services
                 Title = "Purchase order " + orderId,
                 Body = "Amount: " + order.TotalAmount,
                 UserId = userId,
-                Url = "/orders",
+                Url = "/profile/orders",
                 Sender = "System"
             };
 

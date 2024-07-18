@@ -68,7 +68,7 @@ namespace Services.Services
                 Body = "You create a new order: " + orderResponse.Id,
                 Title = "Order Created!",
                 UserId = currentUser,
-                Url = "/orders",
+                Url = "/profile/orders",
                 Sender = "System"
             };
 

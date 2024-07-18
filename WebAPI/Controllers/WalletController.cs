@@ -228,7 +228,7 @@ namespace WebAPI.Controllers
                 {
                     Title = "Deposit " + int.Parse(iPNReponse.price) / 100,
                     Body = iPNReponse.message,
-                    UserId = _claimsService.GetCurrentUserId,
+                    UserId = _claimsService.GetCurrentUserId == -1 ? null : _claimsService.GetCurrentUserId,
                     Url = "/profile/wallet",
                     Sender = "System"
                 };
