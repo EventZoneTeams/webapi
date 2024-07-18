@@ -60,7 +60,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<ResponseGenericModel<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignDTO eventCampaignDTO)
+        public async Task<ResponseGenericModel<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignCreateDTO eventCampaignDTO)
         {
             try
             {
@@ -87,8 +87,7 @@ namespace Services.Services
                 };
 
                 var result = await _unitOfWork.EventCampaignRepository.AddAsync(newCampaign);
-                var returnData = _mapper.Map<EventCampaignDTO>(result);
-
+                // mapping data tra ve response truoc savechanges se ko lay duoc ID??
                 var check = await _unitOfWork.SaveChangeAsync();
                 if (check > 0)
                 {
@@ -96,14 +95,14 @@ namespace Services.Services
                     {
                         Status = true,
                         Message = " Added successfully",
-                        Data = returnData
+                        Data = _mapper.Map<EventCampaignDTO>(result)
                     };
                 }
                 return new ResponseGenericModel<EventCampaignDTO>()
                 {
                     Status = false,
                     Message = " Added failed",
-                    Data = returnData
+                    Data = _mapper.Map<EventCampaignDTO>(result)
                 };
             }
             catch (Exception ex)
@@ -196,6 +195,42 @@ namespace Services.Services
             };
         }
 
+        public async Task<ResponseGenericModel<EventCampaignDTO>> DeleteCampaignByIdAsync(int id)
+        {
+            var product = await _unitOfWork.EventCampaignRepository.GetByIdAsync(id);
+
+            if (product != null)
+            {
+                await _unitOfWork.EventCampaignRepository.SoftRemove(product);
+                //save changes
+                var result = await _unitOfWork.SaveChangeAsync();
+                if (result > 0)
+                {
+                    return new ResponseGenericModel<EventCampaignDTO>()
+                    {
+                        Status = true,
+                        Message = "Product " + id + " Removed successfully",
+                        Data = _mapper.Map<EventCampaignDTO>(product)
+                    };
+                }
+                //else
+                //{
+                //    return new ResponseGenericModel<EventCampaignDTO>()
+                //    {
+                //        Status = false,
+                //        Message = "Deleted failed, something wrong has happenned",
+                //        Data = _mapper.Map<EventCampaignDTO>(product)
+                //    };
+                //}
+            }
+            return new ResponseGenericModel<EventCampaignDTO>()
+            {
+                Status = false,
+                Message = "There are no existed campaign with id: " + id,
+                Data = null
+            };
+        }
+
         public async Task<List<EventCampaignDTO>> GetAllCampaignsAsync()
         {
             var result = await _unitOfWork.EventCampaignRepository.GetAllAsync();
@@ -214,7 +249,7 @@ namespace Services.Services
             return _mapper.Map<List<EventCampaignDTO>>(result);
         }
 
-        public async Task<ResponseGenericModel<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignDTO eventCampaignDTO)
+        public async Task<ResponseGenericModel<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignUpdateDTO eventCampaignDTO)
         {
             var esistingCampaign = await _unitOfWork.EventCampaignRepository.GetByIdAsync(id);
             if (esistingCampaign != null)
@@ -236,7 +271,7 @@ namespace Services.Services
                     return new ResponseGenericModel<EventCampaignDTO>()
                     {
                         Status = false,
-                        Message = "FAILED",
+                        Message = "Something has been failed while updating",
                         Data = null
                     };
                 }

@@ -122,6 +122,7 @@ namespace WebAPI.Controllers
         ///         "Name": First package,
         ///         "Description": "Nice package for student with free purchase",
         ///         "Price":1000,
+        ///         "StartDate":2024-07-18T03:14:40.143Z
         ///         "QuantityInStock":10
         ///         "fileImages":[{"input1"}, {"input2"}]
         ///      }
@@ -130,7 +131,7 @@ namespace WebAPI.Controllers
 
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("campaigns")]
-        public async Task<IActionResult> CreateAsync([FromForm] EventCampaignDTO model)
+        public async Task<IActionResult> CreateAsync([FromForm] EventCampaignCreateDTO model)
         {
             try
             {
@@ -162,7 +163,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a product</response>
         [HttpPut("campaigns/{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] EventCampaignDTO model)
+        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromForm] EventCampaignUpdateDTO model)
         {
             try
             {
@@ -181,15 +182,15 @@ namespace WebAPI.Controllers
         }
 
         /// <summary>
-        /// delete a list of event product by their IDs
+        /// delete a campaign  by their ID
         /// </summary>
         /// <response code="200">Returns list of remove products</response>
-        [HttpDelete("campaigns")]
-        public async Task<IActionResult> DeleteAsync([FromBody] List<int> campaignIds)
+        [HttpDelete("campaigns/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             try
             {
-                var result = await _eventCampaignService.DeleteEventCampaignAsync(campaignIds);
+                var result = await _eventCampaignService.DeleteCampaignByIdAsync(id);
                 if (result.Status)
                 {
                     return Ok(result);

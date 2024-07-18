@@ -12,16 +12,18 @@ namespace Services.Interface
 {
     public interface IEventCampaignService
     {
-        Task<ResponseGenericModel<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignDTO eventCampaignDTO);
-
+        Task<ResponseGenericModel<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignCreateDTO eventCampaignDTO);
+        Task<ResponseGenericModel<EventCampaignDTO>> DeleteCampaignByIdAsync(int id);
         Task<ResponseGenericModel<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<int> campaignIds);
+
         Task<EventCampaignStaticticDTO> GetACampaignsByIdAsync(int id);
+
         Task<List<EventCampaignDTO>> GetAllCampaignsAsync();
 
         Task<List<EventCampaignDTO>> GetAllCampaignsByEventAsync(int eventId);
 
         Task<Pagination<EventCampaignDTO>> GetCampaignsByFiltersAsync(PaginationParameter paginationParameter, CampaignFilterModel campaignFilterModel);
 
-        Task<ResponseGenericModel<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignDTO eventCampaignDTO);
+        Task<ResponseGenericModel<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignUpdateDTO eventCampaignDTO);
     }
 }
