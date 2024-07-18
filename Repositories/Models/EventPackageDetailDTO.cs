@@ -10,6 +10,8 @@ namespace Repositories.Models
     {
         public int Id { get; set; }
         public int EventId { get; set; }
+        public string? Title { get; set; }
+
         public Int64 TotalPrice { get; set; }
         public string Description { get; set; }
         public string? ThumbnailUrl { get; set; }
