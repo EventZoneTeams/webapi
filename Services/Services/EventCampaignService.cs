@@ -15,6 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Services.DTO.EventCampaignDTOs;
 using Repositories.Models.EventCampaignModels;
+using Domain.Enums;
 
 namespace Services.Services
 {
@@ -64,7 +65,8 @@ namespace Services.Services
         {
             try
             {
-                if (await _unitOfWork.EventRepository.GetByIdAsync(eventCampaignDTO.EventId) == null)
+                var checkEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventCampaignDTO.EventId);
+                if (checkEvent == null)
                 {
                     return new ResponseGenericModel<EventCampaignDTO>()
                     {
@@ -85,6 +87,18 @@ namespace Services.Services
                     CollectedAmount = 0,
                     EventId = eventCampaignDTO.EventId,
                 };
+
+                if (checkEvent.Status == EventStatusEnums.CANCELED.ToString() || checkEvent.Status == EventStatusEnums.COMPLETED.ToString())
+                {
+                    return new ResponseGenericModel<EventCampaignDTO>()
+                    {
+                        Status = false,
+                        Message = " Added failed due to event status: " + checkEvent.Status,
+                        Data = _mapper.Map<EventCampaignDTO>(newCampaign)
+                    };
+                };
+
+                newCampaign.Status = string.IsNullOrEmpty(checkEvent.Status) ? newCampaign.Status : checkEvent.Status;
 
                 var result = await _unitOfWork.EventCampaignRepository.AddAsync(newCampaign);
                 // mapping data tra ve response truoc savechanges se ko lay duoc ID??
