@@ -62,7 +62,6 @@ namespace Repositories.Repositories
                     var eventProduct = productsList.Find(x => x.Id == product.productid);
                     productsInPackage.Add(newProduct);
                     newPackage.TotalPrice += eventProduct.Price * product.quantity;
-                    eventProduct.QuantityInStock -= product.quantity;
                     if (eventProduct.QuantityInStock < 0)
                     {
                         throw new Exception("Cannot add this package, product is out of stock");
