@@ -65,8 +65,9 @@ namespace Services.Services
 
             var newEvent = await _unitOfWork.EventRepository.AddAsync(eventEntity);
 
-            var result = _mapper.Map<EventResponseDTO>(newEvent);
             var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
+            var result = _mapper.Map<EventResponseDTO>(newEvent);
+
             if (isSuccess)
             {
                 await _notificationService.PushNotificationToManager(new Notification
