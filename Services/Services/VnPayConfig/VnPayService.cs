@@ -30,6 +30,7 @@ namespace Services.Services.VnPayConfig
 
         public SortedList<string, string> requestData
            = new SortedList<string, string>(new VnPayCompare());
+
         public SortedList<string, string> responseData
             = new SortedList<string, string>(new VnPayCompare());
 
@@ -175,11 +176,13 @@ namespace Services.Services.VnPayConfig
                             await UpdateErrorTransaction(transaction, "Error 99: Giao dịch bị lỗi khác");
                         }
                         break;
+
                     case "00": //giao dịch thành công
                         await UpdateStatusTransaction(transaction);
                         iPNReponse.status = TransactionStatusEnums.SUCCESS;
                         iPNReponse.message = "Transaction has been paid successfully!";
                         break;
+
                     default:
                         iPNReponse.status = TransactionStatusEnums.FAILED;
                         iPNReponse.message = "Invalid signature!";
@@ -202,12 +205,15 @@ namespace Services.Services.VnPayConfig
                     case TransactionTypeEnums.DEPOSIT:
                         await _walletService.ConfirmTransaction(transaction.Id);
                         break;
+
                     case TransactionTypeEnums.WITHDRAW:
                         await _walletService.ConfirmTransaction(transaction.Id);
                         break;
+
                     case TransactionTypeEnums.PURCHASE:
                         await _walletService.ConfirmTransaction(transaction.Id);
                         break;
+
                     default:
                         break;
                 }
@@ -233,9 +239,9 @@ namespace Services.Services.VnPayConfig
             string myChecksum = HashHelper.HmacSHA512(secretKey, rspRaw);
             return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
         }
+
         private string GetResponseData()
         {
-
             StringBuilder data = new StringBuilder();
             if (responseData.ContainsKey("vnp_SecureHashType"))
             {
@@ -291,6 +297,7 @@ namespace Services.Services.VnPayConfig
             if (vnp_Version != null)
                 requestData.Add("vnp_Version", vnp_Version);
         }
+
         public string? vnp_Amount { get; set; }
         public string? vnp_Command { get; set; }
         public string? vnp_CreateDate { get; set; }

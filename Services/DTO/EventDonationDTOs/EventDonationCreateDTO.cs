@@ -13,6 +13,5 @@ namespace Services.DTO.EventDonationDTOs
         public int EventCampaignId { get; set; }
 
         public Int64 Amount { get; set; }
-        public DateTime DonationDate { get; set; }
     }
 }
