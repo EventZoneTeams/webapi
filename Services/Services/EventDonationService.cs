@@ -44,12 +44,6 @@ namespace Services.Services
                     };
                 }
 
-                if (data.Amount > checkEvent.GoalAmount)
-                {
-                    throw new Exception("Error, You cannot donate more than the goal amount" +
-                        "  please try agaim");
-                }
-
                 var newDonation = new EventDonation
                 {
                     EventCampaignId = data.EventCampaignId,
@@ -59,6 +53,16 @@ namespace Services.Services
                 };
 
                 checkEvent.CollectedAmount += newDonation.Amount;
+
+                if (checkEvent.CollectedAmount > checkEvent.GoalAmount)
+                {
+                    return new ResponseGenericModel<EventDonationDetailDTO>()
+                    {
+                        Status = false,
+                        Message = "added failed, cannot donate more than goal amount",
+                        Data = _mapper.Map<EventDonationDetailDTO>(newDonation)
+                    };
+                }
                 await _unitOfWork.EventCampaignRepository.Update(checkEvent);
 
                 var newData = await _unitOfWork.EventDonationRepository.AddAsync(newDonation);
