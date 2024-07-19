@@ -26,10 +26,6 @@ namespace Services.Services
         public async Task<EventOrderReponseDTO> GetEventOrder(int orderId)
         {
             var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId, x => x.EventOrderDetails);
-            if (order == null)
-            {
-                throw new Exception("Event Order not found");
-            }
             return _mapper.Map<EventOrderReponseDTO>(order);
         }
 
