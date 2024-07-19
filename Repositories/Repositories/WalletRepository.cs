@@ -274,5 +274,33 @@ namespace Repositories.Repositories
             return transaction;
         }
 
+        public async Task<Transaction> Donation(int userId, long amount)
+        {
+            var wallet = await GetWalletByUserIdAndType(userId, WalletTypeEnums.PERSONAL);
+            if (wallet == null)
+            {
+                throw new Exception("Wallet not found");
+            }
+
+            if (wallet.Balance < amount)
+            {
+                throw new Exception("Balance is not enough");
+            }
+
+            //Create new transaction
+            var transaction = new Transaction
+            {
+                WalletId = wallet.Id,
+                TransactionType = TransactionTypeEnums.DONATION.ToString(),
+                Amount = amount,
+                Description = "DONATION money with amount: " + amount,
+                TransactionDate = _timeService.GetCurrentTime(),
+                CreatedAt = _timeService.GetCurrentTime(),
+                Status = TransactionStatusEnums.SUCCESS.ToString()
+            };
+            //add transaction to database
+            await _context.Transactions.AddAsync(transaction);
+            return transaction;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("event-donations")]
-        public async Task<IActionResult> CreateAsync(EventDonationCreateDTO model)
+        public async Task<IActionResult> Donation(EventDonationCreateDTO model)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("campaigns/{id}/event-donations")]
-        public async Task<IActionResult> CreateAsync(int id)
+        public async Task<IActionResult> GetCampaignAsync(int id)
         {
             try
             {

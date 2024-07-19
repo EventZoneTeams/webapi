@@ -4,6 +4,7 @@
     {
         DEPOSIT,
         WITHDRAW,
-        PURCHASE
+        PURCHASE,
+        DONATION
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Repositories.Interfaces;
 using Services.DTO.EventDonationDTOs;
 using Services.DTO.ResponseModels;
@@ -12,19 +13,23 @@ namespace Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
+        private readonly INotificationService _notificationService;
+        private readonly IWalletService _walletService;
 
-        public EventDonationService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService)
+        public EventDonationService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, INotificationService notificationService, IWalletService walletService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _claimsService = claimsService;
+            _notificationService = notificationService;
+            _walletService = walletService;
         }
 
         public async Task<ResponseGenericModel<EventDonationDetailDTO>> AddDonationToCampaign(EventDonationCreateDTO data)
         {
             try
             {
-                var checkEvent = await _unitOfWork.EventCampaignRepository.GetByIdAsync(data.EventCampaignId);
+                var checkEvent = await _unitOfWork.EventCampaignRepository.GetByIdAsync(data.EventCampaignId, x => x.Event);
                 var checkUser = _claimsService.GetCurrentUserId == -1 ? 1 : _claimsService.GetCurrentUserId; //test
 
                 if (checkEvent == null)
@@ -62,6 +67,38 @@ namespace Services.Services
                 var result = await _unitOfWork.SaveChangeAsync();
                 if (result > 0)
                 {
+                    // Send notification
+                    var notification = new Notification
+                    {
+                        Title = "Donation Successfully!",
+                        Body = "Amount: " + newDonation.Amount,
+                        UserId = newDonation.UserId,
+                        Url = "/profile",
+                        Sender = "System"
+                    };
+
+                    await _notificationService.PushNotification(notification);
+
+                    // Decrease money in wallet
+                    var transation = await _unitOfWork.WalletRepository.Donation(newDonation.UserId, newDonation.Amount);
+
+                    // Increase money of event owner
+                    var eventOwnerWallet = await _unitOfWork.WalletRepository.GetWalletByUserIdAndType(checkEvent.EventId, WalletTypeEnums.PERSONAL);
+                    eventOwnerWallet.Balance += newDonation.Amount;
+                    await _unitOfWork.WalletRepository.Update(eventOwnerWallet);
+                    await _unitOfWork.SaveChangeAsync();
+
+                    //Notification to event order
+                    var notificationToOrganizer = new Notification
+                    {
+                        Title = "One person donate event ",
+                        Body = "Amount: " + newDonation.Amount,
+                        UserId = checkEvent.Event.UserId,
+                        Url = "/dashboard/my-events/" + checkEvent.EventId,
+                        Sender = "System"
+                    };
+                    await _notificationService.PushNotification(notificationToOrganizer);
+
                     return new ResponseGenericModel<EventDonationDetailDTO>()
                     {
                         Status = true,
@@ -88,6 +125,8 @@ namespace Services.Services
 
         public async Task<List<EventDonationDetailDTO>> GetMyDonation()
         {
+            var userId = _claimsService.GetCurrentUserId;
+            if (userId == -1) throw new Exception("you are not login or bearer is not correct");
             var result = await _unitOfWork.EventDonationRepository.GetMyDonation();
             return _mapper.Map<List<EventDonationDetailDTO>>(result);
         }

@@ -12,5 +12,7 @@ namespace Repositories.Interfaces
         Task<Transaction> DepositMoney(int userId, WalletTypeEnums walletType, Int64 amount);
         Task<Transaction> PurchaseItem(int userId, int orderId);
         Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, Int64 amount);
+
+        Task<Transaction> Donation(int userId, Int64 amount);
     }
 }
