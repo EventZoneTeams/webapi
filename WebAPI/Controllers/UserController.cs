@@ -299,9 +299,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _userService.GetCurrentUserOrders();
-                if (result == null)
-
-                    return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
+                return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
             }
             catch (Exception ex)
             {

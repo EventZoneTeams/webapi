@@ -76,28 +76,33 @@ namespace Services.Services
                         Url = "/profile/wallets",
                         Sender = "System"
                     };
-
-                    await _notificationService.PushNotification(notification);
+                    //await _notificationService.PushNotification(notification);
 
                     // Decrease money in wallet
                     var transation = await _unitOfWork.WalletRepository.Donation(newDonation.UserId, newDonation.Amount);
 
                     // Increase money of event owner
-                    var eventOwnerWallet = await _unitOfWork.WalletRepository.GetWalletByUserIdAndType(checkEvent.EventId, WalletTypeEnums.PERSONAL);
+                    var eventOwnerWallet = await _unitOfWork.WalletRepository.GetWalletByUserIdAndType(checkEvent.Event.UserId, WalletTypeEnums.PERSONAL);
                     eventOwnerWallet.Balance += newDonation.Amount;
+
                     await _unitOfWork.WalletRepository.Update(eventOwnerWallet);
                     await _unitOfWork.SaveChangeAsync();
 
-                    //Notification to event order
-                    var notificationToOrganizer = new Notification
+                    //create transaction for event owner
+                    await _unitOfWork.WalletRepository.ReceiveDonation(checkEvent.Event.UserId, newDonation.Amount);
+                    await _unitOfWork.SaveChangeAsync();
+
+                    //Notification to event owner
+                    var notificationtoorganizer = new Notification
                     {
-                        Title = "One person donate event ",
-                        Body = "Amount: " + newDonation.Amount,
+                        Title = "one person donate event ",
+                        Body = "amount: " + newDonation.Amount,
                         UserId = checkEvent.Event.UserId,
-                        Url = "/dashboard/my-events/" + checkEvent.EventId,
-                        Sender = "System"
+                        Url = "/dashboard/my-events/" + checkEvent.Event,
+                        Sender = "system"
                     };
-                    await _notificationService.PushNotification(notificationToOrganizer);
+                    await _notificationService.PushNotification(notificationtoorganizer);
+
 
                     return new ResponseGenericModel<EventDonationDetailDTO>()
                     {
