@@ -84,7 +84,7 @@ namespace Services.Services
                 Sender = "System"
             };
 
-            await _notificationService.PushNotification(notification);
+            //await _notificationService.PushNotification(notification);
 
             // Purchase
             var transation = await _unitOfWork.WalletRepository.PurchaseItem(userId, orderId);

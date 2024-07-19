@@ -14,5 +14,6 @@ namespace Repositories.Interfaces
         Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, Int64 amount);
 
         Task<Transaction> Donation(int userId, Int64 amount);
+        Task<Transaction> ReceiveDonation(int userId, Int64 amount);
     }
 }

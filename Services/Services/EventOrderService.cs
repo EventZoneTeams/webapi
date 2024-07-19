@@ -79,7 +79,7 @@ namespace Services.Services
                 Sender = "System"
             };
 
-            await _notificationService.PushNotification(notificationToUser).ConfigureAwait(true);
+            //await _notificationService.PushNotification(notificationToUser).ConfigureAwait(true);
             await _notificationService.PushNotification(notificationToEventOwner).ConfigureAwait(true);
 
             return _mapper.Map<EventOrderReponseDTO>(orderResponse);
