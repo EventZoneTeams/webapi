@@ -317,10 +317,7 @@ namespace Services.Services
             try
             {
                 var orders = await _unitOfWork.EventOrderRepository.getCurrentUserOrder();
-                if (orders.Count == 0 || orders == null)
-                {
-                    return null;
-                }
+
                 return _mapper.Map<List<EventOrderReponseDTO>>(orders);
             }
             catch (Exception)
