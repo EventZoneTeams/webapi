@@ -73,7 +73,7 @@ namespace Services.Services
                         Title = "Donation Successfully!",
                         Body = "Amount: " + newDonation.Amount,
                         UserId = newDonation.UserId,
-                        Url = "/profile",
+                        Url = "/profile/wallets",
                         Sender = "System"
                     };
 
