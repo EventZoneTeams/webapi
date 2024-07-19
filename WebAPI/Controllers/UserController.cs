@@ -1,15 +1,11 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models;
-using Services.DTO.EmailModels;
-using Services.DTO.EventDTOs;
 using Services.DTO.EventOrderDTOs;
 using Services.DTO.UserModels;
 using Services.Interface;
-using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -304,11 +300,8 @@ namespace WebAPI.Controllers
             {
                 var result = await _userService.GetCurrentUserOrders();
                 if (result == null)
-                {
-                    return NotFound(ApiResult<object>.Error(null, "Cannot find or this user order is empty"));
-                }
 
-                return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
+                    return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
             }
             catch (Exception ex)
             {

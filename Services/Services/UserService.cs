@@ -2,7 +2,6 @@
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
-using Services.DTO.EventDTOs;
 using Services.DTO.EventOrderDTOs;
 using Services.DTO.ResponseModels;
 using Services.DTO.UserModels;
