@@ -302,5 +302,29 @@ namespace Repositories.Repositories
             await _context.Transactions.AddAsync(transaction);
             return transaction;
         }
+
+        public async Task<Transaction> ReceiveDonation(int userId, long amount)
+        {
+            var wallet = await GetWalletByUserIdAndType(userId, WalletTypeEnums.PERSONAL);
+            if (wallet == null)
+            {
+                throw new Exception("Wallet not found");
+            }
+
+            //Create new transaction
+            var transaction = new Transaction
+            {
+                WalletId = wallet.Id,
+                TransactionType = TransactionTypeEnums.DONATION.ToString(),
+                Amount = amount,
+                Description = "RECEIVE DONATION money with amount: " + amount,
+                TransactionDate = _timeService.GetCurrentTime(),
+                CreatedAt = _timeService.GetCurrentTime(),
+                Status = TransactionStatusEnums.SUCCESS.ToString()
+            };
+            //add transaction to database
+            await _context.Transactions.AddAsync(transaction);
+            return transaction;
+        }
     }
 }
