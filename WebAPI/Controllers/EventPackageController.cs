@@ -50,7 +50,7 @@ namespace WebAPI.Controllers
                 }
                 var result = await _eventPackageService.CreatePackageWithProducts(eventId, url, package);
 
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
@@ -128,7 +128,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventPackageService.DeleteEventProductByIdAsync(id);
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }

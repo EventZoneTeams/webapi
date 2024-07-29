@@ -55,25 +55,25 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<ResponseGenericModel<UserDetailsModel>> ResigerAsync(UserSignupModel UserLogin, string role)
+        public async Task<ApiResult<UserDetailsModel>> ResigerAsync(UserSignupModel UserLogin, string role)
         {
             var result = await _unitOfWork.UserRepository.AddUser(UserLogin, role);
             if (result == null)
             {
-                return new ResponseGenericModel<UserDetailsModel>
+                return new ApiResult<UserDetailsModel>
                 {
                     Data = null,
-                    Status = false,
+                    Success = false,
                     Message = "User have been existed"
                 };
             }
 
             //  var token = await _unitOfWork.UserRepository.GenerateEmailConfirmationToken(result);
 
-            return new ResponseGenericModel<UserDetailsModel>
+            return new ApiResult<UserDetailsModel>
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
-                Status = true,
+                Success = true,
                 Message = "Register Successfuly"
             };
         }
@@ -83,7 +83,7 @@ namespace Services.Services
             return await _unitOfWork.UserRepository.RefreshToken(token);
         }
 
-        public async Task<ResponseGenericModel<UserDetailsModel>> UpdateStudentProfileAsync(int userId, UserUpdateModel userUpdateMode)
+        public async Task<ApiResult<UserDetailsModel>> UpdateStudentProfileAsync(int userId, UserUpdateModel userUpdateMode)
         {
             var existingUser = await _unitOfWork.UserRepository.GetAccountDetailsAsync(userId);
             if (existingUser != null)
@@ -93,23 +93,23 @@ namespace Services.Services
 
                 if (updatedAccount != null)
                 {
-                    var response = new ResponseGenericModel<UserDetailsModel>();
+                    var response = new ApiResult<UserDetailsModel>();
                     response.Data = _mapper.Map<UserDetailsModel>(existingUser);
                     response.Message = "Updated user successfully";
-                    response.Status = true;
+                    response.Success = true;
                     return response;
                 }
             }
 
-            return new ResponseGenericModel<UserDetailsModel>
+            return new ApiResult<UserDetailsModel>
             {
                 Data = null,
-                Status = false,
+                Success = false,
                 Message = "This user is not existed"
             };
         }
 
-        public async Task<ResponseGenericModel<UserDetailsModel>> UpdateAccountAsync(int userId, UserUpdateModel userUpdateMode, string role)
+        public async Task<ApiResult<UserDetailsModel>> UpdateAccountAsync(int userId, UserUpdateModel userUpdateMode, string role)
         {
             try
             {
@@ -122,10 +122,10 @@ namespace Services.Services
 
                     if (updatedAccount != null)
                     {
-                        var response = new ResponseGenericModel<UserDetailsModel>();
+                        var response = new ApiResult<UserDetailsModel>();
                         response.Data = _mapper.Map<UserDetailsModel>(existingUser);
                         response.Message = "Updated user successfully";
-                        response.Status = true;
+                        response.Success = true;
                         if (!string.IsNullOrEmpty(role))
                         {
                             var result = await _unitOfWork.UserRepository.UpdateUserRole(existingUser, role);
@@ -143,10 +143,10 @@ namespace Services.Services
                     }
                 }
 
-                return new ResponseGenericModel<UserDetailsModel>
+                return new ApiResult<UserDetailsModel>
                 {
                     Data = null,
-                    Status = false,
+                    Success = false,
                     Message = "This user is not existed"
                 };
             }
@@ -156,30 +156,30 @@ namespace Services.Services
             }
         }
 
-        public async Task<ResponseGenericModel<UserDetailsModel>> CreateManagerAsync(UserSignupModel UserLogin)
+        public async Task<ApiResult<UserDetailsModel>> CreateManagerAsync(UserSignupModel UserLogin)
         {
             var result = await _unitOfWork.UserRepository.AddUser(UserLogin, "MANAGER");
             if (result == null)
             {
-                return new ResponseGenericModel<UserDetailsModel>
+                return new ApiResult<UserDetailsModel>
                 {
                     Data = null,
-                    Status = false,
+                    Success = false,
                     Message = "User have been existed"
                 };
             }
 
             //  var token = await _unitOfWork.UserRepository.GenerateEmailConfirmationToken(result);
 
-            return new ResponseGenericModel<UserDetailsModel>
+            return new ApiResult<UserDetailsModel>
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
-                Status = true,
+                Success = true,
                 Message = ""
             };
         }
 
-        public async Task<ResponseGenericModel<UserDetailsModel>> GetCurrentUserAsync()
+        public async Task<ApiResult<UserDetailsModel>> GetCurrentUserAsync()
         {
             var result = await _unitOfWork.UserRepository.GetCurrentUserAsync();
             if (result != null)
@@ -188,22 +188,22 @@ namespace Services.Services
                 var data = _mapper.Map<UserDetailsModel>(result);
                 data.RoleName = role.First();
 
-                return new ResponseGenericModel<UserDetailsModel>
+                return new ApiResult<UserDetailsModel>
                 {
                     Data = data,
-                    Status = true,
+                    Success = true,
                     Message = "This is current user"
                 };
             }
-            return new ResponseGenericModel<UserDetailsModel>
+            return new ApiResult<UserDetailsModel>
             {
                 Data = null,
-                Status = false,
+                Success = false,
                 Message = "User is not found due to error or expiration token"
             };
         }
 
-        public async Task<ResponseGenericModel<List<UserDetailsModel>>> DeleteRangeUsers(List<int> userIds)
+        public async Task<ApiResult<List<UserDetailsModel>>> DeleteRangeUsers(List<int> userIds)
         {
             var users = await _unitOfWork.UserRepository.GetAllUsersAsync();
             var existingIds = users.Where(e => userIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -215,9 +215,9 @@ namespace Services.Services
                 var result = await _unitOfWork.SaveChangeAsync();
                 if (result > 0)
                 {
-                    return new ResponseGenericModel<List<UserDetailsModel>>()
+                    return new ApiResult<List<UserDetailsModel>>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -229,23 +229,23 @@ namespace Services.Services
                 {
                     string nonExistingIdsString = string.Join(", ", nonExistingIds);
 
-                    return new ResponseGenericModel<List<UserDetailsModel>>()
+                    return new ApiResult<List<UserDetailsModel>>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = "There are few ids that is not existed user: " + nonExistingIdsString,
                         Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
             }
-            return new ResponseGenericModel<List<UserDetailsModel>>()
+            return new ApiResult<List<UserDetailsModel>>()
             {
-                Status = false,
+                Success = false,
                 Message = "failed",
                 Data = null
             };
         }
 
-        public async Task<ResponseGenericModel<UserDetailsModel>> DeleteUser(int id)
+        public async Task<ApiResult<UserDetailsModel>> DeleteUser(int id)
         {
             var package = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
 
@@ -256,17 +256,17 @@ namespace Services.Services
                 var result = await _unitOfWork.SaveChangeAsync();
                 if (result > 0)
                 {
-                    return new ResponseGenericModel<UserDetailsModel>()
+                    return new ApiResult<UserDetailsModel>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = "Package " + id + " Removed successfully",
                         Data = _mapper.Map<UserDetailsModel>(package)
                     };
                 }
             }
-            return new ResponseGenericModel<UserDetailsModel>()
+            return new ApiResult<UserDetailsModel>()
             {
-                Status = false,
+                Success = false,
                 Message = "There are no existed user id: " + id,
                 Data = null
             };
@@ -277,18 +277,18 @@ namespace Services.Services
             return await _unitOfWork.UserRepository.LoginByEmailAndPassword(User);
         }
 
-        public async Task<ResponseGenericModel<UserDetailsModel>> UserChangePasswordAsync(string email, string token, string newPassword)
+        public async Task<ApiResult<UserDetailsModel>> UserChangePasswordAsync(string email, string token, string newPassword)
         {
             var result = await _unitOfWork.UserRepository.ChangeUserPasswordAsync(email, token, newPassword);
             if (result == null)
             {
-                return new ResponseGenericModel<UserDetailsModel> { Data = null, Status = false, Message = "The update process has been cooked, pleas try again" };
+                return new ApiResult<UserDetailsModel> { Data = null, Success = false, Message = "The update process has been cooked, pleas try again" };
             }
 
-            return new ResponseGenericModel<UserDetailsModel>
+            return new ApiResult<UserDetailsModel>
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
-                Status = true,
+                Success = true,
                 Message = "Update Sucessfully"
             };
         }
@@ -326,19 +326,19 @@ namespace Services.Services
             }
         }
 
-        public async Task<ResponseGenericModel<string>> ForgotPassword(string email)
+        public async Task<ApiResult<string>> ForgotPassword(string email)
         {
             var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
             {
-                return new ResponseGenericModel<string> { Data = null, Status = false, Message = "User is not existed" };
+                return new ApiResult<string> { Data = null, Success = false, Message = "User is not existed" };
             }
             else
             {
-                return new ResponseGenericModel<string>
+                return new ApiResult<string>
                 {
                     Data = await _unitOfWork.UserRepository.GenerateTokenForResetPassword(user),
-                    Status = true,
+                    Success = true,
                     Message = "Token to your email " + user.Email + " have been sent for reset password"
                 };
             }

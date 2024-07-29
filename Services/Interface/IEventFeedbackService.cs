@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Repositories.Commons;
 using Services.DTO.EventFeedbackModel;
 using Services.DTO.ResponseModels;
 using System;
@@ -11,9 +12,9 @@ namespace Services.Interface
 {
     public interface IEventFeedbackService
     {
-        Task<ResponseGenericModel<EventFeedbackDetailModel>> CreateFeedBackForEvent(CreateFeedbackModel inputFeedback, FeedbackTypeEnums type);
+        Task<ApiResult<EventFeedbackDetailModel>> CreateFeedBackForEvent(CreateFeedbackModel inputFeedback, FeedbackTypeEnums type);
 
-        Task<ResponseGenericModel<List<EventFeedbackDetailModel>>> DeleteFeedbacksAsync(List<int> feedbackIds);
+        Task<ApiResult<List<EventFeedbackDetailModel>>> DeleteFeedbacksAsync(List<int> feedbackIds);
 
         Task<List<EventFeedbackDetailModel>> GettAllFeedbacksAsync();
 

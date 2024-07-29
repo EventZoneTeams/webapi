@@ -175,7 +175,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventProductService.UpdateEventProductAsync(id, model);
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
@@ -198,7 +198,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventProductService.DeleteEventProductByIdAsync(id);
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }

@@ -24,14 +24,14 @@ namespace Services.Services
             _eventService = eventService;
         }
 
-        public async Task<ResponseGenericModel<EventPackageDetailDTO>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage)
+        public async Task<ApiResult<EventPackageDetailDTO>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage)
         {
             var existedEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventId);
             if (existedEvent == null)
             {
-                return new ResponseGenericModel<EventPackageDetailDTO>
+                return new ApiResult<EventPackageDetailDTO>
                 {
-                    Status = false,
+                    Success = false,
                     Message = "This event is not existed",
                     Data = null
                 };
@@ -42,23 +42,23 @@ namespace Services.Services
             {
                 var result = _mapper.Map<EventPackageDetailDTO>(check.First().EventPackage);
                 result.Products = _mapper.Map<List<EventProductDetailDTO>>(check.Select(x => x.EventProduct).ToList());
-                return new ResponseGenericModel<EventPackageDetailDTO>
+                return new ApiResult<EventPackageDetailDTO>
                 {
-                    Status = true,
+                    Success = true,
                     Message = "Add sucessfully",
                     Data = result
                 };
             }
 
-            return new ResponseGenericModel<EventPackageDetailDTO>
+            return new ApiResult<EventPackageDetailDTO>
             {
-                Status = false,
+                Success = false,
                 Message = "Failed",
                 Data = null
             };
         }
 
-        public async Task<ResponseGenericModel<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds)
+        public async Task<ApiResult<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds)
         {
             var allPackages = await _unitOfWork.EventPackageRepository.GetAllPackageWithProducts();
             var existingIds = allPackages.Where(e => packageIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -72,32 +72,32 @@ namespace Services.Services
                     allPackages.ForEach(x => x.IsDeleted = true);
                     if (nonExistingIds.Count > 0)
                     {
-                        return new ResponseGenericModel<List<EventPackageDetailDTO>>()
+                        return new ApiResult<List<EventPackageDetailDTO>>()
                         {
-                            Status = false,
+                            Success = false,
                             Message = "Removed successfully but there are still non-existed package: " + nonExistingIdsString,
                             Data = _mapper.Map<List<EventPackageDetailDTO>>(allPackages.Where(e => existingIds.Contains(e.Id)))
                         };
                     }
 
-                    return new ResponseGenericModel<List<EventPackageDetailDTO>>()
+                    return new ApiResult<List<EventPackageDetailDTO>>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = " Removed successfully",
                         Data = _mapper.Map<List<EventPackageDetailDTO>>(allPackages.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
             }
 
-            return new ResponseGenericModel<List<EventPackageDetailDTO>>()
+            return new ApiResult<List<EventPackageDetailDTO>>()
             {
-                Status = false,
+                Success = false,
                 Message = "There are no existed packages:" + string.Join(", ", packageIds) + " please try again",
                 Data = null
             };
         }
 
-        public async Task<ResponseGenericModel<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id)
+        public async Task<ApiResult<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id)
         {
             var package = await _unitOfWork.EventPackageRepository.GetByIdAsync(id);
 
@@ -108,17 +108,17 @@ namespace Services.Services
                 await _unitOfWork.SaveChangeAsync();
                 if (result)
                 {
-                    return new ResponseGenericModel<EventPackageDetailDTO>()
+                    return new ApiResult<EventPackageDetailDTO>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = "Package " + id + " Removed successfully",
                         Data = _mapper.Map<EventPackageDetailDTO>(package)
                     };
                 }
             }
-            return new ResponseGenericModel<EventPackageDetailDTO>()
+            return new ApiResult<EventPackageDetailDTO>()
             {
-                Status = false,
+                Success = false,
                 Message = "There are no existed product id: " + id,
                 Data = null
             };
@@ -141,14 +141,14 @@ namespace Services.Services
             return _mapper.Map<List<ProductInPackageDTO>>(await _unitOfWork.EventPackageRepository.GetProductsInPackagesWithProduct());
         }
 
-        public async Task<ResponseGenericModel<EventPackageDetailDTO>> GetPackageById(int packageId)
+        public async Task<ApiResult<EventPackageDetailDTO>> GetPackageById(int packageId)
         {
             var package = await _unitOfWork.EventPackageRepository.GetPackageById(packageId);
             if (package == null)
             {
-                return new ResponseGenericModel<EventPackageDetailDTO>()
+                return new ApiResult<EventPackageDetailDTO>()
                 {
-                    Status = false,
+                    Success = false,
                     Message = "This package id is not found",
                     Data = null
                 };
@@ -158,9 +158,9 @@ namespace Services.Services
 
             result.Products = _mapper.Map<List<EventProductDetailDTO>>(package.ProductsInPackage.Select(x => x.EventProduct));
 
-            return new ResponseGenericModel<EventPackageDetailDTO>()
+            return new ApiResult<EventPackageDetailDTO>()
             {
-                Status = false,
+                Success = false,
                 Message = "Found successfully package " + packageId,
 
                 Data = result
