@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
             try
             {
                 var data = await _userService.ResigerAsync(userLogin, "STUDENT");
-                if (data.Status)
+                if (data.Success)
                 {
                     // var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);
                     //var message = new Message(new string[] { data.Data.Email }, "Confirmation email link", confirmationLink!);
@@ -120,7 +120,7 @@ namespace WebAPI.Controllers
                 var newRole = RoleEnums.ADMIN.Equals(role) ? "" : role.ToString();
 
                 var result = await _userService.UpdateAccountAsync(id, userUpdatemodel, newRole);
-                if (result.Status == false)
+                if (result.Success == false)
                 {
                     return NotFound(result);
                 }
@@ -146,7 +146,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _userService.DeleteUser(id);
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
@@ -172,7 +172,7 @@ namespace WebAPI.Controllers
             try
             {
                 var data = await _userService.CreateManagerAsync(newUser);
-                if (data.Status)
+                if (data.Success)
                 {
                     // var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);
                     //var message = new Message(new string[] { data.Data.Email }, "Confirmation email link", confirmationLink!);
@@ -286,7 +286,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetCurrentUserAsync()
         {
             var result = await _userService.GetCurrentUserAsync();
-            if (result.Status)
+            if (result.Success)
             {
                 return Ok(result);
             }
@@ -324,7 +324,7 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> ConfirmEmail(string email)
         {
             var result = await _userService.ForgotPassword(email);
-            if (result.Status)
+            if (result.Success)
             {
                 var confirmationLink = "Code:\n\"" + result.Data + "\"";
                 var message = new Services.DTO.EmailModels.Message(new string[] { email }, "Reset password token", confirmationLink!);

@@ -61,16 +61,16 @@ namespace Services.Services
             }
         }
 
-        public async Task<ResponseGenericModel<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignCreateDTO eventCampaignDTO)
+        public async Task<ApiResult<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignCreateDTO eventCampaignDTO)
         {
             try
             {
                 var checkEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventCampaignDTO.EventId);
                 if (checkEvent == null)
                 {
-                    return new ResponseGenericModel<EventCampaignDTO>()
+                    return new ApiResult<EventCampaignDTO>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = " Added failed, event is not existed",
                         Data = null
                     };
@@ -90,9 +90,9 @@ namespace Services.Services
 
                 if (checkEvent.Status == EventStatusEnums.CANCELED.ToString() || checkEvent.Status == EventStatusEnums.COMPLETED.ToString())
                 {
-                    return new ResponseGenericModel<EventCampaignDTO>()
+                    return new ApiResult<EventCampaignDTO>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = " Added failed due to event status: " + checkEvent.Status,
                         Data = _mapper.Map<EventCampaignDTO>(newCampaign)
                     };
@@ -105,16 +105,16 @@ namespace Services.Services
                 var check = await _unitOfWork.SaveChangeAsync();
                 if (check > 0)
                 {
-                    return new ResponseGenericModel<EventCampaignDTO>()
+                    return new ApiResult<EventCampaignDTO>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<EventCampaignDTO>(result)
                     };
                 }
-                return new ResponseGenericModel<EventCampaignDTO>()
+                return new ApiResult<EventCampaignDTO>()
                 {
-                    Status = false,
+                    Success = false,
                     Message = " Added failed",
                     Data = _mapper.Map<EventCampaignDTO>(result)
                 };
@@ -168,7 +168,7 @@ namespace Services.Services
         //    }
         //}
 
-        public async Task<ResponseGenericModel<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<int> campaignIds)
+        public async Task<ApiResult<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<int> campaignIds)
         {
             var allCampaigns = await _unitOfWork.EventCampaignRepository.GetAllAsync();
             var existingIds = allCampaigns.Where(e => campaignIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -179,9 +179,9 @@ namespace Services.Services
                 var result = await _unitOfWork.EventCampaignRepository.SoftRemoveRangeById(existingIds);
                 if (result)
                 {
-                    return new ResponseGenericModel<List<EventCampaignDTO>>()
+                    return new ApiResult<List<EventCampaignDTO>>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<EventCampaignDTO>>(allCampaigns.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -193,23 +193,23 @@ namespace Services.Services
                 {
                     string nonExistingIdsString = string.Join(", ", nonExistingIds);
 
-                    return new ResponseGenericModel<List<EventCampaignDTO>>()
+                    return new ApiResult<List<EventCampaignDTO>>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
                         Data = _mapper.Map<List<EventCampaignDTO>>(allCampaigns.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
             }
-            return new ResponseGenericModel<List<EventCampaignDTO>>()
+            return new ApiResult<List<EventCampaignDTO>>()
             {
-                Status = false,
+                Success = false,
                 Message = "failed",
                 Data = null
             };
         }
 
-        public async Task<ResponseGenericModel<EventCampaignDTO>> DeleteCampaignByIdAsync(int id)
+        public async Task<ApiResult<EventCampaignDTO>> DeleteCampaignByIdAsync(int id)
         {
             var product = await _unitOfWork.EventCampaignRepository.GetByIdAsync(id);
 
@@ -220,9 +220,9 @@ namespace Services.Services
                 var result = await _unitOfWork.SaveChangeAsync();
                 if (result > 0)
                 {
-                    return new ResponseGenericModel<EventCampaignDTO>()
+                    return new ApiResult<EventCampaignDTO>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = "Product " + id + " Removed successfully",
                         Data = _mapper.Map<EventCampaignDTO>(product)
                     };
@@ -237,9 +237,9 @@ namespace Services.Services
                 //    };
                 //}
             }
-            return new ResponseGenericModel<EventCampaignDTO>()
+            return new ApiResult<EventCampaignDTO>()
             {
-                Status = false,
+                Success = false,
                 Message = "There are no existed campaign with id: " + id,
                 Data = null
             };
@@ -263,7 +263,7 @@ namespace Services.Services
             return _mapper.Map<List<EventCampaignDTO>>(result);
         }
 
-        public async Task<ResponseGenericModel<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignUpdateDTO eventCampaignDTO)
+        public async Task<ApiResult<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignUpdateDTO eventCampaignDTO)
         {
             var esistingCampaign = await _unitOfWork.EventCampaignRepository.GetByIdAsync(id);
             if (esistingCampaign != null)
@@ -273,26 +273,26 @@ namespace Services.Services
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
                 {
-                    return new ResponseGenericModel<EventCampaignDTO>()
+                    return new ApiResult<EventCampaignDTO>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = "Updated successfuly",
                         Data = _mapper.Map<EventCampaignDTO>(esistingCampaign)
                     };
                 }
                 else
                 {
-                    return new ResponseGenericModel<EventCampaignDTO>()
+                    return new ApiResult<EventCampaignDTO>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = "Something has been failed while updating",
                         Data = null
                     };
                 }
             }
-            return new ResponseGenericModel<EventCampaignDTO>()
+            return new ApiResult<EventCampaignDTO>()
             {
-                Status = false,
+                Success = false,
                 Message = "This campaign id is not existed",
                 Data = null
             };

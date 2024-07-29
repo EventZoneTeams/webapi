@@ -49,26 +49,9 @@ namespace WebAPI.Controllers
 
                 Response.AddPaginationHeader(events.MetaData);
 
-                var eventReponseDTOs = new List<EventResponseDTO>();
+                var eventReponseDTOs = _mapper.Map<List<EventResponseDTO>>(events);
 
-                foreach (var erdto in events)
-                {
-                    var eventReponseDTO = _mapper.Map<EventResponseDTO>(erdto);
-                    eventReponseDTOs.Add(eventReponseDTO);
-                }
-
-                var result = new
-                {
-                    success = true,
-                    data = eventReponseDTOs,
-                    CurrentPage = events.MetaData.CurrentPage,
-                    PageSize = events.MetaData.PageSize,
-                    TotalCount = events.MetaData.TotalCount,
-                    TotalPages = events.MetaData.TotalPages,
-                    message = "Get List Of Event Successfully!"
-                };
-
-                return Ok(result);
+                return Ok(ApiResult<List<EventResponseDTO>>.Succeed(eventReponseDTOs, "Get list events successfully"));
             }
             catch (Exception ex)
             {
