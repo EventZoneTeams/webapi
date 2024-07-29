@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Repositories.Commons;
 using Services.DTO.EventFeedbackModel;
 using Services.Interface;
 using System.ComponentModel.DataAnnotations;
@@ -48,16 +49,16 @@ namespace WebAPI.Controllers
             {
                 var result = await _eventFeedbackService.CreateFeedBackForEvent(input, feedbackOption);
 
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
 
-                return BadRequest(result);
+                return BadRequest(ApiResult<object>.Error(null, "Error"));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -80,7 +81,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -101,7 +102,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -119,7 +120,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventFeedbackService.DeleteFeedbacksAsync(feedbackIds);
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
@@ -128,7 +129,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
     }

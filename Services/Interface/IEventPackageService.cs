@@ -13,7 +13,7 @@ namespace Services.Interface
 {
     public interface IEventPackageService
     {
-        Task<ResponseGenericModel<EventPackageDetailDTO>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage);
+        Task<ApiResult<EventPackageDetailDTO>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage);
 
         Task<List<EventPackageDetailDTO>> GetAllWithProducts();
 
@@ -21,12 +21,12 @@ namespace Services.Interface
 
         Task<List<ProductInPackageDTO>> GetProductsInPackagesWithProduct_Package();
 
-        Task<ResponseGenericModel<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds);
+        Task<ApiResult<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds);
 
         Task<Pagination<EventPackageDetailDTO>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel);
 
-        Task<ResponseGenericModel<EventPackageDetailDTO>> GetPackageById(int packageId);
+        Task<ApiResult<EventPackageDetailDTO>> GetPackageById(int packageId);
 
-        Task<ResponseGenericModel<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id);
+        Task<ApiResult<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id);
     }
 }

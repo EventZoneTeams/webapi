@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Repositories.Commons;
 using Repositories.Interfaces;
 using Services.DTO.EventDonationDTOs;
 using Services.DTO.ResponseModels;
@@ -25,7 +26,7 @@ namespace Services.Services
             _walletService = walletService;
         }
 
-        public async Task<ResponseGenericModel<EventDonationDetailDTO>> AddDonationToCampaign(EventDonationCreateDTO data)
+        public async Task<ApiResult<EventDonationDetailDTO>> AddDonationToCampaign(EventDonationCreateDTO data)
         {
             try
             {
@@ -34,9 +35,9 @@ namespace Services.Services
 
                 if (checkEvent == null)
                 {
-                    return new ResponseGenericModel<EventDonationDetailDTO>()
+                    return new ApiResult<EventDonationDetailDTO>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = " This campaign is not existed",
                         Data = null
                     };
@@ -54,9 +55,9 @@ namespace Services.Services
 
                 if (checkEvent.CollectedAmount > checkEvent.GoalAmount)
                 {
-                    return new ResponseGenericModel<EventDonationDetailDTO>()
+                    return new ApiResult<EventDonationDetailDTO>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = "added failed, cannot donate more than goal amount",
                         Data = _mapper.Map<EventDonationDetailDTO>(newDonation)
                     };
@@ -104,9 +105,9 @@ namespace Services.Services
                     await _notificationService.PushNotification(notificationtoorganizer);
 
 
-                    return new ResponseGenericModel<EventDonationDetailDTO>()
+                    return new ApiResult<EventDonationDetailDTO>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = "Successfully added",
                         Data = _mapper.Map<EventDonationDetailDTO>(newData)
                     };

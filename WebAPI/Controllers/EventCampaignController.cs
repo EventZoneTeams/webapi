@@ -5,6 +5,7 @@ using Repositories.Commons;
 using Repositories.Models.EventCampaignModels;
 using Repositories.Models.ProductModels;
 using Services.DTO.EventCampaignDTOs;
+using Services.DTO.EventDTOs;
 using Services.DTO.EventProductsModel;
 using Services.Interface;
 using Services.Services;
@@ -30,7 +31,7 @@ namespace WebAPI.Controllers
                 var result = await _eventCampaignService.GetACampaignsByIdAsync(id);
                 if (result == null)
                 {
-                    return NotFound();
+                    return NotFound(ApiResult<EventCampaignStaticticDTO>.Error(null, "Campaign is not found"));
                 }
                 return Ok(result);
             }
@@ -66,7 +67,7 @@ namespace WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(result);
+                return Ok(ApiResult<Pagination<EventCampaignDTO>>.Succeed(result, "Get list events successfully"));
             }
             catch (Exception ex)
             {
@@ -99,13 +100,13 @@ namespace WebAPI.Controllers
                 var data = await _eventCampaignService.GetAllCampaignsByEventAsync(eventid);
                 if (data == null)
                 {
-                    return BadRequest(new { status = false, msg = "Event is not existed" });
+                    throw new Exception("This campaign is not existed");
                 }
                 return Ok(data);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -140,7 +141,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -168,16 +169,16 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventCampaignService.UpdateEventCampaignAsync(id, model);
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
 
-                return NotFound(result);
+                throw new Exception("This campaign is not existed");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -191,16 +192,16 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventCampaignService.DeleteCampaignByIdAsync(id);
-                if (result.Status)
+                if (result.Success)
                 {
                     return Ok(result);
                 }
 
-                return NotFound(result);
+                throw new Exception("This campaign is not existed");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
     }

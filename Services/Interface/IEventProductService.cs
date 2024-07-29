@@ -14,21 +14,22 @@ namespace Services.Interface
 {
     public interface IEventProductService
     {
-        Task<ResponseGenericModel<EventProductDetailModel>> CreateEventProductAsync(EventProductCreateModel newProduct, List<ImageReturnDTO> images);
+        Task<ApiResult<EventProductDetailModel>> CreateEventProductAsync(EventProductCreateModel newProduct, List<ImageReturnDTO> images);
 
         Task<List<EventProductDetailModel>> GetAllProductsAsync();
 
-        Task<ResponseGenericModel<EventProductDetailModel>> UpdateEventProductAsync(int productId, EventProductUpdateModel updateModel);
+        Task<ApiResult<EventProductDetailModel>> UpdateEventProductAsync(int productId, EventProductUpdateModel updateModel);
 
-        Task<ResponseGenericModel<List<EventProductDetailModel>>> DeleteEventProductAsync(List<int> productIds);
+        Task<ApiResult<List<EventProductDetailModel>>> DeleteEventProductAsync(List<int> productIds);
 
-        Task<ResponseGenericModel<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts);
+        Task<ApiResult<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts);
 
         Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(int eventId);
 
         Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
 
-        Task<ResponseGenericModel<EventProductDetailModel>> GetProductById(int productId);
-        Task<ResponseGenericModel<EventProductDetailModel>> DeleteEventProductByIdAsync(int id);
+        Task<ApiResult<EventProductDetailModel>> GetProductById(int productId);
+
+        Task<ApiResult<EventProductDetailModel>> DeleteEventProductByIdAsync(int id);
     }
 }

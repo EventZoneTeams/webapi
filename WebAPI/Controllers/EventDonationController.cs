@@ -22,16 +22,16 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventDonationService.AddDonationToCampaign(model);
-                if (result.Status == false)
+                if (result.Success == false)
                 {
-                    return BadRequest(result);
+                    return BadRequest(ApiResult<object>.Error(null, "Added failed"));
                 }
 
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 

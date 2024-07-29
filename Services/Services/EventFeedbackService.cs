@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Domain.Enums;
+using Repositories.Commons;
 using Repositories.Interfaces;
 using Services.DTO.EventFeedbackModel;
 using Services.DTO.ResponseModels;
@@ -21,16 +22,16 @@ namespace Services.Services
             _notificationService = notificationService;
         }
 
-        public async Task<ResponseGenericModel<EventFeedbackDetailModel>> CreateFeedBackForEvent(CreateFeedbackModel inputFeedback, FeedbackTypeEnums type)
+        public async Task<ApiResult<EventFeedbackDetailModel>> CreateFeedBackForEvent(CreateFeedbackModel inputFeedback, FeedbackTypeEnums type)
         {
             try
             {
                 var checkEvent = await _unitOfWork.EventRepository.GetByIdAsync(inputFeedback.EventId);
                 if (checkEvent == null)
                 {
-                    return new ResponseGenericModel<EventFeedbackDetailModel>
+                    return new ApiResult<EventFeedbackDetailModel>
                     {
-                        Status = false,
+                        Success = false,
                         Data = null,
                         Message = "This event is no longer existing, please try again"
                     };
@@ -101,18 +102,18 @@ namespace Services.Services
                         var result = _mapper.Map<EventFeedbackDetailModel>(newFeedback);
                         await _notificationService.PushNotification(notification);
                         //  result.FeedbackType = type.ToString();
-                        return new ResponseGenericModel<EventFeedbackDetailModel>
+                        return new ApiResult<EventFeedbackDetailModel>
                         {
-                            Status = true,
+                            Success = true,
                             Data = result,
                             Message = "Added and updated status event successfully"
                         };
                     }
                 }
 
-                return new ResponseGenericModel<EventFeedbackDetailModel>
+                return new ApiResult<EventFeedbackDetailModel>
                 {
-                    Status = false,
+                    Success = false,
                     Data = _mapper.Map<EventFeedbackDetailModel>(checkEvent),
                     Message = "This event have already feedback"
                 };
@@ -149,7 +150,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<ResponseGenericModel<List<EventFeedbackDetailModel>>> DeleteFeedbacksAsync(List<int> feedbackIds)
+        public async Task<ApiResult<List<EventFeedbackDetailModel>>> DeleteFeedbacksAsync(List<int> feedbackIds)
         {
             var allFeedbacks = await _unitOfWork.EventFeedbackRepository.GetAllAsync();
             var existingIds = allFeedbacks.Where(e => feedbackIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -160,9 +161,9 @@ namespace Services.Services
                 var result = await _unitOfWork.EventFeedbackRepository.SoftRemoveRangeById(existingIds);
                 if (result)
                 {
-                    return new ResponseGenericModel<List<EventFeedbackDetailModel>>()
+                    return new ApiResult<List<EventFeedbackDetailModel>>()
                     {
-                        Status = true,
+                        Success = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<EventFeedbackDetailModel>>(allFeedbacks.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -174,17 +175,17 @@ namespace Services.Services
                 {
                     string nonExistingIdsString = string.Join(", ", nonExistingIds);
 
-                    return new ResponseGenericModel<List<EventFeedbackDetailModel>>()
+                    return new ApiResult<List<EventFeedbackDetailModel>>()
                     {
-                        Status = false,
+                        Success = false,
                         Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
                         Data = _mapper.Map<List<EventFeedbackDetailModel>>(allFeedbacks.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
             }
-            return new ResponseGenericModel<List<EventFeedbackDetailModel>>()
+            return new ApiResult<List<EventFeedbackDetailModel>>()
             {
-                Status = false,
+                Success = false,
                 Message = "failed",
                 Data = null
             };
