@@ -1,6 +1,7 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
+using Services.DTO.EventDonationDTOs;
 using Services.DTO.EventFeedbackModel;
 using Services.Interface;
 using System.ComponentModel.DataAnnotations;
@@ -77,7 +78,7 @@ namespace WebAPI.Controllers
             try
             {
                 var data = await _eventFeedbackService.GettAllFeedbacksAsync();
-                return Ok(data);
+                return Ok(ApiResult<List<EventFeedbackDetailModel>>.Succeed(data, "Get All package successfully!"));
             }
             catch (Exception ex)
             {
@@ -98,7 +99,7 @@ namespace WebAPI.Controllers
             try
             {
                 var data = await _eventFeedbackService.GettAllFeedbacksByEventIdAsync(id);
-                return Ok(data);
+                return Ok(ApiResult<List<EventFeedbackDetailModel>>.Succeed(data, "Get My Donation Successfully!"));
             }
             catch (Exception ex)
             {
