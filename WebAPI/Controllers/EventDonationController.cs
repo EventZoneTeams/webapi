@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Services.DTO.EventDonationDTOs;
+using Services.DTO.EventOrderDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -41,7 +42,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventDonationService.GetAllDonationOfCampaign(id);
-                return Ok(result);
+                return Ok(ApiResult<List<EventDonationDetailDTO>>.Succeed(result, "Get A Order" + id + " Successfully!"));
             }
             catch (Exception ex)
             {
