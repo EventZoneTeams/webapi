@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
+using Repositories.Models;
 using Repositories.Models.PackageModels;
+using Services.DTO.EventOrderDTOs;
 using Services.DTO.EventPackageModels;
 using Services.Interface;
 using Services.Services;
@@ -109,7 +112,7 @@ namespace WebAPI.Controllers
             try
             {
                 var data = await _eventPackageService.GetAllPackageOfEvent(eventid);
-                return Ok(data);
+                return Ok(ApiResult<List<EventPackageDetailDTO>>.Succeed(data, "Get all package of this event: " + eventid));
             }
             catch (Exception ex)
             {
