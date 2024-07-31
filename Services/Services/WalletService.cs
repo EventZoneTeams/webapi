@@ -20,21 +20,21 @@ namespace Services.Services
             _notificationService = notificationService;
         }
 
-        public async Task<List<WalletResponseDTO>> GetListWalletByUserId(int userId)
+        public async Task<List<WalletResponseDTO>> GetListWalletByUserId(Guid userId)
         {
             var wallets = await _unitOfWork.WalletRepository.GetListWalletByUserId(userId);
             var result = _mapper.Map<List<WalletResponseDTO>>(wallets);
             return result;
         }
 
-        public async Task<WalletResponseDTO> GetWalletByUserIdAndType(int userId, WalletTypeEnums walletType)
+        public async Task<WalletResponseDTO> GetWalletByUserIdAndType(Guid userId, WalletTypeEnums walletType)
         {
             var wallet = await _unitOfWork.WalletRepository.GetWalletByUserIdAndType(userId, walletType);
             var result = _mapper.Map<WalletResponseDTO>(wallet);
             return result;
         }
         // Deposit money to wallet
-        public async Task<Transaction> Deposit(int userId, Int64 amount)
+        public async Task<Transaction> Deposit(Guid userId, Int64 amount)
         {
             var transaction = await _unitOfWork.WalletRepository.DepositMoney(userId, WalletTypeEnums.PERSONAL, amount);
             var result = _mapper.Map<Transaction>(transaction);
@@ -42,7 +42,7 @@ namespace Services.Services
         }
 
         // Purchase
-        public async Task<TransactionResponsesDTO> PurchaseOrder(int orderId, int userId)
+        public async Task<TransactionResponsesDTO> PurchaseOrder(Guid orderId, Guid userId)
         {
             var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId);
             if (order == null)
@@ -111,20 +111,20 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<List<TransactionResponsesDTO>> GetTransactionsByUserId(int userId, WalletRequestTypeEnums walletRequestTypeEnums)
+        public async Task<List<TransactionResponsesDTO>> GetTransactionsByUserId(Guid userId, WalletRequestTypeEnums walletRequestTypeEnums)
         {
             var transactions = await _unitOfWork.TransactionRepository.GetTransactionsByUserId(userId, walletRequestTypeEnums.ToString());
             var result = _mapper.Map<List<TransactionResponsesDTO>>(transactions);
             return result;
         }
-        public async Task<Transaction> GetTransactionById(int transactionId)
+        public async Task<Transaction> GetTransactionById(Guid transactionId)
         {
             var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(transactionId);
             var result = _mapper.Map<Transaction>(transaction);
             return result;
         }
 
-        public async Task<TransactionResponsesDTO> ConfirmTransaction(int transactionId)
+        public async Task<TransactionResponsesDTO> ConfirmTransaction(Guid transactionId)
         {
             var transaction = await _unitOfWork.WalletRepository.ConfirmTransaction(transactionId);
             var result = _mapper.Map<TransactionResponsesDTO>(transaction);

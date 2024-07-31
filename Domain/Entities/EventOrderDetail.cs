@@ -2,8 +2,8 @@
 {
     public class EventOrderDetail : BaseEntity
     {
-        public int PackageId { get; set; }
-        public int EventOrderId { get; set; }
+        public Guid PackageId { get; set; }
+        public Guid EventOrderId { get; set; }
         public int Quantity { get; set; }
         public Int64 Price { get; set; }
 

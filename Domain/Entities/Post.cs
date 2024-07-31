@@ -2,7 +2,7 @@
 {
     public class Post : BaseEntity
     {
-        public int EventId { get; set; }
+        public Guid EventId { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
 

@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
-using Repositories.Models;
 using Repositories.Models.ProductModels;
-using Services.DTO;
 using Services.DTO.EventProductsModel;
-using Services.DTO.TestModels;
 using Services.Interface;
-using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -63,7 +59,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a product</response>
         [HttpGet("event-products/{id}")]
-        public async Task<IActionResult> GetAccountById(int id)
+        public async Task<IActionResult> GetAccountById(Guid id)
         {
             try
             {
@@ -86,7 +82,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a list of products</response>
         [HttpGet("{eventid}/event-products")]
-        public async Task<IActionResult> GetAllAsync(int eventid)
+        public async Task<IActionResult> GetAllAsync(Guid eventid)
         {
             try
             {
@@ -170,7 +166,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a product</response>
         [HttpPut("event-products/{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromBody] EventProductUpdateModel model)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] EventProductUpdateModel model)
         {
             try
             {
@@ -193,7 +189,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns list of remove products</response>
         [HttpDelete("event-products/{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
             try
             {

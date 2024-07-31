@@ -2,7 +2,7 @@
 {
     public interface IClaimsService
     {
-        public int GetCurrentUserId { get; }
+        public Guid GetCurrentUserId { get; }
 
         public string? IpAddress { get; }
 

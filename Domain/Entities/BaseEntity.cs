@@ -2,19 +2,19 @@
 {
     public class BaseEntity
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public DateTime CreatedAt { get; set; }
 
-        public int? CreatedBy { get; set; }
+        public Guid? CreatedBy { get; set; }
 
         public DateTime? ModifiedAt { get; set; }
 
-        public int? ModifiedBy { get; set; }
+        public Guid? ModifiedBy { get; set; }
 
         public DateTime? DeletedAt { get; set; }
 
-        public int? DeletedBy { get; set; }
+        public Guid? DeletedBy { get; set; }
 
         public bool? IsDeleted { get; set; } = false;
     }

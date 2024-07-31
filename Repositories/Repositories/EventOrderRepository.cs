@@ -20,7 +20,7 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
-        public IQueryable<EventOrder> FilterAllField(int eventId, OrderParams orderParams)
+        public IQueryable<EventOrder> FilterAllField(Guid eventId, OrderParams orderParams)
         {
             var query = _context.EventOrders
                .Include(x => x.User)
@@ -34,7 +34,7 @@ namespace Repositories.Repositories
             return query;
         }
 
-        public async Task<EventOrder> CreateOrderWithOrderDetails(int eventId, int userId, List<EventOrderDetail> orderDetails)
+        public async Task<EventOrder> CreateOrderWithOrderDetails(Guid eventId, Guid userId, List<EventOrderDetail> orderDetails)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
@@ -93,7 +93,7 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task<EventOrder> UpdateOrderStatus(int orderId, EventOrderStatusEnums eventOrderStatusEnums)
+        public async Task<EventOrder> UpdateOrderStatus(Guid orderId, EventOrderStatusEnums eventOrderStatusEnums)
         {
             var order = await _context.EventOrders.FindAsync(orderId);
             if (order == null)
@@ -112,7 +112,7 @@ namespace Repositories.Repositories
             try
             {
                 var currentUser = _claimsService.GetCurrentUserId;
-                if (currentUser < 0)
+                if (currentUser == Guid.Empty)
                 {
                     throw new Exception("User havent sign in, can not found");
                     //return null;

@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
             {
                 var userId = _claimsService.GetCurrentUserId;
 
-                if (userId < 0)
+                if (userId == Guid.Empty)
                 {
                     throw new Exception("User Id is invalid");
                 }
@@ -66,7 +66,7 @@ namespace WebAPI.Controllers
             {
                 var userId = _claimsService.GetCurrentUserId;
 
-                if (userId < 0)
+                if (userId == Guid.Empty)
                 {
                     throw new Exception("User Id is invalid or you are not login");
                 }
@@ -94,7 +94,7 @@ namespace WebAPI.Controllers
             {
                 var userId = _claimsService.GetCurrentUserId;
 
-                if (userId <= 0)
+                if (userId == Guid.Empty)
                 {
                     throw new Exception("UserId is invalid or you are not login");
                 }
@@ -136,11 +136,11 @@ namespace WebAPI.Controllers
         [HttpPost("payment/{transactionId}/complete-pending")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> SubmitOldTransactionToPay(int transactionId)
+        public async Task<IActionResult> SubmitOldTransactionToPay(Guid transactionId)
         {
             try
             {
-                if (transactionId <= 0)
+                if (transactionId == Guid.Empty)
                 {
                     throw new Exception("TransactionId is invalid");
                 }
@@ -228,7 +228,7 @@ namespace WebAPI.Controllers
                 {
                     Title = "Deposit " + int.Parse(iPNReponse.price) / 100,
                     Body = iPNReponse.message,
-                    UserId = _claimsService.GetCurrentUserId == -1 ? null : _claimsService.GetCurrentUserId,
+                    UserId = _claimsService.GetCurrentUserId == Guid.Empty ? Guid.Empty : _claimsService.GetCurrentUserId,
                     Url = "/profile/wallet",
                     Sender = "System"
                 };
@@ -261,17 +261,17 @@ namespace WebAPI.Controllers
         /// Purchase a order
         /// </summary>
         [HttpPost("payment/event-orders/{orderId}")]
-        public async Task<IActionResult> PurchaseOrder(int orderId)
+        public async Task<IActionResult> PurchaseOrder(Guid orderId)
         {
             try
             {
                 var userId = _claimsService.GetCurrentUserId;
 
-                if (userId < 0)
+                if (userId == Guid.Empty)
                 {
                     throw new Exception("User Id is invalid");
                 }
-                if (orderId <= 0)
+                if (orderId == Guid.Empty)
                 {
                     throw new Exception("OrderId is invalid");
                 }

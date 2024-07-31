@@ -2,7 +2,7 @@
 {
     public class Transaction : BaseEntity
     {
-        public int WalletId { get; set; }
+        public Guid WalletId { get; set; }
         public string TransactionType { get; set; }
         public Int64 Amount { get; set; }
         public string? Description { get; set; }

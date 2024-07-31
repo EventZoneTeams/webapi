@@ -7,9 +7,9 @@ namespace Services.Interface
 {
     public interface IEventOrderService
     {
-        Task<PagedList<EventOrder>> GetEventOrders(int eventId, OrderParams orderParams);
-        Task<EventOrderReponseDTO> GetEventOrder(int id);
+        Task<PagedList<EventOrder>> GetEventOrders(Guid eventId, OrderParams orderParams);
+        Task<EventOrderReponseDTO> GetEventOrder(Guid id);
         Task<EventOrderReponseDTO> CreateEventOrder(CreateEventOrderReponseDTO order);
-        Task<EventOrderReponseDTO> UpdateOrderStatus(int orderId, EventOrderStatusEnums eventOrderStatusEnums);
+        Task<EventOrderReponseDTO> UpdateOrderStatus(Guid orderId, EventOrderStatusEnums eventOrderStatusEnums);
     }
 }

@@ -2,7 +2,7 @@
 {
     public class UserDetailsModel
     {
-        public required int Id { get; set; }
+        public required Guid Id { get; set; }
         public string Email { get; set; } = null!;
 
         public string? UnsignFullName { get; set; } = "";

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Services.DTO.EventDonationDTOs;
-using Services.DTO.EventOrderDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -37,7 +36,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("campaigns/{id}/event-donations")]
-        public async Task<IActionResult> GetCampaignAsync(int id)
+        public async Task<IActionResult> GetCampaignAsync(Guid id)
         {
             try
             {

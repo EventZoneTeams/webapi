@@ -7,9 +7,9 @@ namespace Repositories.Interfaces
 {
     public interface IEventProductRepository : IGenericRepository<EventProduct>
     {
-        Task<List<ProductImage>> AddImagesForProduct(int productId, List<ImageReturnDTO> images);
+        Task<List<ProductImage>> AddImagesForProduct(Guid productId, List<ImageReturnDTO> images);
 
-        Task<List<EventProduct>> GetAllProductsByEvent(int eventId);
+        Task<List<EventProduct>> GetAllProductsByEvent(Guid eventId);
 
         Task<List<EventProduct>> GetAllProductsWithImages();
 

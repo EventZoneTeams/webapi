@@ -1,11 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Repositories
 {
@@ -26,7 +21,7 @@ namespace Repositories.Repositories
         {
             try
             {
-                newFeedback.UserId = _claimsService.GetCurrentUserId == -1 ? 1 : _claimsService.GetCurrentUserId; // handle tạm thời khi test
+                newFeedback.UserId = _claimsService.GetCurrentUserId == Guid.Empty ? Guid.Empty : _claimsService.GetCurrentUserId; // handle tạm thời khi test
                 await AddAsync(newFeedback);
                 return newFeedback;
             }

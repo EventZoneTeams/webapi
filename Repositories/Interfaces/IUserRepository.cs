@@ -7,7 +7,7 @@ namespace Repositories.Interfaces
     public interface IUserRepository
     {
         Task<User> AddUser(UserSignupModel user, String role);
-        Task<User> ChangeUserPasswordAsync(string id, string currentPassword, string newPassword);
+        Task<User> ChangeUserPasswordAsync(string email, string currentPassword, string newPassword);
         Task<bool> ConfirmEmail(string email, string token);
         Task<string> GenerateEmailConfirmationToken(User user);
         Task<string> GenerateTokenForResetPassword(User user);
@@ -17,14 +17,14 @@ namespace Repositories.Interfaces
         Task<List<string>> GetRoleName(User user);
         Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel user);
         Task<User> GetCurrentUserAsync();
-        Task<User> GetAccountDetailsAsync(int userId);
+        Task<User> GetAccountDetailsAsync(Guid userId);
         Task<User> UpdateAccountAsync(User user);
         Task<string> UpdateUserRole(User user, string role);
-        Task<List<User>> SoftRemoveRangeUserAsync(List<int> userIds);
+        Task<List<User>> SoftRemoveRangeUserAsync(List<Guid> userIds);
         Task<Pagination<User>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel UserFilterModel);
         Task<List<string>> GetAllRoleNamesAsync();
         Task<ResponseLoginModel> RefreshToken(TokenModel token);
-        Task<User> GetUserByIdAsync(int id);
-        Task<User> SoftRemoveUserAsync(int id);
+        Task<User> GetUserByIdAsync(Guid id);
+        Task<User> SoftRemoveUserAsync(Guid id);
     }
 }

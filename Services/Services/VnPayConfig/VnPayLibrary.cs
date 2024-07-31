@@ -111,7 +111,7 @@ namespace Services.Services.VnPayConfig
     public class IPNReponse
     {
         public TransactionStatusEnums status { get; set; }
-        public int transactionId { get; set; }
+        public Guid transactionId { get; set; }
         public string price { get; set; }
         public string message { get; set; }
     }

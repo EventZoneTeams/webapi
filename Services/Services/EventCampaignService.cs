@@ -1,21 +1,11 @@
 ﻿using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
 using Repositories.Commons;
 using Repositories.Interfaces;
-using Repositories.Models.ImageDTOs;
-using Repositories.Models.ProductModels;
-using Repositories.Models;
-using Services.DTO.EventProductsModel;
-using Services.DTO.ResponseModels;
-using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Services.DTO.EventCampaignDTOs;
 using Repositories.Models.EventCampaignModels;
-using Domain.Enums;
+using Services.DTO.EventCampaignDTOs;
+using Services.Interface;
 
 namespace Services.Services
 {
@@ -30,7 +20,7 @@ namespace Services.Services
             _mapper = mapper;
         }
 
-        public async Task<EventCampaignStaticticDTO> GetACampaignsByIdAsync(int id)
+        public async Task<EventCampaignStaticticDTO> GetACampaignsByIdAsync(Guid id)
         {
             try
             {
@@ -168,7 +158,7 @@ namespace Services.Services
         //    }
         //}
 
-        public async Task<ApiResult<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<int> campaignIds)
+        public async Task<ApiResult<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<Guid> campaignIds)
         {
             var allCampaigns = await _unitOfWork.EventCampaignRepository.GetAllAsync();
             var existingIds = allCampaigns.Where(e => campaignIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -209,7 +199,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<EventCampaignDTO>> DeleteCampaignByIdAsync(int id)
+        public async Task<ApiResult<EventCampaignDTO>> DeleteCampaignByIdAsync(Guid id)
         {
             var product = await _unitOfWork.EventCampaignRepository.GetByIdAsync(id);
 
@@ -252,7 +242,7 @@ namespace Services.Services
             return _mapper.Map<List<EventCampaignDTO>>(result);
         }
 
-        public async Task<List<EventCampaignDTO>> GetAllCampaignsByEventAsync(int eventId)
+        public async Task<List<EventCampaignDTO>> GetAllCampaignsByEventAsync(Guid eventId)
         {
             var result = await _unitOfWork.EventCampaignRepository.GetAllCampaignByEvent(eventId);
             if (result == null)
@@ -263,7 +253,7 @@ namespace Services.Services
             return _mapper.Map<List<EventCampaignDTO>>(result);
         }
 
-        public async Task<ApiResult<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignUpdateDTO eventCampaignDTO)
+        public async Task<ApiResult<EventCampaignDTO>> UpdateEventCampaignAsync(Guid id, EventCampaignUpdateDTO eventCampaignDTO)
         {
             var esistingCampaign = await _unitOfWork.EventCampaignRepository.GetByIdAsync(id);
             if (esistingCampaign != null)

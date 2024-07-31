@@ -4,7 +4,6 @@ using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
 using Repositories.Models.PackageModels;
-using Repositories.Models.ProductModels;
 
 namespace Repositories.Repositories
 {
@@ -21,14 +20,14 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
-        public async Task<List<EventPackage>> GetAllPackgesByEventId(int eventId)
+        public async Task<List<EventPackage>> GetAllPackgesByEventId(Guid eventId)
         {
             var result = await _context.EventPackages.Where(x => x.EventId == eventId).ToListAsync();
 
             return result;
         }
 
-        public async Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, string thumbnailUrl, List<ProductQuantityDTO> products, string title)
+        public async Task<List<ProductInPackage>> CreatePackageWithProducts(Guid eventId, string description, string thumbnailUrl, List<ProductQuantityDTO> products, string title)
         {
             try
             {
@@ -129,7 +128,7 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task<List<EventPackage>> GetAllPackageWithProductsByEventId(int eventId) // SỬ DỤNG EAGER LOADING
+        public async Task<List<EventPackage>> GetAllPackageWithProductsByEventId(Guid eventId) // SỬ DỤNG EAGER LOADING
         {
             try
             {
@@ -153,7 +152,7 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task<EventPackage> GetPackageById(int id) // SỬ DỤNG EAGER LOADING
+        public async Task<EventPackage> GetPackageById(Guid id) // SỬ DỤNG EAGER LOADING
         {
             try
             {

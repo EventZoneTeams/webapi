@@ -1,9 +1,7 @@
 ﻿using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Commons;
 using Repositories.Interfaces;
-using Repositories.Models;
 using Repositories.Models.ImageDTOs;
 using Repositories.Models.ProductModels;
 
@@ -22,7 +20,7 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
-        public async Task<List<EventProduct>> GetAllProductsByEvent(int eventId)
+        public async Task<List<EventProduct>> GetAllProductsByEvent(Guid eventId)
         {
             var check = await _context.Events.FindAsync(eventId);
             if (check == null) { return null; }
@@ -34,7 +32,7 @@ namespace Repositories.Repositories
             return await _context.EventProducts.Include(x => x.ProductImages).ToListAsync();
         }
 
-        public async Task<List<ProductImage>> AddImagesForProduct(int productId, List<ImageReturnDTO> images)
+        public async Task<List<ProductImage>> AddImagesForProduct(Guid productId, List<ImageReturnDTO> images)
         {
             try
             {

@@ -2,8 +2,8 @@
 {
     public class PostComment : BaseEntity
     {
-        public int PostId { get; set; }
-        public int UserId { get; set; }
+        public Guid PostId { get; set; }
+        public Guid UserId { get; set; }
         public string Content { get; set; }
 
         public virtual Post Post { get; set; }

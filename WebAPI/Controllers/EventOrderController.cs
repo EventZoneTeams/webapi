@@ -28,7 +28,7 @@ namespace WebAPI.Controllers
         /// <response code="400">Event Id is not exist</response>
         /// <response code="404">Not Found</response>
         [HttpGet("event/{id}/event-orders")]
-        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventOrders(int id, [FromQuery] OrderParams orderParam)
+        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventOrders(Guid id, [FromQuery] OrderParams orderParam)
         {
             try
             {
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
         /// /// <response code="400">Event Order Id is not exist</response>
         /// <response code="404">Not Found</response>
         [HttpGet("event-orders/{id}")]
-        public async Task<ActionResult<EventOrderReponseDTO>> GetEventOrder(int id)
+        public async Task<ActionResult<EventOrderReponseDTO>> GetEventOrder(Guid id)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a order</response>
         [HttpPut("event-orders/{id}")]
-        public async Task<ActionResult<EventOrderReponseDTO>> UpdateOrderStatus(int id, [FromForm] EventOrderStatusEnums eventOrderStatusEnums)
+        public async Task<ActionResult<EventOrderReponseDTO>> UpdateOrderStatus(Guid id, [FromForm] EventOrderStatusEnums eventOrderStatusEnums)
         {
             try
             {

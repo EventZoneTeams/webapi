@@ -19,7 +19,7 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
-        public async Task<List<EventCampaign>> GetAllCampaignByEvent(int id)
+        public async Task<List<EventCampaign>> GetAllCampaignByEvent(Guid id)
         {
             var data = await
                 _context.EventCampaigns
@@ -30,7 +30,7 @@ namespace Repositories.Repositories
             return data;
         }
 
-        public async Task<EventCampaign> GetCampainById(int id)
+        public async Task<EventCampaign> GetCampainById(Guid id)
         {
             var data = await _context.EventCampaigns.Include(x => x.Event).Include(x => x.EventDonations).ThenInclude(x => x.User).FirstOrDefaultAsync(c => c.Id == id);
             return data;

@@ -21,7 +21,7 @@ namespace Repositories.Repositories
             _userManager = userManager;
         }
 
-        public async Task<List<Notification>> ReadAllNotification(int userId)
+        public async Task<List<Notification>> ReadAllNotification(Guid userId)
         {
             var notifications = await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
             foreach (var notification in notifications)
@@ -32,13 +32,13 @@ namespace Repositories.Repositories
             return notifications;
         }
 
-        public async Task<int> GetUnreadNotificationQuantity(int userId)
+        public async Task<int> GetUnreadNotificationQuantity(Guid userId)
         {
             var result = await _context.Notifications.Where(x => x.UserId == userId && x.IsRead == false).CountAsync();
             return result;
         }
 
-        public async Task<List<Notification>> GetListByUserId(int userId)
+        public async Task<List<Notification>> GetListByUserId(Guid userId)
         {
             var notifications = new List<Notification>();
             //check role of user to get notification

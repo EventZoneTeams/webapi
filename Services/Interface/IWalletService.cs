@@ -7,12 +7,12 @@ namespace Services.Interface
 {
     public interface IWalletService
     {
-        Task<TransactionResponsesDTO> ConfirmTransaction(int transactionId);
-        Task<Transaction> Deposit(int userId, Int64 amount);
-        Task<List<WalletResponseDTO>> GetListWalletByUserId(int userId);
-        Task<Transaction> GetTransactionById(int transactionId);
-        Task<List<TransactionResponsesDTO>> GetTransactionsByUserId(int userId, WalletRequestTypeEnums walletRequestTypeEnums);
-        Task<WalletResponseDTO> GetWalletByUserIdAndType(int userId, WalletTypeEnums walletType);
-        Task<TransactionResponsesDTO> PurchaseOrder(int orderId, int userId);
+        Task<TransactionResponsesDTO> ConfirmTransaction(Guid transactionId);
+        Task<Transaction> Deposit(Guid userId, Int64 amount);
+        Task<List<WalletResponseDTO>> GetListWalletByUserId(Guid userId);
+        Task<Transaction> GetTransactionById(Guid transactionId);
+        Task<List<TransactionResponsesDTO>> GetTransactionsByUserId(Guid userId, WalletRequestTypeEnums walletRequestTypeEnums);
+        Task<WalletResponseDTO> GetWalletByUserIdAndType(Guid userId, WalletTypeEnums walletType);
+        Task<TransactionResponsesDTO> PurchaseOrder(Guid orderId, Guid userId);
     }
 }

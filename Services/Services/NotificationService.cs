@@ -63,18 +63,18 @@ namespace Services.Services
             await _notificationHubContext.Clients.Group("Manager").SendAsync("ReceiveNotification", notification.Title, notification.Body).ConfigureAwait(true);
         }
 
-        public async Task<List<NotificationDTO>> GetNotifications(int userId)
+        public async Task<List<NotificationDTO>> GetNotifications(Guid userId)
         {
             var notifications = await _unitOfWork.NotificationRepository.GetListByUserId(userId);
             return _mapper.Map<List<NotificationDTO>>(notifications);
         }
 
-        public async Task<List<NotificationDTO>> ReadAllNotification(int userId)
+        public async Task<List<NotificationDTO>> ReadAllNotification(Guid userId)
         {
             var notifications = await _unitOfWork.NotificationRepository.ReadAllNotification(userId);
             return _mapper.Map<List<NotificationDTO>>(notifications);
         }
-        public async Task<int> GetUnreadNotificationQuantity(int userId)
+        public async Task<int> GetUnreadNotificationQuantity(Guid userId)
         {
             var result = await _unitOfWork.NotificationRepository.GetUnreadNotificationQuantity(userId);
             return result;

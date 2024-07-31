@@ -3,7 +3,6 @@ using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
 using Services.DTO.EventOrderDTOs;
-using Services.DTO.ResponseModels;
 using Services.DTO.UserModels;
 using Services.Interface;
 
@@ -42,7 +41,7 @@ namespace Services.Services
             throw new NotImplementedException();
         }
 
-        public async Task<UserDetailsModel> GetUserById(int id)
+        public async Task<UserDetailsModel> GetUserById(Guid id)
         {
             var existingUser = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
 
@@ -83,7 +82,7 @@ namespace Services.Services
             return await _unitOfWork.UserRepository.RefreshToken(token);
         }
 
-        public async Task<ApiResult<UserDetailsModel>> UpdateStudentProfileAsync(int userId, UserUpdateModel userUpdateMode)
+        public async Task<ApiResult<UserDetailsModel>> UpdateStudentProfileAsync(Guid userId, UserUpdateModel userUpdateMode)
         {
             var existingUser = await _unitOfWork.UserRepository.GetAccountDetailsAsync(userId);
             if (existingUser != null)
@@ -109,7 +108,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<UserDetailsModel>> UpdateAccountAsync(int userId, UserUpdateModel userUpdateMode, string role)
+        public async Task<ApiResult<UserDetailsModel>> UpdateAccountAsync(Guid userId, UserUpdateModel userUpdateMode, string role)
         {
             try
             {
@@ -203,7 +202,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<List<UserDetailsModel>>> DeleteRangeUsers(List<int> userIds)
+        public async Task<ApiResult<List<UserDetailsModel>>> DeleteRangeUsers(List<Guid> userIds)
         {
             var users = await _unitOfWork.UserRepository.GetAllUsersAsync();
             var existingIds = users.Where(e => userIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -245,7 +244,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<UserDetailsModel>> DeleteUser(int id)
+        public async Task<ApiResult<UserDetailsModel>> DeleteUser(Guid id)
         {
             var package = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
 

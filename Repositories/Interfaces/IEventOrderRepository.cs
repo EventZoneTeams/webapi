@@ -6,9 +6,9 @@ namespace Repositories.Interfaces
 {
     public interface IEventOrderRepository : IGenericRepository<EventOrder>
     {
-        Task<EventOrder> CreateOrderWithOrderDetails(int eventId, int userId, List<EventOrderDetail> orderDetails);
+        Task<EventOrder> CreateOrderWithOrderDetails(Guid eventId, Guid userId, List<EventOrderDetail> orderDetails);
         Task<List<EventOrder>> getCurrentUserOrder();
-        Task<EventOrder> UpdateOrderStatus(int orderId, EventOrderStatusEnums eventOrderStatusEnums);
-        IQueryable<EventOrder> FilterAllField(int eventId, OrderParams orderParams);
+        Task<EventOrder> UpdateOrderStatus(Guid orderId, EventOrderStatusEnums eventOrderStatusEnums);
+        IQueryable<EventOrder> FilterAllField(Guid eventId, OrderParams orderParams);
     }
 }
