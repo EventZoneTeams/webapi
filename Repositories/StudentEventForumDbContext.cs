@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Repositories
 {
-    public class StudentEventForumDbContext : IdentityDbContext<User, Role, int>
+    public class StudentEventForumDbContext : IdentityDbContext<User, Role, Guid>
     {
         public StudentEventForumDbContext(DbContextOptions options) : base(options)
         {

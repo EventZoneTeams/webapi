@@ -7,18 +7,18 @@ namespace Repositories.Interfaces
 {
     public interface IEventPackageRepository : IGenericRepository<EventPackage>
     {
-        Task<List<ProductInPackage>> CreatePackageWithProducts(int eventId, string description, string thumbnailUr, List<ProductQuantityDTO> productIds, string title);
+        Task<List<ProductInPackage>> CreatePackageWithProducts(Guid eventId, string description, string thumbnailUr, List<ProductQuantityDTO> productIds, string title);
 
-        Task<List<EventPackage>> GetAllPackgesByEventId(int eventId);
+        Task<List<EventPackage>> GetAllPackgesByEventId(Guid eventId);
 
         Task<List<EventPackageDetailDTO>> GetAllPackageWithProducts();
 
         Task<List<ProductInPackage>> GetProductsInPackagesWithProduct();
 
-        Task<List<EventPackage>> GetAllPackageWithProductsByEventId(int eventId);
+        Task<List<EventPackage>> GetAllPackageWithProductsByEventId(Guid eventId);
 
         Task<Pagination<EventPackage>> GetPackagessByFiltersAsync(PaginationParameter paginationParameter, PackageFilterModel packageFilterModel);
 
-        Task<EventPackage> GetPackageById(int id);
+        Task<EventPackage> GetPackageById(Guid id);
     }
 }

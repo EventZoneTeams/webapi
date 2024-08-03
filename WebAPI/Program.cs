@@ -10,7 +10,6 @@ using Services.Interface;
 using Services.Services;
 using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
@@ -24,7 +23,6 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.KebabCaseLower;
     });
 
 builder.Services.AddControllers(options =>
@@ -175,11 +173,13 @@ app.UseSwaggerUI(config =>
     // Always keep token after reload or refresh browser
     config.SwaggerEndpoint("/swagger/v1/swagger.json", "Student Event Forum API v.01");
     config.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
+    config.InjectJavascript("/custom-swagger.js");
 });
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<PerformanceTimeMiddleware>();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
 // USE AUTHENTICATION, AUTHORIZATION
 app.UseAuthorization();

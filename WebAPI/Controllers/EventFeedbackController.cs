@@ -1,7 +1,6 @@
 ﻿using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
-using Services.DTO.EventDonationDTOs;
 using Services.DTO.EventFeedbackModel;
 using Services.Interface;
 using System.ComponentModel.DataAnnotations;
@@ -94,7 +93,7 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns the list of event feedbacks for the specified event.</response>
         /// <response code="400">Returns an error message if the retrieval fails.</response>
         [HttpGet("events/{id}")]
-        public async Task<IActionResult> GetAllPackageAsync(int id)
+        public async Task<IActionResult> GetAllPackageAsync(Guid id)
         {
             try
             {
@@ -116,7 +115,7 @@ namespace WebAPI.Controllers
         /// <response code="404">If none of the specified feedbacks are found.</response>
         /// <response code="400">Returns an error message if the deletion fails.</response>
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsync([FromBody] List<int> feedbackIds)
+        public async Task<IActionResult> DeleteAsync([FromBody] List<Guid> feedbackIds)
         {
             try
             {

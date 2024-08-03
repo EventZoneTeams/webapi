@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost("send-user/{userId}")]
-        public async Task<IActionResult> SendToSpecificUser(int userId, [FromForm] string title, [FromForm] string content)
+        public async Task<IActionResult> SendToSpecificUser(Guid userId, [FromForm] string title, [FromForm] string content)
         {
             //var connections = _userConnectionManager.GetUserConnections(model.userId);
             //if (connections != null && connections.Count > 0)
@@ -69,7 +69,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetListNotification(int userId)
+        public async Task<IActionResult> GetListNotification(Guid userId)
         {
             try
             {
@@ -88,7 +88,7 @@ namespace WebAPI.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost("read-all/{userId}")]
-        public async Task<IActionResult> ReadAllNotification(int userId)
+        public async Task<IActionResult> ReadAllNotification(Guid userId)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace WebAPI.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("unread-quantity/{userId}")]
-        public async Task<IActionResult> GetUnreadNotificationQuantity(int userId)
+        public async Task<IActionResult> GetUnreadNotificationQuantity(Guid userId)
         {
             try
             {

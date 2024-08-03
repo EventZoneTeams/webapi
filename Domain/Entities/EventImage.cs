@@ -2,8 +2,8 @@
 {
     public class EventImage : BaseEntity
     {
-        public int EventId { get; set; }
-        public int PostId { get; set; }
+        public Guid EventId { get; set; }
+        public Guid PostId { get; set; }
         public string ImageUrl { get; set; }
         public string Name { get; set; }
 

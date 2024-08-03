@@ -1,7 +1,6 @@
 ﻿using Repositories.Commons;
 using Repositories.Models;
 using Services.DTO.EventOrderDTOs;
-using Services.DTO.ResponseModels;
 using Services.DTO.UserModels;
 
 namespace Services.Interface
@@ -24,22 +23,22 @@ namespace Services.Interface
 
         Task<ApiResult<UserDetailsModel>> GetCurrentUserAsync();
 
-        Task<ApiResult<UserDetailsModel>> UpdateStudentProfileAsync(int userId, UserUpdateModel userUpdateMode);
+        Task<ApiResult<UserDetailsModel>> UpdateStudentProfileAsync(Guid userId, UserUpdateModel userUpdateMode);
 
-        Task<ApiResult<UserDetailsModel>> UpdateAccountAsync(int userId, UserUpdateModel userUpdateMode, string role);
+        Task<ApiResult<UserDetailsModel>> UpdateAccountAsync(Guid userId, UserUpdateModel userUpdateMode, string role);
 
         Task<ApiResult<UserDetailsModel>> CreateManagerAsync(UserSignupModel UserLogin);
 
-        Task<ApiResult<List<UserDetailsModel>>> DeleteRangeUsers(List<int> userIds);
+        Task<ApiResult<List<UserDetailsModel>>> DeleteRangeUsers(List<Guid> userIds);
 
         Task<Pagination<UserDetailsModel>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel userFilterModel);
 
         Task<ResponseLoginModel> RefreshToken(TokenModel token);
 
-        Task<UserDetailsModel> GetUserById(int id);
+        Task<UserDetailsModel> GetUserById(Guid id);
 
         Task<List<EventOrderReponseDTO>> GetCurrentUserOrders();
 
-        Task<ApiResult<UserDetailsModel>> DeleteUser(int id);
+        Task<ApiResult<UserDetailsModel>> DeleteUser(Guid id);
     }
 }

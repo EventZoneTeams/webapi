@@ -32,7 +32,7 @@ namespace Repositories.Extensions
             return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm) || p.Location.ToLower().Contains(lowerCaseSearchTerm) || p.University.ToLower().Contains(lowerCaseSearchTerm));
         }
 
-        public static IQueryable<Event> Filter(this IQueryable<Event> query, int? categoryId)
+        public static IQueryable<Event> Filter(this IQueryable<Event> query, Guid? categoryId)
         {
             if (categoryId != null)
             {
@@ -41,7 +41,7 @@ namespace Repositories.Extensions
             return query;
         }
 
-        public static IQueryable<Event> FilterByUserId(this IQueryable<Event> query, int? userId)
+        public static IQueryable<Event> FilterByUserId(this IQueryable<Event> query, Guid? userId)
         {
             if (userId != null)
             {

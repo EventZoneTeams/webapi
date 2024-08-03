@@ -4,7 +4,6 @@ using Domain.Enums;
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Services.DTO.EventDonationDTOs;
-using Services.DTO.ResponseModels;
 using Services.Interface;
 
 namespace Services.Services
@@ -31,7 +30,7 @@ namespace Services.Services
             try
             {
                 var checkEvent = await _unitOfWork.EventCampaignRepository.GetByIdAsync(data.EventCampaignId, x => x.Event);
-                var checkUser = _claimsService.GetCurrentUserId == -1 ? 1 : _claimsService.GetCurrentUserId; //test
+                var checkUser = _claimsService.GetCurrentUserId == Guid.Empty ? Guid.Empty : _claimsService.GetCurrentUserId; //test
 
                 if (checkEvent == null)
                 {
@@ -123,7 +122,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<List<EventDonationDetailDTO>> GetAllDonationOfCampaign(int id)
+        public async Task<List<EventDonationDetailDTO>> GetAllDonationOfCampaign(Guid id)
         {
             var result = await _unitOfWork.EventDonationRepository.GetAllDonationByCampaignId(id);
             return _mapper.Map<List<EventDonationDetailDTO>>(result);
@@ -132,7 +131,7 @@ namespace Services.Services
         public async Task<List<EventDonationDetailDTO>> GetMyDonation()
         {
             var userId = _claimsService.GetCurrentUserId;
-            if (userId == -1) throw new Exception("you are not login or bearer is not correct");
+            if (userId == Guid.Empty) throw new Exception("you are not login or bearer is not correct");
             var result = await _unitOfWork.EventDonationRepository.GetMyDonation();
             return _mapper.Map<List<EventDonationDetailDTO>>(result);
         }

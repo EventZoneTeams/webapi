@@ -7,9 +7,9 @@ namespace Services.Interface
     public interface IEventService
     {
         Task<PagedList<Event>> GetEvent(EventParams eventParams);
-        Task<EventResponseDTO> GetEventById(int id);
+        Task<EventResponseDTO> GetEventById(Guid id);
         Task<EventResponseDTO> CreateEvent(EventDTO eventModel);
-        Task<EventResponseDTO> UpdateEvent(int id, EventDTO eventModel);
-        Task<EventResponseDTO> DeleteEvent(int id);
+        Task<EventResponseDTO> UpdateEvent(Guid id, EventDTO eventModel);
+        Task<EventResponseDTO> DeleteEvent(Guid id);
     }
 }

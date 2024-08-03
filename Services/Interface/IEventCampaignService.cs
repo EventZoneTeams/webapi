@@ -1,12 +1,6 @@
 ﻿using Repositories.Commons;
 using Repositories.Models.EventCampaignModels;
 using Services.DTO.EventCampaignDTOs;
-using Services.DTO.ResponseModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Interface
 {
@@ -14,18 +8,18 @@ namespace Services.Interface
     {
         Task<ApiResult<EventCampaignDTO>> CreateEventCampaignAsync(EventCampaignCreateDTO eventCampaignDTO);
 
-        Task<ApiResult<EventCampaignDTO>> DeleteCampaignByIdAsync(int id);
+        Task<ApiResult<EventCampaignDTO>> DeleteCampaignByIdAsync(Guid id);
 
-        Task<ApiResult<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<int> campaignIds);
+        Task<ApiResult<List<EventCampaignDTO>>> DeleteEventCampaignAsync(List<Guid> campaignIds);
 
-        Task<EventCampaignStaticticDTO> GetACampaignsByIdAsync(int id);
+        Task<EventCampaignStaticticDTO> GetACampaignsByIdAsync(Guid id);
 
         Task<List<EventCampaignDTO>> GetAllCampaignsAsync();
 
-        Task<List<EventCampaignDTO>> GetAllCampaignsByEventAsync(int eventId);
+        Task<List<EventCampaignDTO>> GetAllCampaignsByEventAsync(Guid eventId);
 
         Task<Pagination<EventCampaignDTO>> GetCampaignsByFiltersAsync(PaginationParameter paginationParameter, CampaignFilterModel campaignFilterModel);
 
-        Task<ApiResult<EventCampaignDTO>> UpdateEventCampaignAsync(int id, EventCampaignUpdateDTO eventCampaignDTO);
+        Task<ApiResult<EventCampaignDTO>> UpdateEventCampaignAsync(Guid id, EventCampaignUpdateDTO eventCampaignDTO);
     }
 }

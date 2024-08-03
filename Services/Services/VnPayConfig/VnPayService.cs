@@ -100,7 +100,7 @@ namespace Services.Services.VnPayConfig
                 price = vnpAmount,
                 message = "Transaction Invalid",
                 status = TransactionStatusEnums.FAILED,
-                transactionId = 0
+                transactionId = Guid.Empty,
             };
 
             // Get HashSecret from env
@@ -111,7 +111,7 @@ namespace Services.Services.VnPayConfig
             {
                 try
                 {
-                    var txnId = int.Parse(vnpTxnRef);
+                    var txnId = Guid.Parse(vnpTxnRef);
                     iPNReponse.transactionId = txnId;
                 }
                 catch (Exception ex)

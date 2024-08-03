@@ -1,18 +1,13 @@
 ﻿using Domain.Entities;
 using Repositories.Commons;
 using Repositories.Models.EventCampaignModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repositories.Interfaces
 {
     public interface IEventCampaignRepository : IGenericRepository<EventCampaign>
     {
-        Task<List<EventCampaign>> GetAllCampaignByEvent(int id);
+        Task<List<EventCampaign>> GetAllCampaignByEvent(Guid id);
         Task<Pagination<EventCampaign>> GetCampaignsByFilterAsync(PaginationParameter paginationParameter, CampaignFilterModel campaignFilter);
-        Task<EventCampaign> GetCampainById(int id);
+        Task<EventCampaign> GetCampainById(Guid id);
     }
 }

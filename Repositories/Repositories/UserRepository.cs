@@ -285,7 +285,7 @@ namespace Repositories.Repositories
                 JWT = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
                 Expired = newAccessToken.ValidTo,
                 JWTRefreshToken = newRefreshToken,
-                UserId = int.Parse(accountId)
+                UserId = Guid.Parse(accountId)
             };
         }
 
@@ -363,7 +363,7 @@ namespace Repositories.Repositories
             return result;
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByIdAsync(Guid id)
         {
             var result = await _userManager.FindByIdAsync(id.ToString());
             if (result == null)
@@ -373,7 +373,7 @@ namespace Repositories.Repositories
             return result;
         }
 
-        public async Task<User> GetAccountDetailsAsync(int userId)
+        public async Task<User> GetAccountDetailsAsync(Guid userId)
         {
             var accounts = await _userManager.FindByIdAsync(userId.ToString());
             var account = await _templateDbContext.Users.FirstOrDefaultAsync(a => a.Id == userId);
@@ -441,7 +441,7 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task<List<User>> SoftRemoveRangeUserAsync(List<int> userIds)
+        public async Task<List<User>> SoftRemoveRangeUserAsync(List<Guid> userIds)
         {
             try
             {
@@ -462,7 +462,7 @@ namespace Repositories.Repositories
             }
         }
 
-        public async Task<User> SoftRemoveUserAsync(int id)
+        public async Task<User> SoftRemoveUserAsync(Guid id)
         {
             try
             {

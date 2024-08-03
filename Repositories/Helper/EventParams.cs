@@ -9,8 +9,8 @@ namespace Repositories.Helper
         [BindProperty(Name = "search-term")]
         public string? SearchTerm { get; set; }
         [BindProperty(Name = "event-category-id")]
-        public int? EventCategoryId { get; set; }
-        public int? UserId { get; set; }
+        public Guid? EventCategoryId { get; set; }
+        public Guid? UserId { get; set; }
         [BindProperty(Name = "donation-start-date")]
         public DateTime? EventStartDate { get; set; }
         [BindProperty(Name = "event-end-date")]

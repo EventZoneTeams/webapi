@@ -1,6 +1,5 @@
 ﻿using Repositories.Commons;
 using Services.DTO.EventDonationDTOs;
-using Services.DTO.ResponseModels;
 
 namespace Services.Interface
 {
@@ -8,7 +7,7 @@ namespace Services.Interface
     {
         Task<ApiResult<EventDonationDetailDTO>> AddDonationToCampaign(EventDonationCreateDTO data);
 
-        Task<List<EventDonationDetailDTO>> GetAllDonationOfCampaign(int id);
+        Task<List<EventDonationDetailDTO>> GetAllDonationOfCampaign(Guid id);
 
         Task<List<EventDonationDetailDTO>> GetMyDonation();
     }

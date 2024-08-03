@@ -2,8 +2,8 @@
 {
     public class EventOrder : BaseEntity
     {
-        public int EventId { get; set; }
-        public int UserId { get; set; }
+        public Guid EventId { get; set; }
+        public Guid UserId { get; set; }
         public Int64 TotalAmount { get; set; }
         public string Status { get; set; }
 

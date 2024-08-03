@@ -31,7 +31,7 @@ namespace Services.Services
             return events;
         }
 
-        public async Task<EventResponseDTO> GetEventById(int id)
+        public async Task<EventResponseDTO> GetEventById(Guid id)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.EventCategory, x => x.User, x => x.EventCampaigns);
 
@@ -82,7 +82,7 @@ namespace Services.Services
             throw new Exception("Failed to create event");
         }
 
-        public async Task<EventResponseDTO> UpdateEvent(int id, EventDTO eventModel)
+        public async Task<EventResponseDTO> UpdateEvent(Guid id, EventDTO eventModel)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
 
@@ -127,7 +127,7 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<EventResponseDTO> DeleteEvent(int id)
+        public async Task<EventResponseDTO> DeleteEvent(Guid id)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
 

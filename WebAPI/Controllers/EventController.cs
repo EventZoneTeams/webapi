@@ -78,7 +78,7 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns a event</response>
         /// <response code="404">Event Not Found</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEventByIdAsync(int id)
+        public async Task<IActionResult> GetEventByIdAsync(Guid id)
         {
             try
             {
@@ -224,7 +224,7 @@ namespace WebAPI.Controllers
         /// <response code="400">If the event or the update data is invalid</response>
         /// <response code="404">If the event is not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEventAsync(int id, [FromForm] EventCreateDTO updateEventModel)
+        public async Task<IActionResult> UpdateEventAsync(Guid id, [FromForm] EventCreateDTO updateEventModel)
         {
             try
             {
@@ -272,7 +272,7 @@ namespace WebAPI.Controllers
         /// <response code="400">If the event is invalid</response>
         /// <response code="404">If the event is not found</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEventAsync(int id)
+        public async Task<IActionResult> DeleteEventAsync(Guid id)
         {
             try
             {

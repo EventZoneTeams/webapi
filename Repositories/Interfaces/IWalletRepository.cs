@@ -5,15 +5,15 @@ namespace Repositories.Interfaces
 {
     public interface IWalletRepository : IGenericRepository<Wallet>
     {
-        Task<List<Wallet>> GetListWalletByUserId(int userId);
-        Task<Wallet> GetWalletByUserIdAndType(int userId, WalletTypeEnums walletType);
+        Task<List<Wallet>> GetListWalletByUserId(Guid userId);
+        Task<Wallet> GetWalletByUserIdAndType(Guid userId, WalletTypeEnums walletType);
 
-        Task<Transaction> ConfirmTransaction(int transactionId);
-        Task<Transaction> DepositMoney(int userId, WalletTypeEnums walletType, Int64 amount);
-        Task<Transaction> PurchaseItem(int userId, int orderId);
-        Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, Int64 amount);
+        Task<Transaction> ConfirmTransaction(Guid transactionId);
+        Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, Int64 amount);
+        Task<Transaction> PurchaseItem(Guid userId, Guid orderId);
+        Task<Transaction> WithdrawMoney(Guid userId, WalletTypeEnums walletType, Int64 amount);
 
-        Task<Transaction> Donation(int userId, Int64 amount);
-        Task<Transaction> ReceiveDonation(int userId, Int64 amount);
+        Task<Transaction> Donation(Guid userId, Int64 amount);
+        Task<Transaction> ReceiveDonation(Guid userId, Int64 amount);
     }
 }

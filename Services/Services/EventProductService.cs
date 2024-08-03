@@ -5,7 +5,6 @@ using Repositories.Interfaces;
 using Repositories.Models.ImageDTOs;
 using Repositories.Models.ProductModels;
 using Services.DTO.EventProductsModel;
-using Services.DTO.ResponseModels;
 using Services.Interface;
 
 namespace Services.Services
@@ -120,7 +119,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<ApiResult<List<EventProductDetailModel>>> DeleteEventProductAsync(List<int> productIds)
+        public async Task<ApiResult<List<EventProductDetailModel>>> DeleteEventProductAsync(List<Guid> productIds)
         {
             var allProduct = await _unitOfWork.EventProductRepository.GetAllAsync();
             var existingIds = allProduct.Where(e => productIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -163,7 +162,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<EventProductDetailModel>> DeleteEventProductByIdAsync(int id)
+        public async Task<ApiResult<EventProductDetailModel>> DeleteEventProductByIdAsync(Guid id)
         {
             var product = await _unitOfWork.EventProductRepository.GetByIdAsync(id);
 
@@ -197,7 +196,7 @@ namespace Services.Services
             return _mapper.Map<List<EventProductDetailModel>>(result);
         }
 
-        public async Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(int eventId)
+        public async Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(Guid eventId)
         {
             var result = await _unitOfWork.EventProductRepository.GetAllProductsByEvent(eventId);
             if (result == null)
@@ -208,7 +207,7 @@ namespace Services.Services
             return _mapper.Map<List<EventProductDetailModel>>(result);
         }
 
-        public async Task<ApiResult<EventProductDetailModel>> UpdateEventProductAsync(int productId, EventProductUpdateModel updateModel)
+        public async Task<ApiResult<EventProductDetailModel>> UpdateEventProductAsync(Guid productId, EventProductUpdateModel updateModel)
         {
             var existingProduct = await _unitOfWork.EventProductRepository.GetByIdAsync(productId);
             if (existingProduct != null)
@@ -244,7 +243,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<EventProductDetailModel>> GetProductById(int productId)
+        public async Task<ApiResult<EventProductDetailModel>> GetProductById(Guid productId)
         {
             var product = await _unitOfWork.EventProductRepository.GetByIdAsync(productId, x => x.ProductImages);
             if (product == null)

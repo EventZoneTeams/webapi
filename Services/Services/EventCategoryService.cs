@@ -48,7 +48,7 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<bool> DeleteEventCategory(int id)
+        public async Task<bool> DeleteEventCategory(Guid id)
         {
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
 
@@ -78,7 +78,7 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<EventCategoryResponseDTO> GetEventCategoryById(int id)
+        public async Task<EventCategoryResponseDTO> GetEventCategoryById(Guid id)
         {
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
 
@@ -92,7 +92,7 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<EventCategoryResponseDTO> UpdateEventCategory(int id, EventCategoryDTO eventCategoryModel)
+        public async Task<EventCategoryResponseDTO> UpdateEventCategory(Guid id, EventCategoryDTO eventCategoryModel)
         {
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
 

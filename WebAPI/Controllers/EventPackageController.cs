@@ -1,15 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models;
 using Repositories.Models.PackageModels;
-using Services.DTO.EventOrderDTOs;
 using Services.DTO.EventPackageModels;
 using Services.DTO.EventProductsModel;
 using Services.Interface;
-using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -43,7 +39,7 @@ namespace WebAPI.Controllers
         /// </remarks>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("event-packages")]
-        public async Task<IActionResult> CreateAsync([FromQuery] int eventId, [FromForm] CreatePackageRequest package)
+        public async Task<IActionResult> CreateAsync([FromQuery] Guid eventId, [FromForm] CreatePackageRequest package)
         {
             try
             {
@@ -108,7 +104,7 @@ namespace WebAPI.Controllers
         /// <returns>A list of event packages</returns>
         [HttpGet("events/{eventid}/event-packages")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAllPackagesInEventAsync(int eventid)
+        public async Task<IActionResult> GetAllPackagesInEventAsync(Guid eventid)
         {
             try
             {
@@ -127,7 +123,7 @@ namespace WebAPI.Controllers
         /// <returns>A list of event packages removed</returns>
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("event-packages/{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
             try
             {
@@ -150,7 +146,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a product</response>
         [HttpGet("event-packages/{id}")]
-        public async Task<IActionResult> GetAccountById(int id)
+        public async Task<IActionResult> GetAccountById(Guid id)
         {
             try
             {

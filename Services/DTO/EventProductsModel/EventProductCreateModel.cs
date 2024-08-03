@@ -6,7 +6,7 @@ namespace Services.DTO.EventProductsModel
     public class EventProductCreateModel
     {
         [Required(ErrorMessage = "EventID is required!")]
-        public int EventId { get; set; }
+        public Guid EventId { get; set; }
 
         [Required(ErrorMessage = "Name is required!")]
         public string Name { get; set; }

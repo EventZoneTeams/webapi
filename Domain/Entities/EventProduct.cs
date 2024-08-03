@@ -2,7 +2,7 @@
 {
     public class EventProduct : BaseEntity
     {
-        public int EventId { get; set; }
+        public Guid EventId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public Int64 Price { get; set; }

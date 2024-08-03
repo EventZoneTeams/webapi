@@ -19,7 +19,7 @@ namespace Repositories.Repositories
             _claimsService = claims;
         }
 
-        public async Task<List<Transaction>> GetTransactionsByUserId(int userId, string walletRequestTypeEnums)
+        public async Task<List<Transaction>> GetTransactionsByUserId(Guid userId, string walletRequestTypeEnums)
         {
             if (walletRequestTypeEnums == WalletRequestTypeEnums.ALL.ToString())
             {

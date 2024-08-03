@@ -23,13 +23,13 @@ namespace Services.Services
             _notificationService = notificationService;
         }
 
-        public async Task<EventOrderReponseDTO> GetEventOrder(int orderId)
+        public async Task<EventOrderReponseDTO> GetEventOrder(Guid orderId)
         {
             var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId, x => x.EventOrderDetails);
             return _mapper.Map<EventOrderReponseDTO>(order);
         }
 
-        public async Task<PagedList<EventOrder>> GetEventOrders(int eventId, OrderParams orderParams)
+        public async Task<PagedList<EventOrder>> GetEventOrders(Guid eventId, OrderParams orderParams)
         {
             var query = _unitOfWork.EventOrderRepository.FilterAllField(eventId, orderParams).AsQueryable();
             var eventOrders = await PagedList<EventOrder>.ToPagedList(query, orderParams.PageNumber, orderParams.PageSize);
@@ -40,7 +40,7 @@ namespace Services.Services
         public async Task<EventOrderReponseDTO> CreateEventOrder(CreateEventOrderReponseDTO order)
         {
             var currentUser = _claimsService.GetCurrentUserId;
-            if (currentUser == -1) throw new Exception("please login");
+            if (currentUser == Guid.Empty) throw new Exception("please login");
 
             var eventObject = await _unitOfWork.EventRepository.GetByIdAsync(order.EventId);
             if (eventObject == null)
@@ -85,7 +85,7 @@ namespace Services.Services
             return _mapper.Map<EventOrderReponseDTO>(orderResponse);
         }
 
-        public async Task<EventOrderReponseDTO> UpdateOrderStatus(int orderId, EventOrderStatusEnums eventOrderStatusEnums)
+        public async Task<EventOrderReponseDTO> UpdateOrderStatus(Guid orderId, EventOrderStatusEnums eventOrderStatusEnums)
         {
             var order = await _unitOfWork.EventOrderRepository.UpdateOrderStatus(orderId, eventOrderStatusEnums);
             return _mapper.Map<EventOrderReponseDTO>(order);

@@ -2,8 +2,8 @@
 {
     public class EventDonation : BaseEntity
     {
-        public int EventCampaignId { get; set; }
-        public int UserId { get; set; }
+        public Guid EventCampaignId { get; set; }
+        public Guid UserId { get; set; }
         public Int64 Amount { get; set; }
         public DateTime DonationDate { get; set; }
         public virtual EventCampaign EventCampaign { get; set; }

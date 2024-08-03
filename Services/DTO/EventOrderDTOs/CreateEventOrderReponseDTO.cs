@@ -2,7 +2,7 @@
 {
     public class CreateEventOrderReponseDTO
     {
-        public int EventId { get; set; }
+        public Guid EventId { get; set; }
         public List<CreateEventOrderDetailsReponseDTO> EventOrderDetails { get; set; }
     }
 }

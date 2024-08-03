@@ -114,7 +114,7 @@ namespace WebAPI.Controllers
         /// <response code="404">If the user with the specified ID is not found.</response>
         /// <response code="400">Returns an error message if the update fails (e.g., invalid data).</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAccount([FromRoute] int id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums? role)
+        public async Task<IActionResult> UpdateAccount([FromRoute] Guid id, [FromBody] UserUpdateModel userUpdatemodel, [FromQuery] RoleEnums? role)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace WebAPI.Controllers
         /// <response code="404">If none of the specified users are found.</response>
         /// <response code="400">Returns an error message if the deletion fails.</response>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUsersAsync(int id)
+        public async Task<IActionResult> DeleteUsersAsync(Guid id)
         {
             try
             {
@@ -264,7 +264,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns an existing user</response>
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetEventByIdAsync(int id)
+        public async Task<IActionResult> GetEventByIdAsync(Guid id)
         {
             try
             {

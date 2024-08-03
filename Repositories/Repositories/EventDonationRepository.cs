@@ -17,7 +17,7 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
-        public async Task<List<EventDonation>> GetAllDonationByCampaignId(int id)
+        public async Task<List<EventDonation>> GetAllDonationByCampaignId(Guid id)
         {
             var data = await _context.EventDonations.Include(x => x.User).Where(c => c.EventCampaignId == id).ToListAsync();
             return data;

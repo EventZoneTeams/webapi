@@ -18,7 +18,7 @@ namespace Repositories.Repositories
             _claimsService = claimsService;
         }
 
-        public async Task<List<Wallet>> GetListWalletByUserId(int userId)
+        public async Task<List<Wallet>> GetListWalletByUserId(Guid userId)
         {
             //check user is exist
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
@@ -64,14 +64,14 @@ namespace Repositories.Repositories
 
             return wallets;
         }
-        public async Task<Wallet> GetWalletByUserIdAndType(int userId, WalletTypeEnums walletType)
+        public async Task<Wallet> GetWalletByUserIdAndType(Guid userId, WalletTypeEnums walletType)
         {
             var wallets = await GetListWalletByUserId(userId);
             var wallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == userId && x.WalletType.ToUpper() == walletType.ToString().ToUpper());
             return wallet;
         }
         // Deposit money to wallet
-        public async Task<Transaction> DepositMoney(int userId, WalletTypeEnums walletType, Int64 amount)
+        public async Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, Int64 amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, walletType);
             if (wallet == null)
@@ -98,7 +98,7 @@ namespace Repositories.Repositories
         }
 
         // Withdraw money from wallet
-        public async Task<Transaction> WithdrawMoney(int userId, WalletTypeEnums walletType, Int64 amount)
+        public async Task<Transaction> WithdrawMoney(Guid userId, WalletTypeEnums walletType, Int64 amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, walletType);
             if (wallet == null)
@@ -128,7 +128,7 @@ namespace Repositories.Repositories
         }
 
         // Purchase item and deduct money from wallet
-        public async Task<Transaction> PurchaseItem(int userId, int orderId)
+        public async Task<Transaction> PurchaseItem(Guid userId, Guid orderId)
         {
             //Get order
             var order = await _context.EventOrders.FirstOrDefaultAsync(x => x.Id == orderId);
@@ -214,7 +214,7 @@ namespace Repositories.Repositories
                 }
             }
         }
-        public async Task<Transaction> ConfirmTransaction(int transactionId)
+        public async Task<Transaction> ConfirmTransaction(Guid transactionId)
         {
             var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == transactionId);
             if (transaction == null)
@@ -274,7 +274,7 @@ namespace Repositories.Repositories
             return transaction;
         }
 
-        public async Task<Transaction> Donation(int userId, long amount)
+        public async Task<Transaction> Donation(Guid userId, long amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, WalletTypeEnums.PERSONAL);
             if (wallet == null)
@@ -303,7 +303,7 @@ namespace Repositories.Repositories
             return transaction;
         }
 
-        public async Task<Transaction> ReceiveDonation(int userId, long amount)
+        public async Task<Transaction> ReceiveDonation(Guid userId, long amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, WalletTypeEnums.PERSONAL);
             if (wallet == null)

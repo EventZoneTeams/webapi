@@ -3,10 +3,7 @@ using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
 using Repositories.Models.PackageModels;
-using Repositories.Models.ProductModels;
 using Services.DTO.EventPackageModels;
-using Services.DTO.EventProductsModel;
-using Services.DTO.ResponseModels;
 using Services.Interface;
 
 namespace Services.Services
@@ -24,7 +21,7 @@ namespace Services.Services
             _eventService = eventService;
         }
 
-        public async Task<ApiResult<EventPackageDetailDTO>> CreatePackageWithProducts(int eventId, string thumbnailurl, CreatePackageRequest newPackage)
+        public async Task<ApiResult<EventPackageDetailDTO>> CreatePackageWithProducts(Guid eventId, string thumbnailurl, CreatePackageRequest newPackage)
         {
             var existedEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventId);
             if (existedEvent == null)
@@ -58,7 +55,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<int> packageIds)
+        public async Task<ApiResult<List<EventPackageDetailDTO>>> DeleteEventPackagesAsync(List<Guid> packageIds)
         {
             var allPackages = await _unitOfWork.EventPackageRepository.GetAllPackageWithProducts();
             var existingIds = allPackages.Where(e => packageIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -97,7 +94,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<EventPackageDetailDTO>> DeleteEventProductByIdAsync(int id)
+        public async Task<ApiResult<EventPackageDetailDTO>> DeleteEventProductByIdAsync(Guid id)
         {
             var package = await _unitOfWork.EventPackageRepository.GetByIdAsync(id);
 
@@ -129,7 +126,7 @@ namespace Services.Services
             return await _unitOfWork.EventPackageRepository.GetAllPackageWithProducts();
         }
 
-        public async Task<List<EventPackageDetailDTO>> GetAllPackageOfEvent(int eventId)
+        public async Task<List<EventPackageDetailDTO>> GetAllPackageOfEvent(Guid eventId)
         {
             var result = await _unitOfWork.EventPackageRepository.GetAllPackageWithProductsByEventId(eventId);
 
@@ -141,7 +138,7 @@ namespace Services.Services
             return _mapper.Map<List<ProductInPackageDTO>>(await _unitOfWork.EventPackageRepository.GetProductsInPackagesWithProduct());
         }
 
-        public async Task<ApiResult<EventPackageDetailDTO>> GetPackageById(int packageId)
+        public async Task<ApiResult<EventPackageDetailDTO>> GetPackageById(Guid packageId)
         {
             var package = await _unitOfWork.EventPackageRepository.GetPackageById(packageId);
             if (package == null)

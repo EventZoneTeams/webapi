@@ -89,7 +89,7 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ApiResult<List<EventCategoryResponseDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<List<object>>), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCategoryEventByIdAsync(int id)
+        public async Task<IActionResult> GetCategoryEventByIdAsync(Guid id)
         {
             try
             {
@@ -177,7 +177,7 @@ namespace WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResult<List<EventCategoryDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEventCategory(int id, [FromForm] UpdateEventCategoryModel data)
+        public async Task<IActionResult> UpdateEventCategory(Guid id, [FromForm] UpdateEventCategoryModel data)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteEventCategory(int id)
+        public async Task<IActionResult> DeleteEventCategory(Guid id)
         {
             try
             {

@@ -4,7 +4,6 @@ using Domain.Enums;
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Services.DTO.EventFeedbackModel;
-using Services.DTO.ResponseModels;
 using Services.Interface;
 
 namespace Services.Services
@@ -137,7 +136,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<List<EventFeedbackDetailModel>> GettAllFeedbacksByEventIdAsync(int eventId)
+        public async Task<List<EventFeedbackDetailModel>> GettAllFeedbacksByEventIdAsync(Guid eventId)
         {
             try
             {
@@ -150,7 +149,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<ApiResult<List<EventFeedbackDetailModel>>> DeleteFeedbacksAsync(List<int> feedbackIds)
+        public async Task<ApiResult<List<EventFeedbackDetailModel>>> DeleteFeedbacksAsync(List<Guid> feedbackIds)
         {
             var allFeedbacks = await _unitOfWork.EventFeedbackRepository.GetAllAsync();
             var existingIds = allFeedbacks.Where(e => feedbackIds.Contains(e.Id)).Select(e => e.Id).ToList();

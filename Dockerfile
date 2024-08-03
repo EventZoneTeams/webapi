@@ -1,33 +1,29 @@
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 EXPOSE 8080
 
-# Copy the solution file
+# Copy the solution file and project files
 COPY *.sln ./
-
-# Copy all project files
-COPY WebAPI/WebAPI.csproj ./WebAPI/
+COPY Domain/Domain.csproj ./Domain/
 COPY Repositories/Repositories.csproj ./Repositories/
 COPY Services/Services.csproj ./Services/
-COPY Domain/Domain.csproj ./Domain/
+COPY WebAPI/WebAPI.csproj ./WebAPI/
 
 # Restore dependencies
 RUN dotnet restore
 
-# Copy the rest of the source code
+# Copy the rest of the source code and build the project
 COPY . .
-
-# Build the project
 RUN dotnet build -c Release
 
-# Publish stage
+# Publish the application
 FROM build AS publish
 WORKDIR /app/WebAPI
 RUN dotnet publish -c Release -o /app/publish
 
-# Final stage
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+# Final stage: use the ASP.NET runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "WebAPI.dll"]

@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models.EventCampaignModels;
-using Repositories.Models.ProductModels;
 using Services.DTO.EventCampaignDTOs;
-using Services.DTO.EventDTOs;
-using Services.DTO.EventProductsModel;
 using Services.Interface;
-using Services.Services;
 
 namespace WebAPI.Controllers
 {
@@ -24,7 +19,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("campaigns/{id}")]
-        public async Task<IActionResult> UpdateAsync(int id)
+        public async Task<IActionResult> UpdateAsync(Guid id)
         {
             try
             {
@@ -93,7 +88,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a list of products</response>
         [HttpGet("event/{eventid}/campaigns")]
-        public async Task<IActionResult> GetAllCampaignByEventAsync(int eventid)
+        public async Task<IActionResult> GetAllCampaignByEventAsync(Guid eventid)
         {
             try
             {
@@ -164,7 +159,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a product</response>
         [HttpPut("campaigns/{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] int id, [FromForm] EventCampaignUpdateDTO model)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromForm] EventCampaignUpdateDTO model)
         {
             try
             {
@@ -187,7 +182,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns list of remove products</response>
         [HttpDelete("campaigns/{id}")]
-        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] Guid id)
         {
             try
             {

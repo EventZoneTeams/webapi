@@ -13,8 +13,8 @@ namespace Services.DTO.EventDTOs
         public DateTime? EventEndDate { get; set; }
         public string Note { get; set; } = string.Empty;
         public string? Location { get; set; }
-        public int UserId { get; set; }
-        public int EventCategoryId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid EventCategoryId { get; set; }
         public string? University { get; set; }
         public EventStatusEnums Status { get; set; } = EventStatusEnums.PENDING;
         public Int64? TotalCost { get; set; }

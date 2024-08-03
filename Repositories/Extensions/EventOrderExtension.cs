@@ -19,7 +19,7 @@ namespace Repositories.Extensions
             return query.Where(p => p.Id.ToString().ToLower().Contains(lowerCaseSearchTerm));
         }
 
-        public static IQueryable<EventOrder> FilterEventId(this IQueryable<EventOrder> query, int? eventId)
+        public static IQueryable<EventOrder> FilterEventId(this IQueryable<EventOrder> query, Guid? eventId)
         {
             if (eventId != null)
             {

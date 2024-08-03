@@ -9,8 +9,8 @@
         public DateTime? EventEndDate { get; set; }
         public string? Location { get; set; }
         public string? ReasonNote { get; set; }
-        public int UserId { get; set; }
-        public int EventCategoryId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid EventCategoryId { get; set; }
         public string? University { get; set; }
         public string? Status { get; set; }
         public string? Note { get; set; }
