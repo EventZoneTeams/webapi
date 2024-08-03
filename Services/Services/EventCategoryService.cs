@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventCategoryDTOs;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Extensions;
@@ -25,14 +26,12 @@ namespace Services.Services
             var existingCategory = await _unitOfWork.EventCategoryRepository
                 .GetAllAsync();
 
-
             var isExist = existingCategory.FirstOrDefault(x => x.Title.ToLower() == eventCategoryModel.Title.ToLower());
 
             if (isExist != null)
             {
                 throw new Exception("Event category already exists");
             }
-
 
             // create new event category
             var eventCategory = new EventCategory

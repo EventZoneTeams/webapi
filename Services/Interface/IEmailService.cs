@@ -1,4 +1,4 @@
-﻿using Services.DTO.EmailModels;
+﻿using Domain.DTOs.EmailModels;
 
 namespace Services.Interface
 {

@@ -1,7 +1,7 @@
-﻿using MailKit.Net.Smtp;
+﻿using Domain.DTOs.EmailModels;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using Services.DTO.EmailModels;
 using Services.Interface;
 
 namespace Services.Services

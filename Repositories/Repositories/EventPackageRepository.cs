@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.EventPackageDTOs;
+using Domain.DTOs.EventProductDTOs;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repositories.Commons;
 using Repositories.Interfaces;

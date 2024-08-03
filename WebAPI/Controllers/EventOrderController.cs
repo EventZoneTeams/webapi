@@ -1,10 +1,11 @@
-﻿using Domain.Enums;
+﻿using Domain.DTOs.EventOrderDTOs;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Repositories.Extensions;
 using Repositories.Helper;
-using Services.DTO.EventOrderDTOs;
 using Services.Interface;
+using Domain.DTOs;
 
 namespace WebAPI.Controllers
 {

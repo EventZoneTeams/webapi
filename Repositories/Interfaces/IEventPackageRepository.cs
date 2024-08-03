@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.EventPackageDTOs;
+using Domain.Entities;
 using Repositories.Commons;
 using Repositories.Models;
 using Repositories.Models.PackageModels;

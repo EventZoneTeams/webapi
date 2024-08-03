@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.DTOs.EventPackageDTOs;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
-using Repositories.Models;
 using Repositories.Models.PackageModels;
-using Services.DTO.EventPackageModels;
+using Services.DTO.EventProductsModel;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -89,7 +89,7 @@ namespace WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(result);
+                return Ok(ApiResult<Pagination<EventPackageDetailDTO>>.Succeed(result, "Get list products successfully"));
             }
             catch (Exception ex)
             {

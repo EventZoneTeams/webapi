@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventDonationDTOs;
 using Domain.Entities;
 using Domain.Enums;
 using Repositories.Commons;
 using Repositories.Interfaces;
-using Services.DTO.EventDonationDTOs;
 using Services.Interface;
 
 namespace Services.Services
@@ -102,7 +102,6 @@ namespace Services.Services
                         Sender = "system"
                     };
                     await _notificationService.PushNotification(notificationtoorganizer);
-
 
                     return new ApiResult<EventDonationDetailDTO>()
                     {

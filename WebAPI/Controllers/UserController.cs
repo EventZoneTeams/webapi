@@ -1,9 +1,11 @@
-﻿using Domain.Enums;
+﻿using Domain.DTOs.EventOrderDTOs;
+using Domain.DTOs.UserDTOs;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models;
-using Services.DTO.EventOrderDTOs;
+using Services.DTO.EventProductsModel;
 using Services.DTO.UserModels;
 using Services.Interface;
 
@@ -250,7 +252,7 @@ namespace WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(result);
+                return Ok(ApiResult<Pagination<UserDetailsModel>>.Succeed(result, "Get list products successfully"));
             }
             catch (Exception ex)
             {
@@ -327,7 +329,7 @@ namespace WebAPI.Controllers
             if (result.Success)
             {
                 var confirmationLink = "Code:\n\"" + result.Data + "\"";
-                var message = new Services.DTO.EmailModels.Message(new string[] { email }, "Reset password token", confirmationLink!);
+                var message = new Domain.DTOs.EmailModels.Message(new string[] { email }, "Reset password token", confirmationLink!);
                 await _emailService.SendEmail(message);
                 return Ok(result);
             }

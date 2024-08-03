@@ -1,10 +1,10 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.EmailModels;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repositories;
-using Services.DTO.EmailModels;
 using Services.Hubs;
 using Services.Interface;
 using Services.Services;

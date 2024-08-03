@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventPackageDTOs;
+using Domain.DTOs.EventProductDTOs;
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
 using Repositories.Models.PackageModels;
-using Services.DTO.EventPackageModels;
 using Services.Interface;
 
 namespace Services.Services

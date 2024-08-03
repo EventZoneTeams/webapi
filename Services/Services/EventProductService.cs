@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Domain.DTOs.ImageDTOs;
 using Domain.Entities;
 using Repositories.Commons;
 using Repositories.Interfaces;
-using Repositories.Models.ImageDTOs;
 using Repositories.Models.ProductModels;
 using Services.DTO.EventProductsModel;
 using Services.Interface;
