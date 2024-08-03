@@ -7,6 +7,7 @@ using Repositories.Models;
 using Repositories.Models.PackageModels;
 using Services.DTO.EventOrderDTOs;
 using Services.DTO.EventPackageModels;
+using Services.DTO.EventProductsModel;
 using Services.Interface;
 using Services.Services;
 
@@ -93,7 +94,7 @@ namespace WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(result);
+                return Ok(ApiResult<Pagination<EventPackageDetailDTO>>.Succeed(result, "Get list products successfully"));
             }
             catch (Exception ex)
             {

@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models;
 using Services.DTO.EventOrderDTOs;
+using Services.DTO.EventProductsModel;
 using Services.DTO.UserModels;
 using Services.Interface;
 
@@ -250,7 +251,7 @@ namespace WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(result);
+                return Ok(ApiResult<Pagination<UserDetailsModel>>.Succeed(result, "Get list products successfully"));
             }
             catch (Exception ex)
             {
