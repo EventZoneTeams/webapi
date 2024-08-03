@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Services.DTO.EmailModels;
+﻿using Domain.DTOs.EmailModels;
+using Microsoft.AspNetCore.Mvc;
 using Services.DTO.TestModels;
 using Services.Interface;
 using System.Reflection;

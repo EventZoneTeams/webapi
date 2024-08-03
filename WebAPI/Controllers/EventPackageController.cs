@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.DTOs.EventPackageDTOs;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
-using Repositories.Models;
 using Repositories.Models.PackageModels;
-using Services.DTO.EventPackageModels;
 using Services.DTO.EventProductsModel;
 using Services.Interface;
 

@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.ImageDTOs;
+using Domain.Entities;
 using Repositories.Commons;
-using Repositories.Models.ImageDTOs;
 using Repositories.Models.ProductModels;
 
 namespace Repositories.Interfaces

@@ -1,7 +1,7 @@
-﻿using Repositories.Commons;
-using Repositories.Models;
+﻿using Domain.DTOs.EventPackageDTOs;
+using Domain.DTOs.EventProductDTOs;
+using Repositories.Commons;
 using Repositories.Models.PackageModels;
-using Services.DTO.EventPackageModels;
 
 namespace Services.Interface
 {

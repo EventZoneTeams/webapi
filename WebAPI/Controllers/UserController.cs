@@ -1,9 +1,10 @@
-﻿using Domain.Enums;
+﻿using Domain.DTOs.EventOrderDTOs;
+using Domain.DTOs.UserDTOs;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models;
-using Services.DTO.EventOrderDTOs;
 using Services.DTO.EventProductsModel;
 using Services.DTO.UserModels;
 using Services.Interface;
@@ -328,7 +329,7 @@ namespace WebAPI.Controllers
             if (result.Success)
             {
                 var confirmationLink = "Code:\n\"" + result.Data + "\"";
-                var message = new Services.DTO.EmailModels.Message(new string[] { email }, "Reset password token", confirmationLink!);
+                var message = new Domain.DTOs.EmailModels.Message(new string[] { email }, "Reset password token", confirmationLink!);
                 await _emailService.SendEmail(message);
                 return Ok(result);
             }

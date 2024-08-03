@@ -1,9 +1,9 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
+using Domain.DTOs.ImageDTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Repositories.Models.ImageDTOs;
 using Services.Interface;
 
 namespace Services.Services

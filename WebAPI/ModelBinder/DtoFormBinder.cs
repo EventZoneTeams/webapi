@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Domain.DTOs.EventPackageDTOs;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Repositories.Models;
 using System.Text.Json;
 using WebAPI.Controllers;

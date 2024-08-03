@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventOrderDTOs;
+using Domain.DTOs.UserDTOs;
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
-using Services.DTO.EventOrderDTOs;
 using Services.DTO.UserModels;
 using Services.Interface;
 

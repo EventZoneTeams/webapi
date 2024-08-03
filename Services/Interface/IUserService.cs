@@ -1,6 +1,7 @@
-﻿using Repositories.Commons;
+﻿using Domain.DTOs.EventOrderDTOs;
+using Domain.DTOs.UserDTOs;
+using Repositories.Commons;
 using Repositories.Models;
-using Services.DTO.EventOrderDTOs;
 using Services.DTO.UserModels;
 
 namespace Services.Interface

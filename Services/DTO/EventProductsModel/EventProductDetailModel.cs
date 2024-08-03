@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Repositories.Models.ImageDTOs;
+﻿using Domain.DTOs.ImageDTOs;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

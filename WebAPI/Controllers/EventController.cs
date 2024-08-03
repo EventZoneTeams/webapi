@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventDTOs;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Repositories.Extensions;
 using Repositories.Helper;
-using Services.DTO.EventDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers

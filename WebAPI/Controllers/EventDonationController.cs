@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.DTOs.EventDonationDTOs;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
-using Services.DTO.EventDonationDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers

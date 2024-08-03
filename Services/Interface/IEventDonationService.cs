@@ -1,5 +1,5 @@
-﻿using Repositories.Commons;
-using Services.DTO.EventDonationDTOs;
+﻿using Domain.DTOs.EventDonationDTOs;
+using Repositories.Commons;
 
 namespace Services.Interface
 {

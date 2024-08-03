@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventOrderDTOs;
 using Domain.Entities;
 using Domain.Enums;
 using Repositories.Helper;
 using Repositories.Interfaces;
-using Services.DTO.EventOrderDTOs;
 using Services.Interface;
 
 namespace Services.Services

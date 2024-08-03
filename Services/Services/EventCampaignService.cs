@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventCampaignDTOs;
 using Domain.Entities;
 using Domain.Enums;
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models.EventCampaignModels;
-using Services.DTO.EventCampaignDTOs;
 using Services.Interface;
 
 namespace Services.Services

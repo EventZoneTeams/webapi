@@ -1,5 +1,5 @@
-﻿using Repositories.Commons;
-using Repositories.Models.ImageDTOs;
+﻿using Domain.DTOs.ImageDTOs;
+using Repositories.Commons;
 using Repositories.Models.ProductModels;
 using Services.DTO.EventProductsModel;
 

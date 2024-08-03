@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.DTOs.EventCampaignDTOs;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models.EventCampaignModels;
-using Services.DTO.EventCampaignDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers

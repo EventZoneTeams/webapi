@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.DTOs.EventCategoryDTOs;
+using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Repositories.Extensions;
 using Services.DTO.EventCategoryDTOs;
@@ -26,8 +27,6 @@ namespace WebAPI.Controllers
 
         //    return Ok(imageUrl);
         //}
-
-
 
         /// <summary>
         /// Get list event categories
@@ -75,7 +74,7 @@ namespace WebAPI.Controllers
         /// Sample request:
         ///
         ///     GET /event-categories/1
-        ///     
+        ///
         /// Sample response:
         ///     {
         ///        "id": 1,
@@ -246,6 +245,5 @@ namespace WebAPI.Controllers
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
-
     }
 }
