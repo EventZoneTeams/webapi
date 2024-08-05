@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using Domain.DTOs.EventFeedbackDTOs;
+using Domain.Enums;
 using Repositories.Commons;
-using Services.DTO.EventFeedbackModel;
 
 namespace Services.Interface
 {

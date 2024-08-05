@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTO.UserModels
+namespace Domain.DTOs.UserDTOs
 {
     public class UserUpdateModel
     {

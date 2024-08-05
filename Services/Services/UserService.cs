@@ -4,7 +4,6 @@ using Domain.DTOs.UserDTOs;
 using Repositories.Commons;
 using Repositories.Interfaces;
 using Repositories.Models;
-using Services.DTO.UserModels;
 using Services.Interface;
 
 namespace Services.Services

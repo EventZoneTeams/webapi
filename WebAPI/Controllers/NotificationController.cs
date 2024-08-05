@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.NotificationDTOs;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
-using Services.DTO.NotificationDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers

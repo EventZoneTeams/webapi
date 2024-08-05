@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Domain.DTOs.EventFeedbackDTOs;
 using Domain.Entities;
 using Domain.Enums;
 using Repositories.Commons;
 using Repositories.Interfaces;
-using Services.DTO.EventFeedbackModel;
 using Services.Interface;
 
 namespace Services.Services

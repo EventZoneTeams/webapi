@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
+﻿using Domain.DTOs.EventFeedbackDTOs;
+using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
-using Services.DTO.EventFeedbackModel;
 using Services.Interface;
 using System.ComponentModel.DataAnnotations;
 

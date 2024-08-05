@@ -1,4 +1,4 @@
-﻿namespace Services.DTO.EventCategoryDTOs
+﻿namespace Domain.DTOs.EventCategoryDTOs
 {
     public class EventCategoryDTO
     {

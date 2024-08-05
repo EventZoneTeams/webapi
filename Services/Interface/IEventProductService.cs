@@ -1,7 +1,7 @@
-﻿using Domain.DTOs.ImageDTOs;
+﻿using Domain.DTOs.EventProductDTOs;
+using Domain.DTOs.ImageDTOs;
 using Repositories.Commons;
 using Repositories.Models.ProductModels;
-using Services.DTO.EventProductsModel;
 
 namespace Services.Interface
 {

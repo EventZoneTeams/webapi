@@ -3,18 +3,15 @@ using Domain.DTOs.EventCampaignDTOs;
 using Domain.DTOs.EventCategoryDTOs;
 using Domain.DTOs.EventDonationDTOs;
 using Domain.DTOs.EventDTOs;
+using Domain.DTOs.EventFeedbackDTOs;
 using Domain.DTOs.EventOrderDTOs;
 using Domain.DTOs.EventPackageDTOs;
 using Domain.DTOs.EventProductDTOs;
 using Domain.DTOs.ImageDTOs;
+using Domain.DTOs.NotificationDTOs;
 using Domain.DTOs.UserDTOs;
 using Domain.Entities;
 using Repositories.Models;
-using Services.DTO.EventCategoryDTOs;
-using Services.DTO.EventFeedbackModel;
-using Services.DTO.EventProductsModel;
-using Services.DTO.NotificationDTOs;
-using Services.DTO.UserModels;
 using Services.DTO.WalletDTOs;
 
 namespace Services.Mapper

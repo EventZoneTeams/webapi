@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Repositories.Extensions;
+﻿using Domain.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Services.DTO.EventCategoryDTOs
+namespace Domain.DTOs.EventCategoryDTOs
 {
     public class CategoryParam
     {
         [BindProperty(Name = "search-term")]
         public string SearchTerm { get; set; }
+
         [BindProperty(Name = "order-by")]
         public EventCategoryOrderBy OrderBy { get; set; }
     }

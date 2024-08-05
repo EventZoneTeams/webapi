@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Services.DTO.NotificationDTOs;
+﻿using Domain.DTOs.NotificationDTOs;
+using Domain.Entities;
 
 namespace Services.Interface
 {

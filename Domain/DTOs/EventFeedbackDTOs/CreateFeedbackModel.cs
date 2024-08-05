@@ -1,4 +1,4 @@
-﻿namespace Services.DTO.EventFeedbackModel
+﻿namespace Domain.DTOs.EventFeedbackDTOs
 {
     public class CreateFeedbackModel
     {

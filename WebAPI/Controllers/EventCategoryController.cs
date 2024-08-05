@@ -1,8 +1,7 @@
 ﻿using Domain.DTOs.EventCategoryDTOs;
+using Domain.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
-using Repositories.Extensions;
-using Services.DTO.EventCategoryDTOs;
 using Services.Interface;
 
 namespace WebAPI.Controllers

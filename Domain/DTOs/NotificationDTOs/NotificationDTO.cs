@@ -1,4 +1,4 @@
-﻿namespace Services.DTO.NotificationDTOs
+﻿namespace Domain.DTOs.NotificationDTOs
 {
     public class NotificationDTO
     {
