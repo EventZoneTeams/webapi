@@ -10,9 +10,9 @@ using Domain.DTOs.EventProductDTOs;
 using Domain.DTOs.ImageDTOs;
 using Domain.DTOs.NotificationDTOs;
 using Domain.DTOs.UserDTOs;
+using Domain.DTOs.WalletDTOs;
 using Domain.Entities;
 using Repositories.Models;
-using Services.DTO.WalletDTOs;
 
 namespace Services.Mapper
 {
@@ -44,8 +44,8 @@ namespace Services.Mapper
             CreateMap<EventCategory, EventCategoryResponseDTO>()
                 .ReverseMap();
 
-            CreateMap<EventProduct, EventProductDetailModel>().ReverseMap();
-            CreateMap<EventProduct, EventProductUpdateModel>().ReverseMap();
+            CreateMap<EventProduct, EventProductDetailDTO>().ReverseMap();
+            CreateMap<EventProduct, EventProductUpdateDTO>().ReverseMap();
             CreateMap<EventProduct, EventProductDetailDTO>().ReverseMap();
 
             CreateMap<EventCampaign, EventCampaignDTO>().ReverseMap();

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.DTOs.WalletDTOs;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,6 @@ using Repositories.Commons;
 using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.DTO.ResponseModels;
-using Services.DTO.WalletDTOs;
 using Services.Interface;
 using Services.Services.VnPayConfig;
 using System.Reflection;
@@ -32,6 +32,7 @@ namespace WebAPI.Controllers
             _claimsService = claimsService;
             _notificationService = notificationService;
         }
+
         /// <summary>
         /// Get 2 Wallets By UserId
         /// </summary>
@@ -54,7 +55,6 @@ namespace WebAPI.Controllers
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
-
 
         /// <summary>
         /// Get List Transactions By UserId
@@ -119,7 +119,6 @@ namespace WebAPI.Controllers
                     var paymentUrl = _vnPayService.CreateLink(orderInfo);
                     return Ok(ApiResult<string>.Succeed(paymentUrl, "Payment to deposit!"));
                 }
-
             }
             catch (Exception ex)
             {
@@ -152,7 +151,6 @@ namespace WebAPI.Controllers
                 }
                 else
                 {
-
                     if (result.Status == TransactionStatusEnums.SUCCESS.ToString())
                     {
                         throw new Exception("Transaction is already confirmed!");
@@ -171,14 +169,12 @@ namespace WebAPI.Controllers
                     var paymentUrl = _vnPayService.CreateLink(orderInfo);
                     return Ok(ApiResult<string>.Succeed(paymentUrl, "Payment to pay!"));
                 }
-
             }
             catch (Exception ex)
             {
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
-
 
         /// <summary>
         /// [DONT'T TOUCH] VnPay IPN Receiver
@@ -190,7 +186,6 @@ namespace WebAPI.Controllers
             {
                 var htmlString = string.Empty;
                 var requestNameValue = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
-
 
                 IPNReponse iPNReponse = await _vnPayService.IPNReceiver(
                     vnpayResponseModel.vnp_TmnCode,
@@ -204,7 +199,6 @@ namespace WebAPI.Controllers
                     vnpayResponseModel.vnp_PayDate,
                     vnpayResponseModel.vnp_BankTranNo,
                     vnpayResponseModel.vnp_CardType, requestNameValue);
-
 
                 //Get root path and read index.html
                 var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Data", "index.html");
@@ -221,7 +215,6 @@ namespace WebAPI.Controllers
                 var isSuccess = iPNReponse.status.ToString() == TransactionStatusEnums.SUCCESS.ToString();
                 var textColor = isSuccess ? "text-green-500 dark:text-green-300" : "text-red-500 dark:text-red-300";
                 var statusHTML = $"<p class=\"mt-1 text-md {textColor}\">{iPNReponse.status.ToString()}</p>";
-
 
                 // Send notification
                 var notification = new Notification
@@ -247,7 +240,6 @@ namespace WebAPI.Controllers
 
                 string htmlFormat = string.Format(htmlString, imageHTML, iPNReponse.transactionId.ToString(), $"{int.Parse(iPNReponse.price) / 100}", statusHTML, iPNReponse.message);
 
-
                 return Content(htmlFormat, "text/html");
             }
             catch (Exception ex)
@@ -255,7 +247,6 @@ namespace WebAPI.Controllers
                 return Content(ex.ToString(), "text/html");
             }
         }
-
 
         /// <summary>
         /// Purchase a order
@@ -298,6 +289,5 @@ namespace WebAPI.Controllers
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
-
     }
 }

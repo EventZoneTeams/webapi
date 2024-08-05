@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.WalletDTOs;
+using Domain.Entities;
 using Domain.Enums;
 using Repositories.Helper;
-using Services.DTO.WalletDTOs;
 
 namespace Services.Interface
 {

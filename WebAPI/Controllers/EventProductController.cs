@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(ApiResult<Pagination<EventProductDetailModel>>.Succeed(result, "Get list products successfully"));
+                return Ok(ApiResult<Pagination<EventProductDetailDTO>>.Succeed(result, "Get list products successfully"));
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace WebAPI.Controllers
 
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("event-products")]
-        public async Task<IActionResult> CreateAsync([FromForm] EventProductCreateModel model)
+        public async Task<IActionResult> CreateAsync([FromForm] EventProductCreateDTO model)
         {
             try
             {
@@ -167,7 +167,7 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a product</response>
         [HttpPut("event-products/{id}")]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] EventProductUpdateModel model)
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] EventProductUpdateDTO model)
         {
             try
             {

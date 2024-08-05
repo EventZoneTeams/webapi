@@ -7,22 +7,22 @@ namespace Services.Interface
 {
     public interface IEventProductService
     {
-        Task<ApiResult<EventProductDetailModel>> CreateEventProductAsync(EventProductCreateModel newProduct, List<ImageReturnDTO> images);
+        Task<ApiResult<EventProductDetailDTO>> CreateEventProductAsync(EventProductCreateDTO newProduct, List<ImageReturnDTO> images);
 
-        Task<List<EventProductDetailModel>> GetAllProductsAsync();
+        Task<List<EventProductDetailDTO>> GetAllProductsAsync();
 
-        Task<ApiResult<EventProductDetailModel>> UpdateEventProductAsync(Guid productId, EventProductUpdateModel updateModel);
+        Task<ApiResult<EventProductDetailDTO>> UpdateEventProductAsync(Guid productId, EventProductUpdateDTO updateModel);
 
-        Task<ApiResult<List<EventProductDetailModel>>> DeleteEventProductAsync(List<Guid> productIds);
+        Task<ApiResult<List<EventProductDetailDTO>>> DeleteEventProductAsync(List<Guid> productIds);
 
-        Task<ApiResult<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts);
+        Task<ApiResult<List<EventProductDetailDTO>>> CreateEventProductAsync(List<EventProductCreateDTO> newProducts);
 
-        Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(Guid eventId);
+        Task<List<EventProductDetailDTO>> GetAllProductsByEventAsync(Guid eventId);
 
-        Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
+        Task<Pagination<EventProductDetailDTO>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
 
-        Task<ApiResult<EventProductDetailModel>> GetProductById(Guid productId);
+        Task<ApiResult<EventProductDetailDTO>> GetProductById(Guid productId);
 
-        Task<ApiResult<EventProductDetailModel>> DeleteEventProductByIdAsync(Guid id);
+        Task<ApiResult<EventProductDetailDTO>> DeleteEventProductByIdAsync(Guid id);
     }
 }
