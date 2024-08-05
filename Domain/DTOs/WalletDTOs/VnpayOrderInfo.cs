@@ -1,8 +1,8 @@
-﻿namespace Services.DTO.WalletDTOs
+﻿namespace Domain.DTOs.WalletDTOs
 {
     public class VnpayOrderInfo
     {
         public Guid TransactionId { get; set; }
-        public Int64 Amount { get; set; }
+        public long Amount { get; set; }
     }
 }

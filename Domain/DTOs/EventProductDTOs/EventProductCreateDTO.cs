@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Domain.DTOs.EventProductDTOs
 {
-    public class EventProductCreateModel
+    public class EventProductCreateDTO
     {
         [Required(ErrorMessage = "EventID is required!")]
         public Guid EventId { get; set; }

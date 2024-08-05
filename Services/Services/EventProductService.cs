@@ -23,13 +23,13 @@ namespace Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ApiResult<EventProductDetailModel>> CreateEventProductAsync(EventProductCreateModel newProduct, List<ImageReturnDTO> images)
+        public async Task<ApiResult<EventProductDetailDTO>> CreateEventProductAsync(EventProductCreateDTO newProduct, List<ImageReturnDTO> images)
         {
             try
             {
                 if (await _unitOfWork.EventRepository.GetByIdAsync(newProduct.EventId) == null)
                 {
-                    return new ApiResult<EventProductDetailModel>()
+                    return new ApiResult<EventProductDetailDTO>()
                     {
                         Success = false,
                         Message = " Added failed, event is not existed",
@@ -47,7 +47,7 @@ namespace Services.Services
                 };
 
                 var result = await _unitOfWork.EventProductRepository.AddAsync(product);
-                var returnData = _mapper.Map<EventProductDetailModel>(result);
+                var returnData = _mapper.Map<EventProductDetailDTO>(result);
 
                 var check = await _unitOfWork.SaveChangeAsync();
                 if (check > 0)
@@ -56,14 +56,14 @@ namespace Services.Services
                     check = await _unitOfWork.SaveChangeAsync();
                     returnData.ProductImages = _mapper.Map<List<ImageReturnDTO>>(imagerResult);
 
-                    return new ApiResult<EventProductDetailModel>()
+                    return new ApiResult<EventProductDetailDTO>()
                     {
                         Success = true,
                         Message = " Added successfully",
                         Data = returnData
                     };
                 }
-                return new ApiResult<EventProductDetailModel>()
+                return new ApiResult<EventProductDetailDTO>()
                 {
                     Success = false,
                     Message = " Added failed",
@@ -76,7 +76,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<ApiResult<List<EventProductDetailModel>>> CreateEventProductAsync(List<EventProductCreateModel> newProducts)
+        public async Task<ApiResult<List<EventProductDetailDTO>>> CreateEventProductAsync(List<EventProductCreateDTO> newProducts)
         {
             try
             {
@@ -99,18 +99,18 @@ namespace Services.Services
                 var check = await _unitOfWork.SaveChangeAsync();
                 if (check > 0)
                 {
-                    return new ApiResult<List<EventProductDetailModel>>()
+                    return new ApiResult<List<EventProductDetailDTO>>()
                     {
                         Success = true,
                         Message = " Added successfully",
-                        Data = _mapper.Map<List<EventProductDetailModel>>(createProducts)
+                        Data = _mapper.Map<List<EventProductDetailDTO>>(createProducts)
                     };
                 }
-                return new ApiResult<List<EventProductDetailModel>>()
+                return new ApiResult<List<EventProductDetailDTO>>()
                 {
                     Success = false,
                     Message = " Added failed",
-                    Data = _mapper.Map<List<EventProductDetailModel>>(createProducts)
+                    Data = _mapper.Map<List<EventProductDetailDTO>>(createProducts)
                 };
             }
             catch (Exception ex)
@@ -119,7 +119,7 @@ namespace Services.Services
             }
         }
 
-        public async Task<ApiResult<List<EventProductDetailModel>>> DeleteEventProductAsync(List<Guid> productIds)
+        public async Task<ApiResult<List<EventProductDetailDTO>>> DeleteEventProductAsync(List<Guid> productIds)
         {
             var allProduct = await _unitOfWork.EventProductRepository.GetAllAsync();
             var existingIds = allProduct.Where(e => productIds.Contains(e.Id)).Select(e => e.Id).ToList();
@@ -132,11 +132,11 @@ namespace Services.Services
                 await _unitOfWork.SaveChangeAsync();
                 if (result)
                 {
-                    return new ApiResult<List<EventProductDetailModel>>()
+                    return new ApiResult<List<EventProductDetailDTO>>()
                     {
                         Success = true,
                         Message = " Added successfully",
-                        Data = _mapper.Map<List<EventProductDetailModel>>(allProduct.Where(e => existingIds.Contains(e.Id)))
+                        Data = _mapper.Map<List<EventProductDetailDTO>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
             }
@@ -146,15 +146,15 @@ namespace Services.Services
                 {
                     string nonExistingIdsString = string.Join(", ", nonExistingIds);
 
-                    return new ApiResult<List<EventProductDetailModel>>()
+                    return new ApiResult<List<EventProductDetailDTO>>()
                     {
                         Success = false,
                         Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
-                        Data = _mapper.Map<List<EventProductDetailModel>>(allProduct.Where(e => existingIds.Contains(e.Id)))
+                        Data = _mapper.Map<List<EventProductDetailDTO>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
             }
-            return new ApiResult<List<EventProductDetailModel>>()
+            return new ApiResult<List<EventProductDetailDTO>>()
             {
                 Success = false,
                 Message = "failed",
@@ -162,7 +162,7 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<EventProductDetailModel>> DeleteEventProductByIdAsync(Guid id)
+        public async Task<ApiResult<EventProductDetailDTO>> DeleteEventProductByIdAsync(Guid id)
         {
             var product = await _unitOfWork.EventProductRepository.GetByIdAsync(id);
 
@@ -173,15 +173,15 @@ namespace Services.Services
                 await _unitOfWork.SaveChangeAsync();
                 if (result)
                 {
-                    return new ApiResult<EventProductDetailModel>()
+                    return new ApiResult<EventProductDetailDTO>()
                     {
                         Success = true,
                         Message = "Product " + id + " Removed successfully",
-                        Data = _mapper.Map<EventProductDetailModel>(product)
+                        Data = _mapper.Map<EventProductDetailDTO>(product)
                     };
                 }
             }
-            return new ApiResult<EventProductDetailModel>()
+            return new ApiResult<EventProductDetailDTO>()
             {
                 Success = false,
                 Message = "There are no existed product id: " + id,
@@ -189,14 +189,14 @@ namespace Services.Services
             };
         }
 
-        public async Task<List<EventProductDetailModel>> GetAllProductsAsync()
+        public async Task<List<EventProductDetailDTO>> GetAllProductsAsync()
         {
             var result = await _unitOfWork.EventProductRepository.GetAllProductsWithImages();
 
-            return _mapper.Map<List<EventProductDetailModel>>(result);
+            return _mapper.Map<List<EventProductDetailDTO>>(result);
         }
 
-        public async Task<List<EventProductDetailModel>> GetAllProductsByEventAsync(Guid eventId)
+        public async Task<List<EventProductDetailDTO>> GetAllProductsByEventAsync(Guid eventId)
         {
             var result = await _unitOfWork.EventProductRepository.GetAllProductsByEvent(eventId);
             if (result == null)
@@ -204,10 +204,10 @@ namespace Services.Services
                 return null;
             }
 
-            return _mapper.Map<List<EventProductDetailModel>>(result);
+            return _mapper.Map<List<EventProductDetailDTO>>(result);
         }
 
-        public async Task<ApiResult<EventProductDetailModel>> UpdateEventProductAsync(Guid productId, EventProductUpdateModel updateModel)
+        public async Task<ApiResult<EventProductDetailDTO>> UpdateEventProductAsync(Guid productId, EventProductUpdateDTO updateModel)
         {
             var existingProduct = await _unitOfWork.EventProductRepository.GetByIdAsync(productId);
             if (existingProduct != null)
@@ -218,16 +218,16 @@ namespace Services.Services
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
                 {
-                    return new ApiResult<EventProductDetailModel>()
+                    return new ApiResult<EventProductDetailDTO>()
                     {
                         Success = true,
                         Message = "Updated successfuly",
-                        Data = _mapper.Map<EventProductDetailModel>(existingProduct)
+                        Data = _mapper.Map<EventProductDetailDTO>(existingProduct)
                     };
                 }
                 else
                 {
-                    return new ApiResult<EventProductDetailModel>()
+                    return new ApiResult<EventProductDetailDTO>()
                     {
                         Success = false,
                         Message = "FAILED",
@@ -235,7 +235,7 @@ namespace Services.Services
                     };
                 }
             }
-            return new ApiResult<EventProductDetailModel>()
+            return new ApiResult<EventProductDetailDTO>()
             {
                 Success = false,
                 Message = "This account is not existed",
@@ -243,12 +243,12 @@ namespace Services.Services
             };
         }
 
-        public async Task<ApiResult<EventProductDetailModel>> GetProductById(Guid productId)
+        public async Task<ApiResult<EventProductDetailDTO>> GetProductById(Guid productId)
         {
             var product = await _unitOfWork.EventProductRepository.GetByIdAsync(productId, x => x.ProductImages);
             if (product == null)
             {
-                return new ApiResult<EventProductDetailModel>()
+                return new ApiResult<EventProductDetailDTO>()
                 {
                     Success = false,
                     Message = "This product id is not found",
@@ -256,22 +256,22 @@ namespace Services.Services
                 };
             }
 
-            return new ApiResult<EventProductDetailModel>()
+            return new ApiResult<EventProductDetailDTO>()
             {
                 Success = true,
                 Message = "Found successfully product " + productId,
-                Data = _mapper.Map<EventProductDetailModel>(product)
+                Data = _mapper.Map<EventProductDetailDTO>(product)
             };
         }
 
-        public async Task<Pagination<EventProductDetailModel>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
+        public async Task<Pagination<EventProductDetailDTO>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
         {
             var products = await _unitOfWork.EventProductRepository.GetProductsByFiltersAsync(paginationParameter, productFilterModel);
             //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
             if (products != null)
             {
-                var result = _mapper.Map<List<EventProductDetailModel>>(products);
-                return new Pagination<EventProductDetailModel>(result, products.TotalCount, products.CurrentPage, products.PageSize);
+                var result = _mapper.Map<List<EventProductDetailDTO>>(products);
+                return new Pagination<EventProductDetailDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
             }
             return null;
         }

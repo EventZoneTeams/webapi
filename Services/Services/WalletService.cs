@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Domain.DTOs.WalletDTOs;
 using Domain.Entities;
 using Domain.Enums;
 using Repositories.Helper;
 using Repositories.Interfaces;
-using Services.DTO.WalletDTOs;
 using Services.Interface;
 
 namespace Services.Services

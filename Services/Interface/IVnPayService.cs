@@ -1,4 +1,4 @@
-﻿using Services.DTO.WalletDTOs;
+﻿using Domain.DTOs.WalletDTOs;
 using Services.Services.VnPayConfig;
 using System.Collections.Specialized;
 

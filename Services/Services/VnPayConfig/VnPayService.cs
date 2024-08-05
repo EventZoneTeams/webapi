@@ -1,9 +1,9 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.WalletDTOs;
+using Domain.Entities;
 using Domain.Enums;
 using Microsoft.Extensions.Configuration;
 using Repositories.Interfaces;
 using Repositories.Utils;
-using Services.DTO.WalletDTOs;
 using Services.Interface;
 using System.Collections.Specialized;
 using System.Net;
