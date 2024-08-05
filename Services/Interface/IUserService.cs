@@ -2,7 +2,6 @@
 using Domain.DTOs.UserDTOs;
 using Repositories.Commons;
 using Repositories.Models;
-using Services.DTO.UserModels;
 
 namespace Services.Interface
 {

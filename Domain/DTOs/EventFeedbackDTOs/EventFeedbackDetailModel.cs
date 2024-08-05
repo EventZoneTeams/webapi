@@ -1,7 +1,6 @@
 ﻿using Domain.DTOs.UserDTOs;
-using Repositories.Models;
 
-namespace Services.DTO.EventFeedbackModel
+namespace Domain.DTOs.EventFeedbackDTOs
 {
     public class EventFeedbackDetailModel
     {

@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
+using Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Extensions;
 using Repositories.Helper;
 using Repositories.Interfaces;
 

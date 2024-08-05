@@ -1,17 +1,17 @@
 ﻿using Domain.Entities;
 
-namespace Repositories.Extensions
+namespace Domain.Extensions
 {
     public enum EventCategoryOrderBy
     {
         ASC,
         DESC
     }
+
     public static class EventCategoryExtension
     {
         public static IQueryable<EventCategory> Sort(this IQueryable<EventCategory> query, EventCategoryOrderBy eventCategoryOrderBy)
         {
-
             if (string.IsNullOrWhiteSpace(eventCategoryOrderBy.ToString())) return query.OrderBy(p => p.Title);
 
             query = eventCategoryOrderBy switch
@@ -31,6 +31,5 @@ namespace Repositories.Extensions
 
             return query.Where(p => p.Title.ToLower().Contains(lowerCaseSearchTerm));
         }
-
     }
 }

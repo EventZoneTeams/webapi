@@ -1,5 +1,4 @@
 ﻿using Domain.DTOs.EventCategoryDTOs;
-using Services.DTO.EventCategoryDTOs;
 
 namespace Services.Interface
 {

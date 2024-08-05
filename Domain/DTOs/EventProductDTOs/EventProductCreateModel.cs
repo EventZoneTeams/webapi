@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Services.DTO.EventProductsModel
+namespace Domain.DTOs.EventProductDTOs
 {
     public class EventProductCreateModel
     {
@@ -15,7 +15,7 @@ namespace Services.DTO.EventProductsModel
 
         [Required(ErrorMessage = "Price is required!")]
         [Range(0, 10000000)]
-        public Int64 Price { get; set; }
+        public long Price { get; set; }
 
         //  [Required(ErrorMessage = "QuantityInStock is required!")]
         public int QuantityInStock { get; set; }

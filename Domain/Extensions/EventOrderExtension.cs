@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 
-namespace Repositories.Extensions
+namespace Domain.Extensions
 {
     public static class EventOrderExtension
     {

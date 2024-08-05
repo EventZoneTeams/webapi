@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using Domain.DTOs.NotificationDTOs;
 using Domain.Entities;
 using Microsoft.AspNetCore.SignalR;
 using Repositories.Interfaces;
-using Services.DTO.NotificationDTOs;
 using Services.Hubs;
 using Services.Interface;
 

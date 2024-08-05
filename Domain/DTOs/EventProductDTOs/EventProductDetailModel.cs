@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Services.DTO.EventProductsModel
+namespace Domain.DTOs.EventProductDTOs
 {
     public class EventProductDetailModel : EventProductUpdateModel
     {

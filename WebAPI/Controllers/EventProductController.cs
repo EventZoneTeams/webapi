@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.DTOs.EventProductDTOs;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models.ProductModels;
 using Services.DTO;
-using Services.DTO.EventProductsModel;
 using Services.Interface;
 
 namespace WebAPI.Controllers

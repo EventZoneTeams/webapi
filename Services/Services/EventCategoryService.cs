@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Domain.DTOs.EventCategoryDTOs;
 using Domain.Entities;
+using Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Extensions;
 using Repositories.Interfaces;
-using Services.DTO.EventCategoryDTOs;
 using Services.Interface;
 
 namespace Services.Services
