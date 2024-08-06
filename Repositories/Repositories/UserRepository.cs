@@ -68,7 +68,7 @@ namespace Repositories.Repositories
                     FullName = User.FullName,
                     Dob = User.Dob,
                     Gender = User.Gender.ToLower() == "male" ? true : false,
-                    Image = User.Image,
+                    Image = User.ImageUrl,
                     University = User.University,
                     CreatedBy = _claimsService.GetCurrentUserId,
                     CreatedDate = _timeService.GetCurrentTime()
@@ -333,6 +333,7 @@ namespace Repositories.Repositories
                     JWT = new JwtSecurityTokenHandler().WriteToken(token),
                     Expired = token.ValidTo,
                     JWTRefreshToken = refreshToken,
+                    UserId = UserExist.Id
                 };
             }
             else

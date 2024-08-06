@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using Repositories;
 using Services.Hubs;
 using Services.Interface;
@@ -24,7 +25,15 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
-
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ContractResolver = new DefaultContractResolver
+        {
+            NamingStrategy = new DefaultNamingStrategy() // Dùng DefaultNamingStrategy để giữ PascalCase
+        };
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Bỏ qua các vòng lặp tham chiếu
+    });
 builder.Services.AddControllers(options =>
 {
     options.ModelBinderProviders.Insert(0, new CustomEventProductDetailDTOBinderProvider());
@@ -81,7 +90,11 @@ builder.Services.AddSwaggerGen(config =>
     // using System.Reflection;
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     config.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+    // Cấu hình Swagger để sử dụng Newtonsoft.Json
+    config.UseAllOfForInheritance();
 });
+builder.Services.AddSwaggerGenNewtonsoftSupport(); //chuyen sang pascal nhung mat Ifromfile
 
 //SETUP INJECTION SERVICE
 builder.Services.ServicesInjection(builder.Configuration);
