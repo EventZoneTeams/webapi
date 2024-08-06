@@ -24,6 +24,10 @@ namespace WebAPI.Injection
             {
                 options.UseSqlServer(configuration.GetConnectionString("LocalDB"));
             });
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("RedisCacheDB");
+            });
 
             //sign up for middleware
             services.AddSingleton<GlobalExceptionMiddleware>();

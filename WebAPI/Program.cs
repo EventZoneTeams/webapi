@@ -12,6 +12,7 @@ using Services.Services;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using WebAPI.Extensions;
 using WebAPI.Injection;
 using WebAPI.MiddleWares;
 using WebAPI.ModelBinder;
@@ -179,15 +180,19 @@ catch (Exception ex)
     logger.LogError(ex, "An problem occurred during migration!");
 }
 
-//Show SWAGGER UI
-app.UseSwagger();
-app.UseSwaggerUI(config =>
+
+if (app.Environment.IsDevelopment())
 {
-    // Always keep token after reload or refresh browser
-    config.SwaggerEndpoint("/swagger/v1/swagger.json", "Student Event Forum API v.01");
-    config.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
-    config.InjectJavascript("/custom-swagger.js");
-});
+    app.UseSwagger();
+    app.UseSwaggerUI(config =>
+    {
+        // Always keep token after reload or refresh browser
+        config.SwaggerEndpoint("/swagger/v1/swagger.json", "EventZone API v.01");
+        config.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
+        config.InjectJavascript("/custom-swagger.js");
+    });
+    app.ApplyMigrations(logger);
+}
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<PerformanceTimeMiddleware>();

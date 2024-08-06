@@ -1,29 +1,35 @@
-version: '3.8'
+﻿version: '3.4'
 
 services:
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: eventzone-db
+  webapi:
+    image: ${DOCKER_REGISTRY-}webapi
+    container_name: eventzone.api
     environment:
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__LocalDB=Server=eventzone.database;Database=eventzone;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+    build:
+      context: .
+      dockerfile: WebAPI/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  eventzone.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: eventzone.database
+    restart: always
+    environment:
       ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong!Passw0rd"
     ports:
       - "1433:1433"
     volumes:
-      - sqlserver-data:/var/opt/mssql
-    user: "0:0" # Run as root to avoid permission issues during initialization
-
-  webapp:
-    build: .
-    container_name: webapp
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__LocalDB=Server=eventzone-db;Database=eventzone;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+      - ./.containers/eventzone-db:/var/opt/mssql/data # thư mục lưu DB
+      - ./bk:/var/opt/mssql/backup      # thư  mục chứa file backup
+    
+  eventzone.cache:
+    image: redis:latest
+    container_name: eventzone.cache
+    restart: always
     ports:
-      - "5000:80"
-    depends_on:
-      - sqlserver
-
-volumes:
-  sqlserver-data:
-    driver: local
+      - "6379:6379"
