@@ -15,24 +15,28 @@ namespace WebAPI.Controllers
     {
         private readonly IUserService _userService;
         private readonly IEmailService _emailService;
+        private readonly IImageService _imageService;
 
-        public UserController(IUserService userService, IEmailService emailService)
+        public UserController(IUserService userService, IEmailService emailService, IImageService imageService)
         {
             _userService = userService;
             _emailService = emailService;
+            _imageService = imageService;
         }
 
         /// <summary>
         /// Registers a new user with the STUDENT role.
+        ///
+        /// INPUT THE IMAGE ONLY, DO NOT INPUT THE STRING URL
         /// </summary>
-        /// <param name="userLogin">The user signup data.</param>
+        /// <param name="userSignup">The user signup data.</param>
         /// <returns>A result object indicating success or failure, with additional information.</returns>
         /// <remarks>
         /// Sample request:
         ///
         ///     POST /api/v1/users/register
         ///     {
-        ///         "Email": "example@email.com",
+        ///         "Email": "example@gmail.com",
         ///         "Password": "StrongPassword123",
         ///         "FullName": "John Doe",
         ///         "Dob": "2000-01-01",
@@ -44,11 +48,17 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns a success message with user data if registration is successful.</response>
         /// <response code="400">Returns an error message if registration fails (e.g., email already exists, invalid data).</response>
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(UserSignupModel userLogin)
+        public async Task<IActionResult> RegisterAsync([FromForm] UserSignupModel userSignup)
         {
             try
             {
-                var data = await _userService.ResigerAsync(userLogin, "STUDENT");
+                string imageUrl = null;
+                if (userSignup.Image != null)
+                {
+                    imageUrl = await _imageService.UploadImageAsync(userSignup.Image, "event-thumbnails");
+                    userSignup.ImageUrl = imageUrl;
+                }
+                var data = await _userService.ResigerAsync(userSignup, "STUDENT");
                 if (data.Success)
                 {
                     // var confirmationLink = Url.Action(nameof(ConfirmEmail), "users", new { email = userLogin.Email, token = data.Message }, Request.Scheme);

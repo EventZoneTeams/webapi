@@ -27,6 +27,7 @@
 		</PackageReference>
 		<PackageReference Include="NETCore.MailKit" Version="2.1.0" />
 		<PackageReference Include="Swashbuckle" Version="5.6.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.7.0" />
 	</ItemGroup>
 
 </Project>
