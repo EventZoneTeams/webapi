@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.DTOs.EventDTOs;
-using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
 using Repositories.Extensions;
@@ -14,14 +13,12 @@ namespace WebAPI.Controllers
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
-        private readonly IImageService _imageService;
         private readonly IMapper _mapper;
         private readonly IEventPackageService _eventPackageService;
 
-        public EventController(IEventService eventService, IImageService imageService, IMapper mapper, IEventPackageService eventPackageService)
+        public EventController(IEventService eventService, IMapper mapper, IEventPackageService eventPackageService)
         {
             _eventService = eventService;
-            _imageService = imageService;
             _mapper = mapper;
             _eventPackageService = eventPackageService;
         }
@@ -84,7 +81,6 @@ namespace WebAPI.Controllers
             {
                 var eventModel = await _eventService.GetEventById(id);
                 var data = await _eventPackageService.GetAllPackageOfEvent(id);
-                eventModel.EventPackages = data;
                 return Ok(ApiResult<EventResponseDTO>.Succeed(eventModel, "Get Event Successfully!"));
             }
             catch (Exception ex)
@@ -140,31 +136,19 @@ namespace WebAPI.Controllers
         /// <response code="200">Returns a event</response>
         /// <response code="400">Requied field is null</response>
         [HttpPost]
-        public async Task<IActionResult> CreateEventAsync([FromForm] EventCreateDTO createEventModel)
+        public async Task<IActionResult> CreateEventAsync([FromBody] EventCreateDTO createEventModel)
         {
             try
             {
-                string imageUrl = null;
-                if (createEventModel.ThumbnailUrl != null)
-                {
-                    imageUrl = await _imageService.UploadImageAsync(createEventModel.ThumbnailUrl, "event-thumbnails");
-                }
-
-                var format = new EventDTO
+                var format = new EventCreateDTO
                 {
                     Name = createEventModel.Name,
                     Description = createEventModel.Description,
-                    ThumbnailUrl = imageUrl,
-
+                    ThumbnailUrl = createEventModel.ThumbnailUrl,
                     EventStartDate = createEventModel.EventStartDate,
                     EventEndDate = createEventModel.EventEndDate,
                     Note = createEventModel.Note,
-                    Location = createEventModel.Location,
-                    UserId = createEventModel.UserId,
                     EventCategoryId = createEventModel.EventCategoryId,
-                    University = createEventModel.University,
-                    Status = EventStatusEnums.PENDING,
-                    TotalCost = createEventModel?.TotalCost
                 };
                 var eventModel = await _eventService.CreateEvent(format);
                 return Ok(ApiResult<EventResponseDTO>.Succeed(eventModel, "Create Event Successfully!"));
@@ -224,29 +208,20 @@ namespace WebAPI.Controllers
         /// <response code="400">If the event or the update data is invalid</response>
         /// <response code="404">If the event is not found</response>
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEventAsync(Guid id, [FromForm] EventCreateDTO updateEventModel)
+        public async Task<IActionResult> UpdateEventAsync(Guid id, [FromBody] EventCreateDTO updateEventModel)
         {
             try
             {
-                string imageUrl = null;
-                if (updateEventModel.ThumbnailUrl != null)
-                {
-                    imageUrl = await _imageService.UploadImageAsync(updateEventModel.ThumbnailUrl, "event-thumbnails");
-                }
 
                 var format = new EventDTO
                 {
                     Name = updateEventModel.Name,
                     Description = updateEventModel.Description,
-                    ThumbnailUrl = imageUrl,
+                    ThumbnailUrl = updateEventModel.ThumbnailUrl,
                     EventStartDate = updateEventModel.EventStartDate,
                     EventEndDate = updateEventModel.EventEndDate,
                     Note = updateEventModel.Note,
-                    Location = updateEventModel.Location,
-                    UserId = updateEventModel.UserId,
                     EventCategoryId = updateEventModel.EventCategoryId,
-                    University = updateEventModel.University,
-                    TotalCost = updateEventModel.TotalCost ?? 0
                 };
                 var updatedEvent = await _eventService.UpdateEvent(id, format);
                 return Ok(ApiResult<EventResponseDTO>.Succeed(updatedEvent, "Event updated successfully!"));

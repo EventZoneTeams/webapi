@@ -29,7 +29,7 @@ namespace Domain.Extensions
 
             var lowerCaseSearchTerm = searchTerm.Trim().ToLower();
 
-            return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm) || p.Location.ToLower().Contains(lowerCaseSearchTerm) || p.University.ToLower().Contains(lowerCaseSearchTerm));
+            return query.Where(p => p.Name.ToLower().Contains(lowerCaseSearchTerm) || p.Description.ToLower().Contains(lowerCaseSearchTerm) || p.LocationDisplay.ToLower().Contains(lowerCaseSearchTerm));
         }
 
         public static IQueryable<Event> Filter(this IQueryable<Event> query, Guid? categoryId)
@@ -61,24 +61,6 @@ namespace Domain.Extensions
                 query = query.Where(p => p.EventEndDate <= eventEndDate);
             }
             return query;
-        }
-
-        public static IQueryable<Event> FilterByLocation(this IQueryable<Event> query, string location)
-        {
-            if (string.IsNullOrEmpty(location)) return query;
-
-            var lowerCaseLocation = location.Trim().ToLower();
-
-            return query.Where(p => p.Location.ToLower().Contains(lowerCaseLocation));
-        }
-
-        public static IQueryable<Event> FilterByUniversity(this IQueryable<Event> query, string university)
-        {
-            if (string.IsNullOrEmpty(university)) return query;
-
-            var lowerCaseUniversity = university.Trim().ToLower();
-
-            return query.Where(p => p.University.ToLower().Contains(lowerCaseUniversity));
         }
 
         public static IQueryable<Event> FilterByStatus(this IQueryable<Event> query, string eventStatus)

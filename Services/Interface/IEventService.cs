@@ -10,7 +10,7 @@ namespace Services.Interface
 
         Task<EventResponseDTO> GetEventById(Guid id);
 
-        Task<EventResponseDTO> CreateEvent(EventDTO eventModel);
+        Task<EventResponseDTO> CreateEvent(EventCreateDTO eventModel);
 
         Task<EventResponseDTO> UpdateEvent(Guid id, EventDTO eventModel);
 

@@ -1,34 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
-
-namespace Domain.DTOs.EventDTOs
+﻿namespace Domain.DTOs.EventDTOs
 {
     public class EventCreateDTO
     {
         public string Name { get; set; }
-
         public string? Description { get; set; }
-
-        public IFormFile? ThumbnailUrl { get; set; }
-
-        public DateTime? DonationStartDate { get; set; }
-
-        public DateTime? DonationEndDate { get; set; }
-
+        public string? ThumbnailUrl { get; set; }
         public DateTime? EventStartDate { get; set; }
-
         public DateTime? EventEndDate { get; set; }
-
-        public string Note { get; set; }
-
-        public string? Location { get; set; }
-
-        public Guid UserId { get; set; }
-
-        [Required]
+        public string? Latitude { get; set; }
+        public string? Longitude { get; set; }
+        public string? LocationDisplay { get; set; }
+        public string? LocationNote { get; set; }
+        public string? Note { get; set; }
         public Guid EventCategoryId { get; set; }
-
-        public string? University { get; set; }
-        public long? TotalCost { get; set; }
     }
 }

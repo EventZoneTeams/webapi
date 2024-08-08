@@ -11,21 +11,11 @@ namespace WebAPI.Controllers
     public class EventCategoryController : Controller
     {
         private readonly IEventCategoryService _eventCategoryService;
-        private readonly IImageService _imageService;
 
-        public EventCategoryController(IEventCategoryService eventCategoryService, IImageService imageService)
+        public EventCategoryController(IEventCategoryService eventCategoryService)
         {
             _eventCategoryService = eventCategoryService;
-            _imageService = imageService;
         }
-
-        //[HttpPost("test")]
-        //public IActionResult Test([FromForm] )
-        //{
-        //    var imageUrl = _imageService.UploadImageAsync(files, "test-image-multiple");
-
-        //    return Ok(imageUrl);
-        //}
 
         /// <summary>
         /// Get list event categories
@@ -115,9 +105,10 @@ namespace WebAPI.Controllers
         ///
         ///     POST /event-categories
         ///     {
-        ///         "title": "Âm Nhạc",
-        ///         "image": [binary image data]
-        ///     }
+        ///         "Title": "string",
+        ///         "ImageUrl": "string",
+        ///         "Description": "string"
+        ///     {
         ///
         /// </remarks>
         /// <response code="200">Returns the created event category</response>
@@ -125,20 +116,15 @@ namespace WebAPI.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ApiResult<List<EventCategoryResponseDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<List<object>>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateEventCategory([FromForm] CreateEventCategoryModel data)
+        public async Task<IActionResult> CreateEventCategory([FromBody] EventCategoryDTO data)
         {
             try
             {
-                string imageUrl = null;
-                if (data.Image != null)
-                {
-                    imageUrl = await _imageService.UploadImageAsync(data.Image, "event-category");
-                }
-
                 var eventCategory = new EventCategoryDTO
                 {
                     Title = data.Title,
-                    ImageUrl = imageUrl
+                    ImageUrl = data.ImageUrl,
+                    Description = data.Description
                 };
 
                 var result = await _eventCategoryService.CreateEventCategory(eventCategory);
@@ -175,20 +161,15 @@ namespace WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResult<List<EventCategoryDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEventCategory(Guid id, [FromForm] UpdateEventCategoryModel data)
+        public async Task<IActionResult> UpdateEventCategory(Guid id, [FromBody] EventCategoryDTO data)
         {
             try
             {
-                string imageUrl = null;
-                if (data.Image != null)
-                {
-                    imageUrl = await _imageService.UploadImageAsync(data.Image, "event-category");
-                }
-
                 var eventCategory = new EventCategoryDTO
                 {
                     Title = data.Title,
-                    ImageUrl = imageUrl
+                    ImageUrl = data.ImageUrl,
+                    Description = data.Description
                 };
 
                 var result = await _eventCategoryService.UpdateEventCategory(id, eventCategory);
@@ -230,9 +211,9 @@ namespace WebAPI.Controllers
             {
                 var result = await _eventCategoryService.DeleteEventCategory(id);
 
-                if (result)
+                if (!result)
                 {
-                    return NotFound(ApiResult<object>.Error(null, "Event Category Not Found!"));
+                    return NotFound(ApiResult<object>.Error(null, "Delete Event Category Is Failed!"));
                 }
                 else
                 {

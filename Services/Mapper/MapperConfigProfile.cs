@@ -12,7 +12,6 @@ using Domain.DTOs.NotificationDTOs;
 using Domain.DTOs.UserDTOs;
 using Domain.DTOs.WalletDTOs;
 using Domain.Entities;
-using Repositories.Models;
 
 namespace Services.Mapper
 {
@@ -31,11 +30,26 @@ namespace Services.Mapper
             CreateMap<EventDTO, Event>()
                 .ReverseMap();
 
+            CreateMap<EventCreateDTO, Event>()
+                .ReverseMap();
+
+
             CreateMap<EventDTO, EventResponseDTO>()
                 .ReverseMap();
 
             CreateMap<Event, EventResponseDTO>()
-                .ReverseMap();
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new LocationResponseDTO
+                {
+                    Latitude = src.Latitude,
+                    Longitude = src.Longitude,
+                    Display = src.LocationDisplay,
+                    Note = src.LocationNote
+                }))
+                .ReverseMap()
+                .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Location.Latitude))
+                .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Location.Longitude))
+                .ForMember(dest => dest.LocationDisplay, opt => opt.MapFrom(src => src.Location.Display))
+                .ForMember(dest => dest.LocationNote, opt => opt.MapFrom(src => src.Location.Note));
 
             CreateMap<EventCategory, EventCategoryDTO>()
                 .ReverseMap()

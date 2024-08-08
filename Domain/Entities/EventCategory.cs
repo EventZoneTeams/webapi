@@ -4,8 +4,7 @@
     {
         public string Title { get; set; }
         public string? ImageUrl { get; set; }
-        public string? Test { get; set; }
-
+        public string? Description { get; set; }
         public virtual ICollection<Event> Events { get; set; }
     }
 }

@@ -12,12 +12,14 @@ namespace Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly IClaimsService _claimsService;
 
-        public EventService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
+        public EventService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService, IClaimsService claimsService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
+            _claimsService = claimsService;
         }
 
         public async Task<PagedList<Event>> GetEvent(EventParams eventParams)
@@ -25,8 +27,6 @@ namespace Services.Services
             var query = _unitOfWork.EventRepository.FilterAllField(eventParams).AsQueryable();
 
             var events = await PagedList<Event>.ToPagedList(query, eventParams.PageNumber, eventParams.PageSize);
-
-            //.Sort(eventParams.OrderBy);
 
             return events;
         }
@@ -44,17 +44,19 @@ namespace Services.Services
             return result;
         }
 
-        public async Task<EventResponseDTO> CreateEvent(EventDTO eventModel)
+        public async Task<EventResponseDTO> CreateEvent(EventCreateDTO eventModel)
         {
             var eventEntity = _mapper.Map<Event>(eventModel);
             //check user
-            var user = await _unitOfWork.UserRepository.GetAllUsersAsync();
-            var isExistUser = user.FirstOrDefault(x => x.Id == eventModel.UserId);
-            if (isExistUser == null)
-            {
-                throw new Exception("User not null when create event");
-            }
-            eventEntity.User = isExistUser;
+            Guid userId = _claimsService.GetCurrentUserId;
+            //var isExistUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            //if (isExistUser == null)
+            //{
+            //    throw new Exception("User does not exist!");
+            //}
+            //eventEntity.UserId = isExistUser.Id;
+            //eventEntity.User = isExistUser;
+            eventEntity.UserId = Guid.Parse("d187ccfc-4c35-43e8-85d3-08dcb6bdd221");
             //check eventCategory
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(eventModel.EventCategoryId);
             if (eventCategory == null)
@@ -68,16 +70,16 @@ namespace Services.Services
             var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
             var result = _mapper.Map<EventResponseDTO>(newEvent);
 
-            if (isSuccess)
-            {
-                await _notificationService.PushNotificationToManager(new Notification
-                {
-                    Title = "User " + isExistUser.Email + " Has Created Event",
-                    Body = $"Event Name: " + eventModel.Name,
-                    Url = "/dashboard/feedback/event/" + newEvent.Id,
-                });
-                return result;
-            }
+            //if (isSuccess)
+            //{
+            //    await _notificationService.PushNotificationToManager(new Notification
+            //    {
+            //        Title = "User " + isExistUser.Email + " Has Created Event",
+            //        Body = $"Event Name: " + eventModel.Name,
+            //        Url = "/dashboard/feedback/event/" + newEvent.Id,
+            //    });
+            //    return result;
+            //}
 
             throw new Exception("Failed to create event");
         }
@@ -111,8 +113,6 @@ namespace Services.Services
             existingEvent.ThumbnailUrl = eventModel.ThumbnailUrl ?? existingEvent.ThumbnailUrl;
             existingEvent.EventStartDate = eventModel.EventStartDate ?? existingEvent.EventStartDate;
             existingEvent.EventEndDate = eventModel.EventEndDate ?? existingEvent.EventEndDate;
-            existingEvent.Location = eventModel.Location ?? existingEvent.Location;
-            existingEvent.University = eventModel.University ?? existingEvent.University;
             existingEvent.Status = eventModel.Status.ToString() ?? existingEvent.Status;
 
             var isUpdated = await _unitOfWork.EventRepository.Update(existingEvent);

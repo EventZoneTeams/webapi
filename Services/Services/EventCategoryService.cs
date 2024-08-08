@@ -36,7 +36,8 @@ namespace Services.Services
             var eventCategory = new EventCategory
             {
                 Title = eventCategoryModel.Title,
-                ImageUrl = eventCategoryModel.ImageUrl
+                ImageUrl = eventCategoryModel.ImageUrl,
+                Description = eventCategoryModel.Description,
             };
             var newCategory = await _unitOfWork.EventCategoryRepository.AddAsync(eventCategory);
 
@@ -67,13 +68,7 @@ namespace Services.Services
                 .Sort(categoryParam.OrderBy)
                 .ToListAsync<EventCategory>();
 
-            var result = new List<EventCategoryResponseDTO>();
-            foreach (var category in eventCategories)
-            {
-                var eventFormat = _mapper.Map<EventCategoryResponseDTO>(category);
-                result.Add(eventFormat);
-            }
-            return result;
+            return _mapper.Map<List<EventCategoryResponseDTO>>(eventCategories);
         }
 
         public async Task<EventCategoryResponseDTO> GetEventCategoryById(Guid id)
@@ -101,6 +96,7 @@ namespace Services.Services
 
             eventCategory.Title = eventCategoryModel.Title;
             eventCategory.ImageUrl = eventCategoryModel?.ImageUrl ?? eventCategory?.ImageUrl;
+            eventCategory.Description = eventCategoryModel?.Description ?? eventCategory?.Description;
 
             var isUpdated = await _unitOfWork.EventCategoryRepository.Update(eventCategory);
 
