@@ -59,7 +59,7 @@ namespace Services.Services
                     switch (type)
                     {
                         case FeedbackTypeEnums.APPROVE:
-                            checkEvent.Status = EventStatusEnums.APPROVED.ToString();
+                            checkEvent.Status = EventStatusEnums.PUBLISHED.ToString();
 
                             //if (checkEvent.IsDonation)
                             //{

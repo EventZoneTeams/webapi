@@ -78,7 +78,7 @@ namespace Services.Services
                     EventId = eventCampaignDTO.EventId,
                 };
 
-                if (checkEvent.Status == EventStatusEnums.CANCELED.ToString() || checkEvent.Status == EventStatusEnums.COMPLETED.ToString())
+                if (checkEvent.Status == EventStatusEnums.COMPLETED.ToString())
                 {
                     return new ApiResult<EventCampaignDTO>()
                     {
