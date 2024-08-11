@@ -4,11 +4,10 @@
     {
         DRAFT,
         PENDING,
-        REJECTED,
-        APPROVED,
         PUBLISHED,
-        ONGOING,
+        REJECTED,
         COMPLETED,
-        CANCELED
+        ARCHIVED,
+        CANCELLED
     }
 }
