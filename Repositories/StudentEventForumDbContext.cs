@@ -72,9 +72,21 @@ namespace Repositories
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<EventProduct>()
-      .HasMany(e => e.ProductImages)
-      .WithOne(p => p.EventProduct)
-      .OnDelete(DeleteBehavior.Cascade);
+              .HasMany(e => e.ProductImages)
+              .WithOne(p => p.EventProduct)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Notification>(entity =>
+            {
+                entity.HasKey(e => e.Id);  // Assuming Id is the primary key from BaseEntity
+
+                // Configure ReceiverId as a foreign key
+                entity.HasOne<User>()
+                    .WithMany()  // Assuming no navigation property in User entity for this relationship
+                    .HasForeignKey(e => e.ReceiverId)
+                    .OnDelete(DeleteBehavior.Restrict) // Optional: specify the delete behavior
+                    .IsRequired(false);  // ReceiverId is nullable
+            });
         }
     }
 }

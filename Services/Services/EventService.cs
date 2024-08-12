@@ -49,14 +49,13 @@ namespace Services.Services
             var eventEntity = _mapper.Map<Event>(eventModel);
             //check user
             Guid userId = _claimsService.GetCurrentUserId;
-            //var isExistUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
-            //if (isExistUser == null)
-            //{
-            //    throw new Exception("User does not exist!");
-            //}
-            //eventEntity.UserId = isExistUser.Id;
-            //eventEntity.User = isExistUser;
-            eventEntity.UserId = Guid.Parse("d187ccfc-4c35-43e8-85d3-08dcb6bdd221");
+            var isExistUser = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            if (isExistUser == null)
+            {
+                throw new Exception("User does not exist!");
+            }
+            eventEntity.UserId = isExistUser.Id;
+            eventEntity.User = isExistUser;
             //check eventCategory
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(eventModel.EventCategoryId);
             if (eventCategory == null)
@@ -70,18 +69,20 @@ namespace Services.Services
             var isSuccess = await _unitOfWork.SaveChangeAsync() > 0;
             var result = _mapper.Map<EventResponseDTO>(newEvent);
 
-            //if (isSuccess)
-            //{
-            //    await _notificationService.PushNotificationToManager(new Notification
-            //    {
-            //        Title = "User " + isExistUser.Email + " Has Created Event",
-            //        Body = $"Event Name: " + eventModel.Name,
-            //        Url = "/dashboard/feedback/event/" + newEvent.Id,
-            //    });
-            //    return result;
-            //}
-
-            throw new Exception("Failed to create event");
+            if (isSuccess)
+            {
+                //    await _notificationService.PushNotificationToManager(new Notification
+                //    {
+                //        Title = "User " + isExistUser.Email + " Has Created Event",
+                //        Body = $"Event Name: " + eventModel.Name,
+                //        Url = "/dashboard/feedback/event/" + newEvent.Id,
+                //    });
+                return result;
+            }
+            else
+            {
+                throw new Exception("Failed to create event");
+            }
         }
 
         public async Task<EventResponseDTO> UpdateEvent(Guid id, EventDTO eventModel)
@@ -93,13 +94,13 @@ namespace Services.Services
                 throw new Exception("Event not found");
             }
             //check user
-            var user = await _unitOfWork.UserRepository.GetAllUsersAsync();
-            var isExistUser = user.FirstOrDefault(x => x.Id == eventModel.UserId);
-            if (isExistUser == null)
-            {
-                throw new Exception("User does not exist!");
-            }
-            existingEvent.User = isExistUser;
+            //var user = await _unitOfWork.UserRepository.GetAllUsersAsync();
+            //var isExistUser = user.FirstOrDefault(x => x.Id == eventModel.UserId);
+            //if (isExistUser == null)
+            //{
+            //    throw new Exception("User does not exist!");
+            //}
+            //existingEvent.User = isExistUser;
             //check eventCategory
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(eventModel.EventCategoryId);
             if (eventCategory == null)

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.DTOs.WalletDTOs;
-using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
@@ -217,15 +216,15 @@ namespace WebAPI.Controllers
                 var statusHTML = $"<p class=\"mt-1 text-md {textColor}\">{iPNReponse.status.ToString()}</p>";
 
                 // Send notification
-                var notification = new Notification
-                {
-                    Title = "Deposit " + int.Parse(iPNReponse.price) / 100,
-                    Body = iPNReponse.message,
-                    UserId = _claimsService.GetCurrentUserId == Guid.Empty ? Guid.Empty : _claimsService.GetCurrentUserId,
-                    Url = "/profile/wallet",
-                    Sender = "System"
-                };
-                await _notificationService.PushNotification(notification).ConfigureAwait(true);
+                //var notification = new Notification
+                //{
+                //    Title = "Deposit " + int.Parse(iPNReponse.price) / 100,
+                //    Body = iPNReponse.message,
+                //    UserId = _claimsService.GetCurrentUserId == Guid.Empty ? Guid.Empty : _claimsService.GetCurrentUserId,
+                //    Url = "/profile/wallet",
+                //    Sender = "System"
+                //};
+                //await _notificationService.PushNotification(notification).ConfigureAwait(true);
 
                 //format image
                 var imageHTML = string.Empty;

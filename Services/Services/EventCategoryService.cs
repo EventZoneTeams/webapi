@@ -3,6 +3,7 @@ using Domain.DTOs.EventCategoryDTOs;
 using Domain.Entities;
 using Domain.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.Interface;
 
@@ -12,11 +13,13 @@ namespace Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IRedisService _redisService;
 
-        public EventCategoryService(IUnitOfWork unitOfWork, IMapper mapper)
+        public EventCategoryService(IUnitOfWork unitOfWork, IMapper mapper, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _redisService = redisService;
         }
 
         public async Task<EventCategoryResponseDTO> CreateEventCategory(EventCategoryDTO eventCategoryModel)
@@ -41,6 +44,9 @@ namespace Services.Services
             };
             var newCategory = await _unitOfWork.EventCategoryRepository.AddAsync(eventCategory);
 
+            // Clear cache as new category is added
+            await _redisService.DeleteKeyAsync(CacheKeys.EventCategories);
+
             // mapper
             var result = _mapper.Map<EventCategoryResponseDTO>(newCategory);
             await _unitOfWork.SaveChangeAsync();
@@ -57,22 +63,53 @@ namespace Services.Services
             }
 
             var isDeleted = await _unitOfWork.EventCategoryRepository.SoftRemove(eventCategory);
+
+            if (isDeleted)
+            {
+                // Clear specific cache key
+                await _redisService.DeleteKeyAsync(CacheKeys.EventCategory(id));
+                // Clear general list cache
+                await _redisService.DeleteKeyAsync(CacheKeys.EventCategories);
+            }
+
             return isDeleted;
         }
 
         public async Task<List<EventCategoryResponseDTO>> GetEventCategories(CategoryParam categoryParam)
         {
+            // Try to get from cache
+            var cachedCategories = await _redisService.GetStringAsync(CacheKeys.EventCategories);
+            if (!string.IsNullOrEmpty(cachedCategories))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<List<EventCategoryResponseDTO>>(cachedCategories);
+            }
+
+            // If not in cache, query the database
             var eventCategories = await _unitOfWork.EventCategoryRepository
                 .GetQueryable()
                 .Search(categoryParam.SearchTerm)
                 .Sort(categoryParam.OrderBy)
                 .ToListAsync<EventCategory>();
 
-            return _mapper.Map<List<EventCategoryResponseDTO>>(eventCategories);
+            var result = _mapper.Map<List<EventCategoryResponseDTO>>(eventCategories);
+
+            // Cache the result
+            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            await _redisService.SetStringAsync(CacheKeys.EventCategories, serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+
+            return result;
         }
 
         public async Task<EventCategoryResponseDTO> GetEventCategoryById(Guid id)
         {
+            // Try to get from cache
+            var cachedCategory = await _redisService.GetStringAsync(CacheKeys.EventCategory(id));
+            if (!string.IsNullOrEmpty(cachedCategory))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<EventCategoryResponseDTO>(cachedCategory);
+            }
+
+            // If not in cache, query the database
             var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
 
             if (eventCategory == null)
@@ -82,12 +119,16 @@ namespace Services.Services
 
             var result = _mapper.Map<EventCategoryResponseDTO>(eventCategory);
 
+            // Cache the result
+            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            await _redisService.SetStringAsync(CacheKeys.EventCategory(id), serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+
             return result;
         }
 
         public async Task<EventCategoryResponseDTO> UpdateEventCategory(Guid id, EventCategoryDTO eventCategoryModel)
         {
-            var eventCategory = await _unitOfWork.EventCategoryRepository.GetByIdAsync(id);
+            var eventCategory = _mapper.Map<EventCategory>(await GetEventCategoryById(id));
 
             if (eventCategory == null)
             {
@@ -104,6 +145,11 @@ namespace Services.Services
             {
                 throw new Exception("Failed to update event category");
             }
+
+            // Clear specific cache key
+            await _redisService.DeleteKeyAsync(CacheKeys.EventCategory(id));
+            // Clear general list cache
+            await _redisService.DeleteKeyAsync(CacheKeys.EventCategories);
 
             var result = _mapper.Map<EventCategoryResponseDTO>(eventCategory);
             await _unitOfWork.SaveChangeAsync();

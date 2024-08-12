@@ -23,13 +23,11 @@ namespace Services.Services
 
         public async Task PushNotification(Notification notification)
         {
-
-
             var newNotification = new Notification
             {
                 Title = notification.Title,
                 Body = notification.Body,
-                UserId = notification.UserId,
+                ReceiverId = notification.ReceiverId,
                 IsRead = false,
                 Url = notification.Url,
                 Sender = notification.Sender ?? "Admin"
@@ -50,10 +48,10 @@ namespace Services.Services
             {
                 Title = notification.Title,
                 Body = notification.Body,
-                UserId = null,
+                ReceiverId = null,
                 IsRead = false,
                 Url = notification.Url,
-                Sender = "Manager"
+                Sender = "System"
             };
             //save notification to DB
             await _unitOfWork.NotificationRepository.AddAsync(newNotification);
@@ -63,20 +61,20 @@ namespace Services.Services
             await _notificationHubContext.Clients.Group("Manager").SendAsync("ReceiveNotification", notification.Title, notification.Body).ConfigureAwait(true);
         }
 
-        public async Task<List<NotificationDTO>> GetNotifications(Guid userId)
+        public async Task<List<NotificationDTO>> GetNotifications()
         {
-            var notifications = await _unitOfWork.NotificationRepository.GetListByUserId(userId);
+            var notifications = await _unitOfWork.NotificationRepository.GetListByUserId();
             return _mapper.Map<List<NotificationDTO>>(notifications);
         }
 
-        public async Task<List<NotificationDTO>> ReadAllNotification(Guid userId)
+        public async Task<List<NotificationDTO>> ReadAllNotification()
         {
-            var notifications = await _unitOfWork.NotificationRepository.ReadAllNotification(userId);
+            var notifications = await _unitOfWork.NotificationRepository.ReadAllNotification();
             return _mapper.Map<List<NotificationDTO>>(notifications);
         }
-        public async Task<int> GetUnreadNotificationQuantity(Guid userId)
+        public async Task<int> GetUnreadNotificationQuantity()
         {
-            var result = await _unitOfWork.NotificationRepository.GetUnreadNotificationQuantity(userId);
+            var result = await _unitOfWork.NotificationRepository.GetUnreadNotificationQuantity();
             return result;
         }
     }

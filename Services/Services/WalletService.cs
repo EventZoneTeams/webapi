@@ -75,14 +75,14 @@ namespace Services.Services
             }
 
             // Send notification
-            var notification = new Notification
-            {
-                Title = "Purchase order " + orderId,
-                Body = "Amount: " + order.TotalAmount,
-                UserId = userId,
-                Url = "/profile/orders",
-                Sender = "System"
-            };
+            //var notification = new Notification
+            //{
+            //    Title = "Purchase order " + orderId,
+            //    Body = "Amount: " + order.TotalAmount,
+            //    UserId = userId,
+            //    Url = "/profile/orders",
+            //    Sender = "System"
+            //};
 
             //await _notificationService.PushNotification(notification);
 
@@ -97,15 +97,15 @@ namespace Services.Services
             await _unitOfWork.SaveChangeAsync();
 
             //Notification to event order
-            var notificationToOrganizer = new Notification
-            {
-                Title = "One person buy your package" + orderId,
-                Body = "Amount: " + order.TotalAmount,
-                UserId = eventModel.UserId,
-                Url = "/dashboard/my-events/" + eventModel.Id + "/orders",
-                Sender = "System"
-            };
-            await _notificationService.PushNotification(notificationToOrganizer);
+            //var notificationToOrganizer = new Notification
+            //{
+            //    Title = "One person buy your package" + orderId,
+            //    Body = "Amount: " + order.TotalAmount,
+            //    UserId = eventModel.UserId,
+            //    Url = "/dashboard/my-events/" + eventModel.Id + "/orders",
+            //    Sender = "System"
+            //};
+            //await _notificationService.PushNotification(notificationToOrganizer);
 
             var result = _mapper.Map<TransactionResponsesDTO>(transation);
             return result;

@@ -44,15 +44,15 @@ namespace Services.Services
 
                 newFeedback = await _unitOfWork.EventFeedbackRepository.CreateFeedbackAsync(newFeedback);
 
-                Notification notification = new Notification
-                {
-                    Body = "You have a new feedback: " + newFeedback.Content,
-                    Title = "Feedback",
-                    UserId = checkEvent.UserId,
-                    IsRead = false,
-                    Url = "/event/" + checkEvent.Id,
-                    Sender = "System"
-                };
+                //Notification notification = new Notification
+                //{
+                //    Body = "You have a new feedback: " + newFeedback.Content,
+                //    Title = "Feedback",
+                //    UserId = checkEvent.UserId,
+                //    IsRead = false,
+                //    Url = "/event/" + checkEvent.Id,
+                //    Sender = "System"
+                //};
 
                 if (checkEvent.Status == EventStatusEnums.PENDING.ToString())
                 {
@@ -79,8 +79,8 @@ namespace Services.Services
 
                         case FeedbackTypeEnums.REJECT:
                             checkEvent.Status = EventStatusEnums.REJECTED.ToString();
-                            notification.Title = "Your event is rejected" + "(Event Id = " + checkEvent.Id + ")";
-                            notification.Body = "Your event is rejected: " + newFeedback.Content;
+                            //notification.Title = "Your event is rejected" + "(Event Id = " + checkEvent.Id + ")";
+                            //notification.Body = "Your event is rejected: " + newFeedback.Content;
                             checkEvent.Status = EventStatusEnums.REJECTED.ToString();
 
                             break;
@@ -99,7 +99,7 @@ namespace Services.Services
                     if (updateStatus || saveCheck > 0)
                     {
                         var result = _mapper.Map<EventFeedbackDetailModel>(newFeedback);
-                        await _notificationService.PushNotification(notification);
+                        //await _notificationService.PushNotification(notification);
                         //  result.FeedbackType = type.ToString();
                         return new ApiResult<EventFeedbackDetailModel>
                         {

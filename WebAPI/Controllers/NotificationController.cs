@@ -69,11 +69,11 @@ namespace WebAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetListNotification(Guid userId)
+        public async Task<IActionResult> GetListNotification()
         {
             try
             {
-                var result = await _notificationService.GetNotifications(userId);
+                var result = await _notificationService.GetNotifications();
                 return Ok(ApiResult<List<NotificationDTO>>.Succeed(result, "Get List Notification Successfully!"));
             }
             catch (Exception ex)
@@ -88,11 +88,11 @@ namespace WebAPI.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpPost("read-all/{userId}")]
-        public async Task<IActionResult> ReadAllNotification(Guid userId)
+        public async Task<IActionResult> ReadAllNotification()
         {
             try
             {
-                var result = await _notificationService.ReadAllNotification(userId);
+                var result = await _notificationService.ReadAllNotification();
                 return Ok(ApiResult<List<NotificationDTO>>.Succeed(result, "Read All Notification Successfully!"));
             }
             catch (Exception ex)
@@ -107,11 +107,11 @@ namespace WebAPI.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("unread-quantity/{userId}")]
-        public async Task<IActionResult> GetUnreadNotificationQuantity(Guid userId)
+        public async Task<IActionResult> GetUnreadNotificationQuantity()
         {
             try
             {
-                var result = await _notificationService.GetUnreadNotificationQuantity(userId);
+                var result = await _notificationService.GetUnreadNotificationQuantity();
                 return Ok(ApiResult<int>.Succeed(result, "Get Unread Notification Quantity Successfully!"));
             }
             catch (Exception ex)

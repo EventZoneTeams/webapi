@@ -72,7 +72,7 @@ namespace Services.Services
                     {
                         Title = "Donation Successfully!",
                         Body = "Amount: " + newDonation.Amount,
-                        UserId = newDonation.UserId,
+                        ReceiverId = newDonation.UserId,
                         Url = "/profile/wallets",
                         Sender = "System"
                     };
@@ -93,15 +93,15 @@ namespace Services.Services
                     await _unitOfWork.SaveChangeAsync();
 
                     //Notification to event owner
-                    var notificationtoorganizer = new Notification
-                    {
-                        Title = "one person donate event ",
-                        Body = "amount: " + newDonation.Amount,
-                        UserId = checkEvent.Event.UserId,
-                        Url = "/dashboard/my-events/" + checkEvent.Event,
-                        Sender = "system"
-                    };
-                    await _notificationService.PushNotification(notificationtoorganizer);
+                    //var notificationtoorganizer = new Notification
+                    //{
+                    //    Title = "one person donate event ",
+                    //    Body = "amount: " + newDonation.Amount,
+                    //    UserId = checkEvent.Event.UserId,
+                    //    Url = "/dashboard/my-events/" + checkEvent.Event,
+                    //    Sender = "system"
+                    //};
+                    //await _notificationService.PushNotification(notificationtoorganizer);
 
                     return new ApiResult<EventDonationDetailDTO>()
                     {

@@ -59,28 +59,28 @@ namespace Services.Services
             var orderResponse = await _unitOfWork.EventOrderRepository.CreateOrderWithOrderDetails(order.EventId, currentUser, newOrderDetailsList);
 
             // Send notification
-            var notificationToUser = new Notification
-            {
-                Body = "You create a new order: " + orderResponse.Id,
-                Title = "Order Created!",
-                UserId = currentUser,
-                Url = "/profile/orders",
-                Sender = "System"
-            };
+            //var notificationToUser = new Notification
+            //{
+            //    Body = "You create a new order: " + orderResponse.Id,
+            //    Title = "Order Created!",
+            //    UserId = currentUser,
+            //    Url = "/profile/orders",
+            //    Sender = "System"
+            //};
 
             //Send notification to event owner
             var eventDetails = await _unitOfWork.EventRepository.GetByIdAsync(order.EventId, x => x.User);
-            var notificationToEventOwner = new Notification
-            {
-                Body = "You have a new order " + orderResponse.Id + " from user: " + currentUser,
-                Title = "1 Order Created!",
-                UserId = eventDetails.UserId,
-                Url = "/dashboard/my-events/" + order.EventId + "/orders",
-                Sender = "System"
-            };
+            //var notificationToEventOwner = new Notification
+            //{
+            //    Body = "You have a new order " + orderResponse.Id + " from user: " + currentUser,
+            //    Title = "1 Order Created!",
+            //    UserId = eventDetails.UserId,
+            //    Url = "/dashboard/my-events/" + order.EventId + "/orders",
+            //    Sender = "System"
+            //};
 
-            //await _notificationService.PushNotification(notificationToUser).ConfigureAwait(true);
-            await _notificationService.PushNotification(notificationToEventOwner).ConfigureAwait(true);
+            ////await _notificationService.PushNotification(notificationToUser).ConfigureAwait(true);
+            //await _notificationService.PushNotification(notificationToEventOwner).ConfigureAwait(true);
 
             return _mapper.Map<EventOrderReponseDTO>(orderResponse);
         }

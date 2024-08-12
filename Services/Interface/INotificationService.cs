@@ -5,14 +5,14 @@ namespace Services.Interface
 {
     public interface INotificationService
     {
-        Task<List<NotificationDTO>> GetNotifications(Guid userId);
+        Task<List<NotificationDTO>> GetNotifications();
 
-        Task<int> GetUnreadNotificationQuantity(Guid userId);
+        Task<int> GetUnreadNotificationQuantity();
 
         Task PushNotification(Notification notification);
 
         Task PushNotificationToManager(Notification notification);
 
-        Task<List<NotificationDTO>> ReadAllNotification(Guid userId);
+        Task<List<NotificationDTO>> ReadAllNotification();
     }
 }

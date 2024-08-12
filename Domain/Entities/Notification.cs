@@ -6,8 +6,8 @@
         public string? Body { get; set; }
         public string? Url { get; set; }
         public string? Sender { get; set; }
-        public Guid? UserId { get; set; }
+        public Guid? ReceiverId { get; set; }
+        public string Type { get; set; }
         public bool IsRead { get; set; } = false;
-        public virtual User User { get; set; }
     }
 }

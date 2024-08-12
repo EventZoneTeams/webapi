@@ -11,7 +11,7 @@ namespace Services.Services
         // Constructor for production
         public RedisService(IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("Redis");
+            var connectionString = configuration.GetConnectionString("RedisCacheDB");
             var redis = ConnectionMultiplexer.Connect(connectionString);
             _db = redis.GetDatabase();
         }
@@ -27,7 +27,10 @@ namespace Services.Services
             await _db.StringSetAsync(key, value, expiry);
         }
 
-        public async Task<string> GetStringAsync(string key) => await _db.StringGetAsync(key);
+        public async Task<string> GetStringAsync(string key)
+        {
+            return await _db.StringGetAsync(key);
+        }
 
         public async Task<bool> DeleteKeyAsync(string key)
         {

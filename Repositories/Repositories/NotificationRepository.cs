@@ -21,9 +21,14 @@ namespace Repositories.Repositories
             _userManager = userManager;
         }
 
-        public async Task<List<Notification>> ReadAllNotification(Guid userId)
+        public async Task<List<Notification>> ReadAllNotification()
         {
-            var notifications = await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
+            var userId = _claimsService.GetCurrentUserId;
+            if (userId == null)
+            {
+                throw new Exception("UserId are invalid or you are not login");
+            }
+            var notifications = await _context.Notifications.Where(x => x.ReceiverId == userId).ToListAsync();
             foreach (var notification in notifications)
             {
                 notification.IsRead = true;
@@ -32,16 +37,26 @@ namespace Repositories.Repositories
             return notifications;
         }
 
-        public async Task<int> GetUnreadNotificationQuantity(Guid userId)
+        public async Task<int> GetUnreadNotificationQuantity()
         {
-            var result = await _context.Notifications.Where(x => x.UserId == userId && x.IsRead == false).CountAsync();
+            var userId = _claimsService.GetCurrentUserId;
+            if (userId == null)
+            {
+                throw new Exception("UserId are invalid or you are not login");
+            }
+            var result = await _context.Notifications.Where(x => x.ReceiverId == userId && x.IsRead == false).CountAsync();
             return result;
         }
 
-        public async Task<List<Notification>> GetListByUserId(Guid userId)
+        public async Task<List<Notification>> GetListByUserId()
         {
             var notifications = new List<Notification>();
             //check role of user to get notification
+            var userId = _claimsService.GetCurrentUserId;
+            if (userId == null)
+            {
+                throw new Exception("UserId are invalid or you are not login");
+            }
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
@@ -57,7 +72,7 @@ namespace Repositories.Repositories
             }
             else
             {
-                notifications = await _context.Notifications.Where(x => x.UserId == userId).ToListAsync();
+                notifications = await _context.Notifications.Where(x => x.ReceiverId == userId).ToListAsync();
             }
 
             //sort created date
