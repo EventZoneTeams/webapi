@@ -164,7 +164,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventCampaignService.UpdateEventCampaignAsync(id, model);
-                if (result.Success)
+                if (result.IsSuccess)
                 {
                     return Ok(result);
                 }
@@ -187,7 +187,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventCampaignService.DeleteCampaignByIdAsync(id);
-                if (result.Success)
+                if (result.IsSuccess)
                 {
                     return Ok(result);
                 }

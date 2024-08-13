@@ -51,6 +51,20 @@ namespace Services.Mapper
                 .ForMember(dest => dest.LocationDisplay, opt => opt.MapFrom(src => src.Location.Display))
                 .ForMember(dest => dest.LocationNote, opt => opt.MapFrom(src => src.Location.Note));
 
+            CreateMap<Event, EventCreateDTO>()
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new LocationResponseDTO
+                {
+                    Latitude = src.Latitude,
+                    Longitude = src.Longitude,
+                    Display = src.LocationDisplay,
+                    Note = src.LocationNote
+                }))
+                .ReverseMap()
+                .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Location.Latitude))
+                .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Location.Longitude))
+                .ForMember(dest => dest.LocationDisplay, opt => opt.MapFrom(src => src.Location.Display))
+                .ForMember(dest => dest.LocationNote, opt => opt.MapFrom(src => src.Location.Note));
+
             CreateMap<EventCategory, EventCategoryDTO>()
                 .ReverseMap()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? (string)null));

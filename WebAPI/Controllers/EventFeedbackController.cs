@@ -49,7 +49,7 @@ namespace WebAPI.Controllers
             {
                 var result = await _eventFeedbackService.CreateFeedBackForEvent(input, feedbackOption);
 
-                if (result.Success)
+                if (result.IsSuccess)
                 {
                     return Ok(result);
                 }
@@ -120,7 +120,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventFeedbackService.DeleteFeedbacksAsync(feedbackIds);
-                if (result.Success)
+                if (result.IsSuccess)
                 {
                     return Ok(result);
                 }

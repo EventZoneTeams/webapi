@@ -98,31 +98,10 @@ namespace WebAPI.Controllers
         ///
         ///     POST /events
         ///     {
-        ///         "name": "Charity Fundraiser for Children's Education",
-        ///         "description": "A charity event to raise funds for underprivileged children's education and school supplies.",
-        ///         "thumbnailUrl": "https://eventzoneblob.blob.core.windows.net/images/event-thumbnails/419976033_907448214020009_8314703696454832411_n.png",
-        ///         "donationStartDate": "2024-05-15T09:00:00.000Z",
-        ///         "donationEndDate": "2024-05-30T18:00:00.000Z",
-        ///         "eventStartDate": "2024-05-25T10:00:00.000Z",
-        ///         "eventEndDate": "2024-05-25T18:00:00.000Z",
-        ///         "location": "Central Park, New York City",
-        ///         "note": "Please approve this event",
-        ///         "userId": 1,
-        ///         "eventCategoryId": 1,
-        ///         "university": "New York University",
-        ///         "status": "PENDING",
-        ///         "origanizationStatus": "PREPARING",
-        ///         "isDonation": true,
-        ///         "totalCost": 25000
+        ///         
         ///      }
         ///
         ///  Note:
-        ///
-        ///     origanizationStatus:
-        ///         PREPARING,
-        ///         ACCOMPLISHED,
-        ///         DELAYED
-        ///         CANCELED
         ///
         ///     status:
         ///         PENDING,
@@ -140,17 +119,7 @@ namespace WebAPI.Controllers
         {
             try
             {
-                var format = new EventCreateDTO
-                {
-                    Name = createEventModel.Name,
-                    Description = createEventModel.Description,
-                    ThumbnailUrl = createEventModel.ThumbnailUrl,
-                    EventStartDate = createEventModel.EventStartDate,
-                    EventEndDate = createEventModel.EventEndDate,
-                    Note = createEventModel.Note,
-                    EventCategoryId = createEventModel.EventCategoryId,
-                };
-                var eventModel = await _eventService.CreateEvent(format);
+                var eventModel = await _eventService.CreateEvent(createEventModel);
                 return Ok(ApiResult<EventResponseDTO>.Succeed(eventModel, "Create Event Successfully!"));
             }
             catch (Exception ex)

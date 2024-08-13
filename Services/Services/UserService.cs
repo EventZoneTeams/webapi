@@ -62,7 +62,7 @@ namespace Services.Services
                 return new ApiResult<UserDetailsModel>
                 {
                     Data = null,
-                    Success = false,
+                    IsSuccess = false,
                     Message = "User have been existed"
                 };
             }
@@ -72,7 +72,7 @@ namespace Services.Services
             return new ApiResult<UserDetailsModel>
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
-                Success = true,
+                IsSuccess = true,
                 Message = "Register Successfuly"
             };
         }
@@ -95,7 +95,7 @@ namespace Services.Services
                     var response = new ApiResult<UserDetailsModel>();
                     response.Data = _mapper.Map<UserDetailsModel>(existingUser);
                     response.Message = "Updated user successfully";
-                    response.Success = true;
+                    response.IsSuccess = true;
                     return response;
                 }
             }
@@ -103,7 +103,7 @@ namespace Services.Services
             return new ApiResult<UserDetailsModel>
             {
                 Data = null,
-                Success = false,
+                IsSuccess = false,
                 Message = "This user is not existed"
             };
         }
@@ -124,7 +124,7 @@ namespace Services.Services
                         var response = new ApiResult<UserDetailsModel>();
                         response.Data = _mapper.Map<UserDetailsModel>(existingUser);
                         response.Message = "Updated user successfully";
-                        response.Success = true;
+                        response.IsSuccess = true;
                         if (!string.IsNullOrEmpty(role))
                         {
                             var result = await _unitOfWork.UserRepository.UpdateUserRole(existingUser, role);
@@ -145,7 +145,7 @@ namespace Services.Services
                 return new ApiResult<UserDetailsModel>
                 {
                     Data = null,
-                    Success = false,
+                    IsSuccess = false,
                     Message = "This user is not existed"
                 };
             }
@@ -163,7 +163,7 @@ namespace Services.Services
                 return new ApiResult<UserDetailsModel>
                 {
                     Data = null,
-                    Success = false,
+                    IsSuccess = false,
                     Message = "User have been existed"
                 };
             }
@@ -173,7 +173,7 @@ namespace Services.Services
             return new ApiResult<UserDetailsModel>
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
-                Success = true,
+                IsSuccess = true,
                 Message = ""
             };
         }
@@ -190,14 +190,14 @@ namespace Services.Services
                 return new ApiResult<UserDetailsModel>
                 {
                     Data = data,
-                    Success = true,
+                    IsSuccess = true,
                     Message = "This is current user"
                 };
             }
             return new ApiResult<UserDetailsModel>
             {
                 Data = null,
-                Success = false,
+                IsSuccess = false,
                 Message = "User is not found due to error or expiration token"
             };
         }
@@ -216,7 +216,7 @@ namespace Services.Services
                 {
                     return new ApiResult<List<UserDetailsModel>>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -230,7 +230,7 @@ namespace Services.Services
 
                     return new ApiResult<List<UserDetailsModel>>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = "There are few ids that is not existed user: " + nonExistingIdsString,
                         Data = _mapper.Map<List<UserDetailsModel>>(users.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -238,7 +238,7 @@ namespace Services.Services
             }
             return new ApiResult<List<UserDetailsModel>>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "failed",
                 Data = null
             };
@@ -257,7 +257,7 @@ namespace Services.Services
                 {
                     return new ApiResult<UserDetailsModel>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = "Package " + id + " Removed successfully",
                         Data = _mapper.Map<UserDetailsModel>(package)
                     };
@@ -265,7 +265,7 @@ namespace Services.Services
             }
             return new ApiResult<UserDetailsModel>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "There are no existed user id: " + id,
                 Data = null
             };
@@ -281,13 +281,13 @@ namespace Services.Services
             var result = await _unitOfWork.UserRepository.ChangeUserPasswordAsync(email, token, newPassword);
             if (result == null)
             {
-                return new ApiResult<UserDetailsModel> { Data = null, Success = false, Message = "The update process has been cooked, pleas try again" };
+                return new ApiResult<UserDetailsModel> { Data = null, IsSuccess = false, Message = "The update process has been cooked, pleas try again" };
             }
 
             return new ApiResult<UserDetailsModel>
             {
                 Data = _mapper.Map<UserDetailsModel>(result),
-                Success = true,
+                IsSuccess = true,
                 Message = "Update Sucessfully"
             };
         }
@@ -330,14 +330,14 @@ namespace Services.Services
             var user = await _unitOfWork.UserRepository.GetUserByEmailAsync(email);
             if (user == null)
             {
-                return new ApiResult<string> { Data = null, Success = false, Message = "User is not existed" };
+                return new ApiResult<string> { Data = null, IsSuccess = false, Message = "User is not existed" };
             }
             else
             {
                 return new ApiResult<string>
                 {
                     Data = await _unitOfWork.UserRepository.GenerateTokenForResetPassword(user),
-                    Success = true,
+                    IsSuccess = true,
                     Message = "Token to your email " + user.Email + " have been sent for reset password"
                 };
             }

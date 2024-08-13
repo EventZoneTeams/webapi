@@ -31,7 +31,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventProductDetailDTO>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = " Added failed, event is not existed",
                         Data = null
                     };
@@ -58,14 +58,14 @@ namespace Services.Services
 
                     return new ApiResult<EventProductDetailDTO>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Added successfully",
                         Data = returnData
                     };
                 }
                 return new ApiResult<EventProductDetailDTO>()
                 {
-                    Success = false,
+                    IsSuccess = false,
                     Message = " Added failed",
                     Data = returnData
                 };
@@ -101,14 +101,14 @@ namespace Services.Services
                 {
                     return new ApiResult<List<EventProductDetailDTO>>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<EventProductDetailDTO>>(createProducts)
                     };
                 }
                 return new ApiResult<List<EventProductDetailDTO>>()
                 {
-                    Success = false,
+                    IsSuccess = false,
                     Message = " Added failed",
                     Data = _mapper.Map<List<EventProductDetailDTO>>(createProducts)
                 };
@@ -134,7 +134,7 @@ namespace Services.Services
                 {
                     return new ApiResult<List<EventProductDetailDTO>>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<EventProductDetailDTO>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -148,7 +148,7 @@ namespace Services.Services
 
                     return new ApiResult<List<EventProductDetailDTO>>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
                         Data = _mapper.Map<List<EventProductDetailDTO>>(allProduct.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -156,7 +156,7 @@ namespace Services.Services
             }
             return new ApiResult<List<EventProductDetailDTO>>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "failed",
                 Data = null
             };
@@ -173,20 +173,12 @@ namespace Services.Services
                 await _unitOfWork.SaveChangeAsync();
                 if (result)
                 {
-                    return new ApiResult<EventProductDetailDTO>()
-                    {
-                        Success = true,
-                        Message = "Product " + id + " Removed successfully",
-                        Data = _mapper.Map<EventProductDetailDTO>(product)
-                    };
+                    return ApiResult<EventProductDetailDTO>
+                        .Succeed(_mapper.Map<EventProductDetailDTO>(product), "Product " + id + " Removed successfully");
+
                 }
             }
-            return new ApiResult<EventProductDetailDTO>()
-            {
-                Success = false,
-                Message = "There are no existed product id: " + id,
-                Data = null
-            };
+            return ApiResult<EventProductDetailDTO>.Error(null, "There are no existed product id: " + id);
         }
 
         public async Task<List<EventProductDetailDTO>> GetAllProductsAsync()
@@ -220,7 +212,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventProductDetailDTO>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = "Updated successfuly",
                         Data = _mapper.Map<EventProductDetailDTO>(existingProduct)
                     };
@@ -229,7 +221,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventProductDetailDTO>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = "FAILED",
                         Data = null
                     };
@@ -237,7 +229,7 @@ namespace Services.Services
             }
             return new ApiResult<EventProductDetailDTO>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "This account is not existed",
                 Data = null
             };
@@ -250,7 +242,7 @@ namespace Services.Services
             {
                 return new ApiResult<EventProductDetailDTO>()
                 {
-                    Success = false,
+                    IsSuccess = false,
                     Message = "This product id is not found",
                     Data = null
                 };
@@ -258,7 +250,7 @@ namespace Services.Services
 
             return new ApiResult<EventProductDetailDTO>()
             {
-                Success = true,
+                IsSuccess = true,
                 Message = "Found successfully product " + productId,
                 Data = _mapper.Map<EventProductDetailDTO>(product)
             };

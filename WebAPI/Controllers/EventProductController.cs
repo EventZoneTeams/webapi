@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Repositories.Commons;
 using Repositories.Models.ProductModels;
-using Services.DTO;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -172,7 +171,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventProductService.UpdateEventProductAsync(id, model);
-                if (result.Success)
+                if (result.IsSuccess)
                 {
                     return Ok(result);
                 }
@@ -195,7 +194,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventProductService.DeleteEventProductByIdAsync(id);
-                if (result.Success)
+                if (result.IsSuccess)
                 {
                     return Ok(result);
                 }

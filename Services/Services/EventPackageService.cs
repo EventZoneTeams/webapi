@@ -3,7 +3,6 @@ using Domain.DTOs.EventPackageDTOs;
 using Domain.DTOs.EventProductDTOs;
 using Repositories.Commons;
 using Repositories.Interfaces;
-using Repositories.Models;
 using Repositories.Models.PackageModels;
 using Services.Interface;
 
@@ -29,7 +28,7 @@ namespace Services.Services
             {
                 return new ApiResult<EventPackageDetailDTO>
                 {
-                    Success = false,
+                    IsSuccess = false,
                     Message = "This event is not existed",
                     Data = null
                 };
@@ -42,7 +41,7 @@ namespace Services.Services
                 result.Products = _mapper.Map<List<EventProductDetailDTO>>(check.Select(x => x.EventProduct).ToList());
                 return new ApiResult<EventPackageDetailDTO>
                 {
-                    Success = true,
+                    IsSuccess = true,
                     Message = "Add sucessfully",
                     Data = result
                 };
@@ -50,7 +49,7 @@ namespace Services.Services
 
             return new ApiResult<EventPackageDetailDTO>
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "Failed",
                 Data = null
             };
@@ -72,7 +71,7 @@ namespace Services.Services
                     {
                         return new ApiResult<List<EventPackageDetailDTO>>()
                         {
-                            Success = false,
+                            IsSuccess = false,
                             Message = "Removed successfully but there are still non-existed package: " + nonExistingIdsString,
                             Data = _mapper.Map<List<EventPackageDetailDTO>>(allPackages.Where(e => existingIds.Contains(e.Id)))
                         };
@@ -80,7 +79,7 @@ namespace Services.Services
 
                     return new ApiResult<List<EventPackageDetailDTO>>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Removed successfully",
                         Data = _mapper.Map<List<EventPackageDetailDTO>>(allPackages.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -89,7 +88,7 @@ namespace Services.Services
 
             return new ApiResult<List<EventPackageDetailDTO>>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "There are no existed packages:" + string.Join(", ", packageIds) + " please try again",
                 Data = null
             };
@@ -108,7 +107,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventPackageDetailDTO>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = "Package " + id + " Removed successfully",
                         Data = _mapper.Map<EventPackageDetailDTO>(package)
                     };
@@ -116,7 +115,7 @@ namespace Services.Services
             }
             return new ApiResult<EventPackageDetailDTO>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "There are no existed product id: " + id,
                 Data = null
             };
@@ -146,7 +145,7 @@ namespace Services.Services
             {
                 return new ApiResult<EventPackageDetailDTO>()
                 {
-                    Success = false,
+                    IsSuccess = false,
                     Message = "This package id is not found",
                     Data = null
                 };
@@ -158,7 +157,7 @@ namespace Services.Services
 
             return new ApiResult<EventPackageDetailDTO>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "Found successfully package " + packageId,
 
                 Data = result

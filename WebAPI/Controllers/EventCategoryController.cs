@@ -1,7 +1,7 @@
 ﻿using Domain.DTOs.EventCategoryDTOs;
-using Domain.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Repositories.Commons;
+using Repositories.Helper;
 using Services.Interface;
 
 namespace WebAPI.Controllers
@@ -32,14 +32,13 @@ namespace WebAPI.Controllers
         [HttpGet("")]
         [ProducesResponseType(typeof(ApiResult<List<EventCategoryResponseDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<List<object>>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetCategoriesOfEventAsync([FromQuery] string? SearchTerm, [FromQuery] EventCategoryOrderBy eventCategoryOrderBy)
+        public async Task<IActionResult> GetCategoriesOfEventAsync([FromQuery] EventCategoryParams eventCategoryParams)
         {
             try
             {
                 var data = await _eventCategoryService.GetEventCategories(new CategoryParam
                 {
-                    SearchTerm = SearchTerm,
-                    OrderBy = eventCategoryOrderBy,
+                    SearchTerm = eventCategoryParams.SearchTerm
                 });
 
                 if (data == null)

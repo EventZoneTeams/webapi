@@ -11,6 +11,7 @@ using Services.Interface;
 using Services.Services;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebAPI.Extensions;
 using WebAPI.Injection;
@@ -25,15 +26,17 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     });
 builder.Services.AddControllers()
     .AddNewtonsoftJson(options =>
     {
+        // Camel case
         options.SerializerSettings.ContractResolver = new DefaultContractResolver
         {
-            NamingStrategy = new DefaultNamingStrategy() // Dùng DefaultNamingStrategy để giữ PascalCase
+            NamingStrategy = new CamelCaseNamingStrategy() // Use CamelCaseNamingStrategy to apply camelCase
         };
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Bỏ qua các vòng lặp tham chiếu
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Ignore reference loops
     });
 builder.Services.AddControllers(options =>
 {

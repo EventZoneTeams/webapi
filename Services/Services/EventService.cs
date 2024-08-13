@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.DTOs.EventDTOs;
 using Domain.Entities;
+using Domain.Enums;
 using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.Interface;
@@ -63,6 +64,14 @@ namespace Services.Services
                 throw new Exception("Event category not null when create event");
             }
             eventEntity.EventCategory = eventCategory;
+
+            //eventEntity.Name = eventModel.Name;
+            //eventEntity.Description = eventModel.Description;
+            //eventEntity.ThumbnailUrl = eventModel.ThumbnailUrl;
+            //eventEntity.EventStartDate = eventModel.EventStartDate;
+            //eventEntity.EventEndDate = eventModel.EventEndDate;
+
+            eventEntity.Status = EventStatusEnums.DRAFT.ToString();
 
             var newEvent = await _unitOfWork.EventRepository.AddAsync(eventEntity);
 

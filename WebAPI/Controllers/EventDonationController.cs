@@ -22,7 +22,7 @@ namespace WebAPI.Controllers
             try
             {
                 var result = await _eventDonationService.AddDonationToCampaign(model);
-                if (result.Success == false)
+                if (result.IsSuccess == false)
                 {
                     return BadRequest(ApiResult<object>.Error(null, "Added failed"));
                 }

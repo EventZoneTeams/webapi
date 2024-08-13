@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Domain.DTOs.EventCategoryDTOs;
 using Domain.Entities;
-using Domain.Extensions;
-using Microsoft.EntityFrameworkCore;
 using Repositories.Helper;
 using Repositories.Interfaces;
 using Services.Interface;
@@ -77,25 +75,36 @@ namespace Services.Services
 
         public async Task<List<EventCategoryResponseDTO>> GetEventCategories(CategoryParam categoryParam)
         {
-            // Try to get from cache
+            List<EventCategoryResponseDTO> result;
+
+            // Bước 1: Kiểm tra cache
             var cachedCategories = await _redisService.GetStringAsync(CacheKeys.EventCategories);
             if (!string.IsNullOrEmpty(cachedCategories))
             {
-                return Newtonsoft.Json.JsonConvert.DeserializeObject<List<EventCategoryResponseDTO>>(cachedCategories);
+                // Nếu cache tồn tại, giải mã và sử dụng dữ liệu từ cache
+                result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EventCategoryResponseDTO>>(cachedCategories);
+            }
+            else
+            {
+                // Nếu cache không tồn tại, truy vấn từ cơ sở dữ liệu
+                var eventCategories = await _unitOfWork.EventCategoryRepository.GetAllAsync();
+
+                result = _mapper.Map<List<EventCategoryResponseDTO>>(eventCategories);
+
+                // Lưu kết quả vào cache
+                var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                await _redisService.SetStringAsync(CacheKeys.EventCategories, serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
             }
 
-            // If not in cache, query the database
-            var eventCategories = await _unitOfWork.EventCategoryRepository
-                .GetQueryable()
-                .Search(categoryParam.SearchTerm)
-                .Sort(categoryParam.OrderBy)
-                .ToListAsync<EventCategory>();
+            // Bước 2: Áp dụng tìm kiếm và sắp xếp trên kết quả
+            if (!string.IsNullOrEmpty(categoryParam.SearchTerm))
+            {
+                result = result
+                    .Where(x => x.Title.ToLower().Contains(categoryParam.SearchTerm.ToLower()))
+                    .ToList();
+            }
 
-            var result = _mapper.Map<List<EventCategoryResponseDTO>>(eventCategories);
-
-            // Cache the result
-            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-            await _redisService.SetStringAsync(CacheKeys.EventCategories, serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+            result = result.ToList();
 
             return result;
         }

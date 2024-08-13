@@ -30,7 +30,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventFeedbackDetailModel>
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Data = null,
                         Message = "This event is no longer existing, please try again"
                     };
@@ -103,7 +103,7 @@ namespace Services.Services
                         //  result.FeedbackType = type.ToString();
                         return new ApiResult<EventFeedbackDetailModel>
                         {
-                            Success = true,
+                            IsSuccess = true,
                             Data = result,
                             Message = "Added and updated status event successfully"
                         };
@@ -112,7 +112,7 @@ namespace Services.Services
 
                 return new ApiResult<EventFeedbackDetailModel>
                 {
-                    Success = false,
+                    IsSuccess = false,
                     Data = _mapper.Map<EventFeedbackDetailModel>(checkEvent),
                     Message = "This event have already feedback"
                 };
@@ -162,7 +162,7 @@ namespace Services.Services
                 {
                     return new ApiResult<List<EventFeedbackDetailModel>>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<EventFeedbackDetailModel>>(allFeedbacks.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -176,7 +176,7 @@ namespace Services.Services
 
                     return new ApiResult<List<EventFeedbackDetailModel>>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
                         Data = _mapper.Map<List<EventFeedbackDetailModel>>(allFeedbacks.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -184,7 +184,7 @@ namespace Services.Services
             }
             return new ApiResult<List<EventFeedbackDetailModel>>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "failed",
                 Data = null
             };

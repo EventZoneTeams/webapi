@@ -60,7 +60,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventCampaignDTO>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = " Added failed, event is not existed",
                         Data = null
                     };
@@ -82,7 +82,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventCampaignDTO>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = " Added failed due to event status: " + checkEvent.Status,
                         Data = _mapper.Map<EventCampaignDTO>(newCampaign)
                     };
@@ -97,14 +97,14 @@ namespace Services.Services
                 {
                     return new ApiResult<EventCampaignDTO>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<EventCampaignDTO>(result)
                     };
                 }
                 return new ApiResult<EventCampaignDTO>()
                 {
-                    Success = false,
+                    IsSuccess = false,
                     Message = " Added failed",
                     Data = _mapper.Map<EventCampaignDTO>(result)
                 };
@@ -171,7 +171,7 @@ namespace Services.Services
                 {
                     return new ApiResult<List<EventCampaignDTO>>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = " Added successfully",
                         Data = _mapper.Map<List<EventCampaignDTO>>(allCampaigns.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -185,7 +185,7 @@ namespace Services.Services
 
                     return new ApiResult<List<EventCampaignDTO>>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
                         Data = _mapper.Map<List<EventCampaignDTO>>(allCampaigns.Where(e => existingIds.Contains(e.Id)))
                     };
@@ -193,7 +193,7 @@ namespace Services.Services
             }
             return new ApiResult<List<EventCampaignDTO>>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "failed",
                 Data = null
             };
@@ -212,7 +212,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventCampaignDTO>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = "Product " + id + " Removed successfully",
                         Data = _mapper.Map<EventCampaignDTO>(product)
                     };
@@ -229,7 +229,7 @@ namespace Services.Services
             }
             return new ApiResult<EventCampaignDTO>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "There are no existed campaign with id: " + id,
                 Data = null
             };
@@ -265,7 +265,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventCampaignDTO>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = "Updated successfuly",
                         Data = _mapper.Map<EventCampaignDTO>(esistingCampaign)
                     };
@@ -274,7 +274,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventCampaignDTO>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = "Something has been failed while updating",
                         Data = null
                     };
@@ -282,7 +282,7 @@ namespace Services.Services
             }
             return new ApiResult<EventCampaignDTO>()
             {
-                Success = false,
+                IsSuccess = false,
                 Message = "This campaign id is not existed",
                 Data = null
             };

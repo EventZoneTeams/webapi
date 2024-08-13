@@ -36,7 +36,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventDonationDetailDTO>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = " This campaign is not existed",
                         Data = null
                     };
@@ -56,7 +56,7 @@ namespace Services.Services
                 {
                     return new ApiResult<EventDonationDetailDTO>()
                     {
-                        Success = false,
+                        IsSuccess = false,
                         Message = "added failed, cannot donate more than goal amount",
                         Data = _mapper.Map<EventDonationDetailDTO>(newDonation)
                     };
@@ -105,7 +105,7 @@ namespace Services.Services
 
                     return new ApiResult<EventDonationDetailDTO>()
                     {
-                        Success = true,
+                        IsSuccess = true,
                         Message = "Successfully added",
                         Data = _mapper.Map<EventDonationDetailDTO>(newData)
                     };
