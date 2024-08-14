@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Domain.DTOs.WalletDTOs;
 using EventZone.Domain.DTOs.WalletDTOs;
 using EventZone.Domain.Enums;
 using EventZone.Repositories.Commons;

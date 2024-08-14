@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using EventZone.Domain.DTOs.NotificationDTOs;
+﻿using EventZone.Domain.DTOs.NotificationDTOs;
+using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;

@@ -1,8 +1,6 @@
 ﻿using EventZone.Domain.DTOs.EventPackageDTOs;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Repositories.Models;
-using WebAPI.Controllers;
 
 namespace EventZone.WebAPI.ModelBinder
 {

@@ -7,6 +7,7 @@ using EventZone.Services.Services;
 using EventZone.WebAPI.Extensions;
 using EventZone.WebAPI.Injection;
 using EventZone.WebAPI.MiddleWares;
+using EventZone.WebAPI.ModelBinder;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -16,7 +17,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WebAPI.ModelBinder;
 
 var builder = WebApplication.CreateBuilder(args);
 

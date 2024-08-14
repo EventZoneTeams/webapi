@@ -1,12 +1,10 @@
-﻿using Domain.DTOs.EventProductDTOs;
-using EventZone.Domain.DTOs.EventPackageDTOs;
+﻿using EventZone.Domain.DTOs.EventPackageDTOs;
+using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.Entities;
-using EventZone.Repositories;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Interfaces;
 using EventZone.Repositories.Models.PackageModels;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Models;
 
 namespace EventZone.Repositories.Repositories
 {

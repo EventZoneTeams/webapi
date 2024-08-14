@@ -2,7 +2,6 @@
 using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Models.PackageModels;
-using Repositories.Models;
 
 namespace EventZone.Repositories.Interfaces
 {

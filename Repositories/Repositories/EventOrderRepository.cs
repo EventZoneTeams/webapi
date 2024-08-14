@@ -1,8 +1,6 @@
-﻿using Domain.Extensions;
-using EventZone.Domain.Entities;
+﻿using EventZone.Domain.Entities;
 using EventZone.Domain.Enums;
 using EventZone.Domain.Extensions;
-using EventZone.Repositories;
 using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;

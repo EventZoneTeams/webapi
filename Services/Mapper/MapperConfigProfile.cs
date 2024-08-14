@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventDTOs;
 using EventZone.Domain.DTOs.EventCampaignDTOs;
 using EventZone.Domain.DTOs.EventCategoryDTOs;
 using EventZone.Domain.DTOs.EventDonationDTOs;
