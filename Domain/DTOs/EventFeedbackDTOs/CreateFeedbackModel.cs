@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.EventFeedbackDTOs
+﻿namespace EventZone.Domain.DTOs.EventFeedbackDTOs
 {
     public class CreateFeedbackModel
     {

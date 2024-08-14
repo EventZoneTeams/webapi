@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IEventCategoryRepository : IGenericRepository<EventCategory>
     {

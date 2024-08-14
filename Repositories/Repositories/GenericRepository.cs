@@ -1,9 +1,10 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Interfaces;
 using System.Linq.Expressions;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : BaseEntity
     {

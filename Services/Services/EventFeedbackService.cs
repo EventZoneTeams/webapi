@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventFeedbackDTOs;
-using Domain.Entities;
-using Domain.Enums;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Services.Interface;
+using EventZone.Domain.DTOs.EventFeedbackDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class EventFeedbackService : IEventFeedbackService
     {

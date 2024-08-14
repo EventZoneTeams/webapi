@@ -1,11 +1,11 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IEventFeedbackRepository : IGenericRepository<EventFeedback>
     {

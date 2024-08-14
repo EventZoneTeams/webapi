@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
-using Repositories.Commons;
-using Repositories.Models.EventCampaignModels;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.EventCampaignModels;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IEventCampaignRepository : IGenericRepository<EventCampaign>
     {

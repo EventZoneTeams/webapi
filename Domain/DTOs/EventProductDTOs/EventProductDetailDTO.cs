@@ -1,5 +1,5 @@
-﻿using Domain.DTOs.ImageDTOs;
-using Domain.Entities;
+﻿using Domain.Entities;
+using EventZone.Domain.DTOs.ImageDTOs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Domain.DTOs.EventProductDTOs
+namespace EventZone.Domain.DTOs.EventProductDTOs
 {
     public class EventProductDetailDTO : EventProductUpdateDTO
     {

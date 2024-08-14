@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventCategoryDTOs;
-using Domain.Entities;
-using Repositories.Helper;
-using Repositories.Interfaces;
-using Services.Interface;
+using EventZone.Domain.DTOs.EventCategoryDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories.Helper;
+using EventZone.Repositories.Interfaces;
+using EventZone.Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class EventCategoryService : IEventCategoryService
     {

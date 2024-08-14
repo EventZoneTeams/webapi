@@ -1,13 +1,13 @@
-﻿using Domain.DTOs.EventOrderDTOs;
-using Domain.DTOs.UserDTOs;
-using Domain.Enums;
+﻿using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Repositories.Commons;
-using Repositories.Models;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/users")]
     [ApiController]

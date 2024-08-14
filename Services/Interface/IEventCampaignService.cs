@@ -1,8 +1,8 @@
-﻿using Domain.DTOs.EventCampaignDTOs;
-using Repositories.Commons;
-using Repositories.Models.EventCampaignModels;
+﻿using EventZone.Domain.DTOs.EventCampaignDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.EventCampaignModels;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventCampaignService
     {

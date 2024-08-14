@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.DTOs.EventPackageDTOs
+namespace EventZone.Domain.DTOs.EventPackageDTOs
 {
     public class CreatePackageRequest
     {

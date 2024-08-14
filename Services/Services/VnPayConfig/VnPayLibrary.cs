@@ -1,10 +1,10 @@
-﻿using Domain.Enums;
-using Repositories.Utils;
+﻿using EventZone.Domain.Enums;
+using EventZone.Repositories.Utils;
 using System.Globalization;
 using System.Net;
 using System.Text;
 
-namespace Services.Services.VnPayConfig
+namespace EventZone.Services.Services.VnPayConfig
 {
     public class VnPayLibrary
     {

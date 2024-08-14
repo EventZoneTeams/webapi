@@ -1,13 +1,13 @@
-﻿using Domain.DTOs.UserDTOs;
-using Domain.Entities;
-using Repositories.Commons;
-using Repositories.Models;
+﻿using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User> AddUser(UserSignupModel user, String role);
+        Task<User> AddUser(UserSignupModel user, string role);
 
         Task<User> ChangeUserPasswordAsync(string email, string currentPassword, string newPassword);
 

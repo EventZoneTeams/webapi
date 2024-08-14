@@ -1,8 +1,8 @@
-﻿using Domain.DTOs.WalletDTOs;
-using Services.Services.VnPayConfig;
+﻿using EventZone.Domain.DTOs.WalletDTOs;
+using EventZone.Services.Services.VnPayConfig;
 using System.Collections.Specialized;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IVnPayService
     {

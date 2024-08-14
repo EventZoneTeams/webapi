@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
 
-namespace Repositories.Models
+namespace EventZone.Repositories.Models
 {
     public class UserCreateReturnDTO
     {

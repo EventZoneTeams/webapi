@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EventZone.Services.Hubs;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Services.Hubs;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/charts")]
     [ApiController]

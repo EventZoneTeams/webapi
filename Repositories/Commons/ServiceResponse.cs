@@ -1,4 +1,4 @@
-﻿namespace Repositories.Commons
+﻿namespace EventZone.Repositories.Commons
 {
     public class ServiceResponse<T>
     {

@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
 using System.Linq.Expressions;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : BaseEntity
     {

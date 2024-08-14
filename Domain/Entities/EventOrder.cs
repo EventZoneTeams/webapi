@@ -1,10 +1,10 @@
-﻿namespace Domain.Entities
+﻿namespace EventZone.Domain.Entities
 {
     public class EventOrder : BaseEntity
     {
         public Guid EventId { get; set; }
         public Guid UserId { get; set; }
-        public Int64 TotalAmount { get; set; }
+        public long TotalAmount { get; set; }
         public string Status { get; set; }
 
         public virtual Event Event { get; set; }

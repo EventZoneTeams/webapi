@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.DTOs.EventProductDTOs
+namespace EventZone.Domain.DTOs.EventProductDTOs
 {
     public class EventProductUpdateDTO
     {

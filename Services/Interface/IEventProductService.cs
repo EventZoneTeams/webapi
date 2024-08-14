@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.EventProductDTOs;
-using Domain.DTOs.ImageDTOs;
-using Repositories.Commons;
-using Repositories.Models.ProductModels;
+﻿using EventZone.Domain.DTOs.EventProductDTOs;
+using EventZone.Domain.DTOs.ImageDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.ProductModels;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventProductService
     {

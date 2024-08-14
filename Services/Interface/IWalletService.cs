@@ -1,15 +1,15 @@
-﻿using Domain.DTOs.WalletDTOs;
-using Domain.Entities;
-using Domain.Enums;
-using Repositories.Helper;
+﻿using EventZone.Domain.DTOs.WalletDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Helper;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IWalletService
     {
         Task<TransactionResponsesDTO> ConfirmTransaction(Guid transactionId);
 
-        Task<Transaction> Deposit(Guid userId, Int64 amount);
+        Task<Transaction> Deposit(Guid userId, long amount);
 
         Task<List<WalletResponseDTO>> GetListWalletByUserId(Guid userId);
 

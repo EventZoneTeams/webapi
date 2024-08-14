@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Repositories
+namespace EventZone.Repositories
 {
     public class StudentEventForumDbContext : IdentityDbContext<User, Role, Guid>
     {

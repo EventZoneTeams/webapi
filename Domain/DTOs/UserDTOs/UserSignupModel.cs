@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.DTOs.UserDTOs
+namespace EventZone.Domain.DTOs.UserDTOs
 {
     public class UserSignupModel
     {

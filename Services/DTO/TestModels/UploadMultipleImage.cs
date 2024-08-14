@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Services.DTO.TestModels
+namespace EventZone.Services.DTO.TestModels
 {
     public class UploadMultipleImage
     {

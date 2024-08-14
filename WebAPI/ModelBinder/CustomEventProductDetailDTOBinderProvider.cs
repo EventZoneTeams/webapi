@@ -1,10 +1,10 @@
-﻿using Domain.DTOs.EventPackageDTOs;
+﻿using EventZone.Domain.DTOs.EventPackageDTOs;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Repositories.Models;
 using WebAPI.Controllers;
 
-namespace WebAPI.ModelBinder
+namespace EventZone.WebAPI.ModelBinder
 {
     public class CustomEventProductDetailDTOBinderProvider : IModelBinderProvider
     {

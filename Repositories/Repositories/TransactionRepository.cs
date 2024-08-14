@@ -1,9 +1,10 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Helper;
+using EventZone.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Helper;
-using Repositories.Interfaces;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository
     {

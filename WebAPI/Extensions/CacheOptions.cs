@@ -1,4 +1,6 @@
-﻿namespace Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.Extensions.Caching.Distributed;
+
+namespace EventZone.WebAPI.Extensions;
 public static class CacheOptions
 {
     public static DistributedCacheEntryOptions DefaultExpiration =>

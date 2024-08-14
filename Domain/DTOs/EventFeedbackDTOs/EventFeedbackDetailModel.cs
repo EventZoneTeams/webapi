@@ -1,6 +1,6 @@
-﻿using Domain.DTOs.UserDTOs;
+﻿using EventZone.Domain.DTOs.UserDTOs;
 
-namespace Domain.DTOs.EventFeedbackDTOs
+namespace EventZone.Domain.DTOs.EventFeedbackDTOs
 {
     public class EventFeedbackDetailModel
     {

@@ -1,8 +1,8 @@
-﻿using Domain.DTOs.EventDTOs;
-using Domain.Entities;
-using Repositories.Helper;
+﻿using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories.Helper;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventService
     {

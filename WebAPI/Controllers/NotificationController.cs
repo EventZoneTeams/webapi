@@ -1,10 +1,10 @@
-﻿using Domain.DTOs.NotificationDTOs;
-using Domain.Entities;
+﻿using Domain.Entities;
+using EventZone.Domain.DTOs.NotificationDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Commons;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/notifications")]
     [ApiController]

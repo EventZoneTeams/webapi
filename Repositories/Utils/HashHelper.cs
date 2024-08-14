@@ -1,11 +1,11 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Repositories.Utils
+namespace EventZone.Repositories.Utils
 {
     public class HashHelper
     {
-        public static String HmacSHA512(string key, string inputData)
+        public static string HmacSHA512(string key, string inputData)
         {
             var hash = new StringBuilder();
             byte[] keyBytes = Encoding.UTF8.GetBytes(key);
@@ -22,7 +22,7 @@ namespace Repositories.Utils
             return hash.ToString();
         }
 
-        public static String HmacSHA256(string inputData, string key)
+        public static string HmacSHA256(string inputData, string key)
         {
             byte[] keyByte = Encoding.UTF8.GetBytes(key);
             byte[] messageBytes = Encoding.UTF8.GetBytes(inputData);

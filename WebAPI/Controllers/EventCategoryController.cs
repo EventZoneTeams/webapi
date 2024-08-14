@@ -1,10 +1,10 @@
-﻿using Domain.DTOs.EventCategoryDTOs;
+﻿using EventZone.Domain.DTOs.EventCategoryDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Helper;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Commons;
-using Repositories.Helper;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/event-categories")]
     [ApiController]

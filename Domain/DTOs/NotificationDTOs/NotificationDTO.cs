@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.NotificationDTOs
+﻿namespace EventZone.Domain.DTOs.NotificationDTOs
 {
     public class NotificationDTO
     {

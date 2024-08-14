@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
-using Repositories.Helper;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories.Helper;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IEventRepository : IGenericRepository<Event>
     {

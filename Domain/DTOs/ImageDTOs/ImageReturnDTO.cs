@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.ImageDTOs
+﻿namespace EventZone.Domain.DTOs.ImageDTOs
 {
     public class ImageReturnDTO
     {

@@ -1,12 +1,12 @@
-﻿using Domain.DTOs.EventOrderDTOs;
-using Domain.Enums;
+﻿using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Extensions;
+using EventZone.Repositories.Helper;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Commons;
-using Repositories.Extensions;
-using Repositories.Helper;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/")]
     [ApiController]
@@ -39,10 +39,10 @@ namespace WebAPI.Controllers
                 {
                     success = true,
                     data = orders,
-                    CurrentPage = orders.MetaData.CurrentPage,
-                    PageSize = orders.MetaData.PageSize,
-                    TotalCount = orders.MetaData.TotalCount,
-                    TotalPages = orders.MetaData.TotalPages,
+                    orders.MetaData.CurrentPage,
+                    orders.MetaData.PageSize,
+                    orders.MetaData.TotalCount,
+                    orders.MetaData.TotalPages,
                     message = "Get List Of Event Order Successfully!"
                 };
                 return Ok(result);

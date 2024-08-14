@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.ImageDTOs;
-using Domain.Entities;
-using Repositories.Commons;
-using Repositories.Models.ProductModels;
+﻿using EventZone.Domain.DTOs.ImageDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.ProductModels;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IEventProductRepository : IGenericRepository<EventProduct>
     {

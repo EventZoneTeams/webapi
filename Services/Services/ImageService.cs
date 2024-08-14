@@ -1,12 +1,12 @@
 ﻿using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Domain.DTOs.ImageDTOs;
+using EventZone.Domain.DTOs.ImageDTOs;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class ImageService : IImageService
     {

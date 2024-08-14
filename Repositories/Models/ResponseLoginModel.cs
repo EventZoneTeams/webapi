@@ -1,4 +1,4 @@
-﻿namespace Repositories.Models
+﻿namespace EventZone.Repositories.Models
 {
     public class ResponseLoginModel
     {

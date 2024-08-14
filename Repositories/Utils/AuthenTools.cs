@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 #pragma warning disable CS8603 // Possible null reference return =))
-namespace Repositories.Utils
+namespace EventZone.Repositories.Utils
 {
     public static class AuthenTools
     {

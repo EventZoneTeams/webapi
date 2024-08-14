@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.EventOrderDTOs;
-using Domain.Entities;
-using Domain.Enums;
-using Repositories.Helper;
+﻿using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Helper;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventOrderService
     {

@@ -1,7 +1,7 @@
-﻿using Domain.DTOs.EventDonationDTOs;
-using Repositories.Commons;
+﻿using EventZone.Domain.DTOs.EventDonationDTOs;
+using EventZone.Repositories.Commons;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventDonationService
     {

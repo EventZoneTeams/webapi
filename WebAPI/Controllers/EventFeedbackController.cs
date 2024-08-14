@@ -1,11 +1,11 @@
-﻿using Domain.DTOs.EventFeedbackDTOs;
-using Domain.Enums;
+﻿using EventZone.Domain.DTOs.EventFeedbackDTOs;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Commons;
-using Services.Interface;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/event-feedbacks")]
     [ApiController]

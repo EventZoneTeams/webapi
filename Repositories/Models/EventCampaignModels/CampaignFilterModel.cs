@@ -1,4 +1,4 @@
-﻿namespace Repositories.Models.EventCampaignModels
+﻿namespace EventZone.Repositories.Models.EventCampaignModels
 {
     public class CampaignFilterModel
     {

@@ -1,10 +1,10 @@
-﻿using Domain.DTOs.EmailModels;
+﻿using EventZone.Domain.DTOs.EmailModels;
+using EventZone.Services.DTO.TestModels;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTO.TestModels;
-using Services.Interface;
 using System.Reflection;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/test-upload")]
     [ApiController]

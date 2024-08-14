@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.UserDTOs
+﻿namespace EventZone.Domain.DTOs.UserDTOs
 {
     public class RoleInfoModel
     {

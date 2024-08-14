@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.EventDonationDTOs;
+﻿using EventZone.Domain.DTOs.EventDonationDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Commons;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/")]
     [ApiController]

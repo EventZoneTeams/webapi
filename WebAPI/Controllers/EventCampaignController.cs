@@ -1,11 +1,11 @@
-﻿using Domain.DTOs.EventCampaignDTOs;
+﻿using EventZone.Domain.DTOs.EventCampaignDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.EventCampaignModels;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Repositories.Commons;
-using Repositories.Models.EventCampaignModels;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/")]
     [ApiController]

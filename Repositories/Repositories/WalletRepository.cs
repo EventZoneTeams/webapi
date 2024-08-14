@@ -1,9 +1,10 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
+using EventZone.Repositories;
+using EventZone.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Interfaces;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class WalletRepository : GenericRepository<Wallet>, IWalletRepository
     {
@@ -71,7 +72,7 @@ namespace Repositories.Repositories
             return wallet;
         }
         // Deposit money to wallet
-        public async Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, Int64 amount)
+        public async Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, long amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, walletType);
             if (wallet == null)
@@ -98,7 +99,7 @@ namespace Repositories.Repositories
         }
 
         // Withdraw money from wallet
-        public async Task<Transaction> WithdrawMoney(Guid userId, WalletTypeEnums walletType, Int64 amount)
+        public async Task<Transaction> WithdrawMoney(Guid userId, WalletTypeEnums walletType, long amount)
         {
             var wallet = await GetWalletByUserIdAndType(userId, walletType);
             if (wallet == null)

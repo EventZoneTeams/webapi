@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using Services.Interface;
+﻿using EventZone.Services.Interface;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class RedisService : IRedisService
     {

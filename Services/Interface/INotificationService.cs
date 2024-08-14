@@ -1,7 +1,7 @@
-﻿using Domain.DTOs.NotificationDTOs;
-using Domain.Entities;
+﻿using EventZone.Domain.DTOs.NotificationDTOs;
+using EventZone.Domain.Entities;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface INotificationService
     {

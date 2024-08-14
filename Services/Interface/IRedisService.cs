@@ -1,4 +1,4 @@
-﻿namespace Services.Interface
+﻿namespace EventZone.Services.Interface
 {
     public interface IRedisService
     {

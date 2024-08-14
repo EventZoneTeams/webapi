@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 
-namespace WebAPI.MiddleWares
-{ 
+namespace EventZone.WebAPI.MiddleWares
+{
     public class PerformanceTimeMiddleware : IMiddleware
     {
         private readonly Stopwatch _stopwatch;
@@ -20,7 +20,7 @@ namespace WebAPI.MiddleWares
             Console.WriteLine("end performance recored");
             _stopwatch.Stop();
             TimeSpan timeTaken = _stopwatch.Elapsed;
-            Console.WriteLine("Time taken: " + timeTaken.ToString(@"m\:ss\.fff")); 
+            Console.WriteLine("Time taken: " + timeTaken.ToString(@"m\:ss\.fff"));
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace WebAPI
+namespace EventZone.WebAPI
 {
     public class WeatherForecast
     {

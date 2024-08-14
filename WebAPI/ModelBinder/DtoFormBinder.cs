@@ -1,10 +1,10 @@
-﻿using Domain.DTOs.EventPackageDTOs;
+﻿using EventZone.Domain.DTOs.EventPackageDTOs;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Repositories.Models;
 using System.Text.Json;
 using WebAPI.Controllers;
 
-namespace WebAPI.ModelBinder
+namespace EventZone.WebAPI.ModelBinder
 {
     public class DtoFormBinder : IModelBinder
     {

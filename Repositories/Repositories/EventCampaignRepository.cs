@@ -1,10 +1,11 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models.EventCampaignModels;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Models.EventCampaignModels;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class EventCampaignRepository : GenericRepository<EventCampaign>, IEventCampaignRepository
     {
@@ -68,15 +69,15 @@ namespace Repositories.Repositories
                 switch (campaignFilterModel.SortBy.ToLower())
                 {
                     case "name":
-                        query = (campaignFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Name) : query.OrderByDescending(a => a.Name);
+                        query = campaignFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Name) : query.OrderByDescending(a => a.Name);
                         break;
 
                     case "date":
-                        query = (campaignFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.StartDate) : query.OrderByDescending(a => a.StartDate);
+                        query = campaignFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.StartDate) : query.OrderByDescending(a => a.StartDate);
                         break;
 
                     default:
-                        query = (campaignFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
+                        query = campaignFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
                         break;
                 }
                 return query;

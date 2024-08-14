@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Domain.DTOs.EventDonationDTOs
+namespace EventZone.Domain.DTOs.EventDonationDTOs
 {
     public class EventDonationCreateDTO
     {

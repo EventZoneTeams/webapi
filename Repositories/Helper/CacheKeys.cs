@@ -1,4 +1,4 @@
-﻿namespace Repositories.Helper
+﻿namespace EventZone.Repositories.Helper
 {
     public static class CacheKeys
     {

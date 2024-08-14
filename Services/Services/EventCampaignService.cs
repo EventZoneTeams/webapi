@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventCampaignDTOs;
 using Domain.Entities;
-using Domain.Enums;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Models.EventCampaignModels;
-using Services.Interface;
+using EventZone.Domain.DTOs.EventCampaignDTOs;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models.EventCampaignModels;
+using EventZone.Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class EventCampaignService : IEventCampaignService
     {
@@ -33,7 +33,7 @@ namespace Services.Services
                 }
 
                 var totalDonors = campaign.EventDonations.Count();
-                var targetAchievementPercentage = ((decimal)campaign.CollectedAmount / campaign.GoalAmount) * 100;
+                var targetAchievementPercentage = (decimal)campaign.CollectedAmount / campaign.GoalAmount * 100;
                 var average = (decimal)(totalDonors > 0 ? campaign.EventDonations.Average(d => d.Amount) : 0);
                 var highest = totalDonors > 0 ? campaign.EventDonations.Max(d => d.Amount) : 0;
 

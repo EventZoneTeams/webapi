@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using EventZone.Domain.Enums;
 
-namespace Repositories.Helper
+namespace EventZone.Repositories.Helper
 {
     public class EventParams : PaginationParams
     {

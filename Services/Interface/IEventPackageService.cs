@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.EventPackageDTOs;
-using Domain.DTOs.EventProductDTOs;
-using Repositories.Commons;
-using Repositories.Models.PackageModels;
+﻿using EventZone.Domain.DTOs.EventPackageDTOs;
+using EventZone.Domain.DTOs.EventProductDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.PackageModels;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventPackageService
     {

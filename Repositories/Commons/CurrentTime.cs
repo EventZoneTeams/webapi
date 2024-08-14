@@ -1,11 +1,11 @@
-﻿using Repositories.Interfaces;
+﻿using EventZone.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Commons
+namespace EventZone.Repositories.Commons
 {
     public class CurrentTime : ICurrentTime
     {

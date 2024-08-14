@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Utils
+namespace EventZone.Repositories.Utils
 {
     public static class TokenTools // NHỚ XEM LẠI CÁI BUỒI NÀY
     {
@@ -19,7 +19,7 @@ namespace Repositories.Utils
             {
                 ValidateAudience = false, //you might want to validate the audience and issuer depending on your use case
                 ValidateIssuer = false,
-                ValidateIssuerSigningKey = true ,
+                ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"])),
                 ValidateLifetime = true //here we are saying that we don't care about the token's expiration date
             };

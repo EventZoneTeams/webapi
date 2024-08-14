@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace WebAPI.MiddleWares
+namespace EventZone.WebAPI.MiddleWares
 {
     public class GlobalExceptionMiddleware : IMiddleware
     {

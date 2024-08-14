@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
+﻿using EventZone.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace Domain.DTOs.EventCampaignDTOs
+namespace EventZone.Domain.DTOs.EventCampaignDTOs
 {
     public class EventCampaignCreateDTO
     {

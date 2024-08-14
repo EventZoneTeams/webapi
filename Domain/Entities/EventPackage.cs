@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities
+﻿namespace EventZone.Domain.Entities
 {
     public class EventPackage : BaseEntity
     {
@@ -6,7 +6,7 @@
         public string? Title { get; set; }
 
         public string? ThumbnailUrl { get; set; }
-        public Int64 TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
         public string? Description { get; set; }
 
         public virtual Event Event { get; set; }

@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
-using Domain.Enums;
-using Repositories.Helper;
+﻿using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Helper;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IEventOrderRepository : IGenericRepository<EventOrder>
     {

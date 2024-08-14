@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.EmailModels
+﻿namespace EventZone.Domain.DTOs.EmailModels
 {
     public class EmailConfiguration
     {

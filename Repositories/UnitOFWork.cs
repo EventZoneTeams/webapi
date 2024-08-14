@@ -1,6 +1,6 @@
-﻿using Repositories.Interfaces;
+﻿using EventZone.Repositories.Interfaces;
 
-namespace Repositories
+namespace EventZone.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

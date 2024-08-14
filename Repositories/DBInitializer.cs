@@ -1,8 +1,8 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories.Utils;
 using Microsoft.AspNetCore.Identity;
-using Repositories.Utils;
 
-namespace Repositories
+namespace EventZone.Repositories
 {
     public static class DBInitializer
     {

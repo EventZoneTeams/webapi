@@ -1,7 +1,7 @@
-﻿using Domain.DTOs.ImageDTOs;
+﻿using EventZone.Domain.DTOs.ImageDTOs;
 using Microsoft.AspNetCore.Http;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IImageService
     {

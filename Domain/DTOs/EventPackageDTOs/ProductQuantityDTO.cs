@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.EventPackageDTOs
+﻿namespace EventZone.Domain.DTOs.EventPackageDTOs
 {
     public class ProductQuantityDTO
     {

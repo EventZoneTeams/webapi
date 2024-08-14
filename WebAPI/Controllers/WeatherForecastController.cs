@@ -1,6 +1,7 @@
+using EventZone.WebAPI;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

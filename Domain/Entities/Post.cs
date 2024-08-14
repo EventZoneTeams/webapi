@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities
+﻿namespace EventZone.Domain.Entities
 {
     public class Post : BaseEntity
     {

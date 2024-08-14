@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Repositories;
+﻿using EventZone.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-namespace WebAPI.Extensions
+namespace EventZone.WebAPI.Extensions
 {
     public static class MigrationExtensions
     {

@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Utils
+namespace EventZone.Repositories.Utils
 {
     public static class GenerateJWTToken
     {

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Repositories.Utils
+namespace EventZone.Repositories.Utils
 {
     public static class ResourceHelper
     {
@@ -25,7 +25,7 @@ namespace Repositories.Utils
             Assembly fromAssembly,
             bool stripWhitespace = false)
         {
-            return !stripWhitespace ? ResourceHelper.ReadResource(relativePath, fromAssembly) : ResourceHelper.ReadResource(relativePath, fromAssembly).StripJsonWhitespace();
+            return !stripWhitespace ? ReadResource(relativePath, fromAssembly) : ReadResource(relativePath, fromAssembly).StripJsonWhitespace();
         }
     }
 }

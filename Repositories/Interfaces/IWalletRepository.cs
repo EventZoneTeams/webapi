@@ -1,7 +1,7 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IWalletRepository : IGenericRepository<Wallet>
     {
@@ -9,11 +9,11 @@ namespace Repositories.Interfaces
         Task<Wallet> GetWalletByUserIdAndType(Guid userId, WalletTypeEnums walletType);
 
         Task<Transaction> ConfirmTransaction(Guid transactionId);
-        Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, Int64 amount);
+        Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, long amount);
         Task<Transaction> PurchaseItem(Guid userId, Guid orderId);
-        Task<Transaction> WithdrawMoney(Guid userId, WalletTypeEnums walletType, Int64 amount);
+        Task<Transaction> WithdrawMoney(Guid userId, WalletTypeEnums walletType, long amount);
 
-        Task<Transaction> Donation(Guid userId, Int64 amount);
-        Task<Transaction> ReceiveDonation(Guid userId, Int64 amount);
+        Task<Transaction> Donation(Guid userId, long amount);
+        Task<Transaction> ReceiveDonation(Guid userId, long amount);
     }
 }

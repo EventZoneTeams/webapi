@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repositories.Commons
+namespace EventZone.Repositories.Commons
 {
     public class Pagination<T> : List<T>
     {

@@ -1,8 +1,9 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Interfaces;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class EventFeedbackRepository : GenericRepository<EventFeedback>, IEventFeedbackRepository
     {

@@ -1,7 +1,7 @@
-﻿using Domain.DTOs.EventCategoryDTOs;
-using Domain.DTOs.UserDTOs;
+﻿using EventZone.Domain.DTOs.EventCategoryDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
 
-namespace Domain.DTOs.EventDTOs
+namespace EventZone.Domain.DTOs.EventDTOs
 {
     public class EventResponseDTO
     {

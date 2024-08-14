@@ -1,15 +1,15 @@
-﻿using Domain.DTOs.WalletDTOs;
-using Domain.Entities;
-using Domain.Enums;
+﻿using EventZone.Domain.DTOs.WalletDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Utils;
+using EventZone.Services.Interface;
 using Microsoft.Extensions.Configuration;
-using Repositories.Interfaces;
-using Repositories.Utils;
-using Services.Interface;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
 
-namespace Services.Services.VnPayConfig
+namespace EventZone.Services.Services.VnPayConfig
 {
     public class VnPayService : IVnPayService
     {

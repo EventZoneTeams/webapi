@@ -1,9 +1,10 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Interfaces;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class NotificationRepository : GenericRepository<Notification>, INotificationRepository
     {

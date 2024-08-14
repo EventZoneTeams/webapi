@@ -1,10 +1,10 @@
-﻿using Domain.DTOs.EventPackageDTOs;
-using Domain.Entities;
-using Repositories.Commons;
+﻿using EventZone.Domain.DTOs.EventPackageDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.PackageModels;
 using Repositories.Models;
-using Repositories.Models.PackageModels;
 
-namespace Repositories.Interfaces
+namespace EventZone.Repositories.Interfaces
 {
     public interface IEventPackageRepository : IGenericRepository<EventPackage>
     {

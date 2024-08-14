@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{FDBD3179-E5D0-43AB-B0FB-B55F959FABC2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventZone.WebAPI", "WebAPI\EventZone.WebAPI.csproj", "{FDBD3179-E5D0-43AB-B0FB-B55F959FABC2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repositories", "Repositories\Repositories.csproj", "{B96429D9-9827-482A-9B01-A72C1F6145CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventZone.Repositories", "Repositories\EventZone.Repositories.csproj", "{B96429D9-9827-482A-9B01-A72C1F6145CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{56E3C32E-F077-40E8-BCA5-675DC06FD30B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventZone.Services", "Services\EventZone.Services.csproj", "{56E3C32E-F077-40E8-BCA5-675DC06FD30B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{BE67EC35-B3FA-4607-AF5B-94B1D9E97582}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventZone.Domain", "Domain\EventZone.Domain.csproj", "{BE67EC35-B3FA-4607-AF5B-94B1D9E97582}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4B8718BD-76C3-43B0-83AD-291E1D63AAC8}"
 EndProject

@@ -1,6 +1,6 @@
-﻿using Domain.DTOs.EmailModels;
+﻿using EventZone.Domain.DTOs.EmailModels;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEmailService
     {

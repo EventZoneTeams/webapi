@@ -1,6 +1,6 @@
-﻿using Domain.Entities;
+﻿using EventZone.Domain.Entities;
 
-namespace Domain.Extensions
+namespace EventZone.Domain.Extensions
 {
     public static class EventOrderExtension
     {

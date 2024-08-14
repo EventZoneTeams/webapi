@@ -1,19 +1,20 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventCampaignDTOs;
-using Domain.DTOs.EventCategoryDTOs;
-using Domain.DTOs.EventDonationDTOs;
 using Domain.DTOs.EventDTOs;
-using Domain.DTOs.EventFeedbackDTOs;
-using Domain.DTOs.EventOrderDTOs;
-using Domain.DTOs.EventPackageDTOs;
-using Domain.DTOs.EventProductDTOs;
-using Domain.DTOs.ImageDTOs;
-using Domain.DTOs.NotificationDTOs;
-using Domain.DTOs.UserDTOs;
-using Domain.DTOs.WalletDTOs;
-using Domain.Entities;
+using EventZone.Domain.DTOs.EventCampaignDTOs;
+using EventZone.Domain.DTOs.EventCategoryDTOs;
+using EventZone.Domain.DTOs.EventDonationDTOs;
+using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.EventFeedbackDTOs;
+using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.DTOs.EventPackageDTOs;
+using EventZone.Domain.DTOs.EventProductDTOs;
+using EventZone.Domain.DTOs.ImageDTOs;
+using EventZone.Domain.DTOs.NotificationDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.DTOs.WalletDTOs;
+using EventZone.Domain.Entities;
 
-namespace Services.Mapper
+namespace EventZone.Services.Mapper
 {
     public class MapperConfigProfile : Profile
     {
@@ -67,7 +68,7 @@ namespace Services.Mapper
 
             CreateMap<EventCategory, EventCategoryDTO>()
                 .ReverseMap()
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? (string)null));
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl ?? null));
 
             CreateMap<EventCategory, EventCategoryResponseDTO>()
                 .ReverseMap();

@@ -1,4 +1,4 @@
-﻿namespace Services.DTO.ResponseModels
+﻿namespace EventZone.Services.DTO.ResponseModels
 {
     public class VnpayResponseModel
     {

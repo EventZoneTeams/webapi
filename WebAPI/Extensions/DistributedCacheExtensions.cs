@@ -1,7 +1,8 @@
-﻿using System.Buffers;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using System.Buffers;
 using System.Text.Json;
 
-namespace Microsoft.Extensions.Caching.Distributed;
+namespace EventZone.WebAPI.Extensions;
 
 /// <summary>
 /// Provides a simple convenience wrapper around <see cref="IDistributedCache"/>; note that this implementation
@@ -95,7 +96,7 @@ public static class DistributedCacheExtensions
                 Func<T> get => get(),
                 _ => throw new ArgumentException(nameof(getMethod)),
             };
-            bytes = Serialize<T>(result);
+            bytes = Serialize(result);
             if (options is null)
             {   // not recommended; cache expiration should be considered
                 // important, usually

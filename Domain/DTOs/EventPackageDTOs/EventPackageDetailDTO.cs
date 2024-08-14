@@ -1,6 +1,6 @@
-﻿using Domain.DTOs.EventProductDTOs;
+﻿using EventZone.Domain.DTOs.EventProductDTOs;
 
-namespace Domain.DTOs.EventPackageDTOs
+namespace EventZone.Domain.DTOs.EventPackageDTOs
 {
     public class EventPackageDetailDTO
     {

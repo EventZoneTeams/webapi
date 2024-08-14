@@ -1,4 +1,4 @@
-﻿namespace Repositories.Interfaces
+﻿namespace EventZone.Repositories.Interfaces
 {
     public interface IUnitOfWork
     {

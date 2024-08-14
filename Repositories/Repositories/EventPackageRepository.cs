@@ -1,13 +1,14 @@
-﻿using Domain.DTOs.EventPackageDTOs;
-using Domain.DTOs.EventProductDTOs;
-using Domain.Entities;
+﻿using Domain.DTOs.EventProductDTOs;
+using EventZone.Domain.DTOs.EventPackageDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models.PackageModels;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Commons;
-using Repositories.Interfaces;
 using Repositories.Models;
-using Repositories.Models.PackageModels;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class EventPackageRepository : GenericRepository<EventPackage>, IEventPackageRepository
     {
@@ -181,11 +182,11 @@ namespace Repositories.Repositories
                 switch (packageFilterModel.SortBy.ToLower())
                 {
                     case "price":
-                        query = (packageFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.TotalPrice) : query.OrderByDescending(a => a.TotalPrice);
+                        query = packageFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.TotalPrice) : query.OrderByDescending(a => a.TotalPrice);
                         break;
 
                     default:
-                        query = (packageFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
+                        query = packageFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
                         break;
                 }
                 return query;

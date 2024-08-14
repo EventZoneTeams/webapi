@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventOrderDTOs;
-using Domain.DTOs.UserDTOs;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Models;
-using Services.Interface;
+using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models;
+using EventZone.Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class UserService : IUserService
     {

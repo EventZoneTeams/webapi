@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
-using Domain.Entities;
+using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Repositories;
+using EventZone.Services.Interface;
+using EventZone.Services.Mapper;
+using EventZone.Services.Services;
+using EventZone.Services.Services.VnPayConfig;
+using EventZone.WebAPI.MiddleWares;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Repositories;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Repositories;
-using Services.Interface;
-using Services.Mapper;
-using Services.Services;
-using Services.Services.VnPayConfig;
 using System.Diagnostics;
-using WebAPI.MiddleWares;
 
-namespace WebAPI.Injection
+namespace EventZone.WebAPI.Injection
 {
     public static class DependencyInjection // Chỉ cần một class tồn tại trong project unchanged
     {

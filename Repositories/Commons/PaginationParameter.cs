@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using AutoMapper.Configuration.Annotations;
 using Swashbuckle.Swagger.Annotations;
 
-namespace Repositories.Commons
+namespace EventZone.Repositories.Commons
 {
     public class PaginationParameter
     {
@@ -23,7 +23,7 @@ namespace Repositories.Commons
             }
             set
             {
-                _pageSize = (value > maxPageSize) ? maxPageSize : value;
+                _pageSize = value > maxPageSize ? maxPageSize : value;
             }
         }
     }

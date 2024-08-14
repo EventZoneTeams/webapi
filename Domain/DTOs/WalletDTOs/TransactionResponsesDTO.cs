@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.WalletDTOs
+﻿namespace EventZone.Domain.DTOs.WalletDTOs
 {
     public class TransactionResponsesDTO
     {

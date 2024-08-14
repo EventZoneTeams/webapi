@@ -1,11 +1,11 @@
-﻿using Domain.DTOs.EventPackageDTOs;
+﻿using EventZone.Domain.DTOs.EventPackageDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.PackageModels;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Repositories.Commons;
-using Repositories.Models.PackageModels;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/")]
     [ApiController]

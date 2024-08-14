@@ -1,11 +1,13 @@
-﻿using Domain.Entities;
-using Domain.Enums;
-using Domain.Extensions;
+﻿using Domain.Extensions;
+using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
+using EventZone.Domain.Extensions;
+using EventZone.Repositories;
+using EventZone.Repositories.Helper;
+using EventZone.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Helper;
-using Repositories.Interfaces;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class EventOrderRepository : GenericRepository<EventOrder>, IEventOrderRepository
     {
@@ -75,7 +77,7 @@ namespace Repositories.Repositories
                         };
 
                         eventOrderDetails.Add(orderDetail);
-                        newOrder.TotalAmount += ((Int64)package.TotalPrice * item.Quantity);
+                        newOrder.TotalAmount += package.TotalPrice * item.Quantity;
                     }
 
                     _context.Entry(newOrder).State = EntityState.Modified;

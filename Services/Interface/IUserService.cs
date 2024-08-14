@@ -1,9 +1,9 @@
-﻿using Domain.DTOs.EventOrderDTOs;
-using Domain.DTOs.UserDTOs;
-using Repositories.Commons;
-using Repositories.Models;
+﻿using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IUserService
     {

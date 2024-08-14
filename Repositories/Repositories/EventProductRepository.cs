@@ -1,11 +1,12 @@
-﻿using Domain.DTOs.ImageDTOs;
-using Domain.Entities;
+﻿using EventZone.Domain.DTOs.ImageDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models.ProductModels;
 using Microsoft.EntityFrameworkCore;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Models.ProductModels;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class EventProductRepository : GenericRepository<EventProduct>, IEventProductRepository
     {
@@ -98,15 +99,15 @@ namespace Repositories.Repositories
                 switch (productFilterModel.SortBy.ToLower())
                 {
                     case "name":
-                        query = (productFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Name) : query.OrderByDescending(a => a.Name);
+                        query = productFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Name) : query.OrderByDescending(a => a.Name);
                         break;
 
                     case "price":
-                        query = (productFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Price) : query.OrderByDescending(a => a.Price);
+                        query = productFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Price) : query.OrderByDescending(a => a.Price);
                         break;
 
                     default:
-                        query = (productFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
+                        query = productFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
                         break;
                 }
                 return query;

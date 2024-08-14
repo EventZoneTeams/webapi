@@ -1,4 +1,4 @@
-﻿namespace Repositories.Models.ProductModels
+﻿namespace EventZone.Repositories.Models.ProductModels
 {
     public class ProductFilterModel
     {
@@ -6,8 +6,8 @@
         public string SortDirection { get; set; } = "desc";
         public string? SearchName { get; set; }
         public Guid? EventId { get; set; }
-        public Int64? MinPrice { get; set; }
-        public Int64? MaxPrice { get; set; }
+        public long? MinPrice { get; set; }
+        public long? MaxPrice { get; set; }
 
         public bool? isDeleted { get; set; } = null;
     }

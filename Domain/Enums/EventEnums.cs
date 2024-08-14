@@ -1,4 +1,4 @@
-﻿namespace Domain.Enums
+﻿namespace EventZone.Domain.Enums
 {
     public enum EventStatusEnums
     {

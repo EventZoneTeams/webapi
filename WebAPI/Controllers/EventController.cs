@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Extensions;
+using EventZone.Repositories.Helper;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Commons;
-using Repositories.Extensions;
-using Repositories.Helper;
-using Services.Interface;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/events")]
     [ApiController]

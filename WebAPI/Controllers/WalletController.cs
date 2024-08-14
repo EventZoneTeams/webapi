@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
 using Domain.DTOs.WalletDTOs;
-using Domain.Enums;
+using EventZone.Domain.DTOs.WalletDTOs;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Helper;
+using EventZone.Repositories.Interfaces;
+using EventZone.Services.DTO.ResponseModels;
+using EventZone.Services.Interface;
+using EventZone.Services.Services.VnPayConfig;
 using Microsoft.AspNetCore.Mvc;
-using Repositories.Commons;
-using Repositories.Helper;
-using Repositories.Interfaces;
-using Services.DTO.ResponseModels;
-using Services.Interface;
-using Services.Services.VnPayConfig;
 using System.Reflection;
 using System.Web;
 
-namespace WebAPI.Controllers
+namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/")]
     [ApiController]
@@ -47,7 +48,7 @@ namespace WebAPI.Controllers
                     throw new Exception("User Id is invalid");
                 }
                 var result = await _walletService.GetListWalletByUserId(userId);
-                return Ok((ApiResult<List<WalletResponseDTO>>.Succeed(result, "Get 2 Wallet Of User with Id " + userId + " Successfully!")));
+                return Ok(ApiResult<List<WalletResponseDTO>>.Succeed(result, "Get 2 Wallet Of User with Id " + userId + " Successfully!"));
             }
             catch (Exception ex)
             {

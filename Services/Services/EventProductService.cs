@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventProductDTOs;
-using Domain.DTOs.ImageDTOs;
-using Domain.Entities;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Models.ProductModels;
-using Services.Interface;
+using EventZone.Domain.DTOs.EventProductDTOs;
+using EventZone.Domain.DTOs.ImageDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models.ProductModels;
+using EventZone.Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class EventProductService : IEventProductService
     {

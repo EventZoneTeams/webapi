@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Domain.DTOs.NotificationDTOs;
-using Domain.Entities;
+using EventZone.Domain.DTOs.NotificationDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories.Interfaces;
+using EventZone.Services.Hubs;
+using EventZone.Services.Interface;
 using Microsoft.AspNetCore.SignalR;
-using Repositories.Interfaces;
-using Services.Hubs;
-using Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class NotificationService : INotificationService
     {

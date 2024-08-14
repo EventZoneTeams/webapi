@@ -1,10 +1,10 @@
-﻿using Domain.DTOs.EmailModels;
+﻿using EventZone.Domain.DTOs.EmailModels;
+using EventZone.Services.Interface;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class EmailService : IEmailService
     {

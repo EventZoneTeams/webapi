@@ -1,4 +1,4 @@
-﻿namespace Domain.DTOs.EventDTOs
+﻿namespace EventZone.Domain.DTOs.EventDTOs
 {
     public class EventDTO
     {

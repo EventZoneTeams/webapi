@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Repositories.Interfaces;
-using Repositories.Utils;
+﻿using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Utils;
+using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace Repositories.Commons
+namespace EventZone.Repositories.Commons
 {
     public class ClaimsService : IClaimsService
     {

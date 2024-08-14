@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Repositories.Helper;
+﻿using EventZone.Repositories.Helper;
+using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 
-namespace Repositories.Extensions
+namespace EventZone.Repositories.Extensions
 {
     public static class HttpExtensions
     {

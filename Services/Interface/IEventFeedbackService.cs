@@ -1,8 +1,8 @@
-﻿using Domain.DTOs.EventFeedbackDTOs;
-using Domain.Enums;
-using Repositories.Commons;
+﻿using EventZone.Domain.DTOs.EventFeedbackDTOs;
+using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventFeedbackService
     {

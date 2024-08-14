@@ -1,4 +1,4 @@
-﻿namespace WebAPI.MiddleWares
+﻿namespace EventZone.WebAPI.MiddleWares
 {
     public class UserStatusMiddleware : IMiddleware
     {

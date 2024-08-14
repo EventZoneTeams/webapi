@@ -1,19 +1,20 @@
-﻿using Domain.DTOs.UserDTOs;
-using Domain.Entities;
+﻿using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Entities;
+using EventZone.Repositories;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models;
+using EventZone.Repositories.Utils;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Models;
-using Repositories.Utils;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Repositories.Repositories
+namespace EventZone.Repositories.Repositories
 {
     public class UserRepository : IUserRepository
     {
@@ -648,15 +649,15 @@ namespace Repositories.Repositories
             switch (UserFilterModel.SortBy.ToLower())
             {
                 case "fullname":
-                    query = (UserFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.FullName) : query.OrderByDescending(a => a.FullName);
+                    query = UserFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.FullName) : query.OrderByDescending(a => a.FullName);
                     break;
 
                 case "dob":
-                    query = (UserFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Dob) : query.OrderByDescending(a => a.Dob);
+                    query = UserFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Dob) : query.OrderByDescending(a => a.Dob);
                     break;
 
                 default:
-                    query = (UserFilterModel.SortDirection.ToLower() == "asc") ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
+                    query = UserFilterModel.SortDirection.ToLower() == "asc" ? query.OrderBy(a => a.Id) : query.OrderByDescending(a => a.Id);
                     break;
             }
             return query;

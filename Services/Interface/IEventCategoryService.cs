@@ -1,6 +1,6 @@
-﻿using Domain.DTOs.EventCategoryDTOs;
+﻿using EventZone.Domain.DTOs.EventCategoryDTOs;
 
-namespace Services.Interface
+namespace EventZone.Services.Interface
 {
     public interface IEventCategoryService
     {

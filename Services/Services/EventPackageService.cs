@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Domain.DTOs.EventPackageDTOs;
-using Domain.DTOs.EventProductDTOs;
-using Repositories.Commons;
-using Repositories.Interfaces;
-using Repositories.Models.PackageModels;
-using Services.Interface;
+using EventZone.Domain.DTOs.EventPackageDTOs;
+using EventZone.Domain.DTOs.EventProductDTOs;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models.PackageModels;
+using EventZone.Services.Interface;
 
-namespace Services.Services
+namespace EventZone.Services.Services
 {
     public class EventPackageService : IEventPackageService
     {
