@@ -2,7 +2,7 @@
 
 services:
   webapi:
-    image: lequocuy/eventzone.webapi:latest
+    image: eventzone.api
     container_name: eventzone.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
