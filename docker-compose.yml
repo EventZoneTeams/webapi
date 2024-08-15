@@ -1,8 +1,8 @@
-﻿version: '3.8'
+﻿version: '3.4'
 
 services:
   webapi:
-    image: eventzone.api
+    image: ${DOCKER_REGISTRY-}eventzone.api
     container_name: eventzone.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
