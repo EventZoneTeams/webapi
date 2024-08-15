@@ -1,6 +1,4 @@
-﻿version: '3.4'
-
-services:
+﻿services:
   webapi:
     image: ${DOCKER_REGISTRY-}eventzone.api
     container_name: eventzone.api
@@ -12,7 +10,7 @@ services:
       dockerfile: WebAPI/Dockerfile
     ports:
       - "5000:5000"
-      - "5001:5001"
+      # - "5001:5001"
 
   eventzone.database:
     image: mcr.microsoft.com/mssql/server:2022-latest
