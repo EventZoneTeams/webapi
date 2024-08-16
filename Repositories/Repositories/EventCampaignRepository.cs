@@ -1,5 +1,4 @@
 ﻿using EventZone.Domain.Entities;
-using EventZone.Repositories;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Interfaces;
 using EventZone.Repositories.Models.EventCampaignModels;

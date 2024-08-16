@@ -1,4 +1,3 @@
-using EventZone.WebAPI;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventZone.WebAPI.Controllers

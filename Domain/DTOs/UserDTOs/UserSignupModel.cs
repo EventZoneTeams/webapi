@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace EventZone.Domain.DTOs.UserDTOs

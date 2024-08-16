@@ -1,5 +1,4 @@
 ﻿using EventZone.Domain.Entities;
-using EventZone.Repositories;
 using EventZone.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

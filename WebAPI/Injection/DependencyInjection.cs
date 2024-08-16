@@ -22,7 +22,7 @@ namespace EventZone.WebAPI.Injection
             // CONNECT TO DATABASE
             services.AddDbContext<StudentEventForumDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("LocalDB"));
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddStackExchangeRedisCache(options =>
             {

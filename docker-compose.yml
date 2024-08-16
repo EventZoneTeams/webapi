@@ -4,26 +4,28 @@
     container_name: eventzone.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings_LocalDB=Server=eventzone.database;Database=eventzone;User=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+      - "DatabaseSettings:DefaultConnection=Server=eventzone.database;Database=eventzone;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true"
     build:
       context: .
       dockerfile: WebAPI/Dockerfile
     ports:
       - "5000:5000"
       # - "5001:5001"
+    depends_on:
+      - eventzone.database
 
   eventzone.database:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/mssql/server:2019-latest
     container_name: eventzone.database
     restart: always
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "YourStrong!Passw0rd"
+      MSSQL_SA_PASSWORD: "YourStrong!Passw0rd"
     ports:
       - "1433:1433"
     volumes:
-      - ./.containers/eventzone-db:/var/opt/mssql/data # thư mục lưu DB
-      - ./bk:/var/opt/mssql/backup      # thư  mục chứa file backup
+      - sql_data:/var/opt/mssql # thư mục lưu DB
+      - sql_bk_data:/var/opt/mssql/backup      # thư  mục chứa file backup
     
   eventzone.cache:
     image: redis:latest
@@ -31,3 +33,9 @@
     restart: always
     ports:
       - "6379:6379"
+
+volumes:
+  sql_data:
+    name: sql_data
+  sql_bk_data:
+    name: sql_bk_data  
