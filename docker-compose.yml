@@ -24,8 +24,8 @@
     ports:
       - "1433:1433"
     volumes:
-      - sql_data:/var/opt/mssql # thư mục lưu DB
-      - sql_bk_data:/var/opt/mssql/backup      # thư  mục chứa file backup
+      - ./.containers/eventzone-db:/var/opt/mssql/data # thư mục lưu DB
+      - ./bk:/var/opt/mssql/backup      # thư  mục chứa file backup
     
   eventzone.cache:
     image: redis:latest
@@ -33,9 +33,3 @@
     restart: always
     ports:
       - "6379:6379"
-
-volumes:
-  sql_data:
-    name: sql_data
-  sql_bk_data:
-    name: sql_bk_data  
