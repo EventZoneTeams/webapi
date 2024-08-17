@@ -25,6 +25,5 @@ jobs:
           script: |
             cd webapi
             git pull origin main
-            # Add any other commands you need to run after pulling the code
-            docker-compose down
-            docker-compose up -d --build
+            docker compose down
+            docker compose up -d --build
