@@ -70,7 +70,7 @@ builder.Services.AddSwaggerGen(config =>
     {
         Version = "v1",
         Title = "EventZone API Bruh",
-        Description = "EventZone API",
+        Description = "EventZone API. This is the description",
         Contact = new OpenApiContact
         {
             Name = "Fanpage",
