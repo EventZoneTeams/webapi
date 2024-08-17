@@ -1,6 +1,6 @@
 ﻿services:
   webapi:
-    image: ${DOCKER_REGISTRY-}eventzone.api
+    # image: ${DOCKER_REGISTRY-}eventzone.api
     container_name: eventzone.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

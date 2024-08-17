@@ -1,0 +1,30 @@
+name: Build and deploy ASP.Net Core app to VPS - EVENTZONE
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploying to VPS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: SSH into VPS and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd webapi
+            git pull origin main
+            # Add any other commands you need to run after pulling the code
+            docker-compose down
+            docker-compose up -d --build

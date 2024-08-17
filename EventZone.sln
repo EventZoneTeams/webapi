@@ -13,6 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventZone.Domain", "Domain\
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4B8718BD-76C3-43B0-83AD-291E1D63AAC8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Github Workflows", "Github Workflows", "{6551CBDC-BD49-4CA9-9C7C-34DE112B07BE}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\main_eventzone.yml = .github\workflows\main_eventzone.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
