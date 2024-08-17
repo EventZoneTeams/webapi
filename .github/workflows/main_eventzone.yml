@@ -34,6 +34,7 @@ jobs:
           tags: lequocuy/eventzone.api:latest
   deploy:
     name: Deploying to VPS
+    needs: build
     runs-on: ubuntu-latest
 
     steps:

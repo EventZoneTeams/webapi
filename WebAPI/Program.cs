@@ -69,7 +69,7 @@ builder.Services.AddSwaggerGen(config =>
     config.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "EventZone API",
+        Title = "EventZone API Bruh",
         Description = "EventZone API",
         Contact = new OpenApiContact
         {
