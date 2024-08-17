@@ -1,6 +1,6 @@
 ﻿services:
   webapi:
-    # image: ${DOCKER_REGISTRY-}eventzone.api
+    image: lequocuy/eventzone.api:latest
     container_name: eventzone.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
