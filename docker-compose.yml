@@ -5,9 +5,9 @@
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "DatabaseSettings:DefaultConnection=Server=eventzone.database;Database=eventzone;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true"
-    build:
-      context: .
-      dockerfile: WebAPI/Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: WebAPI/Dockerfile
     ports:
       - "5000:5000"
       # - "5001:5001"
