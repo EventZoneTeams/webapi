@@ -69,8 +69,8 @@ builder.Services.AddSwaggerGen(config =>
     config.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "Student Event Forum",
-        Description = "Student Event Forum API",
+        Title = "EventZone API",
+        Description = "EventZone API",
         Contact = new OpenApiContact
         {
             Name = "Fanpage",
