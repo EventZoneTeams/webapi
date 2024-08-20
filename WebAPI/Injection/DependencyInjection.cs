@@ -54,6 +54,7 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<INotificationRepository, NotificationRepository>();
             services.AddScoped<IEventCampaignRepository, EventCampaignRepository>();
             services.AddScoped<IEventDonationRepository, EventDonationRepository>();
+            services.AddScoped<IEventTicketRepository, EventTicketRepository>();
 
             // add generic repositories
             services.AddScoped<IGenericRepository<EventFeedback>, GenericRepository<EventFeedback>>();
@@ -67,6 +68,7 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IGenericRepository<Notification>, GenericRepository<Notification>>();
             services.AddScoped<IGenericRepository<EventCampaign>, GenericRepository<EventCampaign>>();
             services.AddScoped<IGenericRepository<EventDonation>, GenericRepository<EventDonation>>();
+            services.AddScoped<IGenericRepository<EventTicket>, GenericRepository<EventTicket>>();
 
             // add signInManager
             services.AddScoped<SignInManager<User>>();
@@ -83,6 +85,7 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<IEventCampaignService, EventCampaignService>();
             services.AddScoped<IEventDonationService, EventDonationService>();
+            services.AddScoped<IEventTicketService, EventTicketService>();
 
             // add unitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();

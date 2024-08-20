@@ -17,6 +17,7 @@ namespace EventZone.Repositories
         private readonly INotificationRepository _notificationRepository;
         private readonly IEventCampaignRepository _eventCampaignRepository;
         private readonly IEventDonationRepository _eventDonationRepository;
+        private readonly IEventTicketRepository _eventTicketRepository;
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
             , IUserRepository userRepository,
@@ -30,7 +31,8 @@ namespace EventZone.Repositories
             IEventFeedbackRepository eventFeedbackRepository,
             INotificationRepository notificationRepository,
             IEventCampaignRepository eventCampaignRepository,
-            IEventDonationRepository eventDonationRepository
+            IEventDonationRepository eventDonationRepository,
+            IEventTicketRepository eventTicketRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -46,6 +48,7 @@ namespace EventZone.Repositories
             _notificationRepository = notificationRepository;
             _eventCampaignRepository = eventCampaignRepository;
             _eventDonationRepository = eventDonationRepository;
+            _eventTicketRepository = eventTicketRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -60,6 +63,7 @@ namespace EventZone.Repositories
         public INotificationRepository NotificationRepository => _notificationRepository;
         public IEventCampaignRepository EventCampaignRepository => _eventCampaignRepository;
         public IEventDonationRepository EventDonationRepository => _eventDonationRepository;
+        public IEventTicketRepository EventTicketRepository => _eventTicketRepository;
 
         public Task<int> SaveChangeAsync()
         {

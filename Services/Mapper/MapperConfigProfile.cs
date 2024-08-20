@@ -9,6 +9,7 @@ using EventZone.Domain.DTOs.EventPackageDTOs;
 using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.DTOs.ImageDTOs;
 using EventZone.Domain.DTOs.NotificationDTOs;
+using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.DTOs.WalletDTOs;
 using EventZone.Domain.Entities;
@@ -32,7 +33,6 @@ namespace EventZone.Services.Mapper
 
             CreateMap<EventCreateDTO, Event>()
                 .ReverseMap();
-
 
             CreateMap<EventDTO, EventResponseDTO>()
                 .ReverseMap();
@@ -98,6 +98,10 @@ namespace EventZone.Services.Mapper
 
             CreateMap<EventDonation, EventDonationCreateDTO>().ReverseMap();
             CreateMap<EventDonation, EventDonationDetailDTO>().ReverseMap();
+
+            //Ticket
+            CreateMap<EventTicket, EventTicketDetailDTO>().ReverseMap();
+            CreateMap<EventTicket, EventTicketDTO>().ReverseMap();
         }
     }
 }

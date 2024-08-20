@@ -14,6 +14,7 @@
         INotificationRepository NotificationRepository { get; }
         IEventCampaignRepository EventCampaignRepository { get; }
         IEventDonationRepository EventDonationRepository { get; }
+        IEventTicketRepository EventTicketRepository { get; }
 
         Task<int> SaveChangeAsync();
     }
