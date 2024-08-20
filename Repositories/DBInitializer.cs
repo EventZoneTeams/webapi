@@ -1,6 +1,7 @@
 ﻿using EventZone.Domain.Entities;
 using EventZone.Repositories.Utils;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventZone.Repositories
 {
@@ -211,57 +212,69 @@ namespace EventZone.Repositories
                 await context.SaveChangesAsync();
             }
 
-            //            if (!context.Events.Any())
-            //            {
-            //                var events = new List<Event>
-            //                {
-            //                    new Event
-            //                    {
-            //                      Name = "Hội thảo Công nghệ 4.0",
-            //            Description = "Khám phá những xu hướng mới nhất trong lĩnh vực công nghệ.",
-            //            ThumbnailUrl = "https://picsum.photos/500/300/?image=10", // Example image URL
-            //            EventStartDate = DateTime.Now.AddDays(15),
-            //            EventEndDate = DateTime.Now.AddDays(16),
-            //            Location = "FPT Cần Thơ",
-            //            UserId = 1,
-            //            EventCategoryId = 1,
-            //            University = "FPTU Cần Thơ",
-            //            Status = "Upcoming", // Ví dụ trạng thái: Upcoming, Ongoing, Finished
-            //            CreatedAt = DateTime.Now,
-            //                    },
-            //                    new Event
-            //                    {
-            //              Name = "Đêm nhạc Acoustic",
-            //            Description = "Thưởng thức những giai điệu nhẹ nhàng và sâu lắng.",
-            //            ThumbnailUrl = "https://picsum.photos/500/300/?image=20",
-            //            EventStartDate = DateTime.Now.AddDays(30),
-            //            EventEndDate = DateTime.Now.AddDays(30),
-            //            Location = "FPT HCM",
-            //            UserId = 1,
-            //            EventCategoryId = 1,
-            //            University = "FPTU HCM",
-            //            Status = "Upcoming",
-            //            CreatedAt = DateTime.Now,
-            //                    },
-            //                     new Event
-            //        {
-            //            Name = "Workshop Khởi nghiệp",
-            //            Description = "Hướng dẫn các bước để xây dựng một startup thành công.",
-            //            ThumbnailUrl = "https://picsum.photos/500/300/?image=30",
-            //            EventStartDate = DateTime.Now.AddDays(20),
-            //            EventEndDate = DateTime.Now.AddDays(20),
-            //            Location = "FPT Đà Nẵng",
-            //            UserId = 1,
-            //            EventCategoryId = 1,
-            //            University = "FPTU Đà Nẵng",
-            //            Status = "Upcoming",
-            //            CreatedAt = DateTime.Now,
-            //        }
-            //                };
+            if (!context.Events.Any())
+            {
+                var userId = context.Users.First().Id;
+                var categoryId = context.EventCategories.First().Id;
 
-            //                await context.Events.AddRangeAsync(events);
-            //                await context.SaveChangesAsync();
-            //            }
+                var events = new List<Event>
+    {
+        new Event
+        {
+            Name = "Hội thảo Công nghệ 4.0",
+            Description = "Khám phá những xu hướng mới nhất trong lĩnh vực công nghệ.",
+            ThumbnailUrl = "https://picsum.photos/500/300/?image=10",
+            EventStartDate = DateTime.Now.AddDays(15),
+            EventEndDate = DateTime.Now.AddDays(16),
+            Latitude = "10.762622",
+            Longitude = "106.660172",
+            LocationDisplay = "TP. Hồ Chí Minh, Việt Nam",
+            LocationNote = "Tòa nhà số 1, đường ABC",
+            Note = "Vui lòng mang theo giấy tờ tùy thân để check-in.",
+            UserId = userId,
+            EventCategoryId = categoryId,
+            Status = "Upcoming",
+            CreatedAt = DateTime.Now,
+        },
+        new Event
+        {
+            Name = "Đêm nhạc Acoustic",
+            Description = "Thưởng thức những giai điệu nhẹ nhàng và sâu lắng.",
+            ThumbnailUrl = "https://picsum.photos/500/300/?image=20",
+            EventStartDate = DateTime.Now.AddDays(30),
+            EventEndDate = DateTime.Now.AddDays(30),
+            Latitude = "21.028511",
+            Longitude = "105.804817",
+            LocationDisplay = "Hà Nội, Việt Nam",
+            LocationNote = "Quán cafe X, phố Y",
+            Note = "Sự kiện giới hạn người tham dự, vui lòng đăng ký trước.",
+            UserId = userId,
+            EventCategoryId = categoryId,
+            Status = "Upcoming",
+            CreatedAt = DateTime.Now,
+        },
+        new Event
+        {
+            Name = "Workshop Khởi nghiệp",
+            Description = "Hướng dẫn các bước để xây dựng một startup thành công.",
+            ThumbnailUrl = "https://picsum.photos/500/300/?image=30",
+            EventStartDate = DateTime.Now.AddDays(20),
+            EventEndDate = DateTime.Now.AddDays(20),
+            Latitude = "16.047079",
+            Longitude = "108.206230",
+            LocationDisplay = "Đà Nẵng, Việt Nam",
+            LocationNote = "Trung tâm Hội nghị Đà Nẵng",
+            Note = "Tham gia buổi networking sau workshop.",
+            UserId = userId,
+            EventCategoryId = categoryId,
+            Status = "Upcoming",
+            CreatedAt = DateTime.Now,
+        }
+    };
+
+                await context.Events.AddRangeAsync(events);
+                await context.SaveChangesAsync();
+            }
             //            var existingEvents = await context.Events.ToListAsync(); // get để tham chiếu
 
             //            if (!context.EventProducts.Any())
