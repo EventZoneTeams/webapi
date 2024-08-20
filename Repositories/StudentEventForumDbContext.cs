@@ -29,6 +29,8 @@ namespace EventZone.Repositories
         public DbSet<TransactionDetail> TransactionDetails { get; set; }
         public DbSet<EventCampaign> EventCampaigns { get; set; }
         public DbSet<EventDonation> EventDonations { get; set; }
+        public DbSet<EventTicket> EventTickets { get; set; }
+        public DbSet<BookedTicket> BookedTickets { get; set; }
 
         // EventBoard
         public DbSet<EventBoard> EventBoards { get; set; }
