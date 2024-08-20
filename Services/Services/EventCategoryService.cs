@@ -61,6 +61,7 @@ namespace EventZone.Services.Services
             }
 
             var isDeleted = await _unitOfWork.EventCategoryRepository.SoftRemove(eventCategory);
+            await _unitOfWork.SaveChangeAsync();
 
             if (isDeleted)
             {

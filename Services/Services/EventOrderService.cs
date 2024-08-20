@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EventZone.Domain.DTOs.EventCategoryDTOs;
 using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Domain.Enums;
@@ -14,19 +15,47 @@ namespace EventZone.Services.Services
         private readonly IMapper _mapper;
         private readonly IClaimsService _claimsService;
         private readonly INotificationService _notificationService;
+        private readonly IRedisService _redisService;
 
-        public EventOrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, INotificationService notificationService)
+        public EventOrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, INotificationService notificationService, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _claimsService = claimsService;
             _notificationService = notificationService;
+            _redisService = redisService;
         }
 
-        public async Task<EventOrderReponseDTO> GetEventOrder(Guid orderId)
+        public async Task<EventOrderReponseDTO> GetEventOrderById(Guid orderId) // old version
         {
             var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId, x => x.EventOrderDetails);
             return _mapper.Map<EventOrderReponseDTO>(order);
+        }
+
+        public async Task<EventOrderReponseDTO> GetEventOrder(Guid id)
+        {
+            // Try to get from cache
+            var cachedOrder = await _redisService.GetStringAsync(CacheKeys.EventOrder(id));
+            if (!string.IsNullOrEmpty(cachedOrder))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<EventOrderReponseDTO>(cachedOrder);
+            }
+
+            // If not in cache, query the database
+            var eventOrder = await _unitOfWork.EventOrderRepository.GetByIdAsync(id);
+
+            if (eventOrder == null)
+            {
+                throw new Exception("Event category not found");
+            }
+
+            var result = _mapper.Map<EventOrderReponseDTO>(eventOrder);
+
+            // Cache the result
+            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            await _redisService.SetStringAsync(CacheKeys.EventOrder(id), serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+
+            return result;
         }
 
         public async Task<PagedList<EventOrder>> GetEventOrders(Guid eventId, OrderParams orderParams)
@@ -48,11 +77,10 @@ namespace EventZone.Services.Services
                 throw new Exception("Event not found");
             }
 
-            var users = await _unitOfWork.UserRepository.GetAllUsersAsync();
-            var userObject = users.FirstOrDefault(x => x.Id == currentUser);
-            if (userObject == null)
+            var user = await _unitOfWork.UserRepository.GetCurrentUserAsync();
+            if (user == null)
             {
-                throw new Exception("User not found");
+                throw new Exception("User not existing");
             }
 
             var newOrderDetailsList = _mapper.Map<List<EventOrderDetail>>(order.EventOrderDetails);
@@ -82,13 +110,30 @@ namespace EventZone.Services.Services
             ////await _notificationService.PushNotification(notificationToUser).ConfigureAwait(true);
             //await _notificationService.PushNotification(notificationToEventOwner).ConfigureAwait(true);
 
+            // Clear cache as new category is added
+            await _redisService.DeleteKeyAsync(CacheKeys.EventOrders);
+            // mapper
             return _mapper.Map<EventOrderReponseDTO>(orderResponse);
         }
 
         public async Task<EventOrderReponseDTO> UpdateOrderStatus(Guid orderId, EventOrderStatusEnums eventOrderStatusEnums)
         {
+            //already checking order existence in calling method
             var order = await _unitOfWork.EventOrderRepository.UpdateOrderStatus(orderId, eventOrderStatusEnums);
-            return _mapper.Map<EventOrderReponseDTO>(order);
+            var result = await _unitOfWork.SaveChangeAsync();
+            if (result > 0)
+            {
+                // Clear specific cache key
+                await _redisService.DeleteKeyAsync(CacheKeys.EventOrder(orderId));
+                // Clear general list cache
+                await _redisService.DeleteKeyAsync(CacheKeys.EventOrders);
+
+                return _mapper.Map<EventOrderReponseDTO>(order);
+            }
+            else
+            {
+                throw new Exception("Failed to update event order status");
+            }
         }
     }
 }
