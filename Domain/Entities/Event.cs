@@ -26,5 +26,7 @@
         public virtual ICollection<EventProduct> EventProducts { get; set; }
         public virtual ICollection<EventFeedback> EventFeedbacks { get; set; }
         public virtual ICollection<EventCampaign> EventCampaigns { get; set; }
+        public virtual ICollection<EventBoardLabel> EventBoardLabels { get; set; }
+        public virtual ICollection<EventBoard> EventBoards { get; set; }
     }
 }
