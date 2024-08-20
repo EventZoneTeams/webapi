@@ -103,7 +103,6 @@ namespace EventZone.Repositories.Repositories
 
             order.Status = eventOrderStatusEnums.ToString();
             _context.Entry(order).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
             return order;
         }
 
