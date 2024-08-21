@@ -55,6 +55,10 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IEventCampaignRepository, EventCampaignRepository>();
             services.AddScoped<IEventDonationRepository, EventDonationRepository>();
             services.AddScoped<IEventTicketRepository, EventTicketRepository>();
+            services.AddScoped<IEventBoardRepository, EventBoardRepository>();
+            services.AddScoped<IEventBoardTaskLabelRepository, EventBoardTaskLabelRepository>();
+            services.AddScoped<IEventBoardLabelRepository, EventBoardLabelRepository>();
+            services.AddScoped<IEventBoardColumnRepository, EventBoardColumnRepository>();
 
             // add generic repositories
             services.AddScoped<IGenericRepository<EventFeedback>, GenericRepository<EventFeedback>>();
@@ -69,6 +73,10 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IGenericRepository<EventCampaign>, GenericRepository<EventCampaign>>();
             services.AddScoped<IGenericRepository<EventDonation>, GenericRepository<EventDonation>>();
             services.AddScoped<IGenericRepository<EventTicket>, GenericRepository<EventTicket>>();
+            services.AddScoped<IGenericRepository<EventBoard>, GenericRepository<EventBoard>>();
+            services.AddScoped<IGenericRepository<EventBoardTaskLabel>, GenericRepository<EventBoardTaskLabel>>();
+            services.AddScoped<IGenericRepository<EventBoardLabel>, GenericRepository<EventBoardLabel>>();
+            services.AddScoped<IGenericRepository<EventBoardColumn>, GenericRepository<EventBoardColumn>>();
 
             // add signInManager
             services.AddScoped<SignInManager<User>>();
@@ -86,6 +94,10 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IEventCampaignService, EventCampaignService>();
             services.AddScoped<IEventDonationService, EventDonationService>();
             services.AddScoped<IEventTicketService, EventTicketService>();
+            services.AddScoped<IEventBoardService, EventBoardService>();
+            services.AddScoped<IEventBoardTaskLabelService, EventBoardTaskLabelService>();
+            services.AddScoped<IEventBoardLabelService, EventBoardLabelService>();
+            services.AddScoped<IEventBoardColumnService, EventBoardColumnService>();
 
             // add unitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();

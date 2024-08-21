@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using EventZone.Domain.DTOs.EventBoardDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardColumnDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardLabelDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskLabelDTOs;
 using EventZone.Domain.DTOs.EventCampaignDTOs;
 using EventZone.Domain.DTOs.EventCategoryDTOs;
 using EventZone.Domain.DTOs.EventDonationDTOs;
@@ -103,6 +107,54 @@ namespace EventZone.Services.Mapper
             CreateMap<EventTicket, EventTicketDetailDTO>().ReverseMap();
             CreateMap<EventTicket, EventTicketDTO>().ReverseMap();
             CreateMap<EventTicket, EventTicketUpdateDTO>().ReverseMap();
+
+            // EventBoard mappings
+            CreateMap<EventBoard, EventBoardResponseDTO>()
+                .ReverseMap();
+
+            CreateMap<EventBoardCreateDTO, EventBoard>()
+                .ReverseMap();
+
+            CreateMap<EventBoardUpdateDTO, EventBoard>()
+                .ReverseMap();
+
+            // EventBoardColumn mappings
+            CreateMap<EventBoardColumn, EventBoardColumnDTO>()
+                .ReverseMap();
+
+            CreateMap<EventBoardColumnCreateDTO, EventBoardColumn>()
+                .ReverseMap();
+
+            CreateMap<EventBoardColumnUpdateDTO, EventBoardColumn>()
+                .ReverseMap();
+
+            // EventBoardLabel mappings
+            CreateMap<EventBoardLabel, EventBoardLabelDTO>()
+                .ReverseMap();
+            CreateMap<EventBoardLabelCreateDTO, EventBoardLabel>()
+                .ReverseMap();
+
+            CreateMap<EventBoardLabelUpdateDTO, EventBoardLabel>()
+                .ReverseMap();
+
+            // EventBoardTaskLabel mappings
+            CreateMap<EventBoardTaskLabel, EventBoardTaskLabelDTO>()
+                .ReverseMap();
+            CreateMap<EventBoardTaskLabelCreateDTO, EventBoardTaskLabel>()
+                .ReverseMap();
+
+            CreateMap<EventBoardTaskLabelUpdateDTO, EventBoardTaskLabel>()
+                .ReverseMap();
+
+            // Mapping for EventBoardLabelAssignment to EventBoardLabelAssignmentDTO
+            CreateMap<EventBoardLabelAssignment, EventBoardLabelAssignmentDTO>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.EventBoardLabel.Name))
+                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.EventBoardLabel.Color))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EventBoardLabelId));
+
+            // Mapping for EventBoard to EventBoardResponseDTO
+            CreateMap<EventBoard, EventBoardResponseDTO>()
+                .ForMember(dest => dest.EventBoardLabels, opt => opt.MapFrom(src => src.EventBoardLabelAssignments));
         }
     }
 }

@@ -41,6 +41,7 @@ namespace EventZone.Repositories
         public DbSet<EventBoardTaskLabelAssignment> EventBoardTaskLabelAssignments { get; set; }
         public DbSet<EventBoardLabelAssignment> EventBoardLabelAssignments { get; set; }
         public DbSet<EventBoardMember> EventBoardMembers { get; set; }
+        public DbSet<EventBoardTaskAssignment> EventBoardTaskAssignments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

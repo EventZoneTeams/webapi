@@ -4,6 +4,7 @@ using EventZone.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventZone.Repositories.Migrations
 {
     [DbContext(typeof(StudentEventForumDbContext))]
-    partial class StudentEventForumDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240821090156_change isDeleted from optional value to required value")]
+    partial class changeisDeletedfromoptionalvaluetorequiredvalue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -400,7 +403,7 @@ namespace EventZone.Repositories.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("EventBoardTaskAssignments");
+                    b.ToTable("EventBoardTaskAssignment");
                 });
 
             modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabel", b =>
@@ -1781,7 +1784,7 @@ namespace EventZone.Repositories.Migrations
             modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabel", b =>
                 {
                     b.HasOne("EventZone.Domain.Entities.EventBoard", "EventBoard")
-                        .WithMany("EventBoardTaskLabels")
+                        .WithMany()
                         .HasForeignKey("EventBoardId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2160,8 +2163,6 @@ namespace EventZone.Repositories.Migrations
                     b.Navigation("EventBoardLabelAssignments");
 
                     b.Navigation("EventBoardMembers");
-
-                    b.Navigation("EventBoardTaskLabels");
 
                     b.Navigation("EventBoardTasks");
                 });
