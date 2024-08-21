@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Repositories.Migrations
+namespace EventZone.Repositories.Migrations
 {
     [DbContext(typeof(StudentEventForumDbContext))]
     partial class StudentEventForumDbContextModelSnapshot : ModelSnapshot
@@ -158,6 +158,315 @@ namespace Repositories.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoard", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("LeaderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TimeEnd")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("LeaderId");
+
+                    b.ToTable("EventBoards");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardColumn", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventBoardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventBoardId");
+
+                    b.ToTable("EventBoardColumns");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardLabel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("EventBoardLabels");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardLabelAssignment", b =>
+                {
+                    b.Property<Guid>("EventBoardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventBoardLabelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EventBoardId", "EventBoardLabelId");
+
+                    b.HasIndex("EventBoardLabelId");
+
+                    b.ToTable("EventBoardLabelAssignments");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardMember", b =>
+                {
+                    b.Property<Guid>("EventBoardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EventBoardId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventBoardMembers");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("EventBoardColumnId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EventBoardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventBoardColumnId");
+
+                    b.HasIndex("EventBoardId");
+
+                    b.ToTable("EventBoardTasks");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskAssignment", b =>
+                {
+                    b.Property<Guid>("EventBoardTaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EventBoardTaskId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventBoardTaskAssignment");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CreatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventBoardId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EventBoardId");
+
+                    b.ToTable("EventBoardTaskLabels");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabelAssignment", b =>
+                {
+                    b.Property<Guid>("EventBoardTaskId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("EventBoardTaskLabelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("EventBoardTaskId", "EventBoardTaskLabelId");
+
+                    b.HasIndex("EventBoardTaskLabelId");
+
+                    b.ToTable("EventBoardTaskLabelAssignments");
                 });
 
             modelBuilder.Entity("EventZone.Domain.Entities.EventCampaign", b =>
@@ -1362,6 +1671,150 @@ namespace Repositories.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoard", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.Event", "Event")
+                        .WithMany("EventBoards")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventZone.Domain.Entities.User", "Leader")
+                        .WithMany()
+                        .HasForeignKey("LeaderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("Leader");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardColumn", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.EventBoard", "EventBoard")
+                        .WithMany("EventBoardColumns")
+                        .HasForeignKey("EventBoardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EventBoard");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardLabel", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.Event", "Event")
+                        .WithMany("EventBoardLabels")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardLabelAssignment", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.EventBoard", "EventBoard")
+                        .WithMany("EventBoardLabelAssignments")
+                        .HasForeignKey("EventBoardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventZone.Domain.Entities.EventBoardLabel", "EventBoardLabel")
+                        .WithMany("EventBoardLabelAssignments")
+                        .HasForeignKey("EventBoardLabelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EventBoard");
+
+                    b.Navigation("EventBoardLabel");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardMember", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.EventBoard", "EventBoard")
+                        .WithMany("EventBoardMembers")
+                        .HasForeignKey("EventBoardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventZone.Domain.Entities.User", "User")
+                        .WithMany("EventBoardMembers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EventBoard");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTask", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.EventBoardColumn", "EventBoardColumn")
+                        .WithMany("EventBoardTasks")
+                        .HasForeignKey("EventBoardColumnId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventZone.Domain.Entities.EventBoard", null)
+                        .WithMany("EventBoardTasks")
+                        .HasForeignKey("EventBoardId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("EventBoardColumn");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskAssignment", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.EventBoardTask", "EventBoardTask")
+                        .WithMany("EventBoardTaskAssignments")
+                        .HasForeignKey("EventBoardTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventZone.Domain.Entities.User", "User")
+                        .WithMany("EventBoardTaskAssignments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EventBoardTask");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabel", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.EventBoard", "EventBoard")
+                        .WithMany()
+                        .HasForeignKey("EventBoardId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EventBoard");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabelAssignment", b =>
+                {
+                    b.HasOne("EventZone.Domain.Entities.EventBoardTask", "EventBoardTask")
+                        .WithMany("EventBoardTaskLabelAssignments")
+                        .HasForeignKey("EventBoardTaskId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EventZone.Domain.Entities.EventBoardTaskLabel", "EventBoardTaskLabel")
+                        .WithMany("EventBoardTaskLabelAssignments")
+                        .HasForeignKey("EventBoardTaskLabelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EventBoardTask");
+
+                    b.Navigation("EventBoardTaskLabel");
+                });
+
             modelBuilder.Entity("EventZone.Domain.Entities.EventCampaign", b =>
                 {
                     b.HasOne("EventZone.Domain.Entities.Event", "Event")
@@ -1686,6 +2139,10 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("EventZone.Domain.Entities.Event", b =>
                 {
+                    b.Navigation("EventBoardLabels");
+
+                    b.Navigation("EventBoards");
+
                     b.Navigation("EventCampaigns");
 
                     b.Navigation("EventComments");
@@ -1701,6 +2158,39 @@ namespace Repositories.Migrations
                     b.Navigation("EventProducts");
 
                     b.Navigation("Posts");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoard", b =>
+                {
+                    b.Navigation("EventBoardColumns");
+
+                    b.Navigation("EventBoardLabelAssignments");
+
+                    b.Navigation("EventBoardMembers");
+
+                    b.Navigation("EventBoardTasks");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardColumn", b =>
+                {
+                    b.Navigation("EventBoardTasks");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardLabel", b =>
+                {
+                    b.Navigation("EventBoardLabelAssignments");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTask", b =>
+                {
+                    b.Navigation("EventBoardTaskAssignments");
+
+                    b.Navigation("EventBoardTaskLabelAssignments");
+                });
+
+            modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabel", b =>
+                {
+                    b.Navigation("EventBoardTaskLabelAssignments");
                 });
 
             modelBuilder.Entity("EventZone.Domain.Entities.EventCampaign", b =>
@@ -1748,6 +2238,10 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("EventZone.Domain.Entities.User", b =>
                 {
+                    b.Navigation("EventBoardMembers");
+
+                    b.Navigation("EventBoardTaskAssignments");
+
                     b.Navigation("Notifications");
 
                     b.Navigation("Wallets");
