@@ -12,10 +12,13 @@ namespace EventZone.Domain.DTOs.BookedTicketDTOs
     public class BookedTicketDetailDTO : BookedTicketDTO
     {
         public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
+        public bool IsCheckedIn { get; set; }
+        public Guid EventOrderId { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public virtual EventDTO Event { get; set; }
-        public virtual UserDTO User { get; set; }
+        public virtual EventDTO? Event { get; set; }
+        public virtual UserDTO? User { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventZone.Domain.DTOs.BookedTicketDTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace EventZone.Services.Interface
 {
     public interface IAttendeeService
     {
+        Task<List<BookedTicketDetailDTO>> BookANewTicketForEvent(BookedTicketDTO bookedTicketDTO);
+        Task<List<BookedTicketDetailDTO>> GetAllBookedTicket();
     }
 }

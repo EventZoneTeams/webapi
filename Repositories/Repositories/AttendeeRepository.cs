@@ -1,5 +1,6 @@
 ﻿using EventZone.Domain.Entities;
 using EventZone.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,12 @@ namespace EventZone.Repositories.Repositories
             _context = context;
             _timeService = timeService;
             _claimsService = claimsService;
+        }
+
+        public async Task<List<BookedTicket>> GetBookedTicketsByOrderId(Guid orderId)
+        {
+            var result = await _context.BookedTickets.Where(x => x.EventOrderId == orderId).ToListAsync();
+            return result;
         }
     }
 }
