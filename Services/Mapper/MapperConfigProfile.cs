@@ -102,6 +102,7 @@ namespace EventZone.Services.Mapper
             //Ticket
             CreateMap<EventTicket, EventTicketDetailDTO>().ReverseMap();
             CreateMap<EventTicket, EventTicketDTO>().ReverseMap();
+            CreateMap<EventTicket, EventTicketUpdateDTO>().ReverseMap();
         }
     }
 }

@@ -59,7 +59,7 @@ namespace EventZone.WebAPI.Controllers
         /// </summary>
         /// <response code="200">Returns a product</response>
         [HttpGet("event-products/{id}")]
-        public async Task<IActionResult> GetAccountById(Guid id)
+        public async Task<IActionResult> GetProductById(Guid id)
         {
             try
             {

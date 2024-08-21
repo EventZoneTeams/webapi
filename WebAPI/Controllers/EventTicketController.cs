@@ -1,4 +1,5 @@
 ﻿using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Extensions;
@@ -22,10 +23,6 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPost("event-tickets")]
-        /// <summary>
-        /// Create a ticket
-        /// </summary>
-        /// <response code="200">Returns a new ticket detail</response>
         public async Task<ActionResult> CreateEventTicket(EventTicketDTO ticket)
         {
             try
@@ -46,16 +43,83 @@ namespace EventZone.WebAPI.Controllers
         /// <response code="400">Error during reading data</response>
         /// <response code="404">Event Id is not exist</response>
         [HttpGet("events/{id}/event-tickets")]
-        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventTicketss(Guid id)
+        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventTickets(Guid id)
         {
             try
             {
                 var tickets = await _eventTicketService.GetAllTicketsByEventIdAsync(id);
                 if (tickets == null)
                 {
-                    return NotFound("This event is not existing in data");
+                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed event id: " + id));
                 }
                 return Ok(tickets);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
+        /// delete a ticket by their IDs
+        /// </summary>
+        /// <response code="200">Returns the removed ticket </response>
+        [HttpDelete("event-tickets/{id}")]
+        public async Task<IActionResult> DeleteAsync(Guid id)
+        {
+            try
+            {
+                var result = await _eventTicketService.DeleteEventTicketByIdAsync(id);
+                if (result == null)
+                {
+                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
+        /// Get a ticket by id
+        /// </summary>
+        /// <response code="200">Returns a ticket</response>
+        [HttpGet("event-tickets/{id}")]
+        public async Task<IActionResult> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                var result = await _eventTicketService.GetTicketById(id);
+                if (result == null)
+                {
+                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
+                }
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
+        /// update an event ticket by its id
+        /// </summary>
+        /// <response code="200">Returns the updated ticket</response>
+        [HttpPut("event-tickets/{id}")]
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] EventTicketUpdateDTO model)
+        {
+            try
+            {
+                var result = await _eventTicketService.UpdateEventTicketAsync(id, model);
+                if (result == null)
+                {
+                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
+                }
+
+                return Ok(result);
             }
             catch (Exception ex)
             {

@@ -250,7 +250,7 @@ namespace EventZone.Services.Services
             }
         }
 
-        public async Task<ApiResult<EventProductDetailDTO>> GetProductById(Guid productId)
+        public async Task<ApiResult<EventProductDetailDTO>> GetProductByIdd(Guid productId)
         {
             var product = await _unitOfWork.EventProductRepository.GetByIdAsync(productId, x => x.ProductImages);
             if (product == null)
@@ -271,7 +271,7 @@ namespace EventZone.Services.Services
             };
         }
 
-        public async Task<ApiResult<EventProductDetailDTO>> GetProductByIdd(Guid id)
+        public async Task<ApiResult<EventProductDetailDTO>> GetProductById(Guid id)
         {
             // Try to get from cache
             var cachedProduct = await _redisService.GetStringAsync(CacheKeys.EventProduct(id));
