@@ -18,6 +18,10 @@ namespace EventZone.Repositories
         private readonly IEventCampaignRepository _eventCampaignRepository;
         private readonly IEventDonationRepository _eventDonationRepository;
         private readonly IEventTicketRepository _eventTicketRepository;
+        private readonly IEventBoardRepository _eventBoardRepository;
+        private readonly IEventBoardLabelRepository _eventBoardLabelRepository;
+        private readonly IEventBoardTaskLabelRepository _eventBoardTaskLabelRepository;
+        private readonly IEventBoardColumnRepository _eEventBoardColumnRepository;
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
             , IUserRepository userRepository,
@@ -32,7 +36,11 @@ namespace EventZone.Repositories
             INotificationRepository notificationRepository,
             IEventCampaignRepository eventCampaignRepository,
             IEventDonationRepository eventDonationRepository,
-            IEventTicketRepository eventTicketRepository
+            IEventTicketRepository eventTicketRepository,
+            IEventBoardRepository eventBoardRepository,
+            IEventBoardLabelRepository eventBoardLabelRepository,
+            IEventBoardTaskLabelRepository eventBoardTaskLabelRepository,
+            IEventBoardColumnRepository eventBoardColumnRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -49,6 +57,10 @@ namespace EventZone.Repositories
             _eventCampaignRepository = eventCampaignRepository;
             _eventDonationRepository = eventDonationRepository;
             _eventTicketRepository = eventTicketRepository;
+            _eventBoardRepository = eventBoardRepository;
+            _eventBoardLabelRepository = eventBoardLabelRepository;
+            _eventBoardTaskLabelRepository = eventBoardTaskLabelRepository;
+            _eventBoardColumnRepository = eventBoardColumnRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -64,6 +76,10 @@ namespace EventZone.Repositories
         public IEventCampaignRepository EventCampaignRepository => _eventCampaignRepository;
         public IEventDonationRepository EventDonationRepository => _eventDonationRepository;
         public IEventTicketRepository EventTicketRepository => _eventTicketRepository;
+        public IEventBoardRepository EventBoardRepository => _eventBoardRepository;
+        public IEventBoardLabelRepository EventBoardLabelRepository => _eventBoardLabelRepository;
+        public IEventBoardTaskLabelRepository EventBoardTaskLabelRepository => _eventBoardTaskLabelRepository;
+        public IEventBoardColumnRepository EventBoardColumnRepository => _eEventBoardColumnRepository;
 
         public Task<int> SaveChangeAsync()
         {
