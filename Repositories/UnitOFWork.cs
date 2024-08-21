@@ -32,7 +32,7 @@ namespace EventZone.Repositories
             INotificationRepository notificationRepository,
             IEventCampaignRepository eventCampaignRepository,
             IEventDonationRepository eventDonationRepository,
-            IEventTicketRepository eventTicketRepository
+            IEventTicketRepository eventTicketRepositoryo
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
