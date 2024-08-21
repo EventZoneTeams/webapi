@@ -17,5 +17,9 @@
         public static string EventOrders => "_EventOrders";
 
         public static string EventOrder(Guid id) => $"_EventOrder_{id}";
+
+        public static string EventTickets => "_EventTickets";
+
+        public static string EventTicket(Guid id) => $"_EventTicket_{id}";
     }
 }
