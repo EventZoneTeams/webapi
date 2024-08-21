@@ -194,7 +194,7 @@ namespace EventZone.Services.Services
             return result;
         }
 
-        public async Task<List<EventProductDetailDTO>> GetAllProductsByEventAsyncc(Guid eventId)
+        public async Task<List<EventProductDetailDTO>> GetAllProductsByEventAsyncOldVersion(Guid eventId)
         {
             var result = await _unitOfWork.EventProductRepository.GetAllProductsByEvent(eventId);
             if (result == null)
