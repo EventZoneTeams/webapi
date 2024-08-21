@@ -12,6 +12,7 @@ namespace EventZone.Domain.DTOs.TicketDTOs
     {
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual EventDTO? Event { get; set; }
     }
