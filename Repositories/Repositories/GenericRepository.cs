@@ -39,7 +39,7 @@ namespace EventZone.Repositories.Repositories
         }
 
         // riêng hàm này đã sửa để adapt theo Unit Of Work
-        public async Task AddRangeAsync(List<TEntity> entities)
+        public async Task<List<TEntity>> AddRangeAsync(List<TEntity> entities)
         {
             foreach (var entity in entities)
             {
@@ -47,6 +47,7 @@ namespace EventZone.Repositories.Repositories
                 entity.CreatedBy = _claimsService.GetCurrentUserId;
             }
             await _dbSet.AddRangeAsync(entities);
+            return entities;
         }
 
         public Task<List<TEntity>> GetAllAsync(params Expression<Func<TEntity, object>>[] includes)

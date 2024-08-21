@@ -48,6 +48,7 @@ namespace EventZone.Repositories.Repositories
                         Status = EventOrderStatusEnums.PENDING.ToString(),
                         CreatedAt = _timeService.GetCurrentTime(),
                         CreatedBy = _claimsService.GetCurrentUserId,
+                        OrderType = "PRODUCT",
                     };
 
                     await _context.EventOrders.AddAsync(newOrder);

@@ -21,7 +21,7 @@ namespace EventZone.Repositories.Interfaces
 
         Task<bool> SoftRemove(TEntity entity);
 
-        Task AddRangeAsync(List<TEntity> entities);
+        Task<List<TEntity>> AddRangeAsync(List<TEntity> entities);
 
         IQueryable<TEntity> GetQueryable();
 

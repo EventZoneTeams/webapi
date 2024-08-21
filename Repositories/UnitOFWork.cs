@@ -87,7 +87,16 @@ namespace EventZone.Repositories
 
         public Task<int> SaveChangeAsync()
         {
-            return _studentEventForumDbContext.SaveChangesAsync();
+            try
+            {
+                return _studentEventForumDbContext.SaveChangesAsync();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
