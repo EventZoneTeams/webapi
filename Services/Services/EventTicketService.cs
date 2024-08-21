@@ -2,6 +2,7 @@
 using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Domain.Entities;
+using EventZone.Repositories.Commons;
 using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.Interface;
@@ -91,6 +92,98 @@ namespace EventZone.Services.Services
                 .ToList();
 
             return result;
+        }
+
+        public async Task<ApiResult<EventTicketDetailDTO>> UpdateEventTicketAsync(Guid ticketId, EventTicketUpdateDTO updateModel)
+        {
+            var existingTicket = await _unitOfWork.EventTicketRepository.GetByIdAsync(ticketId);
+            if (existingTicket != null)
+            {
+                existingTicket = _mapper.Map(updateModel, existingTicket);
+                // existingTicket.InStock = updateModel.InStock == 0 ? existingTicket.InStock : updateModel.InStock;
+                await _unitOfWork.EventTicketRepository.Update(existingTicket);
+                var updatedResult = await _unitOfWork.SaveChangeAsync();
+                if (updatedResult > 0)
+                {
+                    return new ApiResult<EventTicketDetailDTO>()
+                    {
+                        IsSuccess = true,
+                        Message = "Updated successfuly",
+                        Data = _mapper.Map<EventTicketDetailDTO>(existingTicket)
+                    };
+                }
+                else
+                {
+                    throw new Exception("Something wrong in the updating process");
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<ApiResult<EventTicketDetailDTO>> GetTicketById(Guid id)
+        {
+            // Try to get from cache
+            var cachedTicket = await _redisService.GetStringAsync(CacheKeys.EventTicket(id));
+            if (!string.IsNullOrEmpty(cachedTicket))
+            {
+                var product = Newtonsoft.Json.JsonConvert.DeserializeObject<EventTicketDetailDTO>(cachedTicket);
+                return new ApiResult<EventTicketDetailDTO>()
+                {
+                    IsSuccess = true,
+                    Message = "Found successfully product " + id,
+                    Data = product
+                };
+            }
+
+            // If not in cache, query the database
+            var eventProduct = await _unitOfWork.EventTicketRepository.GetByIdAsync(id, x=> x.Event);
+
+            if (eventProduct == null)
+            {
+                return null;
+            }
+
+            var result = _mapper.Map<EventTicketDetailDTO>(eventProduct);
+
+            // Cache the result
+            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            await _redisService.SetStringAsync(CacheKeys.EventProduct(id), serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+            return new ApiResult<EventTicketDetailDTO>()
+            {
+                IsSuccess = true,
+                Message = "Found successfully product " + id,
+                Data = result
+            };
+        }
+
+        public async Task<ApiResult<EventTicketDetailDTO>> DeleteEventTicketByIdAsync(Guid id)
+        {
+            var ticket = await _unitOfWork.EventTicketRepository.GetByIdAsync(id);
+
+            if (ticket != null)
+            {
+                await _unitOfWork.EventTicketRepository.SoftRemove(ticket);
+                //save changes
+                var result = await _unitOfWork.SaveChangeAsync();
+                if (result > 0)
+                {
+                    // Clear specific cache key
+                    await _redisService.DeleteKeyAsync(CacheKeys.EventTicket(id));
+                    // Clear general list cache
+                    await _redisService.DeleteKeyAsync(CacheKeys.EventTickets);
+
+                    return ApiResult<EventTicketDetailDTO>
+                        .Succeed(_mapper.Map<EventTicketDetailDTO>(ticket), "Product " + id + " Removed successfully");
+                }
+                else
+                {
+                    throw new Exception("Something wrong in the deleting process");
+                }
+            }
+            return null;
         }
     }
 }
