@@ -15,6 +15,11 @@
         IEventCampaignRepository EventCampaignRepository { get; }
         IEventDonationRepository EventDonationRepository { get; }
         IEventTicketRepository EventTicketRepository { get; }
+        IEventBoardRepository EventBoardRepository { get; }
+        IEventBoardLabelRepository EventBoardLabelRepository { get; }
+        IEventBoardTaskLabelRepository EventBoardTaskLabelRepository { get; }
+        IEventBoardColumnRepository EventBoardColumnRepository { get; }
+        IAttendeeRepository AttendeeRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

@@ -1,8 +1,13 @@
-﻿namespace EventZone.Domain.DTOs.UserDTOs
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EventZone.Domain.DTOs.UserDTOs
 {
-    public class UserDetailsModel
+    public class UserDTO
     {
-        public Guid Id { get; set; }
         public string Email { get; set; } = null!;
 
         public string? UnsignFullName { get; set; } = "";
@@ -15,10 +20,5 @@
 
         public string? Image { get; set; } = "";
         public string? University { get; set; }
-        public bool? IsDeleted { get; set; } = false;
-        public string? ImageUrl { get; set; }
-
-        public string? RoleName { get; set; } = null;
-        public List<RoleInfoModel>? Role { get; set; } = null;//
     }
 }

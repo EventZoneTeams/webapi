@@ -21,5 +21,7 @@ namespace EventZone.Services.Services
             _mapper = mapper;
             _redisService = redisService;
         }
+
+        public async Task<>
     }
 }

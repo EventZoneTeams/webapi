@@ -16,6 +16,6 @@
 
         public Guid? DeletedBy { get; set; }
 
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
     }
 }
