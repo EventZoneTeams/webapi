@@ -11,6 +11,7 @@
         public virtual Event Event { get; set; }
         public virtual User User { get; set; }
         public virtual ICollection<EventOrderDetail> EventOrderDetails { get; set; }
-        public virtual ICollection<TransactionDetail> TransactionDetail { get; set; }
+        public virtual ICollection<TransactionDetail> TransactionDetails { get; set; } // thieu s nho fix
+        public virtual ICollection<BookedTicket>? BookedTickets { get; set; }
     }
 }

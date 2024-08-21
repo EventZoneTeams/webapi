@@ -25,5 +25,6 @@ namespace EventZone.Domain.Entities
         public virtual ICollection<Notification> Notifications { get; set; }
         public virtual ICollection<EventBoardMember> EventBoardMembers { get; set; }
         public virtual ICollection<EventBoardTaskAssignment> EventBoardTaskAssignments { get; set; } // Navigation property to join table
+        public virtual ICollection<BookedTicket>? BookedTickets { get; set; } // Navigation property to join table
     }
 }
