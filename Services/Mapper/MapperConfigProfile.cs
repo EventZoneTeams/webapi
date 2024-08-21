@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EventZone.Domain.DTOs.BookedTicketDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardColumnDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardLabelDTOs;
@@ -31,6 +32,10 @@ namespace EventZone.Services.Mapper
             CreateMap<UserUpdateModel, User>().
             ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender.ToLower() == "male")).ReverseMap()
            .ReverseMap();
+
+            CreateMap<User, UserDTO>()
+          .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => src.Gender != null && src.Gender == true ? "Male" : "Female"))
+          .ReverseMap();
 
             CreateMap<EventDTO, Event>()
                 .ReverseMap();
@@ -155,6 +160,10 @@ namespace EventZone.Services.Mapper
             // Mapping for EventBoard to EventBoardResponseDTO
             CreateMap<EventBoard, EventBoardResponseDTO>()
                 .ForMember(dest => dest.EventBoardLabels, opt => opt.MapFrom(src => src.EventBoardLabelAssignments));
+
+            //BookedTicket
+            CreateMap<BookedTicket, BookedTicketDTO>().ReverseMap();
+            CreateMap<BookedTicket, BookedTicketDetailDTO>().ReverseMap();
         }
     }
 }

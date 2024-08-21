@@ -139,7 +139,7 @@ namespace EventZone.Services.Services
             }
 
             // If not in cache, query the database
-            var eventProduct = await _unitOfWork.EventTicketRepository.GetByIdAsync(id, x=> x.Event);
+            var eventProduct = await _unitOfWork.EventTicketRepository.GetByIdAsync(id, x => x.Event);
 
             if (eventProduct == null)
             {

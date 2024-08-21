@@ -19,6 +19,7 @@
         IEventBoardLabelRepository EventBoardLabelRepository { get; }
         IEventBoardTaskLabelRepository EventBoardTaskLabelRepository { get; }
         IEventBoardColumnRepository EventBoardColumnRepository { get; }
+        IAttendeeRepository AttendeeRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

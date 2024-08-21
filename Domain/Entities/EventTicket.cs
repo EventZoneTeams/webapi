@@ -8,5 +8,6 @@
         public int InStock { get; set; }
         public Int64 Price { get; set; }
         public virtual Event Event { get; set; }
+        public virtual ICollection<BookedTicket>? BookedTickets { get; set; }
     }
 }
