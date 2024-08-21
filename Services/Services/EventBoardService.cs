@@ -48,7 +48,7 @@ namespace EventZone.Services.Services
 
         public async Task<EventBoardResponseDTO> GetBoardById(Guid id)
         {
-            var eventBoard = await _unitOfWork.EventBoardRepository.GetByIdAsync(id);
+            var eventBoard = await _unitOfWork.EventBoardRepository.GetBoardById(id);
 
             if (eventBoard == null)
             {

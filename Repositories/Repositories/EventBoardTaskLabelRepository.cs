@@ -1,5 +1,6 @@
 ﻿using EventZone.Domain.Entities;
 using EventZone.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace EventZone.Repositories.Repositories
 {
@@ -14,5 +15,14 @@ namespace EventZone.Repositories.Repositories
             _timeService = timeService;
             _claimsService = claimsService;
         }
+
+        public async Task<List<EventBoardTaskLabel>> GetLabelsByEventBoardId(Guid eventBoardId)
+        {
+            return await _context.Set<EventBoardTaskLabel>()
+                                 .Where(l => l.EventBoardId == eventBoardId && !l.IsDeleted)
+                                 .ToListAsync();
+        }
+
+
     }
 }

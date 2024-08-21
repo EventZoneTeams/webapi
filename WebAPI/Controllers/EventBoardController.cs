@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using EventZone.Domain.DTOs.EventBoardDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardLabelDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskLabelDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Services.Interface;
@@ -42,7 +45,7 @@ namespace EventZone.WebAPI.Controllers
             try
             {
                 var data = await _eventBoardService.GetBoardsByEventId(eventId);
-                return Ok(ApiResult<List<EventBoard>>.Succeed(data, "Get EventBoards Successfully!"));
+                return Ok(ApiResult<List<EventBoardResponseDTO>>.Succeed(data, "Get EventBoards Successfully!"));
             }
             catch (Exception ex)
             {
@@ -62,7 +65,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     return NotFound(ApiResult<object>.Error(null, "EventBoard not found!"));
                 }
-                return Ok(ApiResult<EventBoard>.Succeed(data, "Get EventBoard Details Successfully!"));
+                return Ok(ApiResult<EventBoardResponseDTO>.Succeed(data, "Get EventBoard Details Successfully!"));
             }
             catch (Exception ex)
             {
@@ -77,8 +80,9 @@ namespace EventZone.WebAPI.Controllers
         {
             try
             {
-                var data = await _eventBoardService.CreateBoard(eventBoard);
-                return CreatedAtAction(nameof(GetEventBoardDetails), new { id = data.Id }, ApiResult<EventBoard>.Succeed(data, "Create EventBoard Successfully!"));
+                var param = _mapper.Map<EventBoardCreateDTO>(eventBoard);
+                var data = await _eventBoardService.CreateBoard(param);
+                return CreatedAtAction(nameof(GetEventBoardDetails), new { id = data.Id }, ApiResult<EventBoardResponseDTO>.Succeed(data, "Create EventBoard Successfully!"));
             }
             catch (Exception ex)
             {
@@ -93,9 +97,10 @@ namespace EventZone.WebAPI.Controllers
         {
             try
             {
-                eventBoard.Id = id;
-                var data = await _eventBoardService.UpdateBoard(eventBoard);
-                return Ok(ApiResult<EventBoard>.Succeed(data, "Update EventBoard Successfully!"));
+                var param = _mapper.Map<EventBoardUpdateDTO>(eventBoard);
+                param.Id = id;
+                var data = await _eventBoardService.UpdateBoard(id, param);
+                return Ok(ApiResult<EventBoardResponseDTO>.Succeed(data, "Update EventBoard Successfully!"));
             }
             catch (Exception ex)
             {
@@ -110,7 +115,7 @@ namespace EventZone.WebAPI.Controllers
         {
             try
             {
-                await _eventBoardService.SoftDeleteBoard(id);
+                await _eventBoardService.DeleteBoard(id);
                 return Ok(ApiResult<object>.Succeed(null, "Delete EventBoard Successfully!"));
             }
             catch (Exception ex)
@@ -124,14 +129,14 @@ namespace EventZone.WebAPI.Controllers
          **/
 
         [HttpGet("event-board-labels/{eventId}")]
-        [ProducesResponseType(typeof(ApiResult<List<EventBoardLabel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<List<EventBoardLabelDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetEventBoardLabels(Guid eventId)
         {
             try
             {
                 var data = await _eventBoardLabelService.GetLabelsByEventId(eventId);
-                return Ok(ApiResult<List<EventBoardLabel>>.Succeed(data, "Get EventBoardLabels Successfully!"));
+                return Ok(ApiResult<List<EventBoardLabelDTO>>.Succeed(data, "Get EventBoardLabels Successfully!"));
             }
             catch (Exception ex)
             {
@@ -140,14 +145,14 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPost("event-board-labels")]
-        [ProducesResponseType(typeof(ApiResult<EventBoardLabel>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResult<EventBoardLabelDTO>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateEventBoardLabel([FromBody] EventBoardLabel eventBoardLabel)
+        public async Task<IActionResult> CreateEventBoardLabel([FromBody] EventBoardLabelCreateDTO eventBoardLabelDto)
         {
             try
             {
-                var data = await _eventBoardLabelService.CreateLabel(eventBoardLabel);
-                return CreatedAtAction(nameof(GetEventBoardLabels), new { eventId = eventBoardLabel.EventId }, ApiResult<EventBoardLabel>.Succeed(data, "Create EventBoardLabel Successfully!"));
+                var data = await _eventBoardLabelService.CreateLabel(eventBoardLabelDto);
+                return CreatedAtAction(nameof(GetEventBoardLabels), new { eventId = eventBoardLabelDto.EventId }, ApiResult<EventBoardLabelDTO>.Succeed(data, "Create EventBoardLabel Successfully!"));
             }
             catch (Exception ex)
             {
@@ -156,15 +161,14 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPut("event-board-labels/{id}")]
-        [ProducesResponseType(typeof(ApiResult<EventBoardLabel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<EventBoardLabelDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEventBoardLabel(Guid id, [FromBody] EventBoardLabel eventBoardLabel)
+        public async Task<IActionResult> UpdateEventBoardLabel(Guid id, [FromBody] EventBoardLabelUpdateDTO eventBoardLabelDto)
         {
             try
             {
-                eventBoardLabel.Id = id;
-                var data = await _eventBoardLabelService.UpdateLabel(eventBoardLabel);
-                return Ok(ApiResult<EventBoardLabel>.Succeed(data, "Update EventBoardLabel Successfully!"));
+                var data = await _eventBoardLabelService.UpdateLabel(id, eventBoardLabelDto);
+                return Ok(ApiResult<EventBoardLabelDTO>.Succeed(data, "Update EventBoardLabel Successfully!"));
             }
             catch (Exception ex)
             {
@@ -179,7 +183,7 @@ namespace EventZone.WebAPI.Controllers
         {
             try
             {
-                await _eventBoardLabelService.SoftDeleteLabel(id);
+                await _eventBoardLabelService.DeleteLabel(id);
                 return Ok(ApiResult<object>.Succeed(null, "Delete EventBoardLabel Successfully!"));
             }
             catch (Exception ex)
@@ -193,14 +197,14 @@ namespace EventZone.WebAPI.Controllers
          **/
 
         [HttpGet("event-board-task-labels/{eventBoardId}")]
-        [ProducesResponseType(typeof(ApiResult<List<EventBoardTaskLabel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<List<EventBoardTaskLabelDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetEventBoardTaskLabels(Guid eventBoardId)
         {
             try
             {
                 var data = await _eventBoardTaskLabelService.GetLabelsByEventBoardId(eventBoardId);
-                return Ok(ApiResult<List<EventBoardTaskLabel>>.Succeed(data, "Get EventBoardTaskLabels Successfully!"));
+                return Ok(ApiResult<List<EventBoardTaskLabelDTO>>.Succeed(data, "Get EventBoardTaskLabels Successfully!"));
             }
             catch (Exception ex)
             {
@@ -209,14 +213,14 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPost("event-board-task-labels")]
-        [ProducesResponseType(typeof(ApiResult<EventBoardTaskLabel>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResult<EventBoardTaskLabelDTO>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateEventBoardTaskLabel([FromBody] EventBoardTaskLabel eventBoardTaskLabel)
+        public async Task<IActionResult> CreateEventBoardTaskLabel([FromBody] EventBoardTaskLabelCreateDTO eventBoardTaskLabelDto)
         {
             try
             {
-                var data = await _eventBoardTaskLabelService.CreateLabel(eventBoardTaskLabel);
-                return CreatedAtAction(nameof(GetEventBoardTaskLabels), new { eventBoardId = eventBoardTaskLabel.EventBoardId }, ApiResult<EventBoardTaskLabel>.Succeed(data, "Create EventBoardTaskLabel Successfully!"));
+                var data = await _eventBoardTaskLabelService.CreateLabel(eventBoardTaskLabelDto);
+                return CreatedAtAction(nameof(GetEventBoardTaskLabels), new { eventBoardId = eventBoardTaskLabelDto.EventBoardId }, ApiResult<EventBoardTaskLabelDTO>.Succeed(data, "Create EventBoardTaskLabel Successfully!"));
             }
             catch (Exception ex)
             {
@@ -225,15 +229,14 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPut("event-board-task-labels/{id}")]
-        [ProducesResponseType(typeof(ApiResult<EventBoardTaskLabel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<EventBoardTaskLabelDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEventBoardTaskLabel(Guid id, [FromBody] EventBoardTaskLabel eventBoardTaskLabel)
+        public async Task<IActionResult> UpdateEventBoardTaskLabel(Guid id, [FromBody] EventBoardTaskLabelUpdateDTO eventBoardTaskLabelDto)
         {
             try
             {
-                eventBoardTaskLabel.Id = id;
-                var data = await _eventBoardTaskLabelService.UpdateLabel(eventBoardTaskLabel);
-                return Ok(ApiResult<EventBoardTaskLabel>.Succeed(data, "Update EventBoardTaskLabel Successfully!"));
+                var data = await _eventBoardTaskLabelService.UpdateLabel(id, eventBoardTaskLabelDto);
+                return Ok(ApiResult<EventBoardTaskLabelDTO>.Succeed(data, "Update EventBoardTaskLabel Successfully!"));
             }
             catch (Exception ex)
             {
@@ -248,7 +251,7 @@ namespace EventZone.WebAPI.Controllers
         {
             try
             {
-                await _eventBoardTaskLabelService.SoftDeleteLabel(id);
+                await _eventBoardTaskLabelService.DeleteLabel(id);
                 return Ok(ApiResult<object>.Succeed(null, "Delete EventBoardTaskLabel Successfully!"));
             }
             catch (Exception ex)
@@ -257,73 +260,5 @@ namespace EventZone.WebAPI.Controllers
             }
         }
 
-        /**
-         * Event Board Column CRUD
-         **/
-
-        [HttpGet("event-board-columns/{eventBoardId}")]
-        [ProducesResponseType(typeof(ApiResult<List<EventBoardColumn>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetEventBoardColumns(Guid eventBoardId)
-        {
-            try
-            {
-                var data = await _eventBoardColumnService.GetColumnsByEventBoardId(eventBoardId);
-                return Ok(ApiResult<List<EventBoardColumn>>.Succeed(data, "Get EventBoardColumns Successfully!"));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ApiResult<object>.Fail(ex));
-            }
-        }
-
-        [HttpPost("event-board-columns")]
-        [ProducesResponseType(typeof(ApiResult<EventBoardColumn>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateEventBoardColumn([FromBody] EventBoardColumn eventBoardColumn)
-        {
-            try
-            {
-                var data = await _eventBoardColumnService.CreateColumn(eventBoardColumn);
-                return CreatedAtAction(nameof(GetEventBoardColumns), new { eventBoardId = eventBoardColumn.EventBoardId }, ApiResult<EventBoardColumn>.Succeed(data, "Create EventBoardColumn Successfully!"));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ApiResult<object>.Fail(ex));
-            }
-        }
-
-        [HttpPut("event-board-columns/{id}")]
-        [ProducesResponseType(typeof(ApiResult<EventBoardColumn>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEventBoardColumn(Guid id, [FromBody] EventBoardColumn eventBoardColumn)
-        {
-            try
-            {
-                eventBoardColumn.Id = id;
-                var data = await _eventBoardColumnService.UpdateColumn(eventBoardColumn);
-                return Ok(ApiResult<EventBoardColumn>.Succeed(data, "Update EventBoardColumn Successfully!"));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ApiResult<object>.Fail(ex));
-            }
-        }
-
-        [HttpDelete("event-board-columns/{id}")]
-        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteEventBoardColumn(Guid id)
-        {
-            try
-            {
-                await _eventBoardColumnService.SoftDeleteColumn(id);
-                return Ok(ApiResult<object>.Succeed(null, "Delete EventBoardColumn Successfully!"));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ApiResult<object>.Fail(ex));
-            }
-        }
     }
 }

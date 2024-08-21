@@ -2,7 +2,7 @@
 
 namespace EventZone.Repositories.Interfaces
 {
-    public interface IEventBoardRepository
+    public interface IEventBoardRepository : IGenericRepository<EventBoard>
     {
         Task<List<EventBoard>> GetBoardsByEventId(Guid eventId);
         Task<EventBoard> GetBoardById(Guid id);

@@ -1,7 +1,6 @@
 ﻿using EventZone.Domain.Entities;
 using EventZone.Repositories.Utils;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace EventZone.Repositories
 {
@@ -212,206 +211,283 @@ namespace EventZone.Repositories
                 await context.SaveChangesAsync();
             }
 
+            // Ensure users exist before seeding dependent data
+            var firstUser = context.Users.FirstOrDefault();
+            if (firstUser == null) return;
+
             if (!context.Events.Any())
             {
-                var userId = context.Users.First().Id;
-                var categoryId = context.EventCategories.First().Id;
+                var categories = context.EventCategories.ToList();
 
-                var events = new List<Event>
-    {
-        new Event
-        {
-            Name = "Hội thảo Công nghệ 4.0",
-            Description = "Khám phá những xu hướng mới nhất trong lĩnh vực công nghệ.",
-            ThumbnailUrl = "https://picsum.photos/500/300/?image=10",
-            EventStartDate = DateTime.Now.AddDays(15),
-            EventEndDate = DateTime.Now.AddDays(16),
-            Latitude = "10.762622",
-            Longitude = "106.660172",
-            LocationDisplay = "TP. Hồ Chí Minh, Việt Nam",
-            LocationNote = "Tòa nhà số 1, đường ABC",
-            Note = "Vui lòng mang theo giấy tờ tùy thân để check-in.",
-            UserId = userId,
-            EventCategoryId = categoryId,
-            Status = "Upcoming",
-            CreatedAt = DateTime.Now,
-        },
-        new Event
-        {
-            Name = "Đêm nhạc Acoustic",
-            Description = "Thưởng thức những giai điệu nhẹ nhàng và sâu lắng.",
-            ThumbnailUrl = "https://picsum.photos/500/300/?image=20",
-            EventStartDate = DateTime.Now.AddDays(30),
-            EventEndDate = DateTime.Now.AddDays(30),
-            Latitude = "21.028511",
-            Longitude = "105.804817",
-            LocationDisplay = "Hà Nội, Việt Nam",
-            LocationNote = "Quán cafe X, phố Y",
-            Note = "Sự kiện giới hạn người tham dự, vui lòng đăng ký trước.",
-            UserId = userId,
-            EventCategoryId = categoryId,
-            Status = "Upcoming",
-            CreatedAt = DateTime.Now,
-        },
-        new Event
-        {
-            Name = "Workshop Khởi nghiệp",
-            Description = "Hướng dẫn các bước để xây dựng một startup thành công.",
-            ThumbnailUrl = "https://picsum.photos/500/300/?image=30",
-            EventStartDate = DateTime.Now.AddDays(20),
-            EventEndDate = DateTime.Now.AddDays(20),
-            Latitude = "16.047079",
-            Longitude = "108.206230",
-            LocationDisplay = "Đà Nẵng, Việt Nam",
-            LocationNote = "Trung tâm Hội nghị Đà Nẵng",
-            Note = "Tham gia buổi networking sau workshop.",
-            UserId = userId,
-            EventCategoryId = categoryId,
-            Status = "Upcoming",
-            CreatedAt = DateTime.Now,
-        }
-    };
+                if (categories.Any())
+                {
+                    var events = new List<Event>
+                    {
+                        new Event
+                        {
+                            Name = "Tech Conference 2024",
+                            Description = "Explore the latest in technology and innovation.",
+                            ThumbnailUrl = "https://picsum.photos/500/300/?image=10",
+                            EventStartDate = DateTime.Now.AddDays(10),
+                            EventEndDate = DateTime.Now.AddDays(11),
+                            Latitude = "10.762622",
+                            Longitude = "106.660172",
+                            LocationDisplay = "Ho Chi Minh City, Vietnam",
+                            LocationNote = "XYZ Convention Center",
+                            Note = "Please bring your ID for check-in.",
+                            UserId = firstUser.Id,
+                            EventCategoryId = categories.FirstOrDefault(c => c.Title == "Education")?.Id ?? Guid.Empty,
+                            Status = "Upcoming",
+                            CreatedAt = DateTime.Now,
+                        },
+                        new Event
+                        {
+                            Name = "Acoustic Night",
+                            Description = "Enjoy a night of acoustic performances.",
+                            ThumbnailUrl = "https://picsum.photos/500/300/?image=20",
+                            EventStartDate = DateTime.Now.AddDays(20),
+                            EventEndDate = DateTime.Now.AddDays(20),
+                            Latitude = "21.028511",
+                            Longitude = "105.804817",
+                            LocationDisplay = "Hanoi, Vietnam",
+                            LocationNote = "Cafe ABC",
+                            Note = "Limited seats available, register early.",
+                            UserId = firstUser.Id,
+                            EventCategoryId = categories.FirstOrDefault(c => c.Title == "Music")?.Id ?? Guid.Empty,
+                            Status = "Upcoming",
+                            CreatedAt = DateTime.Now,
+                        }
+                    };
 
-                await context.Events.AddRangeAsync(events);
+                    await context.Events.AddRangeAsync(events);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            // Seed EventBoards
+            var firstEvent = context.Events.FirstOrDefault();
+            if (firstEvent == null || firstUser == null) return;
+
+            if (!context.EventBoards.Any())
+            {
+                var eventBoards = new List<EventBoard>
+                {
+                    new EventBoard
+                    {
+                        EventId = firstEvent.Id,
+                        Name = "Tech Board",
+                        Description = "Board for managing tech events",
+                        Priority = "High",
+                        CreatedAt = DateTime.Now,
+                        LeaderId = firstUser.Id,
+                    },
+                    new EventBoard
+                    {
+                        EventId = firstEvent.Id,
+                        Name = "Music Board",
+                        Description = "Board for managing music events",
+                        Priority = "Medium",
+                        CreatedAt = DateTime.Now,
+                        LeaderId = firstUser.Id,
+                    }
+                };
+
+                await context.EventBoards.AddRangeAsync(eventBoards);
                 await context.SaveChangesAsync();
             }
-            //            var existingEvents = await context.Events.ToListAsync(); // get để tham chiếu
 
-            //            if (!context.EventProducts.Any())
-            //            {
-            //                var eventProducts = new List<EventProduct>
-            //                {
-            //                    new EventProduct
-            //                    {
-            //                        Name = "Product 1",
-            //                        Description = "Description 1",
-            //                        Price = 1000,
-            //                        EventId = existingEvents.ElementAt(random.Next(1, existingEvents.Count)).Id,
-            //                        QuantityInStock= random.Next(10, 1000),
-            //                        CreatedAt=DateTime.Now,
-            //                    },
-            //                    new EventProduct
-            //                    {
-            //                        Name = "Product 2",
-            //                        Description = "Description 2",
-            //                        Price = 1000,
-            //                        EventId = existingEvents.ElementAt(random.Next(1, existingEvents.Count)).Id,
-            //                        QuantityInStock= random.Next(10, 500),
-            //                       CreatedAt=DateTime.Now,
-            //                    },
-            //                    new EventProduct
-            //                    {
-            //                        Name = "Product 3",
-            //                        Description = "Description 2",
-            //                        Price = 5000,
-            //                        EventId = existingEvents.ElementAt(random.Next(1, existingEvents.Count)).Id,
-            //                        QuantityInStock= random.Next(10, 100),
-            //                       CreatedAt=DateTime.Now,
-            //                    }
-            //                };
+            // Ensure EventBoards exist before seeding dependent data
+            if (!context.EventBoards.Any()) return;
 
-            //                await context.EventProducts.AddRangeAsync(eventProducts);
+            // Continue with seeding EventBoardColumns, EventBoardLabels, etc., using the same safety checks.
+            // Ensure EventBoards exist before seeding dependent data
+            var firstEventBoard = context.EventBoards.FirstOrDefault();
+            if (firstEventBoard == null) return;
 
-            //                await context.SaveChangesAsync();
-            //            }
+            // Seed EventBoardColumns
+            if (!context.EventBoardColumns.Any())
+            {
+                var eventBoardColumns = new List<EventBoardColumn>
+                {
+                    new EventBoardColumn
+                    {
+                        EventBoardId = firstEventBoard.Id,
+                        Name = "To Do",
+                        Color = "#FF5733",
+                        CreatedAt = DateTime.Now
+                    },
+                    new EventBoardColumn
+                    {
+                        EventBoardId = firstEventBoard.Id,
+                        Name = "In Progress",
+                        Color = "#33FF57",
+                        CreatedAt = DateTime.Now
+                    },
+                    new EventBoardColumn
+                    {
+                        EventBoardId = firstEventBoard.Id,
+                        Name = "Done",
+                        Color = "#3357FF",
+                        CreatedAt = DateTime.Now
+                    }
+                };
 
-            //            // Seed data cho ProductImage
-            //            if (!context.ProductImages.Any())
-            //            {
-            //                var eventProducts = await context.EventProducts.ToListAsync();
+                await context.EventBoardColumns.AddRangeAsync(eventBoardColumns);
+                await context.SaveChangesAsync();
+            }
 
-            //                var productImages = new List<ProductImage>();
-            //                foreach (var eventProduct in eventProducts)
-            //                {
-            //                    productImages.Add(new ProductImage
-            //                    {
-            //                        ProductId = eventProduct.Id,
-            //                        ImageUrl = $"https://picsum.photos/500/300/?image={random.Next(100, 200)}", // Example image URL
-            //                        Name = $"Hình ảnh  của sản phẩm {eventProduct.Name}",
-            //                        CreatedAt = DateTime.Now,
-            //                        EventProduct = eventProduct
-            //                    });
-            //                }
+            // Seed EventBoardLabels
+            if (!context.EventBoardLabels.Any())
+            {
+                var eventBoardLabels = new List<EventBoardLabel>
+                {
+                    new EventBoardLabel
+                    {
+                        EventId = firstEvent.Id,
+                        Name = "High Priority",
+                        Color = "#FF0000",
+                        CreatedAt = DateTime.Now
+                    },
+                    new EventBoardLabel
+                    {
+                        EventId = firstEvent.Id,
+                        Name = "Low Priority",
+                        Color = "#00FF00",
+                        CreatedAt = DateTime.Now
+                    }
+                };
 
-            //                await context.ProductImages.AddRangeAsync(productImages);
-            //                try
-            //                {
-            //                    var result = await context.SaveChangesAsync();
-            //                }
-            //                catch (Exception)
-            //                {
-            //                    throw;
-            //                }
-            //            }
+                await context.EventBoardLabels.AddRangeAsync(eventBoardLabels);
+                await context.SaveChangesAsync();
+            }
 
-            //            // seed cho packages
-            //            if (!context.EventPackages.Any())
-            //            {
-            //                var eventPackages = new List<EventPackage>();
+            // Seed EventBoardLabelAssignments
+            var firstEventBoardLabel = context.EventBoardLabels.FirstOrDefault();
+            if (firstEventBoardLabel == null) return;
 
-            //                // Tạo EventPackage trước
-            //                foreach (var evt in existingEvents)
-            //                {
-            //                    for (int i = 0; i < 2; i++) // Tạo 3 gói package cho mỗi event
-            //                    {
-            //                        var eventPackage = new EventPackage
-            //                        {
-            //                            EventId = evt.Id,
-            //                            Title = $"Gói {i + 1} cho sự kiện {evt.Name}", // Ví dụ: Gói 1, Gói 2, Gói 3
-            //                            ThumbnailUrl = $"https://picsum.photos/500/300/?image={random.Next(200, 300)}",
-            //                            Description = $"Mô tả gói {i + 1} cho sự kiện {evt.Name}",
-            //                            CreatedAt = DateTime.Now,
-            //                        };
+            if (!context.EventBoardLabelAssignments.Any())
+            {
+                var eventBoardLabelAssignments = new List<EventBoardLabelAssignment>
+                {
+                    new EventBoardLabelAssignment
+                    {
+                        EventBoardId = firstEventBoard.Id,
+                        EventBoardLabelId = firstEventBoardLabel.Id,
+                    }
+                };
 
-            //                        eventPackages.Add(eventPackage);
-            //                    }
-            //                }
+                await context.EventBoardLabelAssignments.AddRangeAsync(eventBoardLabelAssignments);
+                await context.SaveChangesAsync();
+            }
 
-            //                await context.EventPackages.AddRangeAsync(eventPackages);
-            //                await context.SaveChangesAsync();
-            //            }
+            // Seed EventBoardMembers
+            if (!context.EventBoardMembers.Any())
+            {
+                var eventBoardMembers = new List<EventBoardMember>
+                {
+                    new EventBoardMember
+                    {
+                        EventBoardId = firstEventBoard.Id,
+                        UserId = firstUser.Id
+                    }
+                };
 
-            //            //seed data product package
-            //            if (!context.ProductInPackages.Any())
-            //            {
-            //                var eventPackages = await context.EventPackages.ToListAsync();
-            //                var products = await context.EventProducts.ToListAsync();
+                await context.EventBoardMembers.AddRangeAsync(eventBoardMembers);
+                await context.SaveChangesAsync();
+            }
 
-            //                var productInPackages = new List<ProductInPackage>();
-            //                foreach (var package in eventPackages)
-            //                {
-            //                    // Lấy một số ngẫu nhiên sản phẩm từ sự kiện
-            //                    var selectedProducts = products.Where(p => p.EventId == package.EventId)
-            //                                                    .OrderBy(p => Guid.NewGuid())
-            //                                                    .Take(random.Next(1, 4))
-            //                                                    .ToList();
+            // Seed EventBoardTasks
+            var firstEventBoardColumn = context.EventBoardColumns.FirstOrDefault();
+            if (firstEventBoardColumn == null) return;
 
-            //                    foreach (var product in selectedProducts)
-            //                    {
-            //                        var productInPackage = new ProductInPackage
-            //                        {
-            //                            ProductId = product.Id,
-            //                            PackageId = package.Id,
-            //                            Quantity = random.Next(1, 5),
-            //                        };
-            //                        productInPackages.Add(productInPackage);
-            //                    }
+            if (!context.EventBoardTasks.Any())
+            {
+                var eventBoardTasks = new List<EventBoardTask>
+                {
+                    new EventBoardTask
+                    {
+                        Title = "Design UI",
+                        Description = "Design the user interface for the event management system.",
+                        EventBoardColumnId = firstEventBoardColumn.Id,
+                        DueDate = DateTime.Now.AddDays(5),
+                        CreatedAt = DateTime.Now,
+                    },
+                    new EventBoardTask
+                    {
+                        Title = "Setup Backend",
+                        Description = "Setup the backend architecture for the event management system.",
+                        EventBoardColumnId = firstEventBoardColumn.Id,
+                        DueDate = DateTime.Now.AddDays(10),
+                        CreatedAt = DateTime.Now,
+                    }
+                };
 
-            //                    // Tính tổng giá của gói sản phẩm
-            //                    package.TotalPrice = selectedProducts.Sum(p => p.Price * productInPackages.FirstOrDefault(pip => pip.ProductId == p.Id)?.Quantity ?? 0);
-            //                }
+                await context.EventBoardTasks.AddRangeAsync(eventBoardTasks);
+                await context.SaveChangesAsync();
+            }
 
-            //                await context.ProductInPackages.AddRangeAsync(productInPackages);
-            //                try
-            //                {
-            //                    await context.SaveChangesAsync();
-            //                }
-            //                catch (Exception ex)
-            //                {
-            //                    // Xử lý lỗi ở đây (ví dụ: ghi log, thông báo lỗi)
-            //                    throw;
-            //                }
-            //            }
+            // Seed EventBoardTaskAssignments
+            var firstEventBoardTask = context.EventBoardTasks.FirstOrDefault();
+            if (firstEventBoardTask == null) return;
+
+            if (!context.EventBoardTaskAssignments.Any())
+            {
+                var eventBoardTaskAssignments = new List<EventBoardTaskAssignment>
+                {
+                    new EventBoardTaskAssignment
+                    {
+                        EventBoardTaskId = firstEventBoardTask.Id,
+                        UserId = firstUser.Id
+                    }
+                };
+
+                await context.EventBoardTaskAssignments.AddRangeAsync(eventBoardTaskAssignments);
+                await context.SaveChangesAsync();
+            }
+
+            // Seed EventBoardTaskLabels
+            if (!context.EventBoardTaskLabels.Any())
+            {
+                var eventBoardTaskLabels = new List<EventBoardTaskLabel>
+                {
+                    new EventBoardTaskLabel
+                    {
+                        Name = "Urgent",
+                        Color = "#FF0000",
+                        EventBoardId = firstEventBoard.Id,
+                        CreatedAt = DateTime.Now,
+                    },
+                    new EventBoardTaskLabel
+                    {
+                        Name = "Optional",
+                        Color = "#00FF00",
+                        EventBoardId = firstEventBoard.Id,
+                        CreatedAt = DateTime.Now,
+                    }
+                };
+
+                await context.EventBoardTaskLabels.AddRangeAsync(eventBoardTaskLabels);
+                await context.SaveChangesAsync();
+            }
+
+            // Seed EventBoardTaskLabelAssignments
+            var firstEventBoardTaskLabel = context.EventBoardTaskLabels.FirstOrDefault();
+            if (firstEventBoardTaskLabel == null) return;
+
+            if (!context.EventBoardTaskLabelAssignments.Any())
+            {
+                var eventBoardTaskLabelAssignments = new List<EventBoardTaskLabelAssignment>
+                {
+                    new EventBoardTaskLabelAssignment
+                    {
+                        EventBoardTaskId = firstEventBoardTask.Id,
+                        EventBoardTaskLabelId = firstEventBoardTaskLabel.Id
+                    }
+                };
+
+                await context.EventBoardTaskLabelAssignments.AddRangeAsync(eventBoardTaskLabelAssignments);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

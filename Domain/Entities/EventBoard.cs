@@ -14,5 +14,6 @@
         public virtual ICollection<EventBoardColumn> EventBoardColumns { get; set; }
         public virtual ICollection<EventBoardTask> EventBoardTasks { get; set; }
         public virtual ICollection<EventBoardLabelAssignment> EventBoardLabelAssignments { get; set; } // Navigation property to join table
+        public virtual ICollection<EventBoardTaskLabel> EventBoardTaskLabels { get; set; }
     }
 }

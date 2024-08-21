@@ -1,4 +1,9 @@
-﻿using EventZone.Domain.Entities;
+﻿using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardColumnDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardLabelDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskLabelDTOs;
+using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Entities;
 
 namespace EventZone.Domain.DTOs.EventBoardDTOs
 {
@@ -11,11 +16,11 @@ namespace EventZone.Domain.DTOs.EventBoardDTOs
         public string? Priority { get; set; } // "Low", "Medium", "High"
         public string? Description { get; set; }
         public Guid? LeaderId { get; set; }
-        public User? Leader { get; set; }
-        public ICollection<EventBoardMember> EventBoardMembers { get; set; }
-        public Event Event { get; set; }
-        public ICollection<EventBoardColumn> EventBoardColumns { get; set; }
+        public UserDetailsModel? Leader { get; set; }
+        public EventDTO Event { get; set; }
+        public ICollection<EventBoardColumnDTO> EventBoardColumns { get; set; }
         public ICollection<EventBoardTask> EventBoardTasks { get; set; }
-        public ICollection<EventBoardLabelAssignment> EventBoardLabelAssignments { get; set; }
+        public ICollection<EventBoardLabelAssignmentDTO> EventBoardLabels { get; set; }
+        public ICollection<EventBoardTaskLabelDTO> EventBoardTaskLabels { get; set; }
     }
 }
