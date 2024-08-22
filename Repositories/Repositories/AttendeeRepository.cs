@@ -22,9 +22,21 @@ namespace EventZone.Repositories.Repositories
             _claimsService = claimsService;
         }
 
+        public async Task<List<BookedTicket>> GetAllBookedTickets()
+        {
+            var result = await _context.BookedTickets.Include(x => x.Event).Include(x => x.User).ToListAsync();
+            return result;
+        }
+
         public async Task<List<BookedTicket>> GetBookedTicketsByOrderId(Guid orderId)
         {
             var result = await _context.BookedTickets.Where(x => x.EventOrderId == orderId).ToListAsync();
+            return result;
+        }
+
+        public async Task<EventOrder> GetOrderTicket(Guid orderId)
+        {
+            var result = await _context.EventOrders.FirstOrDefaultAsync(x => x.Id == orderId);
             return result;
         }
     }
