@@ -2,7 +2,6 @@
 using EventZone.Domain.DTOs.EventBoardDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardLabelDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskLabelDTOs;
-using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +37,7 @@ namespace EventZone.WebAPI.Controllers
          **/
 
         [HttpGet("events/{eventId}/event-boards")]
-        [ProducesResponseType(typeof(ApiResult<List<EventBoard>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetEventBoards(Guid eventId)
         {
@@ -54,7 +53,7 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpGet("event-boards/{id}")]
-        [ProducesResponseType(typeof(ApiResult<EventBoard>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetEventBoardDetails(Guid id)
         {
@@ -74,14 +73,13 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPost("event-boards")]
-        [ProducesResponseType(typeof(ApiResult<EventBoard>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateEventBoard([FromBody] EventBoard eventBoard)
+        public async Task<IActionResult> CreateEventBoard([FromBody] EventBoardCreateDTO eventBoardCreateDTO)
         {
             try
             {
-                var param = _mapper.Map<EventBoardCreateDTO>(eventBoard);
-                var data = await _eventBoardService.CreateBoard(param);
+                var data = await _eventBoardService.CreateBoard(eventBoardCreateDTO);
                 return CreatedAtAction(nameof(GetEventBoardDetails), new { id = data.Id }, ApiResult<EventBoardResponseDTO>.Succeed(data, "Create EventBoard Successfully!"));
             }
             catch (Exception ex)
@@ -91,15 +89,13 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPut("event-boards/{id}")]
-        [ProducesResponseType(typeof(ApiResult<EventBoard>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEventBoard(Guid id, [FromBody] EventBoard eventBoard)
+        public async Task<IActionResult> UpdateEventBoard(Guid id, EventBoardUpdateDTO eventBoardUpdateDTO)
         {
             try
             {
-                var param = _mapper.Map<EventBoardUpdateDTO>(eventBoard);
-                param.Id = id;
-                var data = await _eventBoardService.UpdateBoard(id, param);
+                var data = await _eventBoardService.UpdateBoard(id, eventBoardUpdateDTO);
                 return Ok(ApiResult<EventBoardResponseDTO>.Succeed(data, "Update EventBoard Successfully!"));
             }
             catch (Exception ex)

@@ -174,6 +174,7 @@ var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetRequiredService<StudentEventForumDbContext>();
 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
 try
 {
     await DBInitializer.Initialize(context, userManager);

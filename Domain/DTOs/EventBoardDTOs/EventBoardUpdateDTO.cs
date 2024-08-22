@@ -1,7 +1,11 @@
 ﻿namespace EventZone.Domain.DTOs.EventBoardDTOs
 {
-    public class EventBoardUpdateDTO : EventBoardCreateDTO
+    public class EventBoardUpdateDTO
     {
-        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? Priority { get; set; }
+        public string? Description { get; set; }
+        public List<Guid>? EventBoardLabels { get; set; }
     }
 }

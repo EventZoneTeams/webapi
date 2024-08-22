@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EventZone.Domain.DTOs.EventBoardDTOs;
-using EventZone.Domain.Entities;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.Interface;
 
@@ -17,10 +16,9 @@ namespace EventZone.Services.Services
             _mapper = mapper;
         }
 
-        public async Task<EventBoardResponseDTO> CreateBoard(EventBoardCreateDTO eventBoardModel)
+        public async Task<EventBoardResponseDTO> CreateBoard(EventBoardCreateDTO eventBoardCreateDTO)
         {
-            var eventBoard = _mapper.Map<EventBoard>(eventBoardModel);
-            var newBoard = await _unitOfWork.EventBoardRepository.AddAsync(eventBoard);
+            var newBoard = await _unitOfWork.EventBoardRepository.CreateBoard(eventBoardCreateDTO);
 
             await _unitOfWork.SaveChangeAsync();
             return _mapper.Map<EventBoardResponseDTO>(newBoard);
@@ -58,7 +56,7 @@ namespace EventZone.Services.Services
             return _mapper.Map<EventBoardResponseDTO>(eventBoard);
         }
 
-        public async Task<EventBoardResponseDTO> UpdateBoard(Guid id, EventBoardUpdateDTO eventBoardModel)
+        public async Task<EventBoardResponseDTO> UpdateBoard(Guid id, EventBoardUpdateDTO eventBoardUpdateDTO)
         {
             var eventBoard = await _unitOfWork.EventBoardRepository.GetByIdAsync(id);
 
@@ -67,16 +65,14 @@ namespace EventZone.Services.Services
                 throw new Exception("Event board not found");
             }
 
-            _mapper.Map(eventBoardModel, eventBoard);
-
-            var isUpdated = await _unitOfWork.EventBoardRepository.Update(eventBoard);
-            if (!isUpdated)
+            var isUpdated = await _unitOfWork.EventBoardRepository.UpdateBoard(id, eventBoardUpdateDTO);
+            if (isUpdated == null)
             {
                 throw new Exception("Failed to update event board");
             }
 
             await _unitOfWork.SaveChangeAsync();
-            return _mapper.Map<EventBoardResponseDTO>(eventBoard);
+            return _mapper.Map<EventBoardResponseDTO>(isUpdated);
         }
     }
 }
