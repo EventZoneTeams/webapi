@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
 using EventZone.Domain.DTOs.BookedTicketDTOs;
+using EventZone.Domain.DTOs.EventOrderDTOs;
+using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Domain.Enums;
+using EventZone.Repositories.Commons;
+using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +33,7 @@ namespace EventZone.Services.Services
             _claimsService = claimsService;
         }
 
-        public async Task<List<BookedTicketDetailDTO>> BookANewTicketForEvent(BookedTicketDTO bookedTicketDTO)
+        public async Task<List<BookedTicketDetailDTO>> BookANewTicketForEvent(BookedTicketRequestDTO bookedTicketDTO)
         {
             try
             {
@@ -55,7 +59,7 @@ namespace EventZone.Services.Services
                 {
                     EventId = existingEvent.Id,
                     UserId = user.Id,
-                    TotalAmount = bookedTicketDTO.Quantity.Value * existingTicket.Price,
+                    TotalAmount = bookedTicketDTO.Quantity * existingTicket.Price,
                     OrderType = "TICKET",
                     Status = EventOrderStatusEnums.PENDING.ToString(),
                 };
@@ -79,6 +83,8 @@ namespace EventZone.Services.Services
 
                         newBookedTicketList.Add(newBookedTicketDTO);
                     }
+                    existingTicket.InStock -= bookedTicketDTO.Quantity;
+                    await _unitOfWork.EventTicketRepository.Update(existingTicket);
                     var result = await _unitOfWork.AttendeeRepository.AddRangeAsync(newBookedTicketList);
                     saveCheck = await _unitOfWork.SaveChangeAsync();
                     if (saveCheck > 0)
@@ -101,9 +107,112 @@ namespace EventZone.Services.Services
             }
         }
 
-        public async Task<List<BookedTicketDetailDTO>> GetAllBookedTicket()
+        public async Task<List<BookedTicketDetailDTO>> GetAllBookedTickets()
         {
-            return _mapper.Map<List<BookedTicketDetailDTO>>(await _unitOfWork.AttendeeRepository.GetAllAsync());
+            List<BookedTicketDetailDTO> result;
+
+            // Bước 1: Kiểm tra cache
+            var cachedBooked = await _redisService.GetStringAsync(CacheKeys.BookedTickets);
+            if (!string.IsNullOrEmpty(cachedBooked))
+            {
+                // Nếu cache tồn tại, giải mã và sử dụng dữ liệu từ cache
+                result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<BookedTicketDetailDTO>>(cachedBooked);
+            }
+            else
+            {
+                // Nếu cache không tồn tại, truy vấn từ cơ sở dữ liệu
+                var bookedTickets = await _unitOfWork.AttendeeRepository.GetAllBookedTickets();
+
+                result = _mapper.Map<List<BookedTicketDetailDTO>>(bookedTickets);
+
+                // Lưu kết quả vào cache
+                var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                await _redisService.SetStringAsync(CacheKeys.BookedTickets, serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+            }
+
+            return result;
+        }
+
+        public async Task<List<BookedTicketDetailDTO>> GetAllBookedTicketByOrderID(Guid orderId)
+        {
+            List<BookedTicketDetailDTO> result = await GetAllBookedTickets();
+
+            result = result
+                .Where(x => x.EventOrderId == orderId)
+                .ToList();
+
+            return result;
+        }
+
+        public async Task<EventOrderBookedTicketDTO> GetEventOrderWithTicket(Guid orderId)
+        {
+            return _mapper.Map<EventOrderBookedTicketDTO>(await _unitOfWork.AttendeeRepository.GetOrderTicket(orderId));
+        }
+
+        public async Task<ApiResult<BookedTicketDetailDTO>> UpdateBookedAsync(Guid bookedId, BookedTicketUpdateDTO updateModel)
+        {
+            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);
+            if (existingBookedTicket != null)
+            {
+                existingBookedTicket = _mapper.Map(updateModel, existingBookedTicket);
+                await _unitOfWork.AttendeeRepository.Update(existingBookedTicket);
+                var updatedResult = await _unitOfWork.SaveChangeAsync();
+                if (updatedResult > 0)
+                {
+                    // Clear specific cache key
+                    await _redisService.DeleteKeyAsync(CacheKeys.BookedTicket(bookedId));
+                    // Clear general list cache
+                    await _redisService.DeleteKeyAsync(CacheKeys.BookedTickets);
+
+                    return new ApiResult<BookedTicketDetailDTO>()
+                    {
+                        IsSuccess = true,
+                        Message = "Updated successfuly",
+                        Data = _mapper.Map<BookedTicketDetailDTO>(existingBookedTicket)
+                    };
+                }
+                else
+                {
+                    throw new Exception("Something wrong in the updating process");
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<ApiResult<BookedTicketDetailDTO>> CheckinBookedAsync(Guid bookedId)
+        {
+            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);
+            if (existingBookedTicket != null)
+            {
+                existingBookedTicket.IsCheckedIn = true;
+                await _unitOfWork.AttendeeRepository.Update(existingBookedTicket);
+                var updatedResult = await _unitOfWork.SaveChangeAsync();
+                if (updatedResult > 0)
+                {
+                    // Clear specific cache key
+                    await _redisService.DeleteKeyAsync(CacheKeys.BookedTicket(bookedId));
+                    // Clear general list cache
+                    await _redisService.DeleteKeyAsync(CacheKeys.BookedTickets);
+
+                    return new ApiResult<BookedTicketDetailDTO>()
+                    {
+                        IsSuccess = true,
+                        Message = "Updated successfuly",
+                        Data = _mapper.Map<BookedTicketDetailDTO>(existingBookedTicket)
+                    };
+                }
+                else
+                {
+                    throw new Exception("Something wrong in the updating process");
+                }
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

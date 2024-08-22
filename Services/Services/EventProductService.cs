@@ -227,6 +227,11 @@ namespace EventZone.Services.Services
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
                 {
+                    // Clear specific cache key
+                    await _redisService.DeleteKeyAsync(CacheKeys.EventProduct(productId));
+                    // Clear general list cache
+                    await _redisService.DeleteKeyAsync(CacheKeys.EventProducts);
+
                     return new ApiResult<EventProductDetailDTO>()
                     {
                         IsSuccess = true,

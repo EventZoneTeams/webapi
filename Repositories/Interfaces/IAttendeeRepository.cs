@@ -9,6 +9,8 @@ namespace EventZone.Repositories.Interfaces
 {
     public interface IAttendeeRepository : IGenericRepository<BookedTicket>
     {
+        Task<List<BookedTicket>> GetAllBookedTickets();
         Task<List<BookedTicket>> GetBookedTicketsByOrderId(Guid orderId);
+        Task<EventOrder> GetOrderTicket(Guid orderId);
     }
 }

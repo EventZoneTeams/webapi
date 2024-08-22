@@ -105,6 +105,11 @@ namespace EventZone.Services.Services
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
                 {
+                    // Clear specific cache key
+                    await _redisService.DeleteKeyAsync(CacheKeys.EventTicket(ticketId));
+                    // Clear general list cache
+                    await _redisService.DeleteKeyAsync(CacheKeys.EventTickets);
+
                     return new ApiResult<EventTicketDetailDTO>()
                     {
                         IsSuccess = true,

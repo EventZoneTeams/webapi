@@ -21,5 +21,9 @@
         public static string EventTickets => "_EventTickets";
 
         public static string EventTicket(Guid id) => $"_EventTicket_{id}";
+
+        public static string BookedTickets => "_BookedTickets";
+
+        public static string BookedTicket(Guid id) => $"_BookedTicket_{id}";
     }
 }
