@@ -314,7 +314,7 @@ namespace EventZone.Repositories.Repositories
             }
             else
             {
-                throw new Exception("Invalid login attempt. Please check your email and password.");
+                throw new Exception("Invalid login attempt. Please check your password.");
             }
         }
 
