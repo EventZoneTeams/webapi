@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using EventZone.Domain.DTOs.EventBoardDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardColumnDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardLabelDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskLabelDTOs;
 using EventZone.Repositories.Commons;
 using EventZone.Services.Interface;
@@ -17,12 +19,14 @@ namespace EventZone.WebAPI.Controllers
         private readonly IEventBoardColumnService _eventBoardColumnService;
         private readonly IEventBoardLabelService _eventBoardLabelService;
         private readonly IEventBoardTaskLabelService _eventBoardTaskLabelService;
+        private readonly IEventBoardTaskService _eventBoardTaskService;
 
         public EventBoardController(IMapper mapper,
                 IEventBoardService eventBoardService,
                 IEventBoardColumnService eventBoardColumnService,
                 IEventBoardLabelService eventBoardLabelService,
-                IEventBoardTaskLabelService eventBoardTaskLabelService
+                IEventBoardTaskLabelService eventBoardTaskLabelService,
+                IEventBoardTaskService eventBoardTaskService
             )
         {
             _mapper = mapper;
@@ -30,6 +34,7 @@ namespace EventZone.WebAPI.Controllers
             _eventBoardColumnService = eventBoardColumnService;
             _eventBoardLabelService = eventBoardLabelService;
             _eventBoardTaskLabelService = eventBoardTaskLabelService;
+            _eventBoardTaskService = eventBoardTaskService;
         }
 
         /**
@@ -124,7 +129,7 @@ namespace EventZone.WebAPI.Controllers
          * Event Board Label CRUD
          **/
 
-        [HttpGet("event-board-labels/{eventId}")]
+        [HttpGet("events/{eventId}/event-board-labels/")]
         [ProducesResponseType(typeof(ApiResult<List<EventBoardLabelDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetEventBoardLabels(Guid eventId)
@@ -192,7 +197,7 @@ namespace EventZone.WebAPI.Controllers
          * Event Board Task Label CRUD
          **/
 
-        [HttpGet("event-board-task-labels/{eventBoardId}")]
+        [HttpGet("event-boards/{eventBoardId}/event-board-task-labels")]
         [ProducesResponseType(typeof(ApiResult<List<EventBoardTaskLabelDTO>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetEventBoardTaskLabels(Guid eventBoardId)
@@ -256,5 +261,182 @@ namespace EventZone.WebAPI.Controllers
             }
         }
 
+        // Get all columns for an event board
+        [HttpGet("event-boards/{eventBoardId}/columns")]
+        [ProducesResponseType(typeof(ApiResult<List<EventBoardColumnDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetEventBoardColumns(Guid eventBoardId)
+        {
+            try
+            {
+                var data = await _eventBoardColumnService.GetColumnsByEventBoardId(eventBoardId);
+                return Ok(ApiResult<List<EventBoardColumnDTO>>.Succeed(data, "Get EventBoardColumns Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Get a specific column by ID
+        [HttpGet("event-board-columns/{id}")]
+        [ProducesResponseType(typeof(ApiResult<EventBoardColumnDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetEventBoardColumnById(Guid id)
+        {
+            try
+            {
+                var data = await _eventBoardColumnService.GetColumnById(id);
+                if (data == null)
+                {
+                    return NotFound(ApiResult<object>.Error(null, "EventBoardColumn not found!"));
+                }
+                return Ok(ApiResult<EventBoardColumnDTO>.Succeed(data, "Get EventBoardColumn Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Create a new column
+        [HttpPost("event-board-columns")]
+        [ProducesResponseType(typeof(ApiResult<EventBoardColumnDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateEventBoardColumn([FromBody] EventBoardColumnCreateDTO eventBoardColumnCreateDTO)
+        {
+            try
+            {
+                var data = await _eventBoardColumnService.CreateColumn(eventBoardColumnCreateDTO);
+                return CreatedAtAction(nameof(GetEventBoardColumnById), new { id = data.Id }, ApiResult<EventBoardColumnDTO>.Succeed(data, "Create EventBoardColumn Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Update an existing column
+        [HttpPut("event-board-columns/{id}")]
+        [ProducesResponseType(typeof(ApiResult<EventBoardColumnDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEventBoardColumn(Guid id, [FromBody] EventBoardColumnUpdateDTO updateDTO)
+        {
+            try
+            {
+                var data = await _eventBoardColumnService.UpdateColumn(id, updateDTO);
+                return Ok(ApiResult<EventBoardColumnDTO>.Succeed(data, "Update EventBoardColumn Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Delete a column
+        [HttpDelete("event-board-columns/{id}")]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteEventBoardColumn(Guid id)
+        {
+            try
+            {
+                await _eventBoardColumnService.DeleteColumn(id);
+                return Ok(ApiResult<object>.Succeed(null, "Delete EventBoardColumn Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Get all tasks for a specific column
+        [HttpGet("event-board-columns/{eventBoardColumnId}/tasks")]
+        [ProducesResponseType(typeof(ApiResult<List<EventBoardTaskResponseDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetEventBoardTasks(Guid eventBoardColumnId)
+        {
+            try
+            {
+                var data = await _eventBoardTaskService.GetTasksByColumnId(eventBoardColumnId);
+                return Ok(ApiResult<List<EventBoardTaskResponseDTO>>.Succeed(data, "Get EventBoardTasks Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Get a specific task by ID
+        [HttpGet("event-board-tasks/{id}")]
+        [ProducesResponseType(typeof(ApiResult<EventBoardTaskResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetEventBoardTaskById(Guid id)
+        {
+            try
+            {
+                var data = await _eventBoardTaskService.GetTaskById(id);
+                if (data == null)
+                {
+                    return NotFound(ApiResult<object>.Error(null, "EventBoardTask not found!"));
+                }
+                return Ok(ApiResult<EventBoardTaskResponseDTO>.Succeed(data, "Get EventBoardTask Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Create a new task
+        [HttpPost("event-board-tasks")]
+        [ProducesResponseType(typeof(ApiResult<EventBoardTaskResponseDTO>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateEventBoardTask([FromBody] EventBoardTaskCreateDTO eventBoardTaskCreateDTO)
+        {
+            try
+            {
+                var data = await _eventBoardTaskService.CreateTask(eventBoardTaskCreateDTO);
+                return CreatedAtAction(nameof(GetEventBoardTaskById), new { id = data.Id }, ApiResult<EventBoardTaskResponseDTO>.Succeed(data, "Create EventBoardTask Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Update an existing task
+        [HttpPut("event-board-tasks/{id}")]
+        [ProducesResponseType(typeof(ApiResult<EventBoardTaskResponseDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEventBoardTask(Guid id, [FromBody] EventBoardTaskUpdateDTO eventBoardTaskUpdateDTO)
+        {
+            try
+            {
+                var data = await _eventBoardTaskService.UpdateTask(id, eventBoardTaskUpdateDTO);
+                return Ok(ApiResult<EventBoardTaskResponseDTO>.Succeed(data, "Update EventBoardTask Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        // Delete a task
+        [HttpDelete("event-board-tasks/{id}")]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult<object>), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteEventBoardTask(Guid id)
+        {
+            try
+            {
+                await _eventBoardTaskService.DeleteTask(id);
+                return Ok(ApiResult<object>.Succeed(null, "Delete EventBoardTask Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
     }
 }

@@ -33,16 +33,17 @@ namespace EventZone.Repositories.Repositories
             return await _context.EventBoards
                                 .Include(b => b.Event) // Include the related Event
                                 .Include(b => b.Leader) // Include the related Leader (one-to-one)
-                                .Include(b => b.EventBoardColumns) // Include the related EventBoardColumns
+                                .Include(b => b.EventBoardColumns)
+                                    .ThenInclude(c => c.EventBoardTasks)
+                                        .ThenInclude(t => t.EventBoardTaskAssignments) // Include Task Assignments
+                                .Include(b => b.EventBoardColumns)
+                                    .ThenInclude(c => c.EventBoardTasks)
+                                        .ThenInclude(t => t.EventBoardTaskLabelAssignments) // Include Task Label Assignments
                                 .Include(b => b.EventBoardTasks) // Include the related EventBoardTasks
                                     .ThenInclude(t => t.EventBoardColumn) // Include the related EventBoardColumn for each task
-                                .Include(b => b.EventBoardTasks) // Include the related EventBoardTasks
-                                    .ThenInclude(t => t.EventBoardTaskAssignments) // Include task assignments (many-to-many)
-                                        .ThenInclude(ta => ta.User) // Include the related User for each assignment
                                 .Include(b => b.EventBoardLabelAssignments) // Include the many-to-many relationship with EventBoardLabels
                                     .ThenInclude(l => l.EventBoardLabel) // Include the actual EventBoardLabel in the assignment
                                 .Include(b => b.EventBoardTaskLabels) // Include the many-to-many relationship with EventBoardLabels
-                                .Include(b => b.EventBoardTasks) // Include the related EventBoardTasks
                                 .FirstOrDefaultAsync(b => b.Id == id && !b.IsDeleted);
         }
 

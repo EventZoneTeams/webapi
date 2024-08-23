@@ -1,7 +1,8 @@
 ﻿namespace EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskLabelDTOs
 {
-    public class EventBoardTaskLabelUpdateDTO : EventBoardTaskLabelCreateDTO
+    public class EventBoardTaskLabelUpdateDTO
     {
-        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
     }
 }
