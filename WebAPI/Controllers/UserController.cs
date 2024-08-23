@@ -89,15 +89,15 @@ namespace EventZone.WebAPI.Controllers
             try
             {
                 var result = await _userService.RefreshToken(model);
-                if (result.Status.Equals(false))
+                if (!result.IsSuccess)
                 {
-                    return BadRequest(result);
+                    return Unauthorized(result);
                 }
                 return Ok(result);
             }
-            catch
+            catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 
@@ -219,15 +219,15 @@ namespace EventZone.WebAPI.Controllers
             try
             {
                 var result = await _userService.LoginAsync(user);
-                if (result.Status)
+                if (result.IsSuccess)
                 {
                     return Ok(result);
                 }
-                return Unauthorized(result);
+                return BadRequest(result);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 

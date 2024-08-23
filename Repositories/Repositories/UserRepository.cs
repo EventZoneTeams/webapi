@@ -8,6 +8,7 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Identity.Client;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -173,11 +174,7 @@ namespace EventZone.Repositories.Repositories
             {
                 if (accountExist.IsDeleted == true)
                 {
-                    return new ResponseLoginModel
-                    {
-                        Status = false,
-                        Message = "Account has been banned"
-                    };
+                    throw new Exception("Account is not existing or banned");
                 }
 
                 if (payload.Picture != null)
@@ -228,11 +225,10 @@ namespace EventZone.Repositories.Repositories
 
             return new ResponseLoginModel
             {
-                Status = true,
-                Message = "Login Successfully",
-                JWT = new JwtSecurityTokenHandler().WriteToken(token),
-                Expired = token.ValidTo.ToLocalTime(),
-                JWTRefreshToken = refreshToken
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                Expired = token.ValidTo,
+                RefreshToken = refreshToken,
+                UserId = accountExist.Id
             };
         }
 
@@ -240,11 +236,7 @@ namespace EventZone.Repositories.Repositories
         {
             if (token is null)
             {
-                return new ResponseLoginModel
-                {
-                    Status = false,
-                    Message = "Token is null"
-                };
+                throw new Exception("Token is null");
             }
 
             string? accessToken = token.AccessToken;
@@ -253,11 +245,7 @@ namespace EventZone.Repositories.Repositories
             var principal = TokenTools.GetPrincipalFromExpiredToken(accessToken, _configuration);
             if (principal == null)
             {
-                return new ResponseLoginModel
-                {
-                    Status = false,
-                    Message = "Invalid access token or refresh token!"
-                };
+                throw new Exception("Invalid access token or refresh token!");
             }
 
             string accountId = principal.Identity.Name;
@@ -266,11 +254,7 @@ namespace EventZone.Repositories.Repositories
 
             if (account == null || account.RefreshToken != refreshToken || account.RefreshTokenExpiryTime <= DateTime.Now)
             {
-                return new ResponseLoginModel
-                {
-                    Status = false,
-                    Message = "Invalid access token or refresh token!"
-                };
+                throw new Exception("Invalid access token or refresh token!");
             }
 
             var newAccessToken = GenerateJWTToken.CreateToken(principal.Claims.ToList(), _configuration, _timeService.GetCurrentTime());
@@ -281,11 +265,9 @@ namespace EventZone.Repositories.Repositories
 
             return new ResponseLoginModel
             {
-                Status = true,
-                Message = "Refresh Token successfully!",
-                JWT = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
                 Expired = newAccessToken.ValidTo,
-                JWTRefreshToken = newRefreshToken,
+                RefreshToken = newRefreshToken,
                 UserId = Guid.Parse(accountId)
             };
         }
@@ -295,11 +277,7 @@ namespace EventZone.Repositories.Repositories
             var UserExist = await _userManager.FindByEmailAsync(User.Email);
             if (UserExist == null)
             {
-                return new ResponseLoginModel
-                {
-                    Status = false,
-                    Message = "This email does not exist, please go to sign up your account",
-                };
+                return null;
             }
 
             var result = await _signInManager.CheckPasswordSignInAsync(UserExist, User.Password, false);
@@ -328,30 +306,15 @@ namespace EventZone.Repositories.Repositories
                 var token = GenerateJWTToken.CreateToken(authClaims, _configuration, _timeService.GetCurrentTime());
                 return new ResponseLoginModel
                 {
-                    Status = true,
-                    Message = "Login successfully",
-                    JWT = new JwtSecurityTokenHandler().WriteToken(token),
+                    AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                     Expired = token.ValidTo,
-                    JWTRefreshToken = refreshToken,
+                    RefreshToken = refreshToken,
                     UserId = UserExist.Id
                 };
             }
             else
             {
-                //if (!UserExist.EmailConfirmed)
-                //{
-                //    return new ResponseLoginModel
-                //    {
-                //        Status = false,
-                //        Message = "Your email haven't verified yet, please check",
-                //    };
-                //}
-
-                return new ResponseLoginModel
-                {
-                    Status = false,
-                    Message = "Incorrect email or password",
-                };
+                throw new Exception("Invalid login attempt. Please check your email and password.");
             }
         }
 
@@ -561,11 +524,11 @@ namespace EventZone.Repositories.Repositories
                                                Gender = (bool)userRolesGroup.First().user.Gender ? "Male" : "Female",
                                                Image = userRolesGroup.First().user.Image,
                                                IsDeleted = userRolesGroup.First().user.IsDeleted,
-                                               Role = userRolesGroup.Select(urg => new RoleInfoModel
-                                               {
-                                                   RoleId = urg.role.Id,
-                                                   RoleName = urg.role.Name
-                                               }).ToList()
+                                               //Role = userRolesGroup.Select(urg => new RoleInfoModel
+                                               //{
+                                               //    RoleId = urg.role.Id,
+                                               //    RoleName = urg.role.Name
+                                               //}).ToList()
                                            }).ToListAsync();
 
             return UserDetailsModels;
