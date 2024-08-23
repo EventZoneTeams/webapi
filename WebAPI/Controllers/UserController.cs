@@ -296,11 +296,11 @@ namespace EventZone.WebAPI.Controllers
         public async Task<IActionResult> GetCurrentUserAsync()
         {
             var result = await _userService.GetCurrentUserAsync();
-            if (result.IsSuccess)
+            if (result.IsSuccess || result.Data != null)
             {
                 return Ok(result);
             }
-            return NotFound(result);
+            return Unauthorized(result);
         }
 
         [HttpGet("me/event-orders")]

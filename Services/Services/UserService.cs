@@ -5,6 +5,7 @@ using EventZone.Repositories.Commons;
 using EventZone.Repositories.Interfaces;
 using EventZone.Repositories.Models;
 using EventZone.Services.Interface;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EventZone.Services.Services
 {
@@ -186,20 +187,10 @@ namespace EventZone.Services.Services
                 var role = await _unitOfWork.UserRepository.GetRoleName(result);
                 var data = _mapper.Map<UserDetailsModel>(result);
                 data.RoleName = role.First();
-
-                return new ApiResult<UserDetailsModel>
-                {
-                    Data = data,
-                    IsSuccess = true,
-                    Message = "This is current user"
-                };
+                return ApiResult<UserDetailsModel>.Succeed(data, "This is current user");
             }
-            return new ApiResult<UserDetailsModel>
-            {
-                Data = null,
-                IsSuccess = false,
-                Message = "User is not found due to error or expiration token"
-            };
+
+            return ApiResult<UserDetailsModel>.Error(null, "User is not found due to error or expiration token");
         }
 
         public async Task<ApiResult<List<UserDetailsModel>>> DeleteRangeUsers(List<Guid> userIds)
