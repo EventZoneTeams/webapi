@@ -18,7 +18,7 @@
         public bool? IsDeleted { get; set; } = false;
         public string? ImageUrl { get; set; }
 
-        public string? RoleName { get; set; } = null;
-        public List<RoleInfoModel>? Role { get; set; } = null;//
+        //public string? RoleName { get; set; } = null;
+        //public List<RoleInfoModel>? Role { get; set; } = null;//
     }
 }

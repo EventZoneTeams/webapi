@@ -11,7 +11,7 @@ namespace EventZone.Services.Interface
 
         Task<UserDetailsModel> GetUserByEmail(string email);
 
-        Task<ResponseLoginModel> LoginAsync(UserLoginModel User);
+        Task<ApiResult<object>> LoginAsync(UserLoginModel User);
 
         Task<List<UserDetailsModel>> GetAllUsers();
 
@@ -33,7 +33,7 @@ namespace EventZone.Services.Interface
 
         Task<Pagination<UserDetailsModel>> GetUsersByFiltersAsync(PaginationParameter paginationParameter, UserFilterModel userFilterModel);
 
-        Task<ResponseLoginModel> RefreshToken(TokenModel token);
+        Task<ApiResult<ResponseLoginModel>> RefreshToken(TokenModel token);
 
         Task<UserDetailsModel> GetUserById(Guid id);
 

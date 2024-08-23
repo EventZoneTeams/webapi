@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Interfaces;
 using EventZone.Repositories.Models;
 using EventZone.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EventZone.Services.Services
@@ -78,9 +80,14 @@ namespace EventZone.Services.Services
             };
         }
 
-        public async Task<ResponseLoginModel> RefreshToken(TokenModel token)
+        public async Task<ApiResult<ResponseLoginModel>> RefreshToken(TokenModel token)
         {
-            return await _unitOfWork.UserRepository.RefreshToken(token);
+            var result = await _unitOfWork.UserRepository.RefreshToken(token);
+            if (result == null)
+            {
+                return ApiResult<ResponseLoginModel>.Error(null, "Invalid token or account");
+            }
+            return ApiResult<ResponseLoginModel>.Succeed(result, "Refresh token successfully");
         }
 
         public async Task<ApiResult<UserDetailsModel>> UpdateStudentProfileAsync(Guid userId, UserUpdateModel userUpdateMode)
@@ -131,7 +138,7 @@ namespace EventZone.Services.Services
                             var result = await _unitOfWork.UserRepository.UpdateUserRole(existingUser, role);
                             if (result.Equals(role))
                             {
-                                response.Data.RoleName = role;
+                               // response.Data.RoleName = role;
                                 response.Message = "Updated user and role Successfuly";
                             }
                             else
@@ -186,7 +193,7 @@ namespace EventZone.Services.Services
             {
                 var role = await _unitOfWork.UserRepository.GetRoleName(result);
                 var data = _mapper.Map<UserDetailsModel>(result);
-                data.RoleName = role.First();
+                //data.RoleName = role.First();
                 return ApiResult<UserDetailsModel>.Succeed(data, "This is current user");
             }
 
@@ -262,9 +269,14 @@ namespace EventZone.Services.Services
             };
         }
 
-        public async Task<ResponseLoginModel> LoginAsync(UserLoginModel User)
+        public async Task<ApiResult<object>> LoginAsync(UserLoginModel User)
         {
-            return await _unitOfWork.UserRepository.LoginByEmailAndPassword(User);
+            var result = await _unitOfWork.UserRepository.LoginByEmailAndPassword(User);
+            if (result == null)
+            {
+                return ApiResult<object>.Error(User.Email, "This email does not exist, please sign up for an account.");
+            }
+            return ApiResult<object>.Succeed(result, "Login successfully");
         }
 
         public async Task<ApiResult<UserDetailsModel>> UserChangePasswordAsync(string email, string token, string newPassword)
@@ -294,7 +306,7 @@ namespace EventZone.Services.Services
                 {
                     var mappedModel = _mapper.Map<UserDetailsModel>(model);
                     mappedModel.Gender = model.Gender == true ? "Male" : "Female";
-                    mappedModel.RoleName = (await _unitOfWork.UserRepository.GetRoleName(model)).First();
+                    //mappedModel.RoleName = (await _unitOfWork.UserRepository.GetRoleName(model)).First();
                     mappedResult.Add(mappedModel);
                 }
                 return new Pagination<UserDetailsModel>(mappedResult, accounts.TotalCount, accounts.CurrentPage, accounts.PageSize);
