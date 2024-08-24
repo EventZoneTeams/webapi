@@ -7,6 +7,6 @@
         public string? ImageUrl { get; set; }
         public string? Priority { get; set; }
         public string? Description { get; set; }
-        public Guid? LeaderId { get; set; }
+        public List<Guid>? EventBoardLabels { get; set; }
     }
 }

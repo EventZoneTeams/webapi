@@ -3,6 +3,7 @@ using EventZone.Domain.DTOs.BookedTicketDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardColumnDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardLabelDTOs;
+using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskDTOs;
 using EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskLabelDTOs;
 using EventZone.Domain.DTOs.EventCampaignDTOs;
 using EventZone.Domain.DTOs.EventCategoryDTOs;
@@ -128,6 +129,9 @@ namespace EventZone.Services.Mapper
             CreateMap<EventBoardColumn, EventBoardColumnDTO>()
                 .ReverseMap();
 
+            CreateMap<EventBoardColumn, EventBoardColumnDTO>()
+                .ForMember(dest => dest.EventBoardTasks, opt => opt.MapFrom(src => src.EventBoardTasks));
+
             CreateMap<EventBoardColumnCreateDTO, EventBoardColumn>()
                 .ReverseMap();
 
@@ -160,7 +164,28 @@ namespace EventZone.Services.Mapper
 
             // Mapping for EventBoard to EventBoardResponseDTO
             CreateMap<EventBoard, EventBoardResponseDTO>()
-                .ForMember(dest => dest.EventBoardLabels, opt => opt.MapFrom(src => src.EventBoardLabelAssignments));
+                .ForMember(dest => dest.EventBoardLabels, opt => opt.MapFrom(src => src.EventBoardLabelAssignments))
+                .ForMember(dest => dest.EventBoardColumns, opt => opt.MapFrom(src => src.EventBoardColumns))
+                .ForMember(dest => dest.EventBoardTaskLabels, opt => opt.MapFrom(src => src.EventBoardTaskLabels));
+
+            // Mapping for EventBoardTask to EventBoardTaskResponseDTO
+            CreateMap<EventBoardTask, EventBoardTaskResponseDTO>()
+                .ForMember(dest => dest.EventBoardTaskLabels, opt => opt.MapFrom(src => src.EventBoardTaskLabelAssignments.Select(x => x.EventBoardTaskLabel)))
+                .ForMember(dest => dest.EventBoardTaskAssignments, opt => opt.MapFrom(src => src.EventBoardTaskAssignments));
+
+            CreateMap<EventBoardTaskLabelAssignment, EventBoardTaskLabelDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EventBoardTaskLabelId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.EventBoardTaskLabel.Name))
+                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.EventBoardTaskLabel.Color));
+
+            CreateMap<EventBoardLabelAssignment, EventBoardLabelAssignmentDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.EventBoardLabelId))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.EventBoardLabel.Name))
+                .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.EventBoardLabel.Color));
+
+            CreateMap<EventBoardTaskAssignment, EventBoardTaskAssignmentDTO>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));
+
 
             //BookedTicket
             CreateMap<BookedTicket, BookedTicketDTO>().ReverseMap();

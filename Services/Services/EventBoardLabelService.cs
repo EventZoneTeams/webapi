@@ -58,7 +58,7 @@ namespace EventZone.Services.Services
             return _mapper.Map<EventBoardLabelDTO>(eventBoardLabel);
         }
 
-        public async Task<EventBoardLabelDTO> UpdateLabel(Guid id, EventBoardLabelUpdateDTO eventBoardLabelModel)
+        public async Task<EventBoardLabelDTO> UpdateLabel(Guid id, EventBoardLabelUpdateDTO eventBoardLabelUpdateDTO)
         {
             var eventBoardLabel = await _unitOfWork.EventBoardLabelRepository.GetByIdAsync(id);
 
@@ -67,7 +67,7 @@ namespace EventZone.Services.Services
                 throw new Exception("Event board label not found");
             }
 
-            _mapper.Map(eventBoardLabelModel, eventBoardLabel);
+            _mapper.Map(eventBoardLabelUpdateDTO, eventBoardLabel);
 
             var isUpdated = await _unitOfWork.EventBoardLabelRepository.Update(eventBoardLabel);
             if (!isUpdated)

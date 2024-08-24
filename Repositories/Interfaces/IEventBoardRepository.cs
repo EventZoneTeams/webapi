@@ -1,4 +1,5 @@
-﻿using EventZone.Domain.Entities;
+﻿using EventZone.Domain.DTOs.EventBoardDTOs;
+using EventZone.Domain.Entities;
 
 namespace EventZone.Repositories.Interfaces
 {
@@ -6,8 +7,8 @@ namespace EventZone.Repositories.Interfaces
     {
         Task<List<EventBoard>> GetBoardsByEventId(Guid eventId);
         Task<EventBoard> GetBoardById(Guid id);
-        Task<EventBoard> CreateBoard(EventBoard board);
-        Task<EventBoard> UpdateBoard(EventBoard board);
+        Task<EventBoard> CreateBoard(EventBoardCreateDTO eventBoardCreateDTO);
+        Task<EventBoard> UpdateBoard(Guid boardId, EventBoardUpdateDTO eventBoardUpdateDTO);
         Task SoftDeleteBoard(Guid id);
     }
 }
