@@ -10,7 +10,7 @@ namespace EventZone.Domain.Entities
         public string? PhoneNumber { get; set; }
         public bool? Gender { get; set; }
         public string? ImageUrl { get; set; } = "";
-        public string? University { get; set; }
+        public string? WorkAt { get; set; }
 
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }

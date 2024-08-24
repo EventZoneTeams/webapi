@@ -70,7 +70,7 @@ namespace EventZone.Repositories.Repositories
                     Dob = User.Dob,
                     Gender = User.Gender.ToLower() == "male" ? true : false,
                     ImageUrl = User.ImageUrl,
-                    University = User.University,
+                    WorkAt = User.WorkAt,
                     CreatedBy = _claimsService.GetCurrentUserId,
                     CreatedDate = _timeService.GetCurrentTime()
                 };

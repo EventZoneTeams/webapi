@@ -30,7 +30,7 @@ namespace EventZone.Domain.DTOs.UserDTOs
 
         public IFormFile? Image { get; set; }
 
-        public string? University { get; set; }
+        public string? WorkAt { get; set; }
 
         [JsonIgnore]
         public string? ImageUrl { get; set; }

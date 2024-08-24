@@ -13,10 +13,9 @@
 
         public string? Gender { get; set; }
 
-        public string? Image { get; set; } = "";
-        public string? University { get; set; }
+        public string? WorkAt { get; set; }
         public bool? IsDeleted { get; set; } = false;
-        public string? ImageUrl { get; set; }
+        public string? ImageUrl { get; set; } = "";
 
         //public string? RoleName { get; set; } = null;
         //public List<RoleInfoModel>? Role { get; set; } = null;//

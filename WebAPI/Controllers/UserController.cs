@@ -260,7 +260,7 @@ namespace EventZone.WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(ApiResult<Pagination<UserDetailsModel>>.Succeed(result, "Get list products successfully"));
+                return Ok(ApiResult<Pagination<UserDetailsModel>>.Succeed(result, "Get list users successfully"));
             }
             catch (Exception ex)
             {
