@@ -138,7 +138,7 @@ namespace EventZone.Services.Services
                             var result = await _unitOfWork.UserRepository.UpdateUserRole(existingUser, role);
                             if (result.Equals(role))
                             {
-                               // response.Data.RoleName = role;
+                                // response.Data.RoleName = role;
                                 response.Message = "Updated user and role Successfuly";
                             }
                             else

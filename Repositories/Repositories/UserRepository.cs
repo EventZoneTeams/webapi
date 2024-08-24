@@ -69,8 +69,8 @@ namespace EventZone.Repositories.Repositories
                     FullName = User.FullName,
                     Dob = User.Dob,
                     Gender = User.Gender.ToLower() == "male" ? true : false,
-                    Image = User.ImageUrl,
-                    University = User.University,
+                    ImageUrl = User.ImageUrl,
+                    WorkAt = User.WorkAt,
                     CreatedBy = _claimsService.GetCurrentUserId,
                     CreatedDate = _timeService.GetCurrentTime()
                 };
@@ -179,16 +179,16 @@ namespace EventZone.Repositories.Repositories
 
                 if (payload.Picture != null)
                 {
-                    if (accountExist.Image == null)
+                    if (accountExist.ImageUrl == null)
                     {
-                        accountExist.Image = payload.Picture;
+                        accountExist.ImageUrl = payload.Picture;
                         await _userManager.UpdateAsync(accountExist);
                     }
                     else
                     {
-                        if (payload.Picture != accountExist.Image)
+                        if (payload.Picture != accountExist.ImageUrl)
                         {
-                            accountExist.Image = payload.Picture;
+                            accountExist.ImageUrl = payload.Picture;
                             await _userManager.UpdateAsync(accountExist);
                         }
                     }
@@ -522,7 +522,7 @@ namespace EventZone.Repositories.Repositories
                                                Email = userRolesGroup.First().user.Email,
                                                Dob = userRolesGroup.First().user.Dob,
                                                Gender = (bool)userRolesGroup.First().user.Gender ? "Male" : "Female",
-                                               Image = userRolesGroup.First().user.Image,
+                                               ImageUrl = userRolesGroup.First().user.ImageUrl,
                                                IsDeleted = userRolesGroup.First().user.IsDeleted,
                                                //Role = userRolesGroup.Select(urg => new RoleInfoModel
                                                //{

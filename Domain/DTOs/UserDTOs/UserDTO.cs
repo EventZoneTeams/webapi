@@ -18,7 +18,7 @@ namespace EventZone.Domain.DTOs.UserDTOs
 
         public string? Gender { get; set; }
 
-        public string? Image { get; set; } = "";
-        public string? University { get; set; }
+        public string? ImageUrl { get; set; } = "";
+        public string? WorkAt { get; set; }
     }
 }

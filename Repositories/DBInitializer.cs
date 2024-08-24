@@ -100,7 +100,7 @@ namespace EventZone.Repositories
                     Dob = DateTime.Now,
                     PhoneNumber = "0123456789",
                     Gender = false,
-                    University = "FPT"
+                    WorkAt = "FPT"
                 };
                 //Add roles
                 await userManager.CreateAsync(admin, "123456");
@@ -114,7 +114,7 @@ namespace EventZone.Repositories
                     Dob = DateTime.Now,
                     PhoneNumber = "0123456789",
                     Gender = false,
-                    University = "FPT"
+                    WorkAt = "FPT"
                 };
                 //Add roles
                 await userManager.CreateAsync(manager, "123456");
@@ -128,7 +128,7 @@ namespace EventZone.Repositories
                     Dob = DateTime.Now,
                     PhoneNumber = "0123456789",
                     Gender = false,
-                    University = "FPT"
+                    WorkAt = "FPT"
                 };
                 //Add roles
                 await userManager.CreateAsync(student, "123456");
@@ -140,10 +140,10 @@ namespace EventZone.Repositories
                     Email = "lequocuy@gmail.com",
                     FullName = "Lê Quốc Uy",
                     UnsignFullName = "Le Quoc Uy",
-                    University = "FPTU HCM",
+                    WorkAt = "FPTU HCM",
                     Dob = new DateTime(2003, 7, 11),
                     Gender = true,
-                    Image = "https://scontent.fsgn15-1.fna.fbcdn.net/v/t39.30808-1/430878538_2206677789683723_4464660377243750146_n.jpg?stp=dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE_Vr1x6BHZ_S__ovdDg7zS5W9udhABzaHlb252EAHNoS38q_urtNeTErRYpa0zqYNo-vOAf49-zjjLBslYOw-p&_nc_ohc=8En2AdNVtaUQ7kNvgEn1g25&_nc_ht=scontent.fsgn15-1.fna&oh=00_AYA_Dyr3Kzs4J5lFKCiaYlu6-KlRK4icdur4m-IrU68PPA&oe=664E1D9B"
+                    ImageUrl = "https://scontent.fsgn15-1.fna.fbcdn.net/v/t39.30808-1/430878538_2206677789683723_4464660377243750146_n.jpg?stp=dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE_Vr1x6BHZ_S__ovdDg7zS5W9udhABzaHlb252EAHNoS38q_urtNeTErRYpa0zqYNo-vOAf49-zjjLBslYOw-p&_nc_ohc=8En2AdNVtaUQ7kNvgEn1g25&_nc_ht=scontent.fsgn15-1.fna&oh=00_AYA_Dyr3Kzs4J5lFKCiaYlu6-KlRK4icdur4m-IrU68PPA&oe=664E1D9B"
                 };
                 //Add roles
                 await userManager.CreateAsync(uydev, "123456");
@@ -155,10 +155,10 @@ namespace EventZone.Repositories
                     Email = "namthhse172294@fpt.edu.vn",
                     FullName = "Trương Hà Hào Nam",
                     UnsignFullName = StringTools.ConvertToUnSign("Trương Hà Hào Nam"),
-                    University = "FPTU HCM",
+                    WorkAt = "FPTU HCM",
                     Dob = new DateTime(2003, 1, 1), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
-                    Image = "https://avatar.iran.liara.run/public/boy?username=namthhse172294" // Replace with the actual image URL
+                    ImageUrl = "https://avatar.iran.liara.run/public/boy?username=namthhse172294" // Replace with the actual ImageUrl URL
                 };
 
                 await userManager.CreateAsync(namthhse172294, "123456"); // Replace "password" with the actual password
@@ -169,10 +169,10 @@ namespace EventZone.Repositories
                     UserName = "vunse172437",
                     Email = "vunse172437@fpt.edu.vn",
                     FullName = "Nguyễn Vũ",
-                    University = "FPTU HCM",
+                    WorkAt = "FPTU HCM",
                     Dob = new DateTime(2003, 2, 15), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
-                    Image = "https://avatar.iran.liara.run/public/boy?username=vunse172437" // Replace with the actual image URL
+                    ImageUrl = "https://avatar.iran.liara.run/public/boy?username=vunse172437" // Replace with the actual ImageUrl URL
                 };
 
                 await userManager.CreateAsync(vunse172437, "123456"); // Replace "password" with the actual password
@@ -184,10 +184,10 @@ namespace EventZone.Repositories
                     Email = "huanngse171018@fpt.edu.vn",
                     FullName = "Ngô Gia Huấn",
                     UnsignFullName = StringTools.ConvertToUnSign("Ngô Gia Huấn"),
-                    University = "FPTU HCM",
+                    WorkAt = "FPTU HCM",
                     Dob = new DateTime(2003, 3, 20), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
-                    Image = "https://avatar.iran.liara.run/public/boy?username=huanngse171018" // Replace with the actual image URL
+                    ImageUrl = "https://avatar.iran.liara.run/public/boy?username=huanngse171018" // Replace with the actual ImageUrl URL
                 };
 
                 await userManager.CreateAsync(huanngse171018, "123456"); // Replace "password" with the actual password
@@ -199,10 +199,10 @@ namespace EventZone.Repositories
                     Email = "tienhmse172436@fpt.edu.vn",
                     FullName = "Hoàng Minh Tiến Lmao",
                     UnsignFullName = StringTools.ConvertToUnSign("Hoàng Minh Tiến"),
-                    University = "FPTU HCM",
+                    WorkAt = "FPTU HCM",
                     Dob = new DateTime(2003, 4, 5), // Replace with the actual date of birth
                     Gender = true, // Assuming true means male
-                    Image = "https://avatar.iran.liara.run/public/boy?username=tienhmse172436" // Replace with the actual image URL
+                    ImageUrl = "https://avatar.iran.liara.run/public/boy?username=tienhmse172436" // Replace with the actual image URL
                 };
 
                 await userManager.CreateAsync(tienhmse172436, "123456"); // Replace "password" with the actual password
