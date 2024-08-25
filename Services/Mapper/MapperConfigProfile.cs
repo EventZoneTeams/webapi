@@ -186,7 +186,6 @@ namespace EventZone.Services.Mapper
             CreateMap<EventBoardTaskAssignment, EventBoardTaskAssignmentDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.UserId));
 
-
             //BookedTicket
             CreateMap<BookedTicket, BookedTicketDTO>().ReverseMap();
             CreateMap<BookedTicket, BookedTicketDetailDTO>().ReverseMap();

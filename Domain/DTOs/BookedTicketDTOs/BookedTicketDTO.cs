@@ -13,6 +13,7 @@ namespace EventZone.Domain.DTOs.BookedTicketDTOs
 
         public Guid UserId { get; set; }
         public Int64 PaidPrice { get; set; }
+        public bool IsCheckedIn { get; set; }
 
         public string AttendeeNote { get; set; }
     }

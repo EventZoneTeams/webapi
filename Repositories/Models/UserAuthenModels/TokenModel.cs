@@ -1,4 +1,4 @@
-﻿namespace EventZone.Repositories.Models
+﻿namespace EventZone.Repositories.Models.UserAuthenModels
 {
     public class TokenModel
     {

@@ -1,12 +1,16 @@
 ﻿using EventZone.Domain.DTOs.BookedTicketDTOs;
+using EventZone.Domain.DTOs.EventCampaignDTOs;
 using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.EventCampaignModels;
+using EventZone.Repositories.Models.TicketModels;
 using EventZone.Services.Interface;
 using EventZone.Services.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace EventZone.WebAPI.Controllers
 {
@@ -114,6 +118,40 @@ namespace EventZone.WebAPI.Controllers
                     return NotFound(ApiResult<BookedTicketDetailDTO>.Error(null, "There are no existed booked id: " + id));
                 }
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
+        /// Get list existing products
+        /// </summary>
+        /// <response code="200">Returns a list of products</response>
+        [HttpGet("booked-tickets")]
+        public async Task<IActionResult> getCampaignByFilter([FromQuery] PaginationParameter paginationParameter, [FromQuery] BookedTicketFilterModel FilterModel)
+        {
+            try
+            {
+                var result = await _attendeeService.GetBookedsByFiltersAsync(paginationParameter, FilterModel);
+                if (result == null)
+                {
+                    return NotFound("No booked tickets found with the specified filters.");
+                }
+                var metadata = new
+                {
+                    result.TotalCount,
+                    result.PageSize,
+                    result.CurrentPage,
+                    result.TotalPages,
+                    result.HasNext,
+                    result.HasPrevious
+                };
+
+                Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
+
+                return Ok(ApiResult<Pagination<BookedTicketDTO>>.Succeed(result, "Get list events successfully"));
             }
             catch (Exception ex)
             {

@@ -2,7 +2,7 @@
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.Enums;
 using EventZone.Repositories.Commons;
-using EventZone.Repositories.Models;
+using EventZone.Repositories.Models.UserAuthenModels;
 using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

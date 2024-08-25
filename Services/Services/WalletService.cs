@@ -13,6 +13,7 @@ namespace EventZone.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+
         public WalletService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
@@ -33,6 +34,7 @@ namespace EventZone.Services.Services
             var result = _mapper.Map<WalletResponseDTO>(wallet);
             return result;
         }
+
         // Deposit money to wallet
         public async Task<Transaction> Deposit(Guid userId, long amount)
         {
@@ -41,7 +43,7 @@ namespace EventZone.Services.Services
             return result;
         }
 
-        // Purchase
+        // Purchase method use wallet amount to pay order
         public async Task<TransactionResponsesDTO> PurchaseOrder(Guid orderId, Guid userId)
         {
             var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId);
@@ -117,6 +119,7 @@ namespace EventZone.Services.Services
             var result = _mapper.Map<List<TransactionResponsesDTO>>(transactions);
             return result;
         }
+
         public async Task<Transaction> GetTransactionById(Guid transactionId)
         {
             var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(transactionId);

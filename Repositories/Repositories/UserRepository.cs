@@ -2,7 +2,7 @@
 using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Interfaces;
-using EventZone.Repositories.Models;
+using EventZone.Repositories.Models.UserAuthenModels;
 using EventZone.Repositories.Utils;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
