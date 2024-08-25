@@ -10,6 +10,7 @@ namespace EventZone.Domain.DTOs.EventBoardDTOs.EventBoardTaskDTOs
         public string Description { get; set; }
         public DateTime? DueDate { get; set; }
         public int? Priority { get; set; }
+        public Guid EventBoardColumnId { get; set; }
         public EventBoardColumnDTO EventBoardColumn { get; set; } // Navigation property
         public List<EventBoardTaskAssignmentDTO> EventBoardTaskAssignments { get; set; }
         public List<EventBoardTaskLabelDTO> EventBoardTaskLabels { get; set; } // Navigation property to join table
