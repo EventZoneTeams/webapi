@@ -4,7 +4,7 @@ using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Interfaces;
-using EventZone.Repositories.Models;
+using EventZone.Repositories.Models.UserAuthenModels;
 using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using static System.Runtime.InteropServices.JavaScript.JSType;

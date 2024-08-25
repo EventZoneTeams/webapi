@@ -48,7 +48,7 @@ namespace EventZone.WebAPI.Controllers
                 var result = await _eventCampaignService.GetCampaignsByFiltersAsync(paginationParameter, campaignFilterModel);
                 if (result == null)
                 {
-                    return NotFound("No accounts found with the specified filters.");
+                    return NotFound("No campaigns found with the specified filters.");
                 }
                 var metadata = new
                 {
@@ -66,7 +66,7 @@ namespace EventZone.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using EventZone.Domain.DTOs.BookedTicketDTOs;
 using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Repositories.Commons;
+using EventZone.Repositories.Models.TicketModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace EventZone.Services.Interface
         Task<List<BookedTicketDetailDTO>> GetAllBookedTicketByOrderID(Guid orderId);
 
         Task<List<BookedTicketDetailDTO>> GetAllBookedTickets();
-
+        Task<Pagination<BookedTicketDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel);
         Task<EventOrderBookedTicketDTO> GetEventOrderWithTicket(Guid orderId);
 
         Task<ApiResult<BookedTicketDetailDTO>> UpdateBookedAsync(Guid bookedId, BookedTicketUpdateDTO updateModel);

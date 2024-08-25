@@ -7,6 +7,8 @@ using EventZone.Domain.Enums;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
+using EventZone.Repositories.Models.ProductModels;
+using EventZone.Repositories.Models.TicketModels;
 using EventZone.Services.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -213,6 +215,18 @@ namespace EventZone.Services.Services
             {
                 return null;
             }
+        }
+
+        public async Task<Pagination<BookedTicketDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel)
+        {
+            var products = await _unitOfWork.AttendeeRepository.GetBookedTicketsByFilterAsync(paginationParameter, bookedTicketFilterModel);
+            //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
+            if (products != null)
+            {
+                var result = _mapper.Map<List<BookedTicketDTO>>(products);
+                return new Pagination<BookedTicketDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
+            }
+            return null;
         }
     }
 }

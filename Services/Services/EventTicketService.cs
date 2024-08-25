@@ -43,7 +43,7 @@ namespace EventZone.Services.Services
             var check = await _unitOfWork.SaveChangeAsync();
             if (check > 0)
             {
-                await _redisService.DeleteKeyAsync(CacheKeys.EventProducts);
+                await _redisService.DeleteKeyAsync(CacheKeys.EventTickets);
                 return _mapper.Map<EventTicketDetailDTO>(result);
             }
             else
@@ -57,11 +57,11 @@ namespace EventZone.Services.Services
             List<EventTicketDetailDTO> result;
 
             // Bước 1: Kiểm tra cache
-            var cachedTickets = await _redisService.GetStringAsync(CacheKeys.EventTickets);
-            if (!string.IsNullOrEmpty(cachedTickets))
+            var cachedCategories = await _redisService.GetStringAsync(CacheKeys.EventTickets);
+            if (!string.IsNullOrEmpty(cachedCategories) && cachedCategories.Count() > 0)
             {
                 // Nếu cache tồn tại, giải mã và sử dụng dữ liệu từ cache
-                result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EventTicketDetailDTO>>(cachedTickets);
+                result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EventTicketDetailDTO>>(cachedCategories);
             }
             else
             {

@@ -1,7 +1,7 @@
 ﻿using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
-using EventZone.Repositories.Models;
+using EventZone.Repositories.Models.UserAuthenModels;
 
 namespace EventZone.Repositories.Interfaces
 {
