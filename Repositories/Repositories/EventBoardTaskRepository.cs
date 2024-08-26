@@ -25,6 +25,7 @@ namespace EventZone.Repositories.Repositories
         public async Task<List<EventBoardTask>> GetTasksByColumnId(Guid eventBoardColumnId)
         {
             return await _context.EventBoardTasks
+                                 .Include(t => t.EventBoardColumn)
                                  .Include(t => t.EventBoardTaskAssignments)
                                     .ThenInclude(a => a.User)
                                  .Include(t => t.EventBoardTaskLabelAssignments)
