@@ -13,12 +13,14 @@ namespace EventZone.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly IRedisService _redisService;
 
-        public WalletService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
+        public WalletService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
+            _redisService = redisService;
         }
 
         public async Task<List<WalletResponseDTO>> GetListWalletByUserId(Guid userId)

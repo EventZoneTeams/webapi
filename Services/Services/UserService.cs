@@ -15,11 +15,13 @@ namespace EventZone.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IRedisService _redisService;
 
-        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _redisService = redisService;
         }
 
         public async Task<List<UserDetailsModel>> GetAllUsers()
