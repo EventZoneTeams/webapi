@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Domain.Enums;
 using EventZone.Repositories.Helper;
@@ -14,13 +15,15 @@ namespace EventZone.Services.Services
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
         private readonly IClaimsService _claimsService;
+        private readonly IRedisService _redisService;
 
-        public EventService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService, IClaimsService claimsService)
+        public EventService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService, IClaimsService claimsService, IRedisService redisService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notificationService = notificationService;
             _claimsService = claimsService;
+            _redisService = redisService;
         }
 
         public async Task<PagedList<Event>> GetEvent(EventParams eventParams)
@@ -32,7 +35,7 @@ namespace EventZone.Services.Services
             return events;
         }
 
-        public async Task<EventResponseDTO> GetEventById(Guid id)
+        public async Task<EventResponseDTO> GetEventByIdOld(Guid id)
         {
             var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.EventCategory, x => x.User, x => x.EventCampaigns);
 
@@ -42,6 +45,32 @@ namespace EventZone.Services.Services
             }
 
             var result = _mapper.Map<EventResponseDTO>(existingEvent);
+            return result;
+        }
+
+        public async Task<EventResponseDTO> GetEventById(Guid id)
+        {
+            // Try to get from cache
+            var cachedOrder = await _redisService.GetStringAsync(CacheKeys.Event(id));
+            if (!string.IsNullOrEmpty(cachedOrder))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<EventResponseDTO>(cachedOrder);
+            }
+
+            // If not in cache, query the database
+            var eventOrder = await _unitOfWork.EventRepository.GetByIdAsync(id);
+
+            if (eventOrder == null)
+            {
+                throw new Exception("Event not found");
+            }
+
+            var result = _mapper.Map<EventResponseDTO>(eventOrder);
+
+            // Cache the result
+            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            await _redisService.SetStringAsync(CacheKeys.Event(id), serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+
             return result;
         }
 
@@ -86,6 +115,9 @@ namespace EventZone.Services.Services
                 //        Body = $"Event Name: " + eventModel.Name,
                 //        Url = "/dashboard/feedback/event/" + newEvent.Id,
                 //    });
+
+                // Clear cache as new category is added
+                await _redisService.DeleteKeyAsync(CacheKeys.Events);
                 return result;
             }
             else
@@ -132,8 +164,12 @@ namespace EventZone.Services.Services
                 throw new Exception("Failed to update event");
             }
 
-            var result = _mapper.Map<EventResponseDTO>(existingEvent);
             await _unitOfWork.SaveChangeAsync();
+            // Clear specific cache key
+            await _redisService.DeleteKeyAsync(CacheKeys.Event(id));
+            // Clear general list cache
+            await _redisService.DeleteKeyAsync(CacheKeys.Events);
+            var result = _mapper.Map<EventResponseDTO>(existingEvent);
             return result;
         }
 
@@ -151,6 +187,10 @@ namespace EventZone.Services.Services
             {
                 var result = _mapper.Map<EventResponseDTO>(existingEvent);
                 await _unitOfWork.SaveChangeAsync();
+                // Clear specific cache key
+                await _redisService.DeleteKeyAsync(CacheKeys.Event(id));
+                // Clear general list cache
+                await _redisService.DeleteKeyAsync(CacheKeys.Events);
                 return result;
             }
             else
