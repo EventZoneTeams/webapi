@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
-using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Interfaces;
 using EventZone.Repositories.Models.UserAuthenModels;
 using EventZone.Services.Interface;
-using Microsoft.AspNetCore.Http;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EventZone.Services.Services
 {
@@ -193,9 +190,9 @@ namespace EventZone.Services.Services
             var result = await _unitOfWork.UserRepository.GetCurrentUserAsync();
             if (result != null)
             {
-                var role = await _unitOfWork.UserRepository.GetRoleName(result);
+                var role = await _unitOfWork.UserRepository.GetRole(result);
                 var data = _mapper.Map<UserDetailsModel>(result);
-                //data.RoleName = role.First();
+                data.Role = role;
                 return ApiResult<UserDetailsModel>.Succeed(data, "This is current user");
             }
 

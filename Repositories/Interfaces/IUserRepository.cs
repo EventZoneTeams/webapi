@@ -23,7 +23,7 @@ namespace EventZone.Repositories.Interfaces
 
         Task<List<UserDetailsModel>> GetAllUsersWithRoleAsync();
 
-        Task<List<string>> GetRoleName(User user);
+        Task<RoleInfoModel> GetRole(User user);
 
         Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel user);
 

@@ -8,7 +8,6 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -41,15 +40,16 @@ namespace EventZone.Repositories.Repositories
             _configuration = configuration;
         }
 
-        public async Task<List<string>> GetRoleName(User User)
+        public async Task<RoleInfoModel> GetRole(User User)
         {
-            var result = await _userManager.GetRolesAsync(User);
-            if (result != null && result.Count > 0)
+            var roleName = await _userManager.GetRolesAsync(User);
+            var roleId = _roleManager.Roles.FirstOrDefault(x => x.Name == roleName.First()).Id;
+
+            return new RoleInfoModel
             {
-                return result.ToList();
-            }
-            result.Add("");
-            return result.ToList();
+                RoleId = roleId,
+                RoleName = roleName.First()
+            };
         }
 
         public async Task<User> AddUser(UserSignupModel User, string role)

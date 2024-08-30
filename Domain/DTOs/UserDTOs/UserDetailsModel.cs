@@ -18,6 +18,6 @@
         public string? ImageUrl { get; set; } = "";
 
         //public string? RoleName { get; set; } = null;
-        //public List<RoleInfoModel>? Role { get; set; } = null;//
+        public RoleInfoModel? Role { get; set; } = null;
     }
 }
