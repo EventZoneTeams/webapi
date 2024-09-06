@@ -6,5 +6,6 @@
         public string? Longitude { get; set; }
         public string? Display { get; set; }
         public string? Note { get; set; }
+        public string? PlaceId { get; set; }
     }
 }

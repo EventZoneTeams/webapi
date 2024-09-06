@@ -14,7 +14,7 @@
         public string? LocationDisplay { get; set; }
         public string? LocationNote { get; set; }
         public string? Note { get; set; }
-
+        public string? PlaceId { get; set; }
         public Guid UserId { get; set; }
         public Guid EventCategoryId { get; set; }
         public string? Status { get; set; }
