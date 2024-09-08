@@ -14,6 +14,7 @@
         public string? LocationDisplay { get; set; }
         public string? LocationNote { get; set; }
         public string? Note { get; set; }
+        public bool? isFree { get; set; }
 
         public Guid UserId { get; set; }
         public Guid EventCategoryId { get; set; }
