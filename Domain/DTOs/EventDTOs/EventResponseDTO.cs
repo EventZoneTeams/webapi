@@ -16,6 +16,7 @@ namespace EventZone.Domain.DTOs.EventDTOs
         public Guid UserId { get; set; }
         public Guid EventCategoryId { get; set; }
         public string? Status { get; set; }
+        public bool? isFree { get; set; }
         public bool IsDeleted { get; set; }
         public UserDetailsModel User { get; set; }
         public EventCategoryResponseDTO? EventCategory { get; set; }
