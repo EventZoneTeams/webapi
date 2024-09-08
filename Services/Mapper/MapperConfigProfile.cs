@@ -53,13 +53,15 @@ namespace EventZone.Services.Mapper
                     Latitude = src.Latitude,
                     Longitude = src.Longitude,
                     Display = src.LocationDisplay,
-                    Note = src.LocationNote
+                    Note = src.LocationNote,
+                    PlaceId = src.PlaceId
                 }))
                 .ReverseMap()
                 .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Location.Latitude))
                 .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Location.Longitude))
                 .ForMember(dest => dest.LocationDisplay, opt => opt.MapFrom(src => src.Location.Display))
-                .ForMember(dest => dest.LocationNote, opt => opt.MapFrom(src => src.Location.Note));
+                .ForMember(dest => dest.LocationNote, opt => opt.MapFrom(src => src.Location.Note))
+                .ForMember(dest => dest.PlaceId, opt => opt.MapFrom(src => src.Location.PlaceId));
 
             CreateMap<Event, EventCreateDTO>()
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => new LocationResponseDTO
@@ -67,13 +69,15 @@ namespace EventZone.Services.Mapper
                     Latitude = src.Latitude,
                     Longitude = src.Longitude,
                     Display = src.LocationDisplay,
-                    Note = src.LocationNote
+                    Note = src.LocationNote,
+                    PlaceId = src.PlaceId
                 }))
                 .ReverseMap()
                 .ForMember(dest => dest.Latitude, opt => opt.MapFrom(src => src.Location.Latitude))
                 .ForMember(dest => dest.Longitude, opt => opt.MapFrom(src => src.Location.Longitude))
                 .ForMember(dest => dest.LocationDisplay, opt => opt.MapFrom(src => src.Location.Display))
-                .ForMember(dest => dest.LocationNote, opt => opt.MapFrom(src => src.Location.Note));
+                .ForMember(dest => dest.LocationNote, opt => opt.MapFrom(src => src.Location.Note))
+                .ForMember(dest => dest.PlaceId, opt => opt.MapFrom(src => src.Location.PlaceId));
 
             CreateMap<EventCategory, EventCategoryDTO>()
                 .ReverseMap()
