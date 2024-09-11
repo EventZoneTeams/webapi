@@ -8,6 +8,7 @@ using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -27,6 +28,8 @@ namespace EventZone.Repositories.Repositories
 
         private readonly RoleManager<Role> _roleManager;
         private readonly SignInManager<User> _signInManager;
+
+        private readonly ILogger<UserRepository> _logger;
 
         public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService,
             IClaimsService claimsService, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
@@ -245,29 +248,31 @@ namespace EventZone.Repositories.Repositories
             var principal = TokenTools.GetPrincipalFromExpiredToken(accessToken, _configuration);
             if (principal == null)
             {
+                _logger.LogError("Invalid access token or refresh token!");
                 throw new Exception("Invalid access token or refresh token!");
             }
+
+
 
             string accountId = principal.Identity.Name;
 
             var account = await _userManager.FindByIdAsync(accountId);
 
-            if (account == null || account.RefreshToken != refreshToken || account.RefreshTokenExpiryTime <= DateTime.Now)
+            if (account == null || account.RefreshToken != refreshToken || account.RefreshTokenExpiryTime <= _timeService.GetCurrentTime())
             {
+                _logger.LogError("Invalid access token or refresh token!");
                 throw new Exception("Invalid access token or refresh token!");
             }
 
-            var newAccessToken = GenerateJWTToken.CreateToken(principal.Claims.ToList(), _configuration, _timeService.GetCurrentTime());
-            var newRefreshToken = TokenTools.GenerateRefreshToken();
+            _logger.LogInformation("Current Time: " + _timeService.GetCurrentTime().ToString());
 
-            account.RefreshToken = newRefreshToken;
-            await _userManager.UpdateAsync(account);
+            var newAccessToken = GenerateJWTToken.CreateToken(principal.Claims.ToList(), _configuration, _timeService.GetCurrentTime());
 
             return new ResponseLoginModel
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
                 Expired = newAccessToken.ValidTo,
-                RefreshToken = newRefreshToken,
+                RefreshToken = refreshToken,
                 UserId = Guid.Parse(accountId)
             };
         }
