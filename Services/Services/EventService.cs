@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using EventZone.Domain.DTOs.EventDTOs;
-using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Domain.Enums;
 using EventZone.Repositories.Helper;
@@ -58,7 +57,7 @@ namespace EventZone.Services.Services
             }
 
             // If not in cache, query the database
-            var eventOrder = await _unitOfWork.EventRepository.GetByIdAsync(id);
+            var eventOrder = await _unitOfWork.EventRepository.GetByIdAsync(id, x => x.User);
 
             if (eventOrder == null)
             {
