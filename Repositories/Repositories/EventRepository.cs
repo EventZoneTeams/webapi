@@ -28,7 +28,8 @@ namespace EventZone.Repositories.Repositories
                 .Search(eventParams.SearchTerm)
                 .Filter(eventParams.EventCategoryId)
                 .FilterByEventDate(eventParams.EventStartDate, eventParams.EventEndDate)
-                .FilterByStatus(eventParams.Status.ToString());
+                .FilterByStatus(eventParams.Status.ToString())
+                .FilterByUserId(eventParams.UserId);
 
             return query;
         }

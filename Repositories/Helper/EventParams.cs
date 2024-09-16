@@ -10,5 +10,6 @@ namespace EventZone.Repositories.Helper
         public DateTime? EventStartDate { get; set; }
         public DateTime? EventEndDate { get; set; }
         public EventStatusEnums? Status { get; set; }
+        public Guid? UserId { get; set; }
     }
 }
