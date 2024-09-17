@@ -47,6 +47,8 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
+            ls -la
             cd /home/uydev/code/eventzone
+            ls -la
             docker compose pull
             docker compose up -d --build
