@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventZone.Repositories.Migrations
 {
     [DbContext(typeof(StudentEventForumDbContext))]
-    [Migration("20240821092334_add table EventBoardTaskAssignments")]
-    partial class addtableEventBoardTaskAssignments
+    [Migration("20240917030148_Initial DB")]
+    partial class InitialDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,6 +145,9 @@ namespace EventZone.Repositories.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PlaceId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
@@ -153,6 +156,9 @@ namespace EventZone.Repositories.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("isFree")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -377,6 +383,9 @@ namespace EventZone.Repositories.Migrations
 
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Priority")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -987,6 +996,9 @@ namespace EventZone.Repositories.Migrations
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("InStock")
                         .HasColumnType("int");
 
@@ -1397,7 +1409,7 @@ namespace EventZone.Repositories.Migrations
                     b.Property<bool?>("Gender")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsDeleted")
@@ -1444,15 +1456,15 @@ namespace EventZone.Repositories.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("University")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("UnsignFullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("WorkAt")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1617,25 +1629,25 @@ namespace EventZone.Repositories.Migrations
             modelBuilder.Entity("EventZone.Domain.Entities.BookedTicket", b =>
                 {
                     b.HasOne("EventZone.Domain.Entities.Event", "Event")
-                        .WithMany()
+                        .WithMany("BookedTickets")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EventZone.Domain.Entities.EventOrder", "EventOrder")
-                        .WithMany()
+                        .WithMany("BookedTickets")
                         .HasForeignKey("EventOrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EventZone.Domain.Entities.EventTicket", "EventTicket")
-                        .WithMany()
+                        .WithMany("BookedTickets")
                         .HasForeignKey("EventTicketId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EventZone.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("BookedTickets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1784,7 +1796,7 @@ namespace EventZone.Repositories.Migrations
             modelBuilder.Entity("EventZone.Domain.Entities.EventBoardTaskLabel", b =>
                 {
                     b.HasOne("EventZone.Domain.Entities.EventBoard", "EventBoard")
-                        .WithMany()
+                        .WithMany("EventBoardTaskLabels")
                         .HasForeignKey("EventBoardId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1960,7 +1972,7 @@ namespace EventZone.Repositories.Migrations
             modelBuilder.Entity("EventZone.Domain.Entities.EventTicket", b =>
                 {
                     b.HasOne("EventZone.Domain.Entities.Event", "Event")
-                        .WithMany()
+                        .WithMany("EventTickets")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2055,7 +2067,7 @@ namespace EventZone.Repositories.Migrations
             modelBuilder.Entity("EventZone.Domain.Entities.TransactionDetail", b =>
                 {
                     b.HasOne("EventZone.Domain.Entities.EventOrder", "EventOrder")
-                        .WithMany("TransactionDetail")
+                        .WithMany("TransactionDetails")
                         .HasForeignKey("EventOrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -2135,6 +2147,8 @@ namespace EventZone.Repositories.Migrations
 
             modelBuilder.Entity("EventZone.Domain.Entities.Event", b =>
                 {
+                    b.Navigation("BookedTickets");
+
                     b.Navigation("EventBoardLabels");
 
                     b.Navigation("EventBoards");
@@ -2153,6 +2167,8 @@ namespace EventZone.Repositories.Migrations
 
                     b.Navigation("EventProducts");
 
+                    b.Navigation("EventTickets");
+
                     b.Navigation("Posts");
                 });
 
@@ -2163,6 +2179,8 @@ namespace EventZone.Repositories.Migrations
                     b.Navigation("EventBoardLabelAssignments");
 
                     b.Navigation("EventBoardMembers");
+
+                    b.Navigation("EventBoardTaskLabels");
 
                     b.Navigation("EventBoardTasks");
                 });
@@ -2201,9 +2219,11 @@ namespace EventZone.Repositories.Migrations
 
             modelBuilder.Entity("EventZone.Domain.Entities.EventOrder", b =>
                 {
+                    b.Navigation("BookedTickets");
+
                     b.Navigation("EventOrderDetails");
 
-                    b.Navigation("TransactionDetail");
+                    b.Navigation("TransactionDetails");
                 });
 
             modelBuilder.Entity("EventZone.Domain.Entities.EventPackage", b =>
@@ -2220,6 +2240,11 @@ namespace EventZone.Repositories.Migrations
                     b.Navigation("ProductsInPackage");
                 });
 
+            modelBuilder.Entity("EventZone.Domain.Entities.EventTicket", b =>
+                {
+                    b.Navigation("BookedTickets");
+                });
+
             modelBuilder.Entity("EventZone.Domain.Entities.Post", b =>
                 {
                     b.Navigation("EventImages");
@@ -2234,6 +2259,8 @@ namespace EventZone.Repositories.Migrations
 
             modelBuilder.Entity("EventZone.Domain.Entities.User", b =>
                 {
+                    b.Navigation("BookedTickets");
+
                     b.Navigation("EventBoardMembers");
 
                     b.Navigation("EventBoardTaskAssignments");

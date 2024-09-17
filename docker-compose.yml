@@ -1,16 +1,15 @@
 ﻿services:
   webapi:
-    # image: ${DOCKER_REGISTRY-}eventzone.api
+    image: lequocuy/eventzone.api:latest
     container_name: eventzone.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:DefaultConnection=Server=eventzone.database;Database=eventzone;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true"
+      - "ConnectionStrings__DefaultConnection=Server=eventzone.database;Database=eventzone;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=true"
     build:
       context: .
       dockerfile: WebAPI/Dockerfile
     ports:
-      - "5000:5000"
-      # - "5001:5001"
+      - "8080:8080"
     depends_on:
       - eventzone.database
 
