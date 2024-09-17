@@ -17,7 +17,7 @@ namespace EventZone.Repositories.Utils
                 ValidateIssuer = false,
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:SecretKey"])),
-                ValidateLifetime = true //here we are saying that we don't care about the token's expiration date
+                ValidateLifetime = false //here we are saying that we don't care about the token's expiration date
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;

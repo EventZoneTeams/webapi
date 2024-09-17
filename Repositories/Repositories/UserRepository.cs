@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -31,16 +32,132 @@ namespace EventZone.Repositories.Repositories
 
         private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService,
-            IClaimsService claimsService, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public UserRepository(StudentEventForumDbContext templateDbContext, ICurrentTime timeService, IClaimsService claimsService, IConfiguration configuration, UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager, ILogger<UserRepository> logger)
         {
             _templateDbContext = templateDbContext;
             _timeService = timeService;
             _claimsService = claimsService;
+            _configuration = configuration;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
-            _configuration = configuration;
+            _logger = logger;
+        }
+
+        public async Task<ResponseLoginModel> RefreshToken(TokenModel token)
+        {
+            if (token == null)
+            {
+                throw new ArgumentNullException(nameof(token), "Token is null");
+            }
+
+            string? accessToken = token.AccessToken;
+            string? refreshToken = token.RefreshToken;
+
+            // Get principal from the expired token without validating lifetime
+            var principal = TokenTools.GetPrincipalFromExpiredToken(accessToken, _configuration);
+            if (principal == null)
+            {
+                _logger.LogError("Invalid access token or refresh token!");
+                throw new SecurityTokenException("Invalid access token or refresh token!");
+            }
+
+            // Retrieve user ID from principal
+            string accountId = principal.Identity.Name;
+
+            // Find user in database
+            var account = await _userManager.FindByIdAsync(accountId);
+            ValidateRefreshToken(account, refreshToken);
+
+            // Log the current time for debugging purposes
+            _logger.LogInformation("Current Time: " + _timeService.GetCurrentTime().ToString());
+
+            // Generate new access token
+            var newAccessToken = GenerateJWTToken.CreateToken(principal.Claims.ToList(), _configuration, _timeService.GetCurrentTime());
+
+            // Generate new refresh token for security purposes
+            var newRefreshToken = TokenTools.GenerateRefreshToken();
+            account.RefreshToken = newRefreshToken;
+            account.RefreshTokenExpiryTime = _timeService.GetCurrentTime().AddDays(int.Parse(_configuration["JWT:RefreshTokenValidityInDays"]));
+
+            // Update user with new refresh token and expiry time
+            await _userManager.UpdateAsync(account);
+
+            // Return the new tokens and expiration information
+            return new ResponseLoginModel
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
+                Expired = newAccessToken.ValidTo,
+                RefreshToken = newRefreshToken, // Return the newly generated refresh token
+                UserId = Guid.Parse(accountId)
+            };
+        }
+
+        private void ValidateRefreshToken(User account, string refreshToken)
+        {
+            if (account == null)
+            {
+                _logger.LogError("Account not found for the given token.");
+                throw new SecurityTokenException("Invalid access token or refresh token!");
+            }
+
+            if (account.RefreshToken != refreshToken)
+            {
+                _logger.LogError("Refresh token does not match the stored refresh token.");
+                throw new SecurityTokenException("Invalid access token or refresh token!");
+            }
+
+            if (account.RefreshTokenExpiryTime <= _timeService.GetCurrentTime())
+            {
+                _logger.LogError("Refresh token has expired.");
+                throw new SecurityTokenException("Invalid access token or refresh token!");
+            }
+        }
+
+        public async Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel User)
+        {
+            var UserExist = await _userManager.FindByEmailAsync(User.Email);
+            if (UserExist == null)
+            {
+                return null;
+            }
+
+            var result = await _signInManager.CheckPasswordSignInAsync(UserExist, User.Password, false);
+
+            if (result.Succeeded)
+            {
+                var roles = await _userManager.GetRolesAsync(UserExist);
+
+                var authClaims = new List<Claim> // add User vào claim
+                {
+                    new Claim(ClaimTypes.Name, UserExist.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                foreach (var role in roles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, role));
+                }
+                //generate refresh token
+                var refreshToken = TokenTools.GenerateRefreshToken();
+                _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
+                UserExist.RefreshToken = refreshToken;
+                UserExist.RefreshTokenExpiryTime = _timeService.GetCurrentTime().AddDays(refreshTokenValidityInDays);
+
+                await _userManager.UpdateAsync(UserExist); //update 2 jwt
+                var token = GenerateJWTToken.CreateToken(authClaims, _configuration, _timeService.GetCurrentTime());
+                return new ResponseLoginModel
+                {
+                    AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
+                    Expired = token.ValidTo,
+                    RefreshToken = refreshToken,
+                    UserId = UserExist.Id
+                };
+            }
+            else
+            {
+                throw new Exception("Invalid login attempt. Please check your password.");
+            }
         }
 
         public async Task<RoleInfoModel> GetRole(User User)
@@ -233,94 +350,6 @@ namespace EventZone.Repositories.Repositories
                 RefreshToken = refreshToken,
                 UserId = accountExist.Id
             };
-        }
-
-        public async Task<ResponseLoginModel> RefreshToken(TokenModel token)
-        {
-            if (token is null)
-            {
-                throw new Exception("Token is null");
-            }
-
-            string? accessToken = token.AccessToken;
-            string? refreshToken = token.RefreshToken;
-
-            var principal = TokenTools.GetPrincipalFromExpiredToken(accessToken, _configuration);
-            if (principal == null)
-            {
-                _logger.LogError("Invalid access token or refresh token!");
-                throw new Exception("Invalid access token or refresh token!");
-            }
-
-
-
-            string accountId = principal.Identity.Name;
-
-            var account = await _userManager.FindByIdAsync(accountId);
-
-            if (account == null || account.RefreshToken != refreshToken || account.RefreshTokenExpiryTime <= _timeService.GetCurrentTime())
-            {
-                _logger.LogError("Invalid access token or refresh token!");
-                throw new Exception("Invalid access token or refresh token!");
-            }
-
-            _logger.LogInformation("Current Time: " + _timeService.GetCurrentTime().ToString());
-
-            var newAccessToken = GenerateJWTToken.CreateToken(principal.Claims.ToList(), _configuration, _timeService.GetCurrentTime());
-
-            return new ResponseLoginModel
-            {
-                AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken),
-                Expired = newAccessToken.ValidTo,
-                RefreshToken = refreshToken,
-                UserId = Guid.Parse(accountId)
-            };
-        }
-
-        public async Task<ResponseLoginModel> LoginByEmailAndPassword(UserLoginModel User)
-        {
-            var UserExist = await _userManager.FindByEmailAsync(User.Email);
-            if (UserExist == null)
-            {
-                return null;
-            }
-
-            var result = await _signInManager.CheckPasswordSignInAsync(UserExist, User.Password, false);
-
-            if (result.Succeeded)
-            {
-                var roles = await _userManager.GetRolesAsync(UserExist);
-
-                var authClaims = new List<Claim> // add User vào claim
-                {
-                    new Claim(ClaimTypes.Name, UserExist.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                };
-
-                foreach (var role in roles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, role));
-                }
-                //generate refresh token
-                var refreshToken = TokenTools.GenerateRefreshToken();
-                _ = int.TryParse(_configuration["JWT:RefreshTokenValidityInDays"], out int refreshTokenValidityInDays);
-                UserExist.RefreshToken = refreshToken;
-                UserExist.RefreshTokenExpiryTime = _timeService.GetCurrentTime().AddDays(refreshTokenValidityInDays);
-
-                await _userManager.UpdateAsync(UserExist); //update 2 jwt
-                var token = GenerateJWTToken.CreateToken(authClaims, _configuration, _timeService.GetCurrentTime());
-                return new ResponseLoginModel
-                {
-                    AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
-                    Expired = token.ValidTo,
-                    RefreshToken = refreshToken,
-                    UserId = UserExist.Id
-                };
-            }
-            else
-            {
-                throw new Exception("Invalid login attempt. Please check your password.");
-            }
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
