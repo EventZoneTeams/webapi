@@ -48,16 +48,16 @@ namespace EventZone.WebAPI.Controllers
         /// <response code="200">Returns a success message with user data if registration is successful.</response>
         /// <response code="400">Returns an error message if registration fails (e.g., email already exists, invalid data).</response>
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync([FromForm] UserSignupModel userSignup)
+        public async Task<IActionResult> RegisterAsync([FromBody] UserSignupModel userSignup)
         {
             try
             {
-                string imageUrl = null;
-                if (userSignup.Image != null)
-                {
-                    imageUrl = await _imageService.UploadImageAsync(userSignup.Image, "event-thumbnails");
-                    userSignup.ImageUrl = imageUrl;
-                }
+                //string imageUrl = null;
+                //if (userSignup.Image != null)
+                //{
+                //    imageUrl = await _imageService.UploadImageAsync(userSignup.Image, "event-thumbnails");
+                //    userSignup.ImageUrl = imageUrl;
+                //}
                 var data = await _userService.ResigerAsync(userSignup, "STUDENT");
                 if (data.IsSuccess)
                 {

@@ -28,11 +28,8 @@ namespace EventZone.Domain.DTOs.UserDTOs
         [Required(ErrorMessage = "Gender is required!")]
         public string? Gender { get; set; }
 
-        public IFormFile? Image { get; set; }
-
         public string? WorkAt { get; set; }
 
-        [JsonIgnore]
         public string? ImageUrl { get; set; }
     }
 }
