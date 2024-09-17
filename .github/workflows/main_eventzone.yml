@@ -2,9 +2,9 @@ name: Build and deploy ASP.Net Core app to VPS - EVENTZONE
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
