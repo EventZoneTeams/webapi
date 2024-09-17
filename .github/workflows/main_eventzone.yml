@@ -49,6 +49,5 @@ jobs:
           script: |
             ls -la
             cd /home/uydev/code/eventzone
-            ls -la
             docker compose pull
-            docker compose up -d --build
+            docker compose up -d
