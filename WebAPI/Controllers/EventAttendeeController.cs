@@ -74,7 +74,7 @@ namespace EventZone.WebAPI.Controllers
             {
                 var tickets = await _attendeeService.GetAllBookedTicketByOrderID(id);
 
-                return Ok(tickets);
+                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(tickets, "Updated successfully: " + id));
             }
             catch (Exception ex)
             {
