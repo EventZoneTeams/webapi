@@ -9,6 +9,8 @@ namespace EventZone.Repositories.Interfaces
     {
         Task<List<ProductImage>> AddImagesForProduct(Guid productId, List<ImageReturnDTO> images);
 
+        Task<List<ProductImage>> AddImagesStringForProduct(Guid productId, List<string> images);
+
         Task<List<EventProduct>> GetAllProductsByEvent(Guid eventId);
 
         Task<List<EventProduct>> GetAllProductsWithImages();

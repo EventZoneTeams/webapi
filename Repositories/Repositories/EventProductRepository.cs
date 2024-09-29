@@ -66,6 +66,40 @@ namespace EventZone.Repositories.Repositories
             }
         }
 
+        public async Task<List<ProductImage>> AddImagesStringForProduct(Guid productId, List<string> images)
+        {
+            try
+            {
+                var product = await GetByIdAsync(productId);
+                if (product == null)
+                {
+                    return null;
+                }
+                var newImages = new List<ProductImage>();
+                foreach (var image in images)
+                {
+                    if (image == null)
+                    {
+                        continue;
+                    }
+                    newImages.Add(new ProductImage()
+                    {
+                        ProductId = product.Id,
+                        ImageUrl = image,
+                        Name = image,
+                        EventProduct = product
+                    });
+                }
+
+                await _context.AddRangeAsync(newImages);
+                return newImages;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<Pagination<EventProduct>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel)
         {
             try

@@ -26,7 +26,7 @@ namespace EventZone.Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ApiResult<EventProductDetailDTO>> CreateEventProductAsync(EventProductCreateDTO newProduct, List<ImageReturnDTO> images)
+        public async Task<ApiResult<EventProductDetailDTO>> CreateEventProductAsync(EventProductCreateDTO newProduct, List<string> images)
         {
             //check existing event
             if (await _unitOfWork.EventRepository.GetByIdAsync(newProduct.EventId) == null)
@@ -49,7 +49,7 @@ namespace EventZone.Services.Services
             var check = await _unitOfWork.SaveChangeAsync();
             if (check > 0)
             {
-                var imagerResult = await _unitOfWork.EventProductRepository.AddImagesForProduct(result.Id, images);
+                var imagerResult = await _unitOfWork.EventProductRepository.AddImagesStringForProduct(result.Id, images);
                 check = await _unitOfWork.SaveChangeAsync();
                 returnData.ProductImages = _mapper.Map<List<ImageReturnDTO>>(imagerResult);
                 // Clear cache as new is added

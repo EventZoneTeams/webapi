@@ -7,7 +7,7 @@ namespace EventZone.Services.Interface
 {
     public interface IEventProductService
     {
-        Task<ApiResult<EventProductDetailDTO>> CreateEventProductAsync(EventProductCreateDTO newProduct, List<ImageReturnDTO> images);
+        Task<ApiResult<EventProductDetailDTO>> CreateEventProductAsync(EventProductCreateDTO newProduct, List<string> images);
 
         Task<List<EventProductDetailDTO>> GetAllProductsAsync();
 
