@@ -20,6 +20,6 @@ namespace EventZone.Domain.DTOs.EventProductDTOs
         //  [Required(ErrorMessage = "QuantityInStock is required!")]
         public int QuantityInStock { get; set; }
 
-        public List<IFormFile>? fileImages { get; set; }
+        public List<string>? ImageUrls { get; set; }
     }
 }

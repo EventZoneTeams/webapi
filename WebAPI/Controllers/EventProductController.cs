@@ -120,25 +120,25 @@ namespace EventZone.WebAPI.Controllers
 
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost("event-products")]
-        public async Task<IActionResult> CreateAsync([FromForm] EventProductCreateDTO model)
+        public async Task<IActionResult> CreateAsync(EventProductCreateDTO model)
         {
             try
             {
-                if (model.fileImages == null || model.fileImages.Count == 0)
-                {
-                    return BadRequest("No files were provided.");
-                }
-                else
-                {
-                }
-                var uploadedFileUrls = await _imageService.UploadMultipleImagesAsync(model.fileImages, "test-image-multiple");
+                //if (model.fileImages == null || model.fileImages.Count == 0)
+                //{
+                //    return BadRequest("No files were provided.");
+                //}
+                //else
+                //{
+                //}
+                //var uploadedFileUrls = await _imageService.UploadMultipleImagesAsync(model.fileImages, "test-image-multiple");
 
-                if (uploadedFileUrls.Count == 0)
-                {
-                    return BadRequest("Failed to upload any files.");
-                }
+                //if (uploadedFileUrls.Count == 0)
+                //{
+                //    return BadRequest("Failed to upload any files.");
+                //}
 
-                var result = await _eventProductService.CreateEventProductAsync(model, uploadedFileUrls);
+                var result = await _eventProductService.CreateEventProductAsync(model, model.ImageUrls);
                 return Ok(result);
             }
             catch (Exception ex)
