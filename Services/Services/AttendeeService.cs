@@ -26,13 +26,15 @@ namespace EventZone.Services.Services
         private readonly IMapper _mapper;
         private readonly IRedisService _redisService;
         private readonly IClaimsService _claimsService;
+        private readonly IWalletService _walletService;
 
-        public AttendeeService(IUnitOfWork unitOfWork, IMapper mapper, IRedisService redisService, IClaimsService claimsService)
+        public AttendeeService(IUnitOfWork unitOfWork, IMapper mapper, IRedisService redisService, IClaimsService claimsService, IWalletService walletService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _redisService = redisService;
             _claimsService = claimsService;
+            _walletService = walletService;
         }
 
         public async Task<List<BookedTicketDetailDTO>> BookANewTicketForEvent(BookedTicketRequestDTO bookedTicketDTO)
@@ -57,6 +59,8 @@ namespace EventZone.Services.Services
                 {
                     throw new Exception("User is not sign-in");
                 }
+                // create new order for purchase ticket
+
                 var newOrder = new EventOrder
                 {
                     EventId = existingEvent.Id,
@@ -65,9 +69,11 @@ namespace EventZone.Services.Services
                     OrderType = "TICKET",
                     Status = EventOrderStatusEnums.PENDING.ToString(),
                 };
-
                 newOrder = await _unitOfWork.EventOrderRepository.AddAsync(newOrder);
                 var saveCheck = await _unitOfWork.SaveChangeAsync();
+                // update user wallet amount
+                var walletTransaction = await _walletService.PurchaseOrder(newOrder.Id, user.Id);
+                // purchase successfully, create booked ticket
                 var newBookedTicketList = new List<BookedTicket>();
                 if (saveCheck > 0)
                 {
@@ -85,7 +91,7 @@ namespace EventZone.Services.Services
 
                         newBookedTicketList.Add(newBookedTicketDTO);
                     }
-                    existingTicket.InStock -= bookedTicketDTO.Quantity;
+                    existingTicket.InStock -= bookedTicketDTO.Quantity; // update stock quantity
                     await _unitOfWork.EventTicketRepository.Update(existingTicket);
                     var result = await _unitOfWork.AttendeeRepository.AddRangeAsync(newBookedTicketList);
                     saveCheck = await _unitOfWork.SaveChangeAsync();
