@@ -9,6 +9,7 @@ using EventZone.Repositories.Models.TicketModels;
 using EventZone.Services.Interface;
 using EventZone.Services.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -52,7 +53,7 @@ namespace EventZone.WebAPI.Controllers
             {
                 var tickets = await _attendeeService.GetAllBookedTickets();
 
-                return Ok(tickets);
+                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(tickets, "get ticket successfully"));
             }
             catch (Exception ex)
             {
@@ -95,7 +96,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     return NotFound(ApiResult<BookedTicketDetailDTO>.Error(null, "There are no existed booked id: " + id));
                 }
-                return Ok(result);
+                return Ok(ApiResult<BookedTicketDetailDTO>.Succeed(result.Data, "Updated successfully: " + id));
             }
             catch (Exception ex)
             {
@@ -117,7 +118,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     return NotFound(ApiResult<BookedTicketDetailDTO>.Error(null, "There are no existed booked id: " + id));
                 }
-                return Ok(result);
+                return Ok(ApiResult<BookedTicketDetailDTO>.Succeed(result.Data, "Check in successfully: " + id));
             }
             catch (Exception ex)
             {
