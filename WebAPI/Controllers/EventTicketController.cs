@@ -7,6 +7,7 @@ using EventZone.Repositories.Helper;
 using EventZone.Services.Interface;
 using EventZone.Services.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EventZone.WebAPI.Controllers
@@ -43,7 +44,7 @@ namespace EventZone.WebAPI.Controllers
         /// <response code="400">Error during reading data</response>
         /// <response code="404">Event Id is not exist</response>
         [HttpGet("events/{id}/event-tickets")]
-        public async Task<ActionResult<List<EventOrderReponseDTO>>> GetEventTickets(Guid id)
+        public async Task<ActionResult> GetEventTickets(Guid id)
         {
             try
             {
@@ -52,7 +53,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed event id: " + id));
                 }
-                return Ok(tickets);
+                return Ok(ApiResult<List<EventTicketDetailDTO>>.Succeed(tickets, "get list successfully"));
             }
             catch (Exception ex)
             {
@@ -74,7 +75,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
                 }
-                return Ok(result);
+                return Ok(ApiResult<EventTicketDetailDTO>.Succeed(result.Data, "ticket deleted successfully"));
             }
             catch (Exception ex)
             {
@@ -92,11 +93,11 @@ namespace EventZone.WebAPI.Controllers
             try
             {
                 var result = await _eventTicketService.GetTicketById(id);
-                if (result == null)
+                if (result != null)
                 {
-                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
+                    return Ok(ApiResult<EventTicketDetailDTO>.Succeed(result.Data, "get ticket successfully"));
                 }
-                return Ok(result);
+                return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
             }
             catch (Exception ex)
             {
@@ -119,7 +120,7 @@ namespace EventZone.WebAPI.Controllers
                     return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
                 }
 
-                return Ok(result);
+                return Ok(ApiResult<EventTicketDetailDTO>.Succeed(result.Data, "update ticket successfully"));
             }
             catch (Exception ex)
             {
