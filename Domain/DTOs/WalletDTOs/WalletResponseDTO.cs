@@ -2,8 +2,8 @@
 {
     public class WalletResponseDTO
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public string WalletType { get; set; }
         public long Balance { get; set; }
     }
