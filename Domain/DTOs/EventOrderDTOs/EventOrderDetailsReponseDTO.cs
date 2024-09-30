@@ -2,9 +2,9 @@
 {
     public class EventOrderDetailsReponseDTO
     {
-        public int Id { get; set; }
-        public int PackageId { get; set; }
-        public int EventOrderId { get; set; }
+        public Guid Id { get; set; }
+        public Guid EventProductId { get; set; }
+        public Guid EventOrderId { get; set; }
         public int Quantity { get; set; }
         public long Price { get; set; }
     }

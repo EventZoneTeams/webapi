@@ -201,12 +201,11 @@ namespace EventZone.WebAPI.Controllers
                     vnpayResponseModel.vnp_BankTranNo,
                     vnpayResponseModel.vnp_CardType, requestNameValue);
 
-                return Ok(iPNReponse);
 
                 //Get root path and read index.html
                 var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Data", "index.html");
 
-                using (FileStream fs = System.IO.File.Open(path, FileMode.Open, FileAccess.ReadWrite))
+                using (FileStream fs = System.IO.File.Open(path, FileMode.Open, FileAccess.Read))
                 {
                     using (StreamReader sr = new StreamReader(fs))
                     {
@@ -247,7 +246,7 @@ namespace EventZone.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                return Content(ex.ToString(), "text/html");
+                return Content(ex.ToString() + "Error", "text/html");
             }
         }
 
