@@ -203,7 +203,7 @@ namespace EventZone.WebAPI.Controllers
                 //Get root path and read index.html
                 var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Data", "index.html");
 
-                using (FileStream fs = System.IO.File.Open(path, FileMode.Open, FileAccess.ReadWrite))
+                using (FileStream fs = System.IO.File.Open(path, FileMode.Open, FileAccess.Read))
                 {
                     using (StreamReader sr = new StreamReader(fs))
                     {
