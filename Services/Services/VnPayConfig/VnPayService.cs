@@ -6,7 +6,6 @@ using EventZone.Repositories.Utils;
 using EventZone.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Owin.Logging;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
@@ -120,20 +119,10 @@ namespace EventZone.Services.Services.VnPayConfig
             var checkSignature = ValidateSignature(vnpSecureHash, vnp_HashSecret);
             if (checkSignature)
             {
-                // Sử dụng Guid.TryParse để tránh lỗi parse nếu chuỗi không hợp lệ
-                Guid parsedGuid;
-
-                if (Guid.TryParse(vnpTxnRef, out parsedGuid))
-                {
-                    throw new Exception("Parse successfully");
-                }
-                else
-                {
-                    throw new Exception("Parse failed");
-                }
-
-                // Lấy tất cả các transaction từ cơ sở dữ liệu
+                _logger.LogInformation("Valid signature!");
                 var allTransactions = await _unitOfWork.TransactionRepository.GetAllAsync();
+
+                _logger.LogInformation(vnpTxnRef);
 
                 // Tìm transaction bằng cách chuyển đổi Guid thành chuỗi và so sánh
                 var foundTransaction = allTransactions.FirstOrDefault(t => t.Id.ToString() == vnpTxnRef);
