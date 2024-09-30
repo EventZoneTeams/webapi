@@ -10,6 +10,8 @@
 
         public virtual Event Event { get; set; }
         public virtual ICollection<ProductInPackage> ProductsInPackage { get; set; }
+        public virtual ICollection<EventOrderDetail> EventOrderDetails { get; set; }
+
         public virtual ICollection<ProductImage> ProductImages { get; set; }
     }
 }
