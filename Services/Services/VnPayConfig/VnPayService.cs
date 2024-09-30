@@ -5,6 +5,8 @@ using EventZone.Repositories.Interfaces;
 using EventZone.Repositories.Utils;
 using EventZone.Services.Interface;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Owin.Logging;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
@@ -19,8 +21,16 @@ namespace EventZone.Services.Services.VnPayConfig
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWalletService _walletService;
         private readonly INotificationService _notificationService;
+        private readonly ILogger<VnPayService> _logger;
 
-        public VnPayService(IConfiguration configuration, IClaimsService claimsService, ICurrentTime currentTime, IUnitOfWork unitOfWork, IWalletService walletService, INotificationService notificationService)
+        public VnPayService(
+       IConfiguration configuration,
+       IClaimsService claimsService,
+       ICurrentTime currentTime,
+       IUnitOfWork unitOfWork,
+       IWalletService walletService,
+       INotificationService notificationService,
+       ILogger<VnPayService> logger) // Thêm ILogger vào constructor
         {
             _configuration = configuration;
             _claimsService = claimsService;
@@ -28,6 +38,7 @@ namespace EventZone.Services.Services.VnPayConfig
             _unitOfWork = unitOfWork;
             _walletService = walletService;
             _notificationService = notificationService;
+            _logger = logger; // Gán logger vào biến cục bộ
         }
 
         public SortedList<string, string> requestData
@@ -109,14 +120,17 @@ namespace EventZone.Services.Services.VnPayConfig
             var checkSignature = ValidateSignature(vnpSecureHash, vnp_HashSecret);
             if (checkSignature)
             {
-                try
+                if (!string.IsNullOrEmpty(vnpTxnRef) && vnpTxnRef.Length == 36 && vnpTxnRef.Contains("-"))
                 {
                     var txnId = Guid.Parse(vnpTxnRef);
                     iPNReponse.transactionId = txnId;
                 }
-                catch (Exception ex)
+                else
                 {
-                    return iPNReponse;
+                    // Ghi log khi gặp lỗi chuyển đổi
+                    _logger.LogWarning($"Invalid GUID format for vnpTxnRef: {vnpTxnRef}");
+                    iPNReponse.message = "Transaction reference is not in a valid GUID format.";
+                    // Tiếp tục luồng mà không dừng chương trình
                 }
                 var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(iPNReponse.transactionId);
                 if (transaction == null)
