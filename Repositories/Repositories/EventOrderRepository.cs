@@ -57,26 +57,26 @@ namespace EventZone.Repositories.Repositories
                     List<EventOrderDetail> eventOrderDetails = new List<EventOrderDetail>();
                     foreach (var item in orderDetails)
                     {
-                        var package = await _context.EventPackages.FindAsync(item.PackageId);
-                        if (package == null)
+                        var product = await _context.EventProducts.FindAsync(item.EventProductId);
+                        if (product == null)
                         {
                             throw new Exception("Package not found");
                         }
 
                         var orderDetail = new EventOrderDetail
                         {
-                            PackageId = item.PackageId,
+                            EventProductId = item.EventProductId,
                             EventOrderId = newOrder.Id,
                             Quantity = item.Quantity,
-                            Price = package.TotalPrice,
+                            Price = product.Price,
                             EventOrder = newOrder,
-                            EventPackage = package,
+                            EventProduct = product,
                             CreatedAt = _timeService.GetCurrentTime(),
                             CreatedBy = _claimsService.GetCurrentUserId,
                         };
 
                         eventOrderDetails.Add(orderDetail);
-                        newOrder.TotalAmount += package.TotalPrice * item.Quantity;
+                        newOrder.TotalAmount += product.Price * item.Quantity;
                     }
 
                     _context.Entry(newOrder).State = EntityState.Modified;

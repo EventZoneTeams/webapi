@@ -2,7 +2,7 @@
 {
     public class CreateEventOrderDetailsReponseDTO
     {
-        public int PackageId { get; set; }
-        public int Quantity { get; set; }
+        public Guid EventProductId { get; set; }
+        public int Quantity { get; set; } = 1;
     }
 }
