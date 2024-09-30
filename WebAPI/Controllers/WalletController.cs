@@ -186,6 +186,8 @@ namespace EventZone.WebAPI.Controllers
                 var htmlString = string.Empty;
                 var requestNameValue = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
 
+                return Ok(vnpayResponseModel.vnp_TxnRef);
+
                 IPNReponse iPNReponse = await _vnPayService.IPNReceiver(
                     vnpayResponseModel.vnp_TmnCode,
                     vnpayResponseModel.vnp_SecureHash,
