@@ -120,6 +120,18 @@ namespace EventZone.Services.Services.VnPayConfig
             var checkSignature = ValidateSignature(vnpSecureHash, vnp_HashSecret);
             if (checkSignature)
             {
+                // Sử dụng Guid.TryParse để tránh lỗi parse nếu chuỗi không hợp lệ
+                Guid parsedGuid;
+
+                if (Guid.TryParse(vnpTxnRef, out parsedGuid))
+                {
+                    throw new Exception("Parse successfully");
+                }
+                else
+                {
+                    throw new Exception("Parse failed");
+                }
+
                 // Lấy tất cả các transaction từ cơ sở dữ liệu
                 var allTransactions = await _unitOfWork.TransactionRepository.GetAllAsync();
 
