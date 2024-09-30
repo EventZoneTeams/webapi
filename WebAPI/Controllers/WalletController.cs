@@ -199,6 +199,8 @@ namespace EventZone.WebAPI.Controllers
                     vnpayResponseModel.vnp_BankTranNo,
                     vnpayResponseModel.vnp_CardType, requestNameValue);
 
+                return Ok(iPNReponse);
+
                 //Get root path and read index.html
                 var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Data", "index.html");
 
