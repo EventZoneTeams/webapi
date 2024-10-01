@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
-using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EventZone.Services.Services
 {
@@ -18,13 +11,11 @@ namespace EventZone.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IRedisService _redisService;
 
-        public EventTicketService(IUnitOfWork unitOfWork, IMapper mapper, IRedisService redisService)
+        public EventTicketService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            _redisService = redisService;
         }
 
         public async Task<EventTicketDetailDTO> CreateNewTicketAsync(EventTicketDTO createTicket)
@@ -43,7 +34,6 @@ namespace EventZone.Services.Services
             var check = await _unitOfWork.SaveChangeAsync();
             if (check > 0)
             {
-                await _redisService.DeleteKeyAsync(CacheKeys.EventTickets);
                 return _mapper.Map<EventTicketDetailDTO>(result);
             }
             else
@@ -55,32 +45,16 @@ namespace EventZone.Services.Services
         public async Task<List<EventTicketDetailDTO>> GetAllTicketsAsync()
         {
             List<EventTicketDetailDTO> result;
+            // Nếu cache không tồn tại, truy vấn từ cơ sở dữ liệu
+            var eventProducts = await _unitOfWork.EventTicketRepository.GetAllAsync();
 
-            // Bước 1: Kiểm tra cache
-            var cachedCategories = await _redisService.GetStringAsync(CacheKeys.EventTickets);
-            if (!string.IsNullOrEmpty(cachedCategories) && cachedCategories.Count() > 0)
-            {
-                // Nếu cache tồn tại, giải mã và sử dụng dữ liệu từ cache
-                result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EventTicketDetailDTO>>(cachedCategories);
-            }
-            else
-            {
-                // Nếu cache không tồn tại, truy vấn từ cơ sở dữ liệu
-                var eventProducts = await _unitOfWork.EventTicketRepository.GetAllAsync();
-
-                result = _mapper.Map<List<EventTicketDetailDTO>>(eventProducts);
-
-                // Lưu kết quả vào cache
-                var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-                await _redisService.SetStringAsync(CacheKeys.EventTickets, serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
-            }
+            result = _mapper.Map<List<EventTicketDetailDTO>>(eventProducts);
 
             return result;
         }
 
         public async Task<List<EventTicketDetailDTO>> GetAllTicketsByEventIdAsync(Guid eventId)
         {
-            //check existing event
             if (await _unitOfWork.EventRepository.GetByIdAsync(eventId) == null)
             {
                 return null; // handle not found event exception
@@ -105,11 +79,6 @@ namespace EventZone.Services.Services
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
                 {
-                    // Clear specific cache key
-                    await _redisService.DeleteKeyAsync(CacheKeys.EventTicket(ticketId));
-                    // Clear general list cache
-                    await _redisService.DeleteKeyAsync(CacheKeys.EventTickets);
-
                     return new ApiResult<EventTicketDetailDTO>()
                     {
                         IsSuccess = true,
@@ -130,20 +99,6 @@ namespace EventZone.Services.Services
 
         public async Task<ApiResult<EventTicketDetailDTO>> GetTicketById(Guid id)
         {
-            // Try to get from cache
-            var cachedTicket = await _redisService.GetStringAsync(CacheKeys.EventTicket(id));
-            if (!string.IsNullOrEmpty(cachedTicket))
-            {
-                var product = Newtonsoft.Json.JsonConvert.DeserializeObject<EventTicketDetailDTO>(cachedTicket);
-                return new ApiResult<EventTicketDetailDTO>()
-                {
-                    IsSuccess = true,
-                    Message = "Found successfully product " + id,
-                    Data = product
-                };
-            }
-
-            // If not in cache, query the database
             var eventProduct = await _unitOfWork.EventTicketRepository.GetByIdAsync(id, x => x.Event);
 
             if (eventProduct == null)
@@ -153,9 +108,6 @@ namespace EventZone.Services.Services
 
             var result = _mapper.Map<EventTicketDetailDTO>(eventProduct);
 
-            // Cache the result
-            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-            await _redisService.SetStringAsync(CacheKeys.EventProduct(id), serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
             return new ApiResult<EventTicketDetailDTO>()
             {
                 IsSuccess = true,
@@ -175,11 +127,6 @@ namespace EventZone.Services.Services
                 var result = await _unitOfWork.SaveChangeAsync();
                 if (result > 0)
                 {
-                    // Clear specific cache key
-                    await _redisService.DeleteKeyAsync(CacheKeys.EventTicket(id));
-                    // Clear general list cache
-                    await _redisService.DeleteKeyAsync(CacheKeys.EventTickets);
-
                     return ApiResult<EventTicketDetailDTO>
                         .Succeed(_mapper.Map<EventTicketDetailDTO>(ticket), "Product " + id + " Removed successfully");
                 }
