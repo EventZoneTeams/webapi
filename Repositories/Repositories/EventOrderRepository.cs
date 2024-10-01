@@ -51,7 +51,7 @@ namespace EventZone.Repositories.Repositories
                         OrderType = "PRODUCT",
                     };
 
-                    await _context.EventOrders.AddAsync(newOrder);
+                    newOrder = await AddAsync(newOrder);
                     await _context.SaveChangesAsync();
 
                     List<EventOrderDetail> eventOrderDetails = new List<EventOrderDetail>();
@@ -86,10 +86,10 @@ namespace EventZone.Repositories.Repositories
 
                         eventOrderDetails.Add(orderDetail);
                         newOrder.TotalAmount += product.Price * item.Quantity;
+                        _context.EventProducts.Update(product);
                     }
 
                     // Cập nhật lại trạng thái sản phẩm sau khi trừ số lượng
-                    _context.EventProducts.UpdateRange(orderDetails.Select(od => od.EventProduct));
 
                     _context.Entry(newOrder).State = EntityState.Modified;
                     await _context.EventOrderDetails.AddRangeAsync(eventOrderDetails);
