@@ -39,7 +39,6 @@ namespace EventZone.Repositories.Repositories
                     UserId = userId,
                     WalletType = WalletTypeEnums.PERSONAL.ToString(),
                     Balance = 0
-
                 };
                 await AddAsync(newPersonalWallet);
                 wallets.Add(newPersonalWallet);
@@ -54,7 +53,6 @@ namespace EventZone.Repositories.Repositories
                     UserId = userId,
                     WalletType = WalletTypeEnums.ORGANIZATIONAL.ToString(),
                     Balance = 0
-
                 };
                 await AddAsync(newOrganizationWallet);
                 wallets.Add(newOrganizationWallet);
@@ -64,12 +62,14 @@ namespace EventZone.Repositories.Repositories
 
             return wallets;
         }
+
         public async Task<Wallet> GetWalletByUserIdAndType(Guid userId, WalletTypeEnums walletType)
         {
             var wallets = await GetListWalletByUserId(userId);
             var wallet = await _context.Wallets.FirstOrDefaultAsync(x => x.UserId == userId && x.WalletType.ToUpper() == walletType.ToString().ToUpper());
             return wallet;
         }
+
         // Deposit money to wallet
         public async Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, long amount)
         {
@@ -214,6 +214,7 @@ namespace EventZone.Repositories.Repositories
                 }
             }
         }
+
         public async Task<Transaction> ConfirmTransaction(Guid transactionId)
         {
             var transaction = await _context.Transactions.FirstOrDefaultAsync(x => x.Id == transactionId);
@@ -237,6 +238,7 @@ namespace EventZone.Repositories.Repositories
                     case TransactionTypeEnums.DEPOSIT:
                         wallet.Balance += transaction.Amount;
                         break;
+
                     case TransactionTypeEnums.WITHDRAW:
                         wallet.Balance -= transaction.Amount;
                         if (wallet.Balance < 0)
@@ -244,6 +246,7 @@ namespace EventZone.Repositories.Repositories
                             throw new Exception("WITHDRAW: Balance is not enough");
                         }
                         break;
+
                     case TransactionTypeEnums.PURCHASE:
                         wallet.Balance -= transaction.Amount;
                         if (wallet.Balance < 0)
@@ -256,6 +259,7 @@ namespace EventZone.Repositories.Repositories
                         order.Status = EventOrderStatusEnums.PAID.ToString();
                         _context.EventOrders.Update(order);
                         break;
+
                     default:
                         break;
                 }

@@ -16,14 +16,16 @@ namespace EventZone.Services.Services
         private readonly IClaimsService _claimsService;
         private readonly INotificationService _notificationService;
         private readonly IRedisService _redisService;
+        private readonly IWalletService _walletService;
 
-        public EventOrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, INotificationService notificationService, IRedisService redisService)
+        public EventOrderService(IUnitOfWork unitOfWork, IMapper mapper, IClaimsService claimsService, INotificationService notificationService, IRedisService redisService, IWalletService walletService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _claimsService = claimsService;
             _notificationService = notificationService;
             _redisService = redisService;
+            _walletService = walletService;
         }
 
         public async Task<EventOrderReponseDTO> GetEventOrderById(Guid orderId) // old version
@@ -85,7 +87,8 @@ namespace EventZone.Services.Services
 
             var newOrderDetailsList = _mapper.Map<List<EventOrderDetail>>(order.EventOrderDetails);
             var orderResponse = await _unitOfWork.EventOrderRepository.CreateOrderWithOrderDetails(order.EventId, currentUser, newOrderDetailsList);
-
+            // update user wallet amount
+            var walletTransaction = await _walletService.PurchaseOrder(orderResponse.Id, user.Id);
             // Send notification
             //var notificationToUser = new Notification
             //{

@@ -60,8 +60,17 @@ namespace EventZone.Repositories.Repositories
                         var product = await _context.EventProducts.FindAsync(item.EventProductId);
                         if (product == null)
                         {
-                            throw new Exception("Package not found");
+                            throw new Exception("Product not found");
                         }
+
+                        // Kiểm tra số lượng sản phẩm trong kho
+                        if (product.QuantityInStock < item.Quantity)
+                        {
+                            throw new Exception($"Product '{product.Name}' does not have enough stock. Available: {product.QuantityInStock}");
+                        }
+
+                        // Trừ số lượng trong kho của sản phẩm
+                        product.QuantityInStock -= item.Quantity;
 
                         var orderDetail = new EventOrderDetail
                         {
@@ -78,6 +87,9 @@ namespace EventZone.Repositories.Repositories
                         eventOrderDetails.Add(orderDetail);
                         newOrder.TotalAmount += product.Price * item.Quantity;
                     }
+
+                    // Cập nhật lại trạng thái sản phẩm sau khi trừ số lượng
+                    _context.EventProducts.UpdateRange(orderDetails.Select(od => od.EventProduct));
 
                     _context.Entry(newOrder).State = EntityState.Modified;
                     await _context.EventOrderDetails.AddRangeAsync(eventOrderDetails);
