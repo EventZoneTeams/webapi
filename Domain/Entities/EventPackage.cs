@@ -10,7 +10,8 @@
         public string? Description { get; set; }
 
         public virtual Event Event { get; set; }
-        public virtual ICollection<EventOrderDetail> EventOrderDetails { get; set; }
+
+        //  public virtual ICollection<EventOrderDetail> EventOrderDetails { get; set; }
         public virtual ICollection<ProductInPackage> ProductsInPackage { get; set; }
     }
 }

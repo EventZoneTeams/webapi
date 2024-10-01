@@ -9,7 +9,7 @@
         public string vnp_OrderInfo { get; set; } = string.Empty;
         public string vnp_TransactionNo { get; set; } = string.Empty;
         public string vnp_TransactionStatus { get; set; } = string.Empty;
-        public string vnp_TxnRef { get; set; } = string.Empty;
+        public string? vnp_TxnRef { get; set; }
         public string vnp_SecureHashType { get; set; } = string.Empty;
         public string vnp_SecureHash { get; set; } = string.Empty;
         public string vnp_Amount { get; set; }
