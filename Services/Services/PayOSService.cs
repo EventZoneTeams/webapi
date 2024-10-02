@@ -54,6 +54,8 @@ namespace EventZone.Services.Services
             _logger.LogInformation(JsonConvert.SerializeObject(payOSWebhook));
             _logger.LogInformation("Received webhook with Code: {Code}, Success: {Success}", payOSWebhook.Code, payOSWebhook.Success);
 
+            await _payOS.confirmWebhook("https://api.eventzone.id.vn/api/v1/webhook-payos");
+
             // Validate the webhook signature
             if (!PayOSUtils.IsValidData(payOSWebhook, payOSWebhook.Signature))
             {
