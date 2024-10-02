@@ -9,6 +9,7 @@ using EventZone.Services.Interface;
 using EventZone.Services.Services;
 using EventZone.Services.Services.VnPayConfig;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Reflection;
 using System.Web;
 
@@ -24,8 +25,9 @@ namespace EventZone.WebAPI.Controllers
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
         private readonly IPayOSService _payOSService;
+        private readonly ILogger<WalletController> _logger;
 
-        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService, IClaimsService claimsService, INotificationService notificationService, IPayOSService payOSService)
+        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService, IClaimsService claimsService, INotificationService notificationService, IPayOSService payOSService, ILogger<WalletController> logger)
         {
             _walletService = walletService;
             _mapper = mapper;
@@ -33,6 +35,7 @@ namespace EventZone.WebAPI.Controllers
             _claimsService = claimsService;
             _notificationService = notificationService;
             _payOSService = payOSService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -335,13 +338,31 @@ namespace EventZone.WebAPI.Controllers
         {
             try
             {
-                _payOSService.ReturnWebhook(payload);
-                return Ok(new { status = 200 });
+                // Log the incoming webhook payload
+                _logger.LogInformation("Received PayOS Webhook Payload: {Payload}", JsonConvert.SerializeObject(payload));
+
+                // Call the service to handle the webhook
+                var response = await _payOSService.ReturnWebhook(payload);
+
+                // Check the result of the webhook processing
+                if (response.Success)
+                {
+                    _logger.LogInformation("Webhook processed successfully for OrderCode: {OrderCode}", payload.Data.OrderCode);
+                    return Ok(new { status = 200, message = response.Note });
+                }
+                else
+                {
+                    _logger.LogWarning("Webhook processing failed: {Message}", response.Note);
+                    return BadRequest(new { status = 400, message = response.Note });
+                }
             }
             catch (Exception ex)
             {
+                // Log the exception
+                _logger.LogError(ex, "An error occurred while processing the PayOS webhook.");
                 return BadRequest(new { status = 400, message = ex.Message });
             }
         }
+
     }
 }
