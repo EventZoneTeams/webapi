@@ -40,6 +40,7 @@ namespace EventZone.WebAPI.Injection
             services.AddAutoMapper(typeof(MapperConfigProfile).Assembly);
             services.AddScoped<IClaimsService, ClaimsService>();
             services.AddScoped<IVnPayService, VnPayService>();
+            services.AddScoped<IPayOSService, PayOSService>();
             services.AddScoped<IRedisService, RedisService>();
             // add repositories
             services.AddScoped<IEventFeedbackRepository, EventFeedbackRepository>();

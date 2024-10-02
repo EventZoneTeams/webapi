@@ -71,7 +71,7 @@ namespace EventZone.Repositories.Repositories
         }
 
         // Deposit money to wallet
-        public async Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, long amount)
+        public async Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, long amount, string? paymentMethod = "VNPay")
         {
             var wallet = await GetWalletByUserIdAndType(userId, walletType);
             if (wallet == null)
@@ -85,7 +85,7 @@ namespace EventZone.Repositories.Repositories
                 WalletId = wallet.Id,
                 TransactionType = TransactionTypeEnums.DEPOSIT.ToString(),
                 Amount = amount,
-                Description = "Deposit money with amount: " + amount,
+                Description = "Deposit money with amount: " + amount + ", Thanh toán qua: " + paymentMethod,
                 TransactionDate = DateTime.UtcNow.AddHours(7),
                 CreatedAt = _timeService.GetCurrentTime(),
                 Status = TransactionStatusEnums.PENDING.ToString()

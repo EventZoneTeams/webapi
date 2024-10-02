@@ -36,9 +36,9 @@ namespace EventZone.Services.Services
         }
 
         // Deposit money to wallet
-        public async Task<Transaction> Deposit(Guid userId, long amount)
+        public async Task<Transaction> Deposit(Guid userId, long amount, string? paymentMethod)
         {
-            var transaction = await _unitOfWork.WalletRepository.DepositMoney(userId, WalletTypeEnums.PERSONAL, amount);
+            var transaction = await _unitOfWork.WalletRepository.DepositMoney(userId, WalletTypeEnums.PERSONAL, amount, paymentMethod);
             var result = _mapper.Map<Transaction>(transaction);
             return result;
         }

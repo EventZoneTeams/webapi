@@ -6,6 +6,7 @@ using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.DTO.ResponseModels;
 using EventZone.Services.Interface;
+using EventZone.Services.Services;
 using EventZone.Services.Services.VnPayConfig;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -22,14 +23,16 @@ namespace EventZone.WebAPI.Controllers
         private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly IPayOSService _payOSService;
 
-        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService, IClaimsService claimsService, INotificationService notificationService)
+        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService, IClaimsService claimsService, INotificationService notificationService, IPayOSService payOSService)
         {
             _walletService = walletService;
             _mapper = mapper;
             _vnPayService = vnPayService;
             _claimsService = claimsService;
             _notificationService = notificationService;
+            _payOSService = payOSService;
         }
 
         /// <summary>
@@ -101,7 +104,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     throw new Exception("Amount is invalid");
                 }
-                var result = await _walletService.Deposit(userId, depositRequest.Amount);
+                var result = await _walletService.Deposit(userId, depositRequest.Amount, "VNPay");
 
                 if (result == null)
                 {
@@ -287,6 +290,60 @@ namespace EventZone.WebAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+
+
+        [Route("create-payment-link-payos")]
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] DepositRequestDTO depositRequest)
+        {
+            try
+            {
+                var userId = _claimsService.GetCurrentUserId;
+
+                if (userId == Guid.Empty)
+                {
+                    throw new Exception("UserId is invalid or you are not login");
+                }
+                if (depositRequest.Amount <= 0)
+                {
+                    throw new Exception("Amount is invalid");
+                }
+                var result = await _walletService.Deposit(userId, depositRequest.Amount, "PayOS");
+
+                if (result == null)
+                {
+                    throw new Exception("Create Deposit Transaction Failed!");
+                }
+                else
+                {
+                    var url = await _payOSService.CreateLink(depositRequest.Amount);
+
+                    return Ok(ApiResult<string>.Succeed(url, "Payment to deposit!"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        [HttpPost("webhook-payos")]
+        public async Task<IActionResult> ReceiveWebhook([FromBody] PayOSObjects.PayOSWebhook payload)
+        {
+            try
+            {
+                _payOSService.ReturnWebhook(payload);
+
+
+
+                return Ok(new { status = 200 });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = 400, message = ex.Message });
             }
         }
     }
