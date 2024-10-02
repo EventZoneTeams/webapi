@@ -186,7 +186,7 @@ namespace EventZone.Services.Services
             public string CounterAccountNumber { get; set; }
             public string VirtualAccountName { get; set; }
             public string VirtualAccountNumber { get; set; }
-            public string TransactionId { get; set; }
+            //public string TransactionId { get; set; }
         }
     }
 }
