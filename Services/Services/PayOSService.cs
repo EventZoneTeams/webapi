@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Net.payOS;
 using Net.payOS.Types;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -17,7 +18,7 @@ namespace EventZone.Services.Services
         private readonly ILogger<PayOSService> _logger;
         private readonly PayOS _payOS;
 
-        public PayOSService()
+        public PayOSService(ILogger<PayOSService> logger)
         {
             IConfiguration configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -26,6 +27,7 @@ namespace EventZone.Services.Services
             var ChecksumKey = configuration["PayOS:ChecksumKey"];
             var ApiKey = configuration["PayOS:ApiKey"];
             _payOS = new PayOS(ClientId, ApiKey, ChecksumKey);
+            _logger = logger;
         }
 
         public async Task<string> CreateLink(int depositMoney)
@@ -48,6 +50,8 @@ namespace EventZone.Services.Services
         public async Task<PayOSWebhookResponse> ReturnWebhook(PayOSWebhook payOSWebhook)
         {
             // Log the receipt of the webhook
+            //Seriablize the object to log
+            _logger.LogInformation(JsonConvert.SerializeObject(payOSWebhook));
             _logger.LogInformation("Received webhook with Code: {Code}, Success: {Success}", payOSWebhook.Code, payOSWebhook.Success);
 
             // Validate the webhook signature
@@ -127,7 +131,7 @@ namespace EventZone.Services.Services
                 }
 
                 string signature = ComputeHmacSha256(transactionStr.ToString(), ChecksumKey);
-                return signature.Equals(payOSWebhook.Signature, StringComparison.OrdinalIgnoreCase);
+                return signature.Equals(transactionSignature, StringComparison.OrdinalIgnoreCase);
             }
             catch (Exception ex)
             {

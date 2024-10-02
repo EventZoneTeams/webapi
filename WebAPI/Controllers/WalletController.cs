@@ -336,9 +336,6 @@ namespace EventZone.WebAPI.Controllers
             try
             {
                 _payOSService.ReturnWebhook(payload);
-
-
-
                 return Ok(new { status = 200 });
             }
             catch (Exception ex)
