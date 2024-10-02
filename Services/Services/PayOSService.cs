@@ -36,7 +36,7 @@ namespace EventZone.Services.Services
 
             var paymentLinkRequest = new PaymentData(
                 orderCode: int.Parse(DateTimeOffset.Now.ToString("ffffff")),
-                amount: 2000,
+                amount: depositMoney,
                 description: "Nạp tiền: " + depositMoney,
                 items: [new("Nạp tiền " + depositMoney, 1, depositMoney)],
                 returnUrl: domain + "?success=true&transactionId=" + "GG" + "&amount=" + depositMoney,
@@ -57,7 +57,7 @@ namespace EventZone.Services.Services
             // Validate the webhook signature
             if (!PayOSUtils.IsValidData(payOSWebhook, payOSWebhook.Signature))
             {
-                _logger.LogWarning("Invalid webhook signature for OrderCode: {OrderCode}", payOSWebhook.Data.OrderCode);
+                _logger.LogWarning("Invalid webhook signature for OrderCode: {OrderCode}");
                 return new PayOSWebhookResponse
                 {
                     Success = false,
@@ -66,16 +66,13 @@ namespace EventZone.Services.Services
             }
 
             // Log the validated data
-            _logger.LogInformation("Valid webhook data: OrderCode: {OrderCode}, Amount: {Amount}, Status: {Code}",
-                payOSWebhook.Data.OrderCode,
-                payOSWebhook.Data.Amount,
-                payOSWebhook.Code);
+            _logger.LogInformation("Valid webhook data: OrderCode: {OrderCode}, Amount: {Amount}, Status: {Code}");
 
             // Handle the webhook based on the transaction status
             switch (payOSWebhook.Code)
             {
                 case "00":
-                    _logger.LogInformation("Payment successful for OrderCode: {OrderCode}", payOSWebhook.Data.OrderCode);
+                    _logger.LogInformation("Payment successful for OrderCode: {OrderCode}");
 
                     // Example: Update the order in the system, mark it as paid
                     //var order = await _unitOfWork.WalletRepository.ConfirmTransaction(payOSWebhook.Data.OrderCode);
@@ -87,7 +84,7 @@ namespace EventZone.Services.Services
                     };
 
                 case "01":
-                    _logger.LogError("Invalid parameters in the webhook for OrderCode: {OrderCode}", payOSWebhook.Data.OrderCode);
+                    _logger.LogError("Invalid parameters in the webhook for OrderCode: {OrderCode}");
                     return new PayOSWebhookResponse
                     {
                         Success = false,
@@ -95,7 +92,7 @@ namespace EventZone.Services.Services
                     };
 
                 default:
-                    _logger.LogWarning("Unhandled webhook code: {Code} for OrderCode: {OrderCode}", payOSWebhook.Code, payOSWebhook.Data.OrderCode);
+                    _logger.LogWarning("Unhandled webhook code: {Code} for OrderCode: {OrderCode}");
                     return new PayOSWebhookResponse
                     {
                         Success = false,
@@ -154,7 +151,7 @@ namespace EventZone.Services.Services
         public class PayOSWebhookResponse
         {
             public bool Success { get; set; }
-            public PayOSTransaction Data { get; set; }
+            public object Data { get; set; }
             public string Note { get; set; }
         }
         public class PayOSWebhook
@@ -162,28 +159,8 @@ namespace EventZone.Services.Services
             public string Code { get; set; }
             public string Desc { get; set; }
             public bool Success { get; set; }
-            public PayOSTransaction Data { get; set; }
+            public object Data { get; set; }
             public string Signature { get; set; }
-        }
-
-        public class PayOSTransaction
-        {
-            public int OrderCode { get; set; }
-            public decimal Amount { get; set; }
-            public string Description { get; set; }
-            public string AccountNumber { get; set; }
-            public string Reference { get; set; }
-            public string TransactionDateTime { get; set; }
-            public string Currency { get; set; }
-            public string PaymentLinkId { get; set; }
-            public string Code { get; set; }
-            public string Desc { get; set; }
-            public string CounterAccountBankId { get; set; }
-            public string CounterAccountBankName { get; set; }
-            public string CounterAccountName { get; set; }
-            public string CounterAccountNumber { get; set; }
-            public string VirtualAccountName { get; set; }
-            public string VirtualAccountNumber { get; set; }
         }
     }
 }
