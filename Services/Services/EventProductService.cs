@@ -224,18 +224,19 @@ namespace EventZone.Services.Services
             {
                 existingProduct = _mapper.Map(updateModel, existingProduct);
                 existingProduct.QuantityInStock = updateModel.QuantityInStock == 0 ? existingProduct.QuantityInStock : updateModel.QuantityInStock;
-                if (!updateModel.ImageUrls.IsNullOrEmpty())
+                if (!updateModel.ProductImages.IsNullOrEmpty())
                 {
                     existingProduct.ProductImages.ToList().ForEach(item => item.IsDeleted = true);
 
-                    foreach (var item in updateModel.ImageUrls)
+                    foreach (var item in updateModel.ProductImages)
                     {
                         var tmp = await _unitOfWork.EventProductRepository.GetProductImageByUrl(item);
                         if (tmp == null)
                         {
                             var image = new ProductImage
                             {
-                                ImageUrl = item
+                                ImageUrl = item,
+                                Name = ""
                             };
                             existingProduct.ProductImages.Add(image);
                         }
@@ -245,7 +246,6 @@ namespace EventZone.Services.Services
                         }
                     }
                 }
-                await _unitOfWork.EventProductRepository.Update(existingProduct);
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
                 {
