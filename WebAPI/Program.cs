@@ -184,7 +184,6 @@ catch (Exception ex)
     logger.LogError(ex, "An problem occurred during migration!");
 }
 
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -203,7 +202,7 @@ app.UseMiddleware<PerformanceTimeMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-// USE AUTHENTICATION, AUTHORIZATION
+// USE AUTHENTICA TION, AUTHORIZATION
 app.UseAuthorization();
 
 app.UseAuthentication();

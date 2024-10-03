@@ -62,6 +62,9 @@ namespace EventZone.Repositories.Repositories
                 throw new SecurityTokenException("Invalid access token or refresh token!");
             }
 
+            var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
+            ValidateAccessTokenExpiry(jwtToken);
+
             // Retrieve user ID from principal
             string accountId = principal.Identity.Name;
 
@@ -111,6 +114,18 @@ namespace EventZone.Repositories.Repositories
             {
                 _logger.LogError("Refresh token has expired.");
                 throw new SecurityTokenException("Invalid access token or refresh token!");
+            }
+        }
+
+        private void ValidateAccessTokenExpiry(JwtSecurityToken jwtToken)
+        {
+            var tokenExpiryTime = jwtToken.ValidTo;
+            var currentTime = _timeService.GetCurrentTime();
+
+            if (tokenExpiryTime > currentTime.AddMinutes(5))
+            {
+                _logger.LogInformation("Access token is still valid, no need to refresh.");
+                throw new SecurityTokenException("Access token is still valid and does not need to be refreshed.");
             }
         }
 
