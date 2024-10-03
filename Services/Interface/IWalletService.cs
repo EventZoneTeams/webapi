@@ -9,7 +9,7 @@ namespace EventZone.Services.Interface
     {
         Task<TransactionResponsesDTO> ConfirmTransaction(Guid transactionId);
 
-        Task<Transaction> Deposit(Guid userId, long amount);
+        Task<Transaction> Deposit(Guid userId, long amount, string? paymentMethod);
 
         Task<List<WalletResponseDTO>> GetListWalletByUserId(Guid userId);
 

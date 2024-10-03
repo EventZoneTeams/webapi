@@ -6,8 +6,10 @@ using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.DTO.ResponseModels;
 using EventZone.Services.Interface;
+using EventZone.Services.Services;
 using EventZone.Services.Services.VnPayConfig;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Reflection;
 using System.Web;
 
@@ -22,14 +24,18 @@ namespace EventZone.WebAPI.Controllers
         private readonly IClaimsService _claimsService;
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
+        private readonly IPayOSService _payOSService;
+        private readonly ILogger<WalletController> _logger;
 
-        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService, IClaimsService claimsService, INotificationService notificationService)
+        public WalletController(IWalletService walletService, IMapper mapper, IVnPayService vnPayService, IClaimsService claimsService, INotificationService notificationService, IPayOSService payOSService, ILogger<WalletController> logger)
         {
             _walletService = walletService;
             _mapper = mapper;
             _vnPayService = vnPayService;
             _claimsService = claimsService;
             _notificationService = notificationService;
+            _payOSService = payOSService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -101,7 +107,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     throw new Exception("Amount is invalid");
                 }
-                var result = await _walletService.Deposit(userId, depositRequest.Amount);
+                var result = await _walletService.Deposit(userId, depositRequest.Amount, "VNPay");
 
                 if (result == null)
                 {
@@ -185,8 +191,6 @@ namespace EventZone.WebAPI.Controllers
             {
                 var htmlString = string.Empty;
                 var requestNameValue = HttpUtility.ParseQueryString(HttpContext.Request.QueryString.ToString());
-
-                return Ok(vnpayResponseModel.vnp_TxnRef);
 
                 IPNReponse iPNReponse = await _vnPayService.IPNReceiver(
                     vnpayResponseModel.vnp_TmnCode,
@@ -291,5 +295,75 @@ namespace EventZone.WebAPI.Controllers
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
+
+
+
+        [Route("create-payment-link-payos")]
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] DepositRequestDTO depositRequest)
+        {
+            try
+            {
+                var userId = _claimsService.GetCurrentUserId;
+
+                if (userId == Guid.Empty)
+                {
+                    throw new Exception("UserId is invalid or you are not login");
+                }
+                if (depositRequest.Amount <= 0)
+                {
+                    throw new Exception("Amount is invalid");
+                }
+                var result = await _walletService.Deposit(userId, depositRequest.Amount, "PayOS");
+
+                if (result == null)
+                {
+                    throw new Exception("Create Deposit Transaction Failed!");
+                }
+                else
+                {
+                    var url = await _payOSService.CreateLink(depositRequest.Amount);
+
+                    return Ok(ApiResult<string>.Succeed(url, "Payment to deposit!"));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        [HttpPost("webhook-payos")]
+        public async Task<IActionResult> ReceiveWebhook([FromBody] PayOSObjects.PayOSWebhook payload)
+        {
+            try
+            {
+                // Log the incoming webhook payload
+                _logger.LogInformation("Received PayOS Webhook Payload: {Payload}", JsonConvert.SerializeObject(payload));
+
+
+                // Call the service to handle the webhook
+                var response = await _payOSService.ReturnWebhook(payload);
+
+                // Check the result of the webhook processing
+                if (response.Success)
+                {
+                    _logger.LogInformation("Webhook processed successfully for OrderCode: {OrderCode}", payload.Data.OrderCode);
+                    return Ok(new { status = 200, message = response.Note });
+                }
+                else
+                {
+                    _logger.LogWarning("Webhook processing failed: {Message}", response.Note);
+                    return BadRequest(new { status = 400, message = response.Note });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                _logger.LogError(ex, "An error occurred while processing the PayOS webhook.");
+                return BadRequest(new { status = 400, message = ex.Message });
+            }
+        }
+
     }
 }

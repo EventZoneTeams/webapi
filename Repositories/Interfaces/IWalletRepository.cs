@@ -9,7 +9,7 @@ namespace EventZone.Repositories.Interfaces
         Task<Wallet> GetWalletByUserIdAndType(Guid userId, WalletTypeEnums walletType);
 
         Task<Transaction> ConfirmTransaction(Guid transactionId);
-        Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, long amount);
+        Task<Transaction> DepositMoney(Guid userId, WalletTypeEnums walletType, long amount, string? paymentMethod);
         Task<Transaction> PurchaseItem(Guid userId, Guid orderId);
         Task<Transaction> WithdrawMoney(Guid userId, WalletTypeEnums walletType, long amount);
 

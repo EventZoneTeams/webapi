@@ -2,6 +2,6 @@
 {
     public class DepositRequestDTO
     {
-        public long Amount { get; set; }
+        public int Amount { get; set; }
     }
 }
