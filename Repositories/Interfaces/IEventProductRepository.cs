@@ -14,7 +14,7 @@ namespace EventZone.Repositories.Interfaces
         Task<List<EventProduct>> GetAllProductsByEvent(Guid eventId);
 
         Task<List<EventProduct>> GetAllProductsWithImages();
-
+        Task<ProductImage> GetProductImageByUrl(string url);
         Task<Pagination<EventProduct>> GetProductsByFiltersAsync(PaginationParameter paginationParameter, ProductFilterModel productFilterModel);
     }
 }

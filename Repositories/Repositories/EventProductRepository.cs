@@ -66,6 +66,11 @@ namespace EventZone.Repositories.Repositories
             }
         }
 
+        public async Task<ProductImage> GetProductImageByUrl(string url)
+        {
+            return await _context.ProductImages.FirstOrDefaultAsync(x => x.ImageUrl == url);
+        }
+
         public async Task<List<ProductImage>> AddImagesStringForProduct(Guid productId, List<string> images)
         {
             try

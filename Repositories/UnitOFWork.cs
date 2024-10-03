@@ -24,6 +24,7 @@ namespace EventZone.Repositories
         private readonly IEventBoardColumnRepository _eventBoardColumnRepository;
         private readonly IAttendeeRepository _attendeeRepository;
         private readonly IEventBoardTaskRepository _eventBoardTaskRepository;
+        private readonly IProductImageRepository _productImageRepository;
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
             , IUserRepository userRepository,
@@ -44,7 +45,8 @@ namespace EventZone.Repositories
             IEventBoardTaskLabelRepository eventBoardTaskLabelRepository,
             IEventBoardColumnRepository eventBoardColumnRepository,
             IAttendeeRepository attendeeRepository,
-            IEventBoardTaskRepository eventBoardTaskRepository
+            IEventBoardTaskRepository eventBoardTaskRepository,
+            IProductImageRepository productImageRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -67,6 +69,7 @@ namespace EventZone.Repositories
             _eventBoardColumnRepository = eventBoardColumnRepository;
             _attendeeRepository = attendeeRepository;
             _eventBoardTaskRepository = eventBoardTaskRepository;
+            _productImageRepository = productImageRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -88,17 +91,16 @@ namespace EventZone.Repositories
         public IEventBoardColumnRepository EventBoardColumnRepository => _eventBoardColumnRepository;
         public IAttendeeRepository AttendeeRepository => _attendeeRepository;
         public IEventBoardTaskRepository EventBoardTaskRepository => _eventBoardTaskRepository;
+        public IProductImageRepository ProductImageRepository => _productImageRepository;
 
         public Task<int> SaveChangeAsync()
         {
             try
             {
                 return _studentEventForumDbContext.SaveChangesAsync();
-
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

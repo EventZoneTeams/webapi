@@ -8,6 +8,7 @@ using EventZone.Repositories.Interfaces;
 using EventZone.Repositories.Models.ProductModels;
 using EventZone.Services.Interface;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace EventZone.Services.Services
 {
@@ -218,12 +219,33 @@ namespace EventZone.Services.Services
 
         public async Task<ApiResult<EventProductDetailDTO>> UpdateEventProductAsync(Guid productId, EventProductUpdateDTO updateModel)
         {
-            var existingProduct = await _unitOfWork.EventProductRepository.GetByIdAsync(productId);
+            var existingProduct = await _unitOfWork.EventProductRepository.GetByIdAsync(productId, x => x.ProductImages);
             if (existingProduct != null)
             {
                 existingProduct = _mapper.Map(updateModel, existingProduct);
                 existingProduct.QuantityInStock = updateModel.QuantityInStock == 0 ? existingProduct.QuantityInStock : updateModel.QuantityInStock;
-                await _unitOfWork.EventProductRepository.Update(existingProduct);
+                if (!updateModel.ProductImages.IsNullOrEmpty())
+                {
+                    existingProduct.ProductImages.ToList().ForEach(item => item.IsDeleted = true);
+
+                    foreach (var item in updateModel.ProductImages)
+                    {
+                        var tmp = await _unitOfWork.EventProductRepository.GetProductImageByUrl(item);
+                        if (tmp == null)
+                        {
+                            var image = new ProductImage
+                            {
+                                ImageUrl = item,
+                                Name = ""
+                            };
+                            existingProduct.ProductImages.Add(image);
+                        }
+                        else
+                        {
+                            tmp.IsDeleted = false;
+                        }
+                    }
+                }
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
                 {

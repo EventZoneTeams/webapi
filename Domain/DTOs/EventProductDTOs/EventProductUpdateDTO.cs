@@ -16,5 +16,7 @@ namespace EventZone.Domain.DTOs.EventProductDTOs
         //  [Required(ErrorMessage = "QuantityInStock is required!")]
         [Range(0, 10000000)]
         public int QuantityInStock { get; set; }
+
+        public List<string>? ProductImages { get; set; }
     }
 }
