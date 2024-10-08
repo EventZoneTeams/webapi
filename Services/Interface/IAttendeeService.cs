@@ -17,7 +17,7 @@ namespace EventZone.Services.Interface
         Task<ApiResult<BookedTicketDetailDTO>> CheckinBookedAsync(Guid bookedId);
 
         Task<List<BookedTicketDetailDTO>> GetAllBookedTicketByOrderID(Guid orderId);
-
+        Task<EventOrderBookedTicketDTO> GetAllBookedTicketOfCurrentUser();
         Task<List<BookedTicketDetailDTO>> GetAllBookedTickets();
         Task<Pagination<BookedTicketDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel);
         Task<EventOrderBookedTicketDTO> GetEventOrderWithTicket(Guid orderId);

@@ -13,5 +13,6 @@ namespace EventZone.Domain.DTOs.TicketDTOs
         public string Description { get; set; }
         public int InStock { get; set; }
         public Int64 Price { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }
