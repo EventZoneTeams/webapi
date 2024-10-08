@@ -1,4 +1,5 @@
 ﻿using EventZone.Domain.Entities;
+using EventZone.Domain.Enums;
 using EventZone.Repositories.Utils;
 using Microsoft.AspNetCore.Identity;
 
@@ -237,7 +238,7 @@ namespace EventZone.Repositories
                             Note = "Please bring your ID for check-in.",
                             UserId = firstUser.Id,
                             EventCategoryId = categories.FirstOrDefault(c => c.Title == "Education")?.Id ?? Guid.Empty,
-                            Status = "Upcoming",
+                            Status = EventStatusEnums.PENDING.ToString(),
                             CreatedAt = DateTime.Now,
                         },
                         new Event
@@ -254,7 +255,7 @@ namespace EventZone.Repositories
                             Note = "Limited seats available, register early.",
                             UserId = firstUser.Id,
                             EventCategoryId = categories.FirstOrDefault(c => c.Title == "Music")?.Id ?? Guid.Empty,
-                            Status = "Upcoming",
+                            Status = EventStatusEnums.PENDING.ToString(),
                             CreatedAt = DateTime.Now,
                         }
                     };
