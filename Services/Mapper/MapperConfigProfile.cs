@@ -101,7 +101,7 @@ namespace EventZone.Services.Mapper
             CreateMap<ProductImage, ImageReturnDTO>().ReverseMap();
             CreateMap<TransactionResponsesDTO, Transaction>().ReverseMap();
 
-            CreateMap<EventFeedbackDetailModel, EventFeedback>().ReverseMap();
+            CreateMap<EventFeedback, EventFeedbackDetailModel>().ReverseMap();
 
             //Order
             CreateMap<EventOrder, EventOrderReponseDTO>().ReverseMap();

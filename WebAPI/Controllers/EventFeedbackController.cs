@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EventZone.WebAPI.Controllers
 {
-    [Route("api/v1/event-feedbacks")]
+    [Route("api/v1/")]
     [ApiController]
     public class EventFeedbackController : ControllerBase
     {
@@ -42,7 +42,7 @@ namespace EventZone.WebAPI.Controllers
         /// </remarks>
         /// <response code="200">Returns the created feedback data.</response>
         /// <response code="400">Returns an error message if the feedback creation fails.</response>
-        [HttpPost]
+        [HttpPost("event-feedbacks")]
         public async Task<IActionResult> CreateAsync([FromQuery, Required] FeedbackTypeEnums feedbackOption, [FromBody] CreateFeedbackModel input)
         {
             try
@@ -71,8 +71,8 @@ namespace EventZone.WebAPI.Controllers
         /// </remarks>
         /// <response code="200">Returns the list of event feedbacks.</response>
         /// <response code="400">Returns an error message if the retrieval fails.</response>
-        [HttpGet]
-        public async Task<IActionResult> GetAllPackageAsync()
+        [HttpGet("event-feedbacks")]
+        public async Task<IActionResult> GetAllFeedBacks()
         {
             try
             {
@@ -92,13 +92,13 @@ namespace EventZone.WebAPI.Controllers
         /// <returns>A list of event feedbacks for the specified event.</returns>
         /// <response code="200">Returns the list of event feedbacks for the specified event.</response>
         /// <response code="400">Returns an error message if the retrieval fails.</response>
-        [HttpGet("events/{id}")]
+        [HttpGet("events/{id}/event-feedbacks")]
         public async Task<IActionResult> GetAllPackageAsync(Guid id)
         {
             try
             {
                 var data = await _eventFeedbackService.GettAllFeedbacksByEventIdAsync(id);
-                return Ok(ApiResult<List<EventFeedbackDetailModel>>.Succeed(data, "Get My Donation Successfully!"));
+                return Ok(ApiResult<List<EventFeedbackDetailModel>>.Succeed(data, "Get feedbacks of event Successfully!"));
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace EventZone.WebAPI.Controllers
         /// <response code="200">Returns a list of deleted feedback IDs.</response>
         /// <response code="404">If none of the specified feedbacks are found.</response>
         /// <response code="400">Returns an error message if the deletion fails.</response>
-        [HttpDelete]
+        [HttpDelete("event-feedbacks")]
         public async Task<IActionResult> DeleteAsync([FromBody] List<Guid> feedbackIds)
         {
             try
