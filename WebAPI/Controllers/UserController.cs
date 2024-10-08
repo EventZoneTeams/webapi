@@ -1,4 +1,5 @@
-﻿using EventZone.Domain.DTOs.EventOrderDTOs;
+﻿using EventZone.Domain.DTOs.BookedTicketDTOs;
+using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.Enums;
 using EventZone.Repositories.Commons;
@@ -311,6 +312,21 @@ namespace EventZone.WebAPI.Controllers
                 var result = await _userService.GetCurrentUserOrders();
 
                 return Ok(ApiResult<List<EventOrderReponseDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        [HttpGet("me/booked-tickets")]
+        public async Task<IActionResult> GetCurrentUserTickets()
+        {
+            try
+            {
+                var result = await _userService.GetAllBookedTicketOfCurrentUser();
+
+                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(result, "Get List Order Of Event Current User Successfully!"));
             }
             catch (Exception ex)
             {

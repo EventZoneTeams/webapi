@@ -18,5 +18,7 @@ namespace EventZone.Repositories.Interfaces
         Task<Pagination<BookedTicket>> GetBookedTicketsByFilterAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilter);
 
         Task<EventOrder> GetOrderTicket(Guid orderId);
+
+        Task<List<BookedTicket>> GetAllBookedTicketsOfUser(Guid userId);
     }
 }

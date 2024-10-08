@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using EventZone.Domain.DTOs.BookedTicketDTOs;
 using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Repositories.Commons;
@@ -343,6 +344,16 @@ namespace EventZone.Services.Services
                     Message = "Token to your email " + user.Email + " have been sent for reset password"
                 };
             }
+        }
+
+        public async Task<List<BookedTicketDetailDTO>> GetAllBookedTicketOfCurrentUser()
+        {
+            var user = await _unitOfWork.UserRepository.GetCurrentUserAsync();
+            if (user == null)
+            {
+                throw new Exception("User is not sign-in");
+            }
+            return _mapper.Map<List<BookedTicketDetailDTO>>(await _unitOfWork.AttendeeRepository.GetAllBookedTicketsOfUser(user.Id));
         }
 
         public async Task<bool> ConfirmEmail(string email, string token)

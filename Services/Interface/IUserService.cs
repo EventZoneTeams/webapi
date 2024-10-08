@@ -1,4 +1,5 @@
-﻿using EventZone.Domain.DTOs.EventOrderDTOs;
+﻿using EventZone.Domain.DTOs.BookedTicketDTOs;
+using EventZone.Domain.DTOs.EventOrderDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Repositories.Commons;
 using EventZone.Repositories.Models.UserAuthenModels;
@@ -40,5 +41,7 @@ namespace EventZone.Services.Interface
         Task<List<EventOrderReponseDTO>> GetCurrentUserOrders();
 
         Task<ApiResult<UserDetailsModel>> DeleteUser(Guid id);
+
+        Task<List<BookedTicketDetailDTO>> GetAllBookedTicketOfCurrentUser();
     }
 }

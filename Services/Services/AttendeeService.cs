@@ -157,6 +157,16 @@ namespace EventZone.Services.Services
             return _mapper.Map<EventOrderBookedTicketDTO>(await _unitOfWork.AttendeeRepository.GetOrderTicket(orderId));
         }
 
+        public async Task<EventOrderBookedTicketDTO> GetAllBookedTicketOfCurrentUser()
+        {
+            var user = await _unitOfWork.UserRepository.GetCurrentUserAsync();
+            if (user == null)
+            {
+                throw new Exception("User is not sign-in");
+            }
+            return _mapper.Map<EventOrderBookedTicketDTO>(await _unitOfWork.AttendeeRepository.GetAllBookedTicketsOfUser(user.Id));
+        }
+
         public async Task<ApiResult<BookedTicketDetailDTO>> UpdateBookedAsync(Guid bookedId, BookedTicketUpdateDTO updateModel)
         {
             var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);

@@ -1,4 +1,5 @@
 ﻿using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.Entities;
 using System;
@@ -19,6 +20,7 @@ namespace EventZone.Domain.DTOs.BookedTicketDTOs
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; } = false;
         public virtual EventDTO? Event { get; set; }
-        public virtual UserDTO? User { get; set; }
+      //  public virtual UserDTO? User { get; set; }
+        public virtual EventTicketDTO? EventTicket { get; set; }
     }
 }
