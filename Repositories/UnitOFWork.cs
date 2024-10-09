@@ -25,6 +25,7 @@ namespace EventZone.Repositories
         private readonly IAttendeeRepository _attendeeRepository;
         private readonly IEventBoardTaskRepository _eventBoardTaskRepository;
         private readonly IProductImageRepository _productImageRepository;
+        private readonly IEventStaffRepository _eventStaffRepository;
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
             , IUserRepository userRepository,
@@ -46,7 +47,8 @@ namespace EventZone.Repositories
             IEventBoardColumnRepository eventBoardColumnRepository,
             IAttendeeRepository attendeeRepository,
             IEventBoardTaskRepository eventBoardTaskRepository,
-            IProductImageRepository productImageRepository
+            IProductImageRepository productImageRepository,
+            IEventStaffRepository eventStaffRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -70,6 +72,7 @@ namespace EventZone.Repositories
             _attendeeRepository = attendeeRepository;
             _eventBoardTaskRepository = eventBoardTaskRepository;
             _productImageRepository = productImageRepository;
+            _eventStaffRepository = eventStaffRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -92,6 +95,7 @@ namespace EventZone.Repositories
         public IAttendeeRepository AttendeeRepository => _attendeeRepository;
         public IEventBoardTaskRepository EventBoardTaskRepository => _eventBoardTaskRepository;
         public IProductImageRepository ProductImageRepository => _productImageRepository;
+        public IEventStaffRepository EventStaffRepository => _eventStaffRepository;
 
         public Task<int> SaveChangeAsync()
         {

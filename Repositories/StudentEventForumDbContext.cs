@@ -42,7 +42,7 @@ namespace EventZone.Repositories
         public DbSet<EventBoardLabelAssignment> EventBoardLabelAssignments { get; set; }
         public DbSet<EventBoardMember> EventBoardMembers { get; set; }
         public DbSet<EventBoardTaskAssignment> EventBoardTaskAssignments { get; set; }
-
+        public DbSet<EventStaff> EventStaffs { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
