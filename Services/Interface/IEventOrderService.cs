@@ -14,5 +14,7 @@ namespace EventZone.Services.Interface
         Task<EventOrderReponseDTO> CreateEventOrder(CreateEventOrderReponseDTO order);
 
         Task<EventOrderReponseDTO> UpdateOrderStatus(Guid orderId, EventOrderStatusEnums eventOrderStatusEnums);
+
+        Task<EventOrderDetailDTO> CheckinProductStuatus(Guid orderDetailId);
     }
 }

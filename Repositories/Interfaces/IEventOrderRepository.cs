@@ -10,5 +10,6 @@ namespace EventZone.Repositories.Interfaces
         Task<List<EventOrder>> getCurrentUserOrder();
         Task<EventOrder> UpdateOrderStatus(Guid orderId, EventOrderStatusEnums eventOrderStatusEnums);
         IQueryable<EventOrder> FilterAllField(Guid eventId, OrderParams orderParams);
+        Task<EventOrderDetail> CheckInStatusProduct(Guid id);
     }
 }

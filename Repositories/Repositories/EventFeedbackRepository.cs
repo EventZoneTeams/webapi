@@ -22,7 +22,7 @@ namespace EventZone.Repositories.Repositories
             try
             {
                 newFeedback.UserId = _claimsService.GetCurrentUserId == Guid.Empty ? Guid.Empty : _claimsService.GetCurrentUserId; // handle tạm thời khi test
-                await AddAsync(newFeedback);
+                newFeedback= await AddAsync(newFeedback);
                 return newFeedback;
             }
             catch (Exception)

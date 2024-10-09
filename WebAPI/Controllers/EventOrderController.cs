@@ -108,5 +108,23 @@ namespace EventZone.WebAPI.Controllers
                 return BadRequest(ApiResult<object>.Fail(ex));
             }
         }
+
+        /// <summary>
+        /// check in order detail product
+        /// </summary>
+        /// <response code="200">Returns a order</response>
+        [HttpPut("event-orders/order-details/{id}")]
+        public async Task<ActionResult<EventOrderDetailDTO>> UpdateOrderDetailsStatus(Guid id)
+        {
+            try
+            {
+                var result = await _eventOrderService.CheckinProductStuatus(id);
+                return Ok(ApiResult<EventOrderDetailDTO>.Succeed(result, "Update order successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
     }
 }

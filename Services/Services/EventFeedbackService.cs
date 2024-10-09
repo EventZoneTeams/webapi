@@ -25,6 +25,11 @@ namespace EventZone.Services.Services
         {
             try
             {
+                var user = await _unitOfWork.UserRepository.GetCurrentUserAsync();
+                if (user == null)
+                {
+                    throw new Exception("User not existing");
+                }
                 var checkEvent = await _unitOfWork.EventRepository.GetByIdAsync(inputFeedback.EventId);
                 if (checkEvent == null)
                 {
@@ -40,6 +45,7 @@ namespace EventZone.Services.Services
                 {
                     EventId = inputFeedback.EventId,
                     Content = inputFeedback.Content,
+                    UserId = user.Id,
                 };
 
                 newFeedback = await _unitOfWork.EventFeedbackRepository.CreateFeedbackAsync(newFeedback);
@@ -54,7 +60,7 @@ namespace EventZone.Services.Services
                 //    Sender = "System"
                 //};
 
-                if (checkEvent.Status == EventStatusEnums.PENDING.ToString())
+                if (checkEvent.Status == EventStatusEnums.PENDING.ToString() || checkEvent.Status == "Upcoming")
                 {
                     switch (type)
                     {
@@ -88,7 +94,7 @@ namespace EventZone.Services.Services
                         default:
                             if (Enum.IsDefined(typeof(FeedbackTypeEnums), type))
                             {
-                                throw new Exception("trôn");
+                                throw new Exception("invalid feedback type");
                             }
                             break;
                     }
@@ -108,6 +114,10 @@ namespace EventZone.Services.Services
                             Message = "Added and updated status event successfully"
                         };
                     }
+                }
+                else
+                {
+                    throw new Exception("Invalid event status");
                 }
 
                 return new ApiResult<EventFeedbackDetailModel>
@@ -145,7 +155,7 @@ namespace EventZone.Services.Services
             }
             catch (Exception)
             {
-                throw new Exception();
+                throw new Exception("");
             }
         }
 
@@ -163,7 +173,7 @@ namespace EventZone.Services.Services
                     return new ApiResult<List<EventFeedbackDetailModel>>()
                     {
                         IsSuccess = true,
-                        Message = " Added successfully",
+                        Message = " delete feedback successfully",
                         Data = _mapper.Map<List<EventFeedbackDetailModel>>(allFeedbacks.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
@@ -177,7 +187,7 @@ namespace EventZone.Services.Services
                     return new ApiResult<List<EventFeedbackDetailModel>>()
                     {
                         IsSuccess = false,
-                        Message = "There are few ids that are no existed product id: " + nonExistingIdsString,
+                        Message = "There are few ids that are no existed feedback id: " + nonExistingIdsString,
                         Data = _mapper.Map<List<EventFeedbackDetailModel>>(allFeedbacks.Where(e => existingIds.Contains(e.Id)))
                     };
                 }
