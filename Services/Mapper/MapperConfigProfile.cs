@@ -108,6 +108,7 @@ namespace EventZone.Services.Mapper
             CreateMap<EventOrderDetail, EventOrderDetailsReponseDTO>().ReverseMap();
             CreateMap<EventOrderDetail, CreateEventOrderDetailsReponseDTO>().ReverseMap();
             CreateMap<EventOrder, EventOrderBookedTicketDTO>().ReverseMap();
+            CreateMap<EventOrderDetail, EventOrderDetailDTO>().ReverseMap();
 
             CreateMap<Notification, NotificationDTO>().ReverseMap();
 

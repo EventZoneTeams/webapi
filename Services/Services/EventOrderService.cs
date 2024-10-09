@@ -138,5 +138,27 @@ namespace EventZone.Services.Services
                 throw new Exception("Failed to update event order status");
             }
         }
+
+        public async Task<EventOrderDetailDTO> CheckinProductStuatus(Guid orderDetailId)
+        {
+            //already checking order existence in calling method
+            var result = await _unitOfWork.EventOrderRepository.CheckInStatusProduct(orderDetailId);
+            if (result == null)
+            {
+                return null;
+            }
+            var existingOrder = await _unitOfWork.EventOrderRepository.GetByIdAsync(result.EventOrderId);
+            if (existingOrder == null || existingOrder.Status != EventOrderStatusEnums.PAID.ToString())
+            {
+                throw new Exception("The order is no longer existing or has been failed or cancelled");
+            }
+
+            if (await _unitOfWork.SaveChangeAsync() <= 0)
+            {
+                throw new Exception("Invalid error during update process");
+            }
+
+            return _mapper.Map<EventOrderDetailDTO>(result);
+        }
     }
 }
