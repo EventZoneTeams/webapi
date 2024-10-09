@@ -32,7 +32,6 @@ namespace EventZone.Services.Services
 
         public async Task<string> CreateLink(int depositMoney)
         {
-            await _payOS.confirmWebhook("https://api.eventzone.id.vn/api/v1/webhook-payos");
             var domain = "https://eventzone.id.vn/payment";
 
             var paymentLinkRequest = new PaymentData(
