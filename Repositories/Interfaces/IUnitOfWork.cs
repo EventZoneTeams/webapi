@@ -21,7 +21,8 @@
         IEventBoardColumnRepository EventBoardColumnRepository { get; }
         IAttendeeRepository AttendeeRepository { get; }
         IEventBoardTaskRepository EventBoardTaskRepository { get; }
-        public IProductImageRepository ProductImageRepository { get; }
+        IProductImageRepository ProductImageRepository { get; }
+        IPostRepository PostRepository { get; }
 
         Task<int> SaveChangeAsync();
     }
