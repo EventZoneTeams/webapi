@@ -141,5 +141,19 @@ namespace EventZone.Repositories.Repositories
                 throw;
             }
         }
+
+        public async Task<EventOrderDetail> CheckInStatusProduct(Guid id)
+        {
+            var existingOrderDetail = await _context.EventOrderDetails.Include(x => x.EventOrder).FirstOrDefaultAsync(x => x.Id == id);
+            if (existingOrderDetail == null)
+            {
+                return null;
+            }
+            else
+            {
+                existingOrderDetail.IsReceived = true;
+                return existingOrderDetail;
+            }
+        }
     }
 }

@@ -8,7 +8,6 @@
         public long TotalAmount { get; set; }
         public string Status { get; set; }
         public string OrderType { get; set; }
-        public List<EventOrderDetailsReponseDTO> EventOrderDetails { get; set; }
-
+        public List<EventOrderDetailsReponseDTO>? EventOrderDetails { get; set; }
     }
 }
