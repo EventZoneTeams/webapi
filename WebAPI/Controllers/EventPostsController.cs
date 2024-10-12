@@ -8,16 +8,16 @@ namespace EventZone.WebAPI.Controllers
 {
     [Route("api/v1/")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class EventPostsController : ControllerBase
     {
         private readonly IPostService _postService;
 
-        public PostController(IPostService postService)
+        public EventPostsController(IPostService postService)
         {
             _postService = postService;
         }
 
-        [HttpPost("posts")]
+        [HttpPost("event-posts")]
         public async Task<ActionResult> CreatePost(PostDTO post)
         {
             try
@@ -37,7 +37,7 @@ namespace EventZone.WebAPI.Controllers
         /// <response code="200">Returns a list of posts</response>
         /// <response code="400">Error during reading data</response>
         /// <response code="404">Event Id is not exist</response>
-        [HttpGet("events/{id}/posts")]
+        [HttpGet("events/{id}/event-posts")]
         public async Task<ActionResult> GetPostsByEventId(Guid id)
         {
             try
@@ -61,7 +61,7 @@ namespace EventZone.WebAPI.Controllers
         /// <response code="200">Returns a list of posts</response>
         /// <response code="400">Error during reading data</response>
         /// <response code="404">Event Id is not exist</response>
-        [HttpGet("posts")]
+        [HttpGet("event-posts")]
         public async Task<ActionResult> GetAllPosts()
         {
             try
@@ -80,7 +80,7 @@ namespace EventZone.WebAPI.Controllers
         /// Get a post by Id
         /// </summary>
         /// <response code="200">Returns a post</response>
-        [HttpGet("posts/{id}")]
+        [HttpGet("event-posts/{id}")]
         public async Task<IActionResult> GetPostByIdAsync(Guid id)
         {
             try
@@ -102,7 +102,7 @@ namespace EventZone.WebAPI.Controllers
         /// Delete a post by Id (soft delete)
         /// </summary>
         /// <response code="200">Returns the removed post</response>
-        [HttpDelete("posts/{id}")]
+        [HttpDelete("event-posts/{id}")]
         public async Task<IActionResult> DeletePostAsync(Guid id)
         {
             try
@@ -124,7 +124,7 @@ namespace EventZone.WebAPI.Controllers
         /// Update a post by Id
         /// </summary>
         /// <response code="200">Returns the updated post</response>
-        [HttpPut("posts/{id}")]
+        [HttpPut("event-posts/{id}")]
         public async Task<IActionResult> UpdatePostAsync([FromRoute] Guid id, [FromBody] PostUpdateDTO model)
         {
             try
