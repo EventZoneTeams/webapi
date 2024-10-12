@@ -63,6 +63,7 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IEventBoardTaskRepository, EventBoardTaskRepository>();
             services.AddScoped<IAttendeeRepository, AttendeeRepository>();
             services.AddScoped<IProductImageRepository, ProductImageRepository>();
+            services.AddScoped<IEventStaffRepository, EventStaffRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
 
             // add generic repositories
@@ -85,6 +86,7 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IGenericRepository<EventBoardTask>, GenericRepository<EventBoardTask>>();
             services.AddScoped<IGenericRepository<BookedTicket>, GenericRepository<BookedTicket>>();
             services.AddScoped<IGenericRepository<ProductImage>, GenericRepository<ProductImage>>();
+            services.AddScoped<IGenericRepository<EventStaff>, GenericRepository<EventStaff>>();
             services.AddScoped<IGenericRepository<Post>, GenericRepository<Post>>();
 
             // add signInManager
@@ -109,6 +111,7 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IEventBoardColumnService, EventBoardColumnService>();
             services.AddScoped<IEventBoardTaskService, EventBoardTaskService>();
             services.AddScoped<IAttendeeService, AttendeeService>();
+            services.AddScoped<IEventStaffService, EventStaffService>();
             services.AddScoped<IPostService, PostService>();
 
             // add unitOfWork
