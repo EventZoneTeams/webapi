@@ -21,6 +21,7 @@
         IEventBoardColumnRepository EventBoardColumnRepository { get; }
         IAttendeeRepository AttendeeRepository { get; }
         IEventBoardTaskRepository EventBoardTaskRepository { get; }
+        IPostRepository PostRepository { get; }
         public IProductImageRepository ProductImageRepository { get; }
         IEventStaffRepository EventStaffRepository { get; }
 
