@@ -56,7 +56,7 @@ namespace EventZone.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get list of posts by eventId
+        /// Get all existing posts in db
         /// </summary>
         /// <response code="200">Returns a list of posts</response>
         /// <response code="400">Error during reading data</response>

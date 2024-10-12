@@ -49,7 +49,7 @@ namespace EventZone.Repositories
             IAttendeeRepository attendeeRepository,
             IEventBoardTaskRepository eventBoardTaskRepository,
             IProductImageRepository productImageRepository,
-            IPostRepository postRepository
+            IPostRepository postRepository,
             IEventStaffRepository eventStaffRepository
             )
         {

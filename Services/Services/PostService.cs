@@ -54,7 +54,7 @@ namespace EventZone.Services.Services
         // Get all Posts
         public async Task<List<PostDetailDTO>> GetAllPostsAsync()
         {
-            var posts = await _unitOfWork.PostRepository.GetAllAsync();
+            var posts = await _unitOfWork.PostRepository.GetAllAsync(x => x.Event);
             return _mapper.Map<List<PostDetailDTO>>(posts);
         }
 
