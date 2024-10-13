@@ -696,6 +696,8 @@ namespace EventZone.Repositories.Repositories
                 query = query.Where(a => a.Gender == isMale);
             }
 
+
+
             if (!string.IsNullOrEmpty(UserFilterModel.Role))
             {
                 var UsersInRole = await _userManager.GetUsersInRoleAsync(UserFilterModel.Role.ToUpper());
@@ -717,6 +719,11 @@ namespace EventZone.Repositories.Repositories
                     a.FullName.Contains(UserFilterModel.SearchName) ||
                     a.UnsignFullName.Contains(UserFilterModel.SearchName)
                 );
+            }
+
+            if (!string.IsNullOrEmpty(UserFilterModel.SearchEmail))
+            {
+                query = query.Where(a => a.Email.Contains(UserFilterModel.SearchEmail));
             }
 
             return query;
