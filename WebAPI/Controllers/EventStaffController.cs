@@ -1,4 +1,6 @@
-﻿using EventZone.Domain.Entities;
+﻿using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Entities;
 using EventZone.Repositories.Commons;
 using EventZone.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +26,10 @@ namespace EventZone.WebAPI.Controllers
                 var events = await _eventStaffService.GetEventByCurrentStaff();
                 if (events == null || events.Count == 0)
                 {
-                    return NotFound(ApiResult<List<Event>>.Error([], "No event found for current staff"));
+                    return NotFound(ApiResult<List<EventResponseDTO>>.Error([], "No event found for current staff"));
                 }
 
-                return Ok(ApiResult<List<Event>>.Succeed(events, "Events retrieved successfully"));
+                return Ok(ApiResult<List<EventResponseDTO>>.Succeed(events, "Events retrieved successfully"));
             }
             catch (Exception ex)
             {
@@ -43,10 +45,10 @@ namespace EventZone.WebAPI.Controllers
                 var eventStaff = await _eventStaffService.GetEventStaffAsync(eventId);
                 if (eventStaff == null || eventStaff.Count == 0)
                 {
-                    return NotFound(ApiResult<List<EventStaff>>.Error([], $"No staff found for event ID: {eventId}"));
+                    return NotFound(ApiResult<List<UserDetailsModel>>.Error([], $"No staff found for event ID: {eventId}"));
                 }
 
-                return Ok(ApiResult<List<EventStaff>>.Succeed(eventStaff, "Event staff retrieved successfully"));
+                return Ok(ApiResult<List<UserDetailsModel>>.Succeed(eventStaff, "Event staff retrieved successfully"));
             }
             catch (Exception ex)
             {
