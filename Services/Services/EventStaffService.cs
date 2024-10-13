@@ -1,4 +1,7 @@
-﻿using EventZone.Domain.Entities;
+﻿using AutoMapper;
+using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Entities;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.Interface;
 
@@ -8,12 +11,14 @@ namespace EventZone.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IClaimsService _claimsService;
-        public EventStaffService(IUnitOfWork unitOfWork, IClaimsService claimsService)
+        private readonly IMapper _mapper;
+        public EventStaffService(IUnitOfWork unitOfWork, IClaimsService claimsService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _claimsService = claimsService;
+            _mapper = mapper;
         }
-        public async Task<List<Event>> GetEventByCurrentStaff()
+        public async Task<List<EventResponseDTO>> GetEventByCurrentStaff()
         {
             if (_claimsService.GetCurrentUserId == null)
             {
@@ -21,13 +26,14 @@ namespace EventZone.Services.Services
             }
             var eventStaffs = await _unitOfWork.EventStaffRepository.GetAllAsync(x => x.Event);
             var events = eventStaffs.Where(x => x.UserId == _claimsService.GetCurrentUserId).Select(x => x.Event).ToList();
-            return events;
+            return _mapper.Map<List<EventResponseDTO>>(events);
         }
 
-        public async Task<List<EventStaff>> GetEventStaffAsync(Guid eventId)
+        public async Task<List<UserDetailsModel>> GetEventStaffAsync(Guid eventId)
         {
             var eventStaffs = await _unitOfWork.EventStaffRepository.GetAllAsync(x => x.User);
-            return eventStaffs.Where(x => x.EventId == eventId).Where(x => !x.IsDeleted).ToList();
+            var userList = eventStaffs.Where(x => x.EventId == eventId).Where(x => !x.IsDeleted).Select(y => y.User).ToList();
+            return _mapper.Map<List<UserDetailsModel>>(userList);
         }
 
         public async Task<EventStaff> AddStaffIntoEvent(Guid eventId, Guid userId, string note)
