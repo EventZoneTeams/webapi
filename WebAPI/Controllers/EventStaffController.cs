@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventZone.WebAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class EventStaffController : Controller
     {
         private readonly IEventStaffService _eventStaffService;
