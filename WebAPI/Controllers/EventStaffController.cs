@@ -54,7 +54,7 @@ namespace EventZone.WebAPI.Controllers
             }
         }
 
-        [HttpPost("{eventId}/addStaff")]
+        [HttpPost("{eventId}")]
         public async Task<IActionResult> AddStaffToEvent(Guid eventId, [FromBody] AddStaffRequest addStaffRequest)
         {
             try
@@ -68,8 +68,8 @@ namespace EventZone.WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{eventId}/removeStaff")]
-        public async Task<IActionResult> RemoveStaffFromEvent(Guid eventId, [FromBody] Guid userId)
+        [HttpDelete("{eventId}")]
+        public async Task<IActionResult> RemoveStaffFromEvent(Guid eventId, [FromQuery] Guid userId)
         {
             try
             {
