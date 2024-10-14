@@ -7,6 +7,6 @@
         public string BankNote { get; set; }
         public long Amount { get; set; }
         public string Status { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

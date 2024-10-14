@@ -44,6 +44,7 @@ namespace EventZone.Repositories
         public DbSet<EventBoardTaskAssignment> EventBoardTaskAssignments { get; set; }
         public DbSet<EventStaff> EventStaffs { get; set; }
         public DbSet<WithdrawnRequest> WithdrawnRequests { get; set; }
+        public DbSet<PostLike> PostLikes { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

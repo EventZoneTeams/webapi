@@ -9,5 +9,6 @@
         public virtual Event Event { get; set; }
         public virtual ICollection<EventImage> EventImages { get; set; }
         public virtual ICollection<PostComment> PostComments { get; set; }
+        public virtual ICollection<PostLike> PostLikes { get; set; }
     }
 }

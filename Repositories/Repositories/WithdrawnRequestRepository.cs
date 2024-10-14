@@ -19,6 +19,15 @@ namespace EventZone.Repositories.Repositories
         // Check Wallet balance before creating a request
         public async Task<WithdrawnRequest> CreateARequest(WithdrawnRequest request)
         {
+            if (_claimsService.GetCurrentUserId == Guid.Empty)
+            {
+                throw new Exception("User not found.");
+            }
+            if (request.Amount <= 0)
+            {
+                throw new Exception("Invalid amount.");
+            }
+
             var wallet = await _context.Wallets.FirstOrDefaultAsync(w => (w.UserId == _claimsService.GetCurrentUserId) && (w.WalletType == "PERSONAL"));
 
             if (wallet == null || wallet.Balance < request.Amount)
