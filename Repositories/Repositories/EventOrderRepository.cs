@@ -151,7 +151,7 @@ namespace EventZone.Repositories.Repositories
             }
             else
             {
-                existingOrderDetail.IsReceived = true;
+                existingOrderDetail.IsReceived = existingOrderDetail.IsReceived.Value ? false : true;
                 return existingOrderDetail;
             }
         }

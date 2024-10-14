@@ -185,6 +185,29 @@ namespace EventZone.WebAPI.Controllers
         }
 
         /// <summary>
+        /// update status an event product by its id
+        /// </summary>
+        /// <response code="200">Returns a product</response>
+        [HttpPut("event-products/check-in-out/{id}")]
+        public async Task<IActionResult> CheckinAndOutAsync([FromRoute] Guid id, [FromBody] EventProductUpdateDTO model)
+        {
+            try
+            {
+                var result = await _eventProductService.UpdateEventProductAsync(id, model);
+                if (result.IsSuccess)
+                {
+                    return Ok(result);
+                }
+
+                return NotFound(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
         /// delete a list of event product by their IDs
         /// </summary>
         /// <response code="200">Returns list of remove products</response>
