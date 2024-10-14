@@ -20,13 +20,14 @@ namespace EventZone.Services.Services
         }
         public async Task<List<EventResponseDTO>> GetEventByCurrentStaff()
         {
-            if (_claimsService.GetCurrentUserId == null)
+            var currentUserId = _claimsService.GetCurrentUserId;
+            if (currentUserId == null)
             {
                 throw new Exception("User not found");
             }
-            var eventStaffs = await _unitOfWork.EventStaffRepository.GetAllAsync(x => x.Event);
-            var events = eventStaffs.Where(x => x.UserId == _claimsService.GetCurrentUserId).Select(x => x.Event).ToList();
-            return _mapper.Map<List<EventResponseDTO>>(events);
+            var events = await _unitOfWork.EventRepository.GetAllAsync(x => x.User, x => x.EventStaffs);
+            var result = events.Where(x => x.EventStaffs.Any(y => y.UserId == currentUserId)).ToList();
+            return _mapper.Map<List<EventResponseDTO>>(result);
         }
 
         public async Task<List<UserDetailsModel>> GetEventStaffAsync(Guid eventId)
@@ -75,6 +76,12 @@ namespace EventZone.Services.Services
             await _unitOfWork.SaveChangeAsync();
 
             return staff;
+        }
+
+        public async Task<object> GetUserListOrderAndTicket(Guid eventId)
+        {
+            var result = await _unitOfWork.EventStaffRepository.GetUserListOrderAndTicket(eventId);
+            return result;
         }
     }
 }

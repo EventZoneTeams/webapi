@@ -10,5 +10,6 @@ namespace EventZone.Services.Interface
         Task<List<EventResponseDTO>> GetEventByCurrentStaff();
         Task<EventStaff> AddStaffIntoEvent(Guid eventId, Guid userId, string note);
         Task<EventStaff> RemoveStaffFromEvent(Guid eventId, Guid userId);
+        Task<object> GetUserListOrderAndTicket(Guid eventId);
     }
 }

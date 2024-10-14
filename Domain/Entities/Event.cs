@@ -33,5 +33,6 @@
         public virtual ICollection<EventBoard> EventBoards { get; set; }
         public virtual ICollection<BookedTicket>? BookedTickets { get; set; }
         public virtual ICollection<EventTicket>? EventTickets { get; set; }
+        public virtual ICollection<EventStaff>? EventStaffs { get; set; }
     }
 }
