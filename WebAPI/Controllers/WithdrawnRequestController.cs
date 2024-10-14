@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EventZone.WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/v1/[controller]")]
     public class WithdrawnRequestController : ControllerBase
     {
         private readonly ILogger<WithdrawnRequestController> _logger;
