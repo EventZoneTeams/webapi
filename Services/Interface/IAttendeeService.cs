@@ -23,7 +23,7 @@ namespace EventZone.Services.Interface
         Task<List<BookedTicketDetailDTO>> GetAllBookedTickets();
 
         Task<Pagination<BookedTicketDetailDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel);
-
+        Task<BookedTicketDetailDTO> GetBookedTicketById(Guid bookedTicketId);
         Task<EventOrderBookedTicketDTO> GetEventOrderWithTicket(Guid orderId);
 
         Task<ApiResult<BookedTicketDetailDTO>> UpdateBookedAsync(Guid bookedId, BookedTicketUpdateDTO updateModel);
