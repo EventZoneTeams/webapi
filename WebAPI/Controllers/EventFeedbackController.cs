@@ -36,7 +36,6 @@ namespace EventZone.WebAPI.Controllers
         ///
         ///      }
         ///      feedbackOption:
-        ///         ISFEEDBACK,
         ///         APPROVE,
         ///         REJECT
         /// </remarks>

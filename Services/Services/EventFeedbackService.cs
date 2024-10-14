@@ -60,7 +60,7 @@ namespace EventZone.Services.Services
                 //    Sender = "System"
                 //};
 
-                if (checkEvent.Status == EventStatusEnums.PENDING.ToString() || checkEvent.Status == "Upcoming")
+                if (checkEvent.Status == EventStatusEnums.PENDING.ToString() || checkEvent.Status == "Upcoming" || checkEvent.Status == EventStatusEnums.DRAFT.ToString())
                 {
                     switch (type)
                     {
@@ -117,7 +117,9 @@ namespace EventZone.Services.Services
                 }
                 else
                 {
-                    throw new Exception("Invalid event status");
+                    checkEvent.Status = EventStatusEnums.PENDING.ToString();
+
+                    throw new Exception("The status of this event:" + checkEvent.Status + " is not valid, plesae try again: " + checkEvent.Id);
                 }
 
                 return new ApiResult<EventFeedbackDetailModel>
