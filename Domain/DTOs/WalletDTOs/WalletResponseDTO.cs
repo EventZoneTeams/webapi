@@ -7,4 +7,10 @@
         public string WalletType { get; set; }
         public long Balance { get; set; }
     }
+
+    public class WithdrawnRequestDTO
+    {
+        public string BankNote { get; set; }
+        public long Amount { get; set; }
+    }
 }

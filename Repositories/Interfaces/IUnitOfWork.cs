@@ -1,4 +1,6 @@
-﻿namespace EventZone.Repositories.Interfaces
+﻿using EventZone.Repositories.Repositories;
+
+namespace EventZone.Repositories.Interfaces
 {
     public interface IUnitOfWork
     {
@@ -24,6 +26,7 @@
         IPostRepository PostRepository { get; }
         public IProductImageRepository ProductImageRepository { get; }
         IEventStaffRepository EventStaffRepository { get; }
+        IWithdrawnRequestRepository WithdrawnRequestRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

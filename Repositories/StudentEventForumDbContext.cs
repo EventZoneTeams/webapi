@@ -43,6 +43,7 @@ namespace EventZone.Repositories
         public DbSet<EventBoardMember> EventBoardMembers { get; set; }
         public DbSet<EventBoardTaskAssignment> EventBoardTaskAssignments { get; set; }
         public DbSet<EventStaff> EventStaffs { get; set; }
+        public DbSet<WithdrawnRequest> WithdrawnRequests { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
