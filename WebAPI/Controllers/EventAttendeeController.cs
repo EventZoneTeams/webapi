@@ -41,19 +41,19 @@ namespace EventZone.WebAPI.Controllers
         }
 
         /// <summary>
-        /// Get list booked ticket
+        /// Get a specific booked ticket
         /// </summary>
-        /// <response code="200">Returns a list of ticket</response>
+        /// <response code="200">Returns a booked ticket</response>
         /// <response code="400">Error during reading data</response>
-        /// <response code="404">Event Id is not exist</response>
-        [HttpGet("event-attendees")]
-        public async Task<ActionResult> GetAllEventBookedTickets()
+        /// <response code="404">Booked ticket Id is not exist</response>
+        [HttpGet("booked-tickets/{id}")]
+        public async Task<ActionResult> GetAllEventBookedTickets(Guid id)
         {
             try
             {
-                var tickets = await _attendeeService.GetAllBookedTickets();
+                var tickets = await _attendeeService.GetBookedTicketById(id);
 
-                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(tickets, "get ticket successfully"));
+                return Ok(ApiResult<BookedTicketDetailDTO>.Succeed(tickets, "get ticket successfully"));
             }
             catch (Exception ex)
             {
@@ -67,14 +67,14 @@ namespace EventZone.WebAPI.Controllers
         /// <response code="200">Returns a list of ticket</response>
         /// <response code="400">Error during reading data</response>
         /// <response code="404">Event Id is not exist</response>
-        [HttpGet("event-orders/{id}/event-attendees")]
+        [HttpGet("event-orders/{id}/booked-tickets")]
         public async Task<ActionResult> GetEventBookedTicketsByOrder(Guid id)
         {
             try
             {
                 var tickets = await _attendeeService.GetAllBookedTicketByOrderID(id);
 
-                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(tickets, "Get booked ticket of order:" + id+"succesfully"));
+                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(tickets, "Get booked ticket of order:" + id + "succesfully"));
             }
             catch (Exception ex)
             {

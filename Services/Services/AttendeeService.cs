@@ -252,5 +252,31 @@ namespace EventZone.Services.Services
             }
             return null;
         }
+
+        public async Task<BookedTicketDetailDTO> GetBookedTicketById(Guid bookedTicketId)
+        {
+            // Try to get from cache
+            var cachedBookedTicket = await _redisService.GetStringAsync(CacheKeys.BookedTicket(bookedTicketId));
+            if (!string.IsNullOrEmpty(cachedBookedTicket))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<BookedTicketDetailDTO>(cachedBookedTicket);
+            }
+
+            // If not in cache, query the database
+            var bookedTicketEntity = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedTicketId, x=>x.Event);
+
+            if (bookedTicketEntity == null)
+            {
+                throw new Exception("Booked ticket not found");
+            }
+
+            var result = _mapper.Map<BookedTicketDetailDTO>(bookedTicketEntity);
+
+            // Cache the result
+            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            await _redisService.SetStringAsync(CacheKeys.BookedTicket(bookedTicketId), serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+
+            return result;
+        }
     }
 }
