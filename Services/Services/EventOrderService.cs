@@ -151,7 +151,12 @@ namespace EventZone.Services.Services
 
             if (existingOrder == null || existingOrder.Status != EventOrderStatusEnums.PAID.ToString())
             {
-                throw new Exception("The order is no longer existing or has been failed or cancelled");
+                throw new Exception("The order is no longer existing or has been completed or not paid");
+            }
+
+            if (!existingOrder.EventOrderDetails.Any(x => x.IsReceived == false))
+            {
+                existingOrder.Status = EventStatusEnums.COMPLETED.ToString();
             }
 
             if (await _unitOfWork.SaveChangeAsync() <= 0)

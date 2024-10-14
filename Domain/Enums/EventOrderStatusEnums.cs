@@ -5,6 +5,7 @@
         PENDING,
         PAID,
         CANCELLED,
-        REFUNDED
+        REFUNDED,
+        COMPLETED
     }
 }
