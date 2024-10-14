@@ -59,7 +59,7 @@ namespace EventZone.Repositories.Repositories
                 query = query.Include(include);
             }
 
-            return query.ToListAsync();
+            return query.OrderByDescending(x=>x.CreatedAt).ToListAsync();
         }
 
         public async Task<TEntity?> GetByIdAsync(Guid id, params Expression<Func<TEntity, object>>[] includes)

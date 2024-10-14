@@ -1,4 +1,5 @@
 ﻿using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.ImageDTOs;
 using EventZone.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,6 @@ namespace EventZone.Domain.DTOs.PostCommentDTOs
 
         public DateTime? CreatedAt { get; set; }
         public bool? IsDeleted { get; set; } = false;
+        public virtual ICollection<ImageReturnDTO>? EventImages { get; set; }
     }
 }
