@@ -66,6 +66,8 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IEventStaffRepository, EventStaffRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<IWithdrawnRequestRepository, WithdrawnRequestRepository>();
+            services.AddScoped<IPostCommentRepository, PostCommentRepository>();
+            services.AddScoped<IPostLikeRepository, PostLikeRepository>();
 
             // add generic repositories
             services.AddScoped<IGenericRepository<EventFeedback>, GenericRepository<EventFeedback>>();
@@ -90,6 +92,8 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IGenericRepository<EventStaff>, GenericRepository<EventStaff>>();
             services.AddScoped<IGenericRepository<Post>, GenericRepository<Post>>();
             services.AddScoped<IGenericRepository<WithdrawnRequest>, GenericRepository<WithdrawnRequest>>();
+            services.AddScoped<IGenericRepository<PostLike>, GenericRepository<PostLike>>();
+            services.AddScoped<IGenericRepository<PostComment>, GenericRepository<PostComment>>();
 
             // add signInManager
             services.AddScoped<SignInManager<User>>();
@@ -116,6 +120,8 @@ namespace EventZone.WebAPI.Injection
             services.AddScoped<IEventStaffService, EventStaffService>();
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IWithdrawnRequestService, WithdrawnRequestService>();
+            services.AddScoped<IPostCommentService, PostCommentService>();
+            services.AddScoped<IPostLikeService, PostLikeService>();
 
             // add unitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();

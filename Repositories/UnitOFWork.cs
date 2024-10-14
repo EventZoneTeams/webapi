@@ -29,6 +29,8 @@ namespace EventZone.Repositories
         private readonly IPostRepository _postRepository;
         private readonly IEventStaffRepository _eventStaffRepository;
         private readonly IWithdrawnRequestRepository _withdrawnRequestRepository;
+        private readonly IPostCommentRepository _postCommentRepository;
+        private readonly IPostLikeRepository _postLikeRepository;
 
         public UnitOfWork(StudentEventForumDbContext studentEventForumDbContext
             , IUserRepository userRepository,
@@ -53,7 +55,9 @@ namespace EventZone.Repositories
             IProductImageRepository productImageRepository,
             IPostRepository postRepository,
             IEventStaffRepository eventStaffRepository,
-            IWithdrawnRequestRepository withdrawnRequestRepository
+            IWithdrawnRequestRepository withdrawnRequestRepository,
+            IPostLikeRepository postLikeRepository,
+            IPostCommentRepository postCommentRepository
             )
         {
             _studentEventForumDbContext = studentEventForumDbContext;
@@ -80,6 +84,8 @@ namespace EventZone.Repositories
             _postRepository = postRepository;
             _eventStaffRepository = eventStaffRepository;
             _withdrawnRequestRepository = withdrawnRequestRepository;
+            _postCommentRepository = postCommentRepository;
+            _postLikeRepository = postLikeRepository;
         }
 
         public IUserRepository UserRepository => _userRepository;
@@ -106,6 +112,8 @@ namespace EventZone.Repositories
         public IEventStaffRepository EventStaffRepository => _eventStaffRepository;
 
         public IWithdrawnRequestRepository WithdrawnRequestRepository => _withdrawnRequestRepository;
+        public IPostLikeRepository PostLikeRepository => _postLikeRepository;
+        public IPostCommentRepository PostCommentRepository => _postCommentRepository;
 
         public Task<int> SaveChangeAsync()
         {

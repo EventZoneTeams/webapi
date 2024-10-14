@@ -16,6 +16,7 @@ using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.DTOs.ImageDTOs;
 using EventZone.Domain.DTOs.NotificationDTOs;
 using EventZone.Domain.DTOs.PostCommentDTOs;
+using EventZone.Domain.DTOs.PostLikeComments;
 using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.DTOs.WalletDTOs;
@@ -204,8 +205,9 @@ namespace EventZone.Services.Mapper
             CreateMap<PostComment, PostCommentDTO>().ReverseMap();
             CreateMap<PostDTO, Post>().ReverseMap();
             CreateMap<PostDetailDTO, Post>().ReverseMap();
-
+            CreateMap<PostLikeDTO, PostLike>().ReverseMap();
             CreateMap<WithdrawnRequestDTO, WithdrawnRequest>().ReverseMap();
+            CreateMap<PostCommentDTO, PostComment>().ReverseMap();
         }
     }
 }
