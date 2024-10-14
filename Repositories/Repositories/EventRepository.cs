@@ -3,6 +3,7 @@ using EventZone.Domain.Extensions;
 using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
 
 namespace EventZone.Repositories.Repositories
 {
@@ -32,6 +33,17 @@ namespace EventZone.Repositories.Repositories
                 .FilterByUserId(eventParams.UserId);
 
             return query;
+        }
+
+        public async Task<Event> DeleteEventDatabaseAsync(Guid id)
+        {
+            var existingEvent = await GetByIdAsync(id);
+            if (existingEvent == null)
+            {
+                return null;
+            }
+            var result = _context.Events.Remove(existingEvent);
+            return result.Entity;
         }
     }
 }

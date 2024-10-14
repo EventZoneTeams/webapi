@@ -175,5 +175,28 @@ namespace EventZone.Services.Services
                 throw new Exception("Failed to delete event");
             }
         }
+
+        public async Task<EventResponseDTO> DeleteEventDatabase(Guid id)
+        {
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(id);
+
+            if (existingEvent == null)
+            {
+                throw new Exception("Event not found");
+            }
+
+            var isDeleted = await _unitOfWork.EventRepository.DeleteEventDatabaseAsync(id);
+            if (isDeleted != null)
+            {
+                var result = _mapper.Map<EventResponseDTO>(existingEvent);
+                result.IsDeleted = true;
+                await _unitOfWork.SaveChangeAsync();
+                return result;
+            }
+            else
+            {
+                throw new Exception("Event is not found");
+            }
+        }
     }
 }

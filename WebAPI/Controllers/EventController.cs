@@ -98,7 +98,7 @@ namespace EventZone.WebAPI.Controllers
         ///
         ///     POST /events
         ///     {
-        ///         
+        ///
         ///      }
         ///
         ///  Note:
@@ -181,7 +181,6 @@ namespace EventZone.WebAPI.Controllers
         {
             try
             {
-
                 var format = new EventDTO
                 {
                     Name = updateEventModel.Name,
@@ -221,6 +220,34 @@ namespace EventZone.WebAPI.Controllers
             try
             {
                 var deletedEvent = await _eventService.DeleteEvent(id);
+                return Ok(ApiResult<EventResponseDTO>.Succeed(deletedEvent, "Event deleted successfully!"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
+        /// <summary>
+        /// Delete an existing event
+        /// </summary>
+        /// <param name="id">The ID of the event to delete</param>
+        /// <returns>The deleted event</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     DELETE /events/1
+        ///
+        /// </remarks>
+        /// <response code="200">Returns the deleted event</response>
+        /// <response code="400">If the event is invalid</response>
+        /// <response code="404">If the event is not found</response>
+        [HttpDelete("forever/{id}")]
+        public async Task<IActionResult> DeleteEventDBAsync(Guid id)
+        {
+            try
+            {
+                var deletedEvent = await _eventService.DeleteEventDatabase(id);
                 return Ok(ApiResult<EventResponseDTO>.Succeed(deletedEvent, "Event deleted successfully!"));
             }
             catch (Exception ex)

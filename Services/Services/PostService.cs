@@ -71,13 +71,14 @@ namespace EventZone.Services.Services
         // Get all posts by EventId
         public async Task<List<PostDetailDTO>> GetPostsByEventIdAsync(Guid eventId)
         {
-            if (await _unitOfWork.EventRepository.GetByIdAsync(eventId) == null)
+            var existingEvent = await _unitOfWork.EventRepository.GetByIdAsync(eventId);
+            if (existingEvent == null)
             {
                 return null;
             }
 
-            var posts = await _unitOfWork.PostRepository.GetAllAsync(x => x.EventImages);
-            return _mapper.Map<List<PostDetailDTO>>(posts.FindAll(p => p.EventId == eventId));
+            var posts = await _unitOfWork.PostRepository.GetAllAsync( x => x.EventImages);
+            return _mapper.Map<List<PostDetailDTO>>(posts.Where(x=> x.EventId == eventId));
         }
 
         public async Task<PostDetailDTO> GetPostByIdAsync(Guid postId)
