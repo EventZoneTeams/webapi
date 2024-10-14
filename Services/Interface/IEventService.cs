@@ -15,5 +15,6 @@ namespace EventZone.Services.Interface
         Task<EventResponseDTO> UpdateEvent(Guid id, EventDTO eventModel);
 
         Task<EventResponseDTO> DeleteEvent(Guid id);
+        Task<EventResponseDTO> DeleteEventDatabase(Guid id);
     }
 }
