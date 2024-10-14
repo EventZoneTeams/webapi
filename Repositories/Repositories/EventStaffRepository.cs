@@ -47,7 +47,8 @@ namespace EventZone.Repositories.Repositories
                             eod.Id,
                             eod.EventProduct.Name,
                             eod.Quantity,
-                            eod.Price
+                            eod.Price,
+                            eod.IsReceived
                         })
                         .ToList()
                 })
