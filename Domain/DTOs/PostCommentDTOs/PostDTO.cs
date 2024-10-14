@@ -11,5 +11,6 @@ namespace EventZone.Domain.DTOs.PostCommentDTOs
         public Guid EventId { get; set; }
         public string Title { get; set; }
         public string Body { get; set; }
+        public List<string>? ImageUrls { get; set; }
     }
 }

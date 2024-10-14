@@ -100,6 +100,7 @@ namespace EventZone.Services.Mapper
             CreateMap<Wallet, WalletResponseDTO>().ReverseMap();
 
             CreateMap<ProductImage, ImageReturnDTO>().ReverseMap();
+            CreateMap<EventImage, ImageReturnDTO>().ReverseMap();
             CreateMap<TransactionResponsesDTO, Transaction>().ReverseMap();
 
             CreateMap<EventFeedback, EventFeedbackDetailModel>().ReverseMap();

@@ -9,5 +9,6 @@ namespace EventZone.Repositories.Interfaces
 {
     public interface IPostRepository : IGenericRepository<Post>
     {
+        Task<List<EventImage>> AddImagesStringForProduct(Guid postId, List<string> images);
     }
 }

@@ -20,5 +20,39 @@ namespace EventZone.Repositories.Repositories
             _timeService = timeService;
             _claimsService = claimsService;
         }
+
+        public async Task<List<EventImage>> AddImagesStringForProduct(Guid postId, List<string> images)
+        {
+            try
+            {
+                var post = await GetByIdAsync(postId);
+                if (post == null)
+                {
+                    throw new Exception("Invalid post is not existing in database");
+                }
+                var newImages = new List<EventImage>();
+                foreach (var image in images)
+                {
+                    if (image == null)
+                    {
+                        continue;
+                    }
+                    newImages.Add(new EventImage()
+                    {
+                        EventId = post.EventId,
+                        ImageUrl = image,
+                        Name = image,
+                        PostId = postId
+                    });
+                }
+
+                await _context.AddRangeAsync(newImages);
+                return newImages;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
