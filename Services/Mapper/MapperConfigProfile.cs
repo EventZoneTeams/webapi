@@ -201,6 +201,9 @@ namespace EventZone.Services.Mapper
             CreateMap<PostComment, PostCommentDTO>().ReverseMap();
             CreateMap<PostDTO, Post>().ReverseMap();
             CreateMap<PostDetailDTO, Post>().ReverseMap();
+
+
+            CreateMap<WithdrawnRequestDTO, WithdrawnRequest>().ReverseMap();
         }
     }
 }
