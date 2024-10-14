@@ -19,7 +19,7 @@ namespace EventZone.Repositories.Repositories
         // Check Wallet balance before creating a request
         public async Task<WithdrawnRequest> CreateARequest(WithdrawnRequest request)
         {
-            var wallet = await _context.Wallets.FirstOrDefaultAsync(w => w.UserId == request.UserId);
+            var wallet = await _context.Wallets.FirstOrDefaultAsync(w => (w.UserId == _claimsService.GetCurrentUserId) && (w.WalletType == "PERSONAL"));
 
             if (wallet == null || wallet.Balance < request.Amount)
             {
