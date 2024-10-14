@@ -195,14 +195,15 @@ namespace EventZone.Services.Mapper
 
             //BookedTicket
             CreateMap<BookedTicket, BookedTicketDTO>().ReverseMap();
-            CreateMap<BookedTicket, BookedTicketDetailDTO>().ReverseMap();
+            CreateMap<BookedTicket, BookedTicketDetailDTO>()
+                .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.Event.Name))
+                .ReverseMap();
             CreateMap<BookedTicket, BookedTicketUpdateDTO>().ReverseMap();
 
             //Post and comment
             CreateMap<PostComment, PostCommentDTO>().ReverseMap();
             CreateMap<PostDTO, Post>().ReverseMap();
             CreateMap<PostDetailDTO, Post>().ReverseMap();
-
 
             CreateMap<WithdrawnRequestDTO, WithdrawnRequest>().ReverseMap();
         }
