@@ -146,6 +146,11 @@ namespace EventZone.Services.Services
 
         public async Task<List<BookedTicketDetailDTO>> GetAllBookedTicketByOrderID(Guid orderId)
         {
+            var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId);
+            if (order == null)
+            {
+                throw new Exception("Order not found");
+            }
             List<BookedTicketDetailDTO> result = await GetAllBookedTickets();
 
             result = result
@@ -236,14 +241,14 @@ namespace EventZone.Services.Services
             }
         }
 
-        public async Task<Pagination<BookedTicketDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel)
+        public async Task<Pagination<BookedTicketDetailDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel)
         {
             var products = await _unitOfWork.AttendeeRepository.GetBookedTicketsByFilterAsync(paginationParameter, bookedTicketFilterModel);
             //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
             if (products != null)
             {
-                var result = _mapper.Map<List<BookedTicketDTO>>(products);
-                return new Pagination<BookedTicketDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
+                var result = _mapper.Map<List<BookedTicketDetailDTO>>(products);
+                return new Pagination<BookedTicketDetailDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
             }
             return null;
         }

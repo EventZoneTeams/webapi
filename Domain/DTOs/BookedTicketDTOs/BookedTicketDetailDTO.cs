@@ -19,8 +19,11 @@ namespace EventZone.Domain.DTOs.BookedTicketDTOs
         public Guid EventOrderId { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public String? EventName { get; set; }
+
         public virtual EventDTO? Event { get; set; }
-      //  public virtual UserDTO? User { get; set; }
+
+        //  public virtual UserDTO? User { get; set; }
         public virtual EventTicketDTO? EventTicket { get; set; }
     }
 }

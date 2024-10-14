@@ -74,7 +74,7 @@ namespace EventZone.WebAPI.Controllers
             {
                 var tickets = await _attendeeService.GetAllBookedTicketByOrderID(id);
 
-                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(tickets, "Updated successfully: " + id));
+                return Ok(ApiResult<List<BookedTicketDetailDTO>>.Succeed(tickets, "Get booked ticket of order:" + id+"succesfully"));
             }
             catch (Exception ex)
             {
@@ -152,7 +152,7 @@ namespace EventZone.WebAPI.Controllers
 
                 Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(metadata));
 
-                return Ok(ApiResult<Pagination<BookedTicketDTO>>.Succeed(result, "Get list events successfully"));
+                return Ok(ApiResult<Pagination<BookedTicketDetailDTO>>.Succeed(result, "Get list events successfully"));
             }
             catch (Exception ex)
             {
