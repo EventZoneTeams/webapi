@@ -13,5 +13,8 @@ namespace EventZone.Domain.DTOs.PostCommentDTOs
         public Guid Id { get; set; }
         public virtual EventDTO? Event { get; set; }
         public virtual ICollection<PostCommentDTO>? PostComments { get; set; }
+
+        public DateTime? CreatedAt { get; set; }
+        public bool? IsDeleted { get; set; } = false;
     }
 }

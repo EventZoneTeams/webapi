@@ -1,4 +1,6 @@
-﻿using EventZone.Domain.DTOs.UserDTOs;
+﻿using EventZone.Domain.DTOs.EventDTOs;
+using EventZone.Domain.DTOs.UserDTOs;
+using EventZone.Domain.Entities;
 
 namespace EventZone.Domain.DTOs.EventFeedbackDTOs
 {
@@ -10,5 +12,6 @@ namespace EventZone.Domain.DTOs.EventFeedbackDTOs
 
         public DateTime? CreatedAt { get; set; }
         public bool? IsDeleted { get; set; } = false;
+        public virtual EventDTO? Event { get; set; }
     }
 }

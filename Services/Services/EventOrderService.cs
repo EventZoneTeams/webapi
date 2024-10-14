@@ -148,6 +148,7 @@ namespace EventZone.Services.Services
                 return null;
             }
             var existingOrder = await _unitOfWork.EventOrderRepository.GetByIdAsync(result.EventOrderId);
+
             if (existingOrder == null || existingOrder.Status != EventOrderStatusEnums.PAID.ToString())
             {
                 throw new Exception("The order is no longer existing or has been failed or cancelled");

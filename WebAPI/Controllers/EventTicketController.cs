@@ -51,7 +51,7 @@ namespace EventZone.WebAPI.Controllers
                 var tickets = await _eventTicketService.GetAllTicketsByEventIdAsync(id);
                 if (tickets == null)
                 {
-                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed event id: " + id));
+                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existing event id: " + id));
                 }
                 return Ok(ApiResult<List<EventTicketDetailDTO>>.Succeed(tickets, "get list successfully"));
             }
@@ -73,7 +73,7 @@ namespace EventZone.WebAPI.Controllers
                 var result = await _eventTicketService.DeleteEventTicketByIdAsync(id);
                 if (result == null)
                 {
-                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
+                    return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed ticket id: " + id));
                 }
                 return Ok(ApiResult<EventTicketDetailDTO>.Succeed(result.Data, "ticket deleted successfully"));
             }
@@ -97,7 +97,7 @@ namespace EventZone.WebAPI.Controllers
                 {
                     return Ok(ApiResult<EventTicketDetailDTO>.Succeed(result.Data, "get ticket successfully"));
                 }
-                return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed product id: " + id));
+                return NotFound(ApiResult<EventTicketDetailDTO>.Error(null, "There are no existed event id: " + id));
             }
             catch (Exception ex)
             {

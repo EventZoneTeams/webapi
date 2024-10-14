@@ -68,6 +68,7 @@ namespace EventZone.Services.Services
                     TotalAmount = bookedTicketDTO.Quantity * existingTicket.Price,
                     OrderType = "TICKET",
                     Status = EventOrderStatusEnums.PENDING.ToString(),
+                    BookedTickets = []
                 };
                 newOrder = await _unitOfWork.EventOrderRepository.AddAsync(newOrder);
                 var saveCheck = await _unitOfWork.SaveChangeAsync();
@@ -79,7 +80,7 @@ namespace EventZone.Services.Services
                 {
                     for (int i = 0; i < bookedTicketDTO.Quantity; i++)
                     {
-                        var newBookedTicketDTO = new BookedTicket
+                        var newBookedTicket = new BookedTicket
                         {
                             EventOrderId = newOrder.Id,
                             EventTicketId = bookedTicketDTO.EventTicketId,
@@ -89,11 +90,13 @@ namespace EventZone.Services.Services
                             AttendeeNote = "Ticket " + existingTicket.Name + " no:" + i,
                         };
 
-                        newBookedTicketList.Add(newBookedTicketDTO);
+                        newBookedTicketList.Add(newBookedTicket);
+                        newOrder.BookedTickets.Add(newBookedTicket);
                     }
                     existingTicket.InStock -= bookedTicketDTO.Quantity; // update stock quantity
                     await _unitOfWork.EventTicketRepository.Update(existingTicket);
                     var result = await _unitOfWork.AttendeeRepository.AddRangeAsync(newBookedTicketList);
+
                     saveCheck = await _unitOfWork.SaveChangeAsync();
                     if (saveCheck > 0)
                     {
@@ -205,7 +208,7 @@ namespace EventZone.Services.Services
             var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);
             if (existingBookedTicket != null)
             {
-                existingBookedTicket.IsCheckedIn = true;
+                existingBookedTicket.IsCheckedIn = existingBookedTicket.IsCheckedIn ? false : true;
                 await _unitOfWork.AttendeeRepository.Update(existingBookedTicket);
                 var updatedResult = await _unitOfWork.SaveChangeAsync();
                 if (updatedResult > 0)
