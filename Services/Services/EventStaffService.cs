@@ -77,5 +77,11 @@ namespace EventZone.Services.Services
 
             return staff;
         }
+
+        public async Task<object> GetUserListOrderAndTicket(Guid eventId)
+        {
+            var result = await _unitOfWork.EventStaffRepository.GetUserListOrderAndTicket(eventId);
+            return result;
+        }
     }
 }

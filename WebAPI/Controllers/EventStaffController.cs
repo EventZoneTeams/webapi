@@ -37,6 +37,20 @@ namespace EventZone.WebAPI.Controllers
             }
         }
 
+        [HttpGet("get-user-list-order-ticket")]
+        public async Task<IActionResult> GetUserListOrderAndTicket([FromQuery] Guid eventId)
+        {
+            try
+            {
+                var result = await _eventStaffService.GetUserListOrderAndTicket(eventId);
+                return Ok(ApiResult<object>.Succeed(result, "User list order and ticket retrieved successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResult<object>.Fail(ex));
+            }
+        }
+
         [HttpGet("{eventId}")]
         public async Task<IActionResult> GetEventStaff(Guid eventId)
         {
