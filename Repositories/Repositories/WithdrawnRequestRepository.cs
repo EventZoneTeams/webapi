@@ -34,6 +34,8 @@ namespace EventZone.Repositories.Repositories
             {
                 throw new Exception("Insufficient funds in the wallet.");
             }
+            // Deduct amount from wallet
+            wallet.Balance -= request.Amount;
 
             request.Status = "Pending";
             request.CreatedAt = _timeService.GetCurrentTime();
@@ -60,9 +62,6 @@ namespace EventZone.Repositories.Repositories
             {
                 throw new Exception("Insufficient funds in the wallet.");
             }
-
-            // Deduct amount from wallet
-            wallet.Balance -= request.Amount;
 
             // Update request status
             request.Status = "Success";
