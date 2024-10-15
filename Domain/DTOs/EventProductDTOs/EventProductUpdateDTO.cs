@@ -17,6 +17,6 @@ namespace EventZone.Domain.DTOs.EventProductDTOs
         [Range(0, 10000000)]
         public int QuantityInStock { get; set; }
 
-        public List<string>? ProductImages { get; set; }
+        public List<string>? ImageUrls { get; set; }
     }
 }

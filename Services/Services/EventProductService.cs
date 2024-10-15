@@ -224,11 +224,11 @@ namespace EventZone.Services.Services
             {
                 existingProduct = _mapper.Map(updateModel, existingProduct);
                 existingProduct.QuantityInStock = updateModel.QuantityInStock == 0 ? existingProduct.QuantityInStock : updateModel.QuantityInStock;
-                if (!updateModel.ProductImages.IsNullOrEmpty())
+                if (!updateModel.ImageUrls.IsNullOrEmpty())
                 {
                     existingProduct.ProductImages.ToList().ForEach(item => item.IsDeleted = true);
 
-                    foreach (var item in updateModel.ProductImages)
+                    foreach (var item in updateModel.ImageUrls)
                     {
                         var tmp = await _unitOfWork.EventProductRepository.GetProductImageByUrl(item);
                         if (tmp == null)
