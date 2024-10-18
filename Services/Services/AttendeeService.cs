@@ -177,7 +177,7 @@ namespace EventZone.Services.Services
 
         public async Task<ApiResult<BookedTicketDetailDTO>> UpdateBookedAsync(Guid bookedId, BookedTicketUpdateDTO updateModel)
         {
-            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);
+            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId, x => x.EventTicket);
             if (existingBookedTicket != null)
             {
                 existingBookedTicket = _mapper.Map(updateModel, existingBookedTicket);
@@ -210,7 +210,7 @@ namespace EventZone.Services.Services
 
         public async Task<ApiResult<BookedTicketDetailDTO>> CheckinBookedAsync(Guid bookedId)
         {
-            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);
+            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId, x => x.EventTicket);
             if (existingBookedTicket != null)
             {
                 existingBookedTicket.IsCheckedIn = existingBookedTicket.IsCheckedIn ? false : true;
@@ -263,7 +263,7 @@ namespace EventZone.Services.Services
             }
 
             // If not in cache, query the database
-            var bookedTicketEntity = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedTicketId, x=>x.Event);
+            var bookedTicketEntity = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedTicketId, x => x.EventTicket);
 
             if (bookedTicketEntity == null)
             {

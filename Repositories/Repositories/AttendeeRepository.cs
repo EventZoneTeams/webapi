@@ -27,13 +27,13 @@ namespace EventZone.Repositories.Repositories
 
         public async Task<List<BookedTicket>> GetAllBookedTickets()
         {
-            var result = await _context.BookedTickets.Include(x => x.Event).Include(x => x.User).ToListAsync();
+            var result = await _context.BookedTickets.Include(x => x.EventTicket).ToListAsync();
             return result;
         }
 
         public async Task<List<BookedTicket>> GetAllBookedTicketsOfUser(Guid userid)
         {
-            var result = await _context.BookedTickets.Include(x => x.EventTicket).Where(x => x.UserId == userid).ToListAsync();
+            var result = await _context.BookedTickets.Include(x => x.Event).Where(x => x.UserId == userid).ToListAsync();
             return result;
         }
 
