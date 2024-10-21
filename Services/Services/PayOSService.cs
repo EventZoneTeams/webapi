@@ -38,7 +38,7 @@ namespace EventZone.Services.Services
             var paymentLinkRequest = new PaymentData(
                 orderCode: int.Parse(DateTimeOffset.Now.ToString("ffffff")),
                 amount: depositMoney,
-                description: txnRef.ToString(),
+                description: txnRef.ToString().Substring(0, 8),
                 items: [new("Nạp tiền " + depositMoney, 1, depositMoney)],
                 returnUrl: domain + "?success=true&transactionId=" + "GG" + "&amount=" + depositMoney,
                 cancelUrl: domain + "?canceled=true&transactionId=" + "GG" + "&amount=" + depositMoney
@@ -61,7 +61,9 @@ namespace EventZone.Services.Services
                 //string orderCode = verifiedData.orderCode.ToString();
                 //string transactionId = "TRANS" + orderCode;
 
-                var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(Guid.Parse(webhookType.data.description));
+                //Get First transaction contains 8 first character
+                var transactionss = await _unitOfWork.TransactionRepository.GetAllAsync();
+                var transaction = transactionss.FirstOrDefault(x => x.Id.ToString().Substring(0, 8).Equals(webhookType.data.description.ToString()));
 
                 // Handle the webhook based on the transaction status
                 switch (webhookType.data.code)
