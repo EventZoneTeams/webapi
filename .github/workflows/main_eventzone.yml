@@ -3,8 +3,6 @@ name: Build and deploy ASP.Net Core app to VPS - EVENTZONE
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -48,6 +46,6 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             ls -la
-            cd /home/uydev/code/eventzone
+            cd /home/uydev/devops-vps/eventzone/api
             docker compose pull
             docker compose up -d

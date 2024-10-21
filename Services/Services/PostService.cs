@@ -77,8 +77,8 @@ namespace EventZone.Services.Services
                 return null;
             }
 
-            var posts = await _unitOfWork.PostRepository.GetAllAsync( x => x.EventImages);
-            return _mapper.Map<List<PostDetailDTO>>(posts.Where(x=> x.EventId == eventId));
+            var posts = await _unitOfWork.PostRepository.GetAllAsync(x => x.EventImages);
+            return _mapper.Map<List<PostDetailDTO>>(posts.Where(x => x.EventId == eventId));
         }
 
         public async Task<PostDetailDTO> GetPostByIdAsync(Guid postId)

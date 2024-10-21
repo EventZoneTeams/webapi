@@ -146,6 +146,11 @@ namespace EventZone.Services.Services
 
         public async Task<List<BookedTicketDetailDTO>> GetAllBookedTicketByOrderID(Guid orderId)
         {
+            var order = await _unitOfWork.EventOrderRepository.GetByIdAsync(orderId);
+            if (order == null)
+            {
+                throw new Exception("Order not found");
+            }
             List<BookedTicketDetailDTO> result = await GetAllBookedTickets();
 
             result = result
@@ -172,7 +177,7 @@ namespace EventZone.Services.Services
 
         public async Task<ApiResult<BookedTicketDetailDTO>> UpdateBookedAsync(Guid bookedId, BookedTicketUpdateDTO updateModel)
         {
-            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);
+            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId, x => x.EventTicket);
             if (existingBookedTicket != null)
             {
                 existingBookedTicket = _mapper.Map(updateModel, existingBookedTicket);
@@ -205,7 +210,7 @@ namespace EventZone.Services.Services
 
         public async Task<ApiResult<BookedTicketDetailDTO>> CheckinBookedAsync(Guid bookedId)
         {
-            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId);
+            var existingBookedTicket = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedId, x => x.EventTicket);
             if (existingBookedTicket != null)
             {
                 existingBookedTicket.IsCheckedIn = existingBookedTicket.IsCheckedIn ? false : true;
@@ -236,16 +241,42 @@ namespace EventZone.Services.Services
             }
         }
 
-        public async Task<Pagination<BookedTicketDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel)
+        public async Task<Pagination<BookedTicketDetailDTO>> GetBookedsByFiltersAsync(PaginationParameter paginationParameter, BookedTicketFilterModel bookedTicketFilterModel)
         {
             var products = await _unitOfWork.AttendeeRepository.GetBookedTicketsByFilterAsync(paginationParameter, bookedTicketFilterModel);
             //var roleNames = await _unitOfWork.UserRepository.GetAllRoleNamesAsync();
             if (products != null)
             {
-                var result = _mapper.Map<List<BookedTicketDTO>>(products);
-                return new Pagination<BookedTicketDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
+                var result = _mapper.Map<List<BookedTicketDetailDTO>>(products);
+                return new Pagination<BookedTicketDetailDTO>(result, products.TotalCount, products.CurrentPage, products.PageSize);
             }
             return null;
+        }
+
+        public async Task<BookedTicketDetailDTO> GetBookedTicketById(Guid bookedTicketId)
+        {
+            // Try to get from cache
+            var cachedBookedTicket = await _redisService.GetStringAsync(CacheKeys.BookedTicket(bookedTicketId));
+            if (!string.IsNullOrEmpty(cachedBookedTicket))
+            {
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<BookedTicketDetailDTO>(cachedBookedTicket);
+            }
+
+            // If not in cache, query the database
+            var bookedTicketEntity = await _unitOfWork.AttendeeRepository.GetByIdAsync(bookedTicketId, x => x.EventTicket);
+
+            if (bookedTicketEntity == null)
+            {
+                throw new Exception("Booked ticket not found");
+            }
+
+            var result = _mapper.Map<BookedTicketDetailDTO>(bookedTicketEntity);
+
+            // Cache the result
+            var serializedResult = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            await _redisService.SetStringAsync(CacheKeys.BookedTicket(bookedTicketId), serializedResult, TimeSpan.FromMinutes(30)); // Cache for 30 minutes
+
+            return result;
         }
     }
 }

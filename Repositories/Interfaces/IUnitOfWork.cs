@@ -27,6 +27,8 @@ namespace EventZone.Repositories.Interfaces
         public IProductImageRepository ProductImageRepository { get; }
         IEventStaffRepository EventStaffRepository { get; }
         IWithdrawnRequestRepository WithdrawnRequestRepository { get; }
+        IPostLikeRepository PostLikeRepository { get; }
+        IPostCommentRepository PostCommentRepository { get; }
 
         Task<int> SaveChangeAsync();
     }

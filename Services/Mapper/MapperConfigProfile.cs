@@ -16,6 +16,7 @@ using EventZone.Domain.DTOs.EventProductDTOs;
 using EventZone.Domain.DTOs.ImageDTOs;
 using EventZone.Domain.DTOs.NotificationDTOs;
 using EventZone.Domain.DTOs.PostCommentDTOs;
+using EventZone.Domain.DTOs.PostLikeComments;
 using EventZone.Domain.DTOs.TicketDTOs;
 using EventZone.Domain.DTOs.UserDTOs;
 using EventZone.Domain.DTOs.WalletDTOs;
@@ -195,16 +196,18 @@ namespace EventZone.Services.Mapper
 
             //BookedTicket
             CreateMap<BookedTicket, BookedTicketDTO>().ReverseMap();
-            CreateMap<BookedTicket, BookedTicketDetailDTO>().ReverseMap();
+            CreateMap<BookedTicket, BookedTicketDetailDTO>()
+                .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.Event.Name))
+                .ReverseMap();
             CreateMap<BookedTicket, BookedTicketUpdateDTO>().ReverseMap();
 
             //Post and comment
             CreateMap<PostComment, PostCommentDTO>().ReverseMap();
             CreateMap<PostDTO, Post>().ReverseMap();
             CreateMap<PostDetailDTO, Post>().ReverseMap();
-
-
+            CreateMap<PostLikeDTO, PostLike>().ReverseMap();
             CreateMap<WithdrawnRequestDTO, WithdrawnRequest>().ReverseMap();
+            CreateMap<PostCommentDTO, PostComment>().ReverseMap();
         }
     }
 }
