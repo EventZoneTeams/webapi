@@ -1,4 +1,5 @@
-﻿using EventZone.Repositories.Interfaces;
+﻿using EventZone.Domain.Enums;
+using EventZone.Repositories.Interfaces;
 using EventZone.Services.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using static EventZone.Services.Services.PayOSObjects;
 
 namespace EventZone.Services.Services
 {
@@ -17,27 +17,28 @@ namespace EventZone.Services.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<PayOSService> _logger;
         private readonly PayOS _payOS;
+        private readonly IConfiguration _configuration;
 
-        public PayOSService(ILogger<PayOSService> logger)
+        public PayOSService(ILogger<PayOSService> logger, IConfiguration configuration, IUnitOfWork unitOfWork)
         {
-            IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true).Build();
-            var ClientId = configuration["PayOS:ClientId"];
-            var ChecksumKey = configuration["PayOS:ChecksumKey"];
-            var ApiKey = configuration["PayOS:ApiKey"];
-            _payOS = new PayOS(ClientId, ApiKey, ChecksumKey);
             _logger = logger;
+            _configuration = configuration;
+
+            var ClientId = _configuration["PayOS:ClientId"];
+            var ChecksumKey = _configuration["PayOS:ChecksumKey"];
+            var ApiKey = _configuration["PayOS:ApiKey"];
+            _payOS = new PayOS(ClientId, ApiKey, ChecksumKey);
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<string> CreateLink(int depositMoney)
+        public async Task<string> CreateLink(int depositMoney, Guid txnRef)
         {
             var domain = "https://eventzone.id.vn/payment";
 
             var paymentLinkRequest = new PaymentData(
                 orderCode: int.Parse(DateTimeOffset.Now.ToString("ffffff")),
                 amount: depositMoney,
-                description: "Nạp tiền: " + depositMoney,
+                description: txnRef.ToString(),
                 items: [new("Nạp tiền " + depositMoney, 1, depositMoney)],
                 returnUrl: domain + "?success=true&transactionId=" + "GG" + "&amount=" + depositMoney,
                 cancelUrl: domain + "?canceled=true&transactionId=" + "GG" + "&amount=" + depositMoney
@@ -47,76 +48,73 @@ namespace EventZone.Services.Services
             return response.checkoutUrl;
         }
 
-        public async Task<PayOSWebhookResponse> ReturnWebhook(PayOSWebhook payOSWebhook)
+        public async Task<WebhookResponse> ReturnWebhook(WebhookType webhookType)
         {
-            // Log the receipt of the webhook
-            //Seriablize the object to log
-            _logger.LogInformation(JsonConvert.SerializeObject(payOSWebhook));
-            _logger.LogInformation("Received webhook with Code: {Code}, Success: {Success}", payOSWebhook.Code, payOSWebhook.Success);
-
-            // Validate the webhook signature
-            if (!PayOSUtils.IsValidData(payOSWebhook, payOSWebhook.Signature))
+            try
             {
-                _logger.LogWarning("Invalid webhook signature for OrderCode: {OrderCode}", payOSWebhook.Data.OrderCode);
-                return new PayOSWebhookResponse
+                // Log the receipt of the webhook
+                //Seriablize the object to log
+                _logger.LogInformation(JsonConvert.SerializeObject(webhookType));
+
+                //WebhookData verifiedData = _payOS.verifyPaymentWebhookData(webhookType); //xác thực data from webhook
+                //string responseCode = verifiedData.code;
+                //string orderCode = verifiedData.orderCode.ToString();
+                //string transactionId = "TRANS" + orderCode;
+
+                var transaction = await _unitOfWork.TransactionRepository.GetByIdAsync(Guid.Parse(webhookType.data.description));
+
+                // Handle the webhook based on the transaction status
+                switch (webhookType.data.code)
                 {
-                    Success = false,
-                    Note = "Invalid signature"
-                };
+                    case "00":
+                        // Update the transaction status
+                        transaction.Status = TransactionStatusEnums.SUCCESS.ToString();
+                        transaction.Description = "Nạp tiền thành công";
+                        await _unitOfWork.TransactionRepository.Update(transaction);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        return new WebhookResponse
+                        {
+                            Success = true,
+                            Note = "Payment processed successfully"
+                        };
+
+                    case "01":
+                        // Update the transaction status
+                        transaction.Status = TransactionStatusEnums.FAILED.ToString();
+                        transaction.Description = "Payment failed: Invalid parameters";
+                        await _unitOfWork.TransactionRepository.Update(transaction);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        return new WebhookResponse
+                        {
+                            Success = false,
+                            Note = "Invalid parameters"
+                        };
+
+                    default:
+                        return new WebhookResponse
+                        {
+                            Success = false,
+                            Note = "Unhandled code"
+                        };
+                }
             }
-
-            // Log the validated data
-            _logger.LogInformation("Valid webhook data: OrderCode: {OrderCode}, Amount: {Amount}, Status: {Code}",
-                payOSWebhook.Data.OrderCode,
-                payOSWebhook.Data.Amount,
-                payOSWebhook.Code);
-
-            // Handle the webhook based on the transaction status
-            switch (payOSWebhook.Code)
+            catch (Exception ex)
             {
-                case "00":
-                    _logger.LogInformation("Payment successful for OrderCode: {OrderCode}", payOSWebhook.Data.OrderCode);
-
-                    // Example: Update the order in the system, mark it as paid
-                    //var order = await _unitOfWork.WalletRepository.ConfirmTransaction(payOSWebhook.Data.OrderCode);
-
-                    return new PayOSWebhookResponse
-                    {
-                        Success = true,
-                        Note = "Payment processed successfully"
-                    };
-
-                case "01":
-                    _logger.LogError("Invalid parameters in the webhook for OrderCode: {OrderCode}", payOSWebhook.Data.OrderCode);
-                    return new PayOSWebhookResponse
-                    {
-                        Success = false,
-                        Note = "Invalid parameters"
-                    };
-
-                default:
-                    _logger.LogWarning("Unhandled webhook code: {Code} for OrderCode: {OrderCode}", payOSWebhook.Code, payOSWebhook.Data.OrderCode);
-                    return new PayOSWebhookResponse
-                    {
-                        Success = false,
-                        Note = "Unhandled code"
-                    };
+                _logger.LogError(ex.Message);
+                throw ex;
             }
         }
     }
 
     public static class PayOSUtils
     {
-        public static bool IsValidData(PayOSWebhook payOSWebhook, string transactionSignature)
+        public static bool IsValidData(WebhookType payOSWebhook, string transactionSignature, string ChecksumKey)
         {
             try
             {
-                IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true).Build();
-                var ChecksumKey = configuration["PayOS:ChecksumKey"];
-
-                JObject jsonObject = JObject.Parse(payOSWebhook.Data.ToString().Replace("'", "\""));
+                JObject jsonObject = JObject.Parse(payOSWebhook.data.ToString().Replace("'", "\""));
                 var sortedKeys = jsonObject.Properties().Select(p => p.Name).OrderBy(k => k).ToList();
 
                 StringBuilder transactionStr = new StringBuilder();
@@ -149,42 +147,16 @@ namespace EventZone.Services.Services
             }
         }
     }
-    public class PayOSObjects
-    {
-        public class PayOSWebhookResponse
-        {
-            public bool Success { get; set; }
-            public PayOSTransaction Data { get; set; }
-            public string Note { get; set; }
-        }
-        public class PayOSWebhook
-        {
-            public string Code { get; set; }
-            public string Desc { get; set; }
-            public bool Success { get; set; }
-            public PayOSTransaction Data { get; set; }
-            public string Signature { get; set; }
-        }
 
-        public class PayOSTransaction
-        {
-            public int OrderCode { get; set; }
-            public decimal Amount { get; set; }
-            public string Description { get; set; }
-            public string AccountNumber { get; set; }
-            public string Reference { get; set; }
-            public string TransactionDateTime { get; set; }
-            public string Currency { get; set; }
-            public string PaymentLinkId { get; set; }
-            public string Code { get; set; }
-            public string Desc { get; set; }
-            public string CounterAccountBankId { get; set; }
-            public string CounterAccountBankName { get; set; }
-            public string CounterAccountName { get; set; }
-            public string CounterAccountNumber { get; set; }
-            public string VirtualAccountName { get; set; }
-            public string VirtualAccountNumber { get; set; }
-            //public string TransactionId { get; set; }
-        }
+    public class DepositRequest
+    {
+        public int Amount { get; set; }
     }
+
+    public class WebhookResponse
+    {
+        public bool Success { get; set; }
+        public string Note { get; set; }
+    }
+
 }

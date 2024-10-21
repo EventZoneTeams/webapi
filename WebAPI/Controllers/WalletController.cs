@@ -6,10 +6,9 @@ using EventZone.Repositories.Helper;
 using EventZone.Repositories.Interfaces;
 using EventZone.Services.DTO.ResponseModels;
 using EventZone.Services.Interface;
-using EventZone.Services.Services;
 using EventZone.Services.Services.VnPayConfig;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using Net.payOS.Types;
 using System.Reflection;
 using System.Web;
 
@@ -322,7 +321,7 @@ namespace EventZone.WebAPI.Controllers
                 }
                 else
                 {
-                    var url = await _payOSService.CreateLink(depositRequest.Amount);
+                    var url = await _payOSService.CreateLink(depositRequest.Amount, result.Id);
 
                     return Ok(ApiResult<string>.Succeed(url, "Payment to deposit!"));
                 }
@@ -334,34 +333,23 @@ namespace EventZone.WebAPI.Controllers
         }
 
         [HttpPost("webhook-payos")]
-        public async Task<IActionResult> ReceiveWebhook([FromBody] PayOSObjects.PayOSWebhook payload)
+        public async Task<IActionResult> ReceiveWebhook([FromBody] WebhookType webhookBody)
         {
             try
             {
-                // Log the incoming webhook payload
-                _logger.LogInformation("Received PayOS Webhook Payload: {Payload}", JsonConvert.SerializeObject(payload));
+                var result = await _payOSService.ReturnWebhook(webhookBody);
 
-
-                // Call the service to handle the webhook
-                var response = await _payOSService.ReturnWebhook(payload);
-
-                // Check the result of the webhook processing
-                if (response.Success)
+                if (result.Success)
                 {
-                    _logger.LogInformation("Webhook processed successfully for OrderCode: {OrderCode}", payload.Data.OrderCode);
-                    return Ok(new { status = 200, message = response.Note });
+                    return Ok(new { Message = "Webhook processed successfully" });
                 }
-                else
-                {
-                    _logger.LogWarning("Webhook processing failed: {Message}", response.Note);
-                    return BadRequest(new { status = 400, message = response.Note });
-                }
+
+                return BadRequest(new { Message = "Webhook processing failed." });
+
             }
             catch (Exception ex)
             {
-                // Log the exception
-                _logger.LogError(ex, "An error occurred while processing the PayOS webhook.");
-                return BadRequest(new { status = 400, message = ex.Message });
+                return BadRequest(new { Message = ex.Message });
             }
         }
 
