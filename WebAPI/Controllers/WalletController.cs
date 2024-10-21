@@ -344,12 +344,12 @@ namespace EventZone.WebAPI.Controllers
                     return Ok(new { Message = "Webhook processed successfully" });
                 }
 
-                return BadRequest(new { Message = "Webhook processing failed." });
+                return Ok(new { Message = "Webhook processing failed." });
 
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return Ok(new { Message = ex.Message });
             }
         }
 
