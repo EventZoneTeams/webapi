@@ -321,7 +321,7 @@ namespace EventZone.WebAPI.Controllers
                 }
                 else
                 {
-                    var url = await _payOSService.CreateLink(depositRequest.Amount, result.Id);
+                    var url = await _payOSService.CreateLink(depositRequest.Amount, result.OrderCode ?? 0);
 
                     return Ok(ApiResult<string>.Succeed(url, "Payment to deposit!"));
                 }

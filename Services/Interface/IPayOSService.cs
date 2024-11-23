@@ -5,7 +5,7 @@ namespace EventZone.Services.Interface
 {
     public interface IPayOSService
     {
-        Task<string> CreateLink(int depositMoney, Guid txnRef);
+        Task<string> CreateLink(int depositMoney, int orderCode);
         Task<WebhookResponse> ReturnWebhook(WebhookType webhookType);
     }
 }

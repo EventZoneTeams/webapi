@@ -88,7 +88,8 @@ namespace EventZone.Repositories.Repositories
                 Description = "Deposit money with amount: " + amount + ", Thanh toán qua: " + paymentMethod,
                 TransactionDate = DateTime.UtcNow.AddHours(7),
                 CreatedAt = _timeService.GetCurrentTime(),
-                Status = TransactionStatusEnums.PENDING.ToString()
+                Status = TransactionStatusEnums.PENDING.ToString(),
+                OrderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"))
             };
             //add transaction to database
             await _context.Transactions.AddAsync(transaction);

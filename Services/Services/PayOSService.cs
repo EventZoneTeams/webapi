@@ -31,14 +31,14 @@ namespace EventZone.Services.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<string> CreateLink(int depositMoney, Guid txnRef)
+        public async Task<string> CreateLink(int depositMoney, int orderCode)
         {
             var domain = "https://eventzone.id.vn/payment";
 
             var paymentLinkRequest = new PaymentData(
-                orderCode: int.Parse(DateTimeOffset.Now.ToString("ffffff")),
+                orderCode: orderCode,
                 amount: depositMoney,
-                description: txnRef.ToString().Substring(0, 8),
+                description: "Deposit Money",
                 items: [new("Nạp tiền " + depositMoney, 1, depositMoney)],
                 returnUrl: domain + "?success=true&transactionId=" + "GG" + "&amount=" + depositMoney,
                 cancelUrl: domain + "?canceled=true&transactionId=" + "GG" + "&amount=" + depositMoney
@@ -61,19 +61,16 @@ namespace EventZone.Services.Services
                 //string orderCode = verifiedData.orderCode.ToString();
                 //string transactionId = "TRANS" + orderCode;
 
-                //Get First transaction contains 8 first character
-                var transactionss = await _unitOfWork.TransactionRepository.GetAllAsync();
-                var transaction = transactionss.FirstOrDefault(x => x.Id.ToString().Substring(0, 8).Equals(webhookType.data.description.ToString()));
+                var transactions = await _unitOfWork.TransactionRepository.GetAllAsync();
+                // Find the transaction based on the order code
+                var transaction = transactions.FirstOrDefault(x => x.OrderCode == webhookType.data.orderCode);
 
                 // Handle the webhook based on the transaction status
                 switch (webhookType.data.code)
                 {
                     case "00":
                         // Update the transaction status
-                        transaction.Status = TransactionStatusEnums.SUCCESS.ToString();
-                        transaction.Description = "Nạp tiền thành công";
-                        await _unitOfWork.TransactionRepository.Update(transaction);
-                        await _unitOfWork.SaveChangeAsync();
+                        await UpdateStatusTransaction(transaction);
 
                         return new WebhookResponse
                         {
@@ -83,10 +80,7 @@ namespace EventZone.Services.Services
 
                     case "01":
                         // Update the transaction status
-                        transaction.Status = TransactionStatusEnums.FAILED.ToString();
-                        transaction.Description = "Payment failed: Invalid parameters";
-                        await _unitOfWork.TransactionRepository.Update(transaction);
-                        await _unitOfWork.SaveChangeAsync();
+                        await UpdateErrorTransaction(transaction, "Payment failed");
 
                         return new WebhookResponse
                         {
@@ -107,6 +101,25 @@ namespace EventZone.Services.Services
                 _logger.LogError(ex.Message);
                 throw ex;
             }
+        }
+
+        private async Task UpdateStatusTransaction(Domain.Entities.Transaction transaction)
+        {
+            transaction.Status = TransactionStatusEnums.SUCCESS.ToString();
+            //Plus money to user wallet
+            var wallet = await _unitOfWork.WalletRepository.GetByIdAsync(transaction.WalletId);
+
+            wallet.Balance += transaction.Amount;
+            await _unitOfWork.TransactionRepository.Update(transaction);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task UpdateErrorTransaction(Domain.Entities.Transaction transaction, string note)
+        {
+            transaction.Status = TransactionStatusEnums.FAILED.ToString();
+            transaction.Description = note;
+            await _unitOfWork.TransactionRepository.Update(transaction);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 
