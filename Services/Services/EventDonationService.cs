@@ -68,14 +68,7 @@ namespace EventZone.Services.Services
                 if (result > 0)
                 {
                     // Send notification
-                    var notification = new Notification
-                    {
-                        Title = "Donation Successfully!",
-                        Body = "Amount: " + newDonation.Amount,
-                        ReceiverId = newDonation.UserId,
-                        Url = "/profile/wallets",
-                        Sender = "System"
-                    };
+
                     //await _notificationService.PushNotification(notification);
 
                     // Decrease money in wallet
@@ -93,15 +86,7 @@ namespace EventZone.Services.Services
                     await _unitOfWork.SaveChangeAsync();
 
                     //Notification to event owner
-                    //var notificationtoorganizer = new Notification
-                    //{
-                    //    Title = "one person donate event ",
-                    //    Body = "amount: " + newDonation.Amount,
-                    //    UserId = checkEvent.Event.UserId,
-                    //    Url = "/dashboard/my-events/" + checkEvent.Event,
-                    //    Sender = "system"
-                    //};
-                    //await _notificationService.PushNotification(notificationtoorganizer);
+
 
                     return new ApiResult<EventDonationDetailDTO>()
                     {

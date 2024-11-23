@@ -1,11 +1,10 @@
-﻿using EventZone.Domain.DTOs.NotificationDTOs;
-using EventZone.Domain.Entities;
+﻿using EventZone.Domain.Entities;
 
 namespace EventZone.Services.Interface
 {
     public interface INotificationService
     {
-        Task<List<NotificationDTO>> GetNotifications();
+        Task<List<Notification>> GetNotifications();
 
         Task<int> GetUnreadNotificationQuantity();
 
@@ -13,6 +12,6 @@ namespace EventZone.Services.Interface
 
         Task PushNotificationToManager(Notification notification);
 
-        Task<List<NotificationDTO>> ReadAllNotification();
+        Task<List<Notification>> ReadAllNotification();
     }
 }

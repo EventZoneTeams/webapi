@@ -12,10 +12,10 @@ namespace EventZone.Repositories.Repositories
         private readonly IClaimsService _claimsService;
         private readonly UserManager<User> _userManager;
 
-        public NotificationRepository(StudentEventForumDbContext studentEventForumDbContext, ICurrentTime timeService, IClaimsService claims, UserManager<User> userManager) : base(studentEventForumDbContext, timeService, claims)
+        public NotificationRepository(StudentEventForumDbContext context, ICurrentTime timeService, IClaimsService claims, UserManager<User> userManager) : base(context, timeService, claims)
 
         {
-            _context = studentEventForumDbContext;
+            _context = context;
             _timeService = timeService;
             _claimsService = claims;
             _userManager = userManager;
@@ -50,33 +50,31 @@ namespace EventZone.Repositories.Repositories
 
         public async Task<List<Notification>> GetListByUserId()
         {
-            var notifications = new List<Notification>();
-            //check role of user to get notification
+            // Get the current user ID from the claims service
             var userId = _claimsService.GetCurrentUserId;
             if (userId == null)
             {
-                throw new Exception("UserId are invalid or you are not login");
+                throw new UnauthorizedAccessException("User is not logged in or the user ID is invalid.");
             }
+
+            // Find the user in the database
             var user = await _userManager.FindByIdAsync(userId.ToString());
             if (user == null)
             {
-                throw new Exception("User not found");
-            }
-            if (await _userManager.IsInRoleAsync(user, "Manager"))
-            {
-                notifications = await _context.Notifications.Where(x => x.Sender == "Manager").ToListAsync();
-            }
-            else if (await _userManager.IsInRoleAsync(user, "Admin"))
-            {
-                notifications = await _context.Notifications.Where(x => x.Sender == "Admin").ToListAsync();
-            }
-            else
-            {
-                notifications = await _context.Notifications.Where(x => x.ReceiverId == userId).ToListAsync();
+                throw new ArgumentException("User not found.");
             }
 
-            //sort created date
-            notifications = notifications.OrderByDescending(x => x.CreatedAt).ToList();
+            // Get user roles
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // Retrieve notifications for the user (global, user-specific, and role-based)
+            var notifications = await _context.Notifications
+                .Where(n => n.Type == "ALL"
+                            || n.ReceiverId == user.Id
+                            || (roles.Contains(n.Type)))
+                .OrderByDescending(n => n.CreatedAt)
+                .ToListAsync();
+
             return notifications;
         }
     }

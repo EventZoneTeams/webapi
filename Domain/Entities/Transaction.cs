@@ -7,6 +7,7 @@
         public long Amount { get; set; }
         public string? Description { get; set; }
         public DateTime TransactionDate { get; set; }
+        public string? OrderCode { get; set; }
         public string Status { get; set; }
         public Wallet Wallet { get; set; }
         public virtual ICollection<TransactionDetail> TransactionDetails { get; set; }
